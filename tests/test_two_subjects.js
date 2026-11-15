@@ -165,4 +165,16 @@ test('错题本仅保存并展示两科，旧记录不会混入', () => {
   assert.equal(api.count(), 2);
 });
 
+test('学习好物不含旧学科商品和推荐文案', () => {
+  const context = { window: {} };
+  vm.runInNewContext(read('goods/goods-data.js'), context, { filename: 'goods/goods-data.js' });
+  const goods = context.window.GOODS;
+  const cats = context.window.GOODS_CATS;
+  assert.ok(Array.isArray(goods) && goods.length > 0);
+  assert.equal(new Set(goods.map(item => item.id)).size, goods.length);
+  assert.ok(goods.every(item => cats.some(cat => cat.id === item.cat)));
+  const publicText = read('goods/goods-data.js') + read('goods/index.html');
+  assert.ok(!/数学|语文|英语|词典笔|单词机/.test(publicText));
+});
+
 console.log('\n' + passed + ' passed');
