@@ -1572,16 +1572,21 @@ def report_questions(stats, topics_by_id):
 
 
 def check_aliases(ids):
-    """data/id-aliases.json：旧 cnm_ext_* 必须映射到仍存在的小学正式知识点。"""
+    """仅保留科学与物理时 aliases 应为空；旧数学别名只在含数学节点时检查。"""
     if not os.path.exists(ALIASES_PATH):
-        err("缺少 data/id-aliases.json（旧 cnm_ext_* 的跳转表）")
+        err("缺少 data/id-aliases.json")
         return
     data = load(ALIASES_PATH)
     if not isinstance(data, dict):
         return
     aliases = data.get("aliases")
-    if not isinstance(aliases, dict) or not aliases:
-        err("id-aliases.json 的 aliases 必须是非空对象")
+    has_math = any(topic_subject(tid) == "math" for tid in ids)
+    if not isinstance(aliases, dict) or (has_math and not aliases):
+        err("id-aliases.json 的 aliases 必须是对象；含数学节点时不能为空")
+        return
+    if not has_math:
+        if aliases:
+            err("仅含科学与物理时不应保留其他学科的旧别名")
         return
     for i in range(1, 19):
         key = "cnm_ext_%03d" % i
@@ -1670,8 +1675,9 @@ def main():
     print("教材版本对照（可选）：topic.mappings %d 个知识点；data/mappings %d 个文件、%d 条" % (
         n_topic_maps, n_map_files, n_map_entries))
     prereqs, dependents, n_hard, n_soft, n_en_hard, n_en_soft = check_deps(deps, ids)
-    qs_for_split = load(QUESTIONS_PATH) if os.path.exists(QUESTIONS_PATH) else None
-    check_g2b_yard_split(ids, deps, qs_for_split)
+    if any(topic_subject(tid) == "chinese" for tid in ids):
+        qs_for_split = load(QUESTIONS_PATH) if os.path.exists(QUESTIONS_PATH) else None
+        check_g2b_yard_split(ids, deps, qs_for_split)
     check_graph(ids, prereqs, dependents)
     std_items = None
     if os.path.exists(STANDARDS_PATH):

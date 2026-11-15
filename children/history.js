@@ -4,8 +4,8 @@
   var CC = window.CnmChildren;
   var picker = document.getElementById('picker');
   var content = document.getElementById('content');
-  var SUBJECTS = [['', '全部'], ['math', '数学'], ['chinese', '语文'], ['science', '科学'], ['morality', '道德与法治'], ['history', '历史'], ['geography', '地理'], ['biology', '生物'], ['chemistry', '化学'], ['english', '英语'], ['physics', '物理']];
-  var SUBJECT_NAME = { math: '数学', chinese: '语文', science: '科学', morality: '道德与法治', history: '历史', geography: '地理', biology: '生物', chemistry: '化学', english: '英语', physics: '物理' };
+  var SUBJECTS = [['', '全部'], ['science', '科学'], ['physics', '物理']];
+  var SUBJECT_NAME = { science: '科学', physics: '物理' };
   var topics = null;
   var childId = null;
   var subjectSel = '';
@@ -18,11 +18,11 @@
   }
   function subjectOfId(id) {
     id = String(id || '');
-    return id.indexOf('cne_') === 0 ? 'english' : id.indexOf('cnp_') === 0 ? 'physics' : id.indexOf('cnc_') === 0 ? 'chinese' : id.indexOf('cns_') === 0 ? 'science' : id.indexOf('cnd_') === 0 ? 'morality' : id.indexOf('cnh_') === 0 ? 'history' : id.indexOf('cng_') === 0 ? 'geography' : id.indexOf('cnb_') === 0 ? 'biology' : id.indexOf('cnk_') === 0 ? 'chemistry' : 'math';
+    return id.indexOf('cnp_') === 0 ? 'physics' : id.indexOf('cns_') === 0 ? 'science' : '';
   }
   function exploreHref(id) {
     var sub = subjectOfId(id);
-    return '../explore/' + (sub === 'math' ? '' : '?subject=' + sub) + '#' + encodeURIComponent(id);
+    return '../explore/' + (sub ? '?subject=' + sub : '') + '#' + encodeURIComponent(id);
   }
   function pad(n) { return ('0' + n).slice(-2); }
   function fmt(iso) {
@@ -38,8 +38,7 @@
     if (window.CnmBlind) return window.CnmBlind.diagnoseHref(ids, sub || subjectOfId(ids[0]), '../diagnose/');
     ids = (ids || []).filter(Boolean);
     var s = sub || subjectOfId(ids[0]);
-    var q = 'target=' + ids.map(encodeURIComponent).join(',');
-    if (s && s !== 'math') q = 'subject=' + encodeURIComponent(s) + '&' + q;
+    var q = 'subject=' + encodeURIComponent(s || 'science') + '&target=' + ids.map(encodeURIComponent).join(',');
     return '../diagnose/?' + q;
   }
 
@@ -64,7 +63,7 @@
     top.appendChild(a);
     top.appendChild(tag(info.status === 'weak' ? 'weak' : 'shaky', info.status === 'weak' ? '薄弱' : '不稳'));
     if (info.root) top.appendChild(tag('root', '根因'));
-    top.appendChild(tag('sub', SUBJECT_NAME[subjectOfId(id)] || SUBJECT_NAME[info.subject] || '数学'));
+    top.appendChild(tag('sub', SUBJECT_NAME[subjectOfId(id)] || SUBJECT_NAME[info.subject] || '科学'));
     li.appendChild(top);
     var meta = [];
     var ch = chapterOf(id);
@@ -81,7 +80,9 @@
 
   function weakSection(child) {
     var by = CC.latestStatus(child.id, subjectSel || null);
-    var ids = Object.keys(by).filter(function (id) { return by[id].status === 'weak' || by[id].status === 'shaky'; });
+    var ids = Object.keys(by).filter(function (id) {
+      return subjectOfId(id) && (by[id].status === 'weak' || by[id].status === 'shaky');
+    });
     /* 没有孩子记录时，仍展示本机盲区账本（含未建档时的诊断）。 */
     if (!ids.length && window.CnmBlind) {
       window.CnmBlind.list({ subject: subjectSel || null }).forEach(function (row) {
@@ -137,7 +138,7 @@
     var det = el('details', 'rec');
     var sum = el('summary');
     var line1 = el('div', 'rec-top');
-    line1.appendChild(tag('sub', SUBJECT_NAME[r.subject] || '数学'));
+    line1.appendChild(tag('sub', SUBJECT_NAME[r.subject] || '科学'));
     line1.appendChild(el('b', 'rec-label', r.label || '诊断'));
     sum.appendChild(line1);
     var c = r.counts || {};
@@ -201,7 +202,7 @@
       recs.forEach(function (r) { sec.appendChild(recordCard(child, r)); });
     }
     var go = el('a', 'btn btn-primary', '去做一次诊断');
-    go.href = '../diagnose/' + (subjectSel === 'english' || subjectSel === 'physics' || subjectSel === 'chinese' || subjectSel === 'science' || subjectSel === 'morality' || subjectSel === 'history' || subjectSel === 'geography' || subjectSel === 'biology' || subjectSel === 'chemistry' ? '?subject=' + subjectSel : '');
+    go.href = '../diagnose/?subject=' + (subjectSel === 'physics' ? 'physics' : 'science');
     sec.appendChild(go);
     return sec;
   }

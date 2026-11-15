@@ -8,7 +8,7 @@
  *           pin 且 qid 对得上题库时，按这个题号记，不再重选。题号对不上则这步不记分。
  *         summarize(graph, session) -> 结果（根因、学习路径、掌握/不稳/薄弱/未测）
  *         gradeTargets(graph, '一年级'|'七上'|'高一'|'选必二', subject?) -> {ids, volumes, label} | null
- *           默认 subject 为 math，不把英语卷进数学的整册；'english' 只取英语（含九全），'physics' 只取物理（八上、八下、九全），'all' 不限学科
+ *           默认 subject 为 science；physics 只取物理（八上、八下、九全及高中册次），all 可跨两科汇总
  *         createSession(graph, ids, {mode:'screen', confirm}) -> 筛查会话：范围 = 目标本身，回溯不出范围，默认题量上限 SCREEN_LIMIT
  *         chapterSummary(graph, session) -> 按章汇总（薄弱章节在前）
  *         layout(graph, session, summary) -> 路径图的分层布局
@@ -610,33 +610,24 @@
     return { volume: '', chapterNo: '', chapterName: s, section: '' };
   }
 
-  /** 学科：显式 subject 优先，否则 cne_ 是英语、cnp_ 是物理、cnc_ 是语文、cns_ 是科学、cnd_ 是道德与法治、cnh_ 是历史、cng_ 是地理、cnb_ 是生物、cnk_ 是化学，其余算数学。 */
+  /** 本站仅保留科学与物理；无法识别的旧节点不再归入其他学科。 */
   function subjectOf(topic) {
-    if (!topic) return 'math';
-    if (topic.subject === 'english' || topic.subject === 'math' || topic.subject === 'physics' || topic.subject === 'chinese' || topic.subject === 'science' || topic.subject === 'morality' || topic.subject === 'history' || topic.subject === 'geography' || topic.subject === 'biology' || topic.subject === 'chemistry') return topic.subject;
-    if (String(topic.id || '').indexOf('cne_') === 0) return 'english';
+    if (!topic) return 'science';
+    if (topic.subject === 'physics' || topic.subject === 'science') return topic.subject;
     if (String(topic.id || '').indexOf('cnp_') === 0) return 'physics';
-    if (String(topic.id || '').indexOf('cnc_') === 0) return 'chinese';
-    if (String(topic.id || '').indexOf('cns_') === 0) return 'science';
-    if (String(topic.id || '').indexOf('cnd_') === 0) return 'morality';
-    if (String(topic.id || '').indexOf('cnh_') === 0) return 'history';
-    if (String(topic.id || '').indexOf('cng_') === 0) return 'geography';
-    if (String(topic.id || '').indexOf('cnb_') === 0) return 'biology';
-    if (String(topic.id || '').indexOf('cnk_') === 0) return 'chemistry';
-    return 'math';
+    return 'science';
   }
 
   /**
    * 整年级 / 整册的知识点：'一年级' = 一上 + 一下，'七上' = 七年级上册。
    * 高中不拆上下册：'高一' / '高一必修' = 必修第一册，'高二' / '高二必修' = 必修第二册。
    * '选必一' / '选择性必修第一册'、选必二、选必三 = 选择性必修三册。
-   * 高中英语用「必修一」「必修二」「必修三」「选必四」，不占用数学的「高一」「高二」。
-   * subject 默认 math，避免三上、四上和选必一把英语和数学混在一起。
-   * 不带 subject 时「必修一」没有数学知识点，返回 null。
+   * 物理高中用「必修一」「必修二」「必修三」「选必一」至「选必三」。
+   * subject 默认为 science；physics 只取物理，all 可跨两科汇总。
    * 返回 {ids, volumes, label}（ids 按 topics 文件顺序，只含正式知识点）；不认识的写法返回 null。
    */
   function gradeTargets(graph, scope, subject) {
-    const subj = subject == null || subject === '' ? 'math' : subject;
+    const subj = subject == null || subject === '' ? 'science' : subject;
     const key = String(scope == null ? '' : scope).trim();
     const books = {
       '高一': ['高一', '高一（必修第一册）'],

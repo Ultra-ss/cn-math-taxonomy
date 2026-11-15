@@ -6,10 +6,7 @@
   var MAX_PER_BUCKET = 300;
   var GUEST = 'guest';
   var MAX_TEXT = 4000;
-  var SUBJECT_NAME = {
-    math: '数学', chinese: '语文', science: '科学',
-    morality: '道德与法治', history: '历史', geography: '地理', biology: '生物', chemistry: '化学', english: '英语', physics: '物理'
-  };
+  var SUBJECT_NAME = { science: '科学', physics: '物理' };
 
   function read(k, fallback) {
     try {
@@ -45,6 +42,10 @@
    * 同一孩子同一 qid 已存在：更新 chosen / kind / ts，count + 1。每桶最多 300 条，超了丢最旧的。 */
   function record(entry) {
     if (!entry || !entry.qid) return false;
+    var topicId = String(entry.topicId || '');
+    if ((entry.subject === 'science' && topicId.indexOf('cns_') !== 0) &&
+        (entry.subject === 'physics' && topicId.indexOf('cnp_') !== 0) ||
+        (entry.subject !== 'science' && entry.subject !== 'physics')) return false;
     var s = store();
     var key = bucketKey(entry.childId);
     var rows = bucketOf(s, key);
@@ -63,7 +64,7 @@
         qid: qid,
         topicId: text(entry.topicId),
         topic: text(entry.topic),
-        subject: text(entry.subject) || 'math',
+        subject: text(entry.subject),
         prompt: text(entry.prompt),
         choices: cleanChoices(entry.choices),
         answer: text(entry.answer),
@@ -82,9 +83,12 @@
 
   /* 最近答错的在前。 */
   function list(childId) {
-    return bucketOf(store(), childId).sort(function (a, b) { return (b.ts || 0) - (a.ts || 0); });
+    return bucketOf(store(), childId).filter(function (e) {
+      return (e.subject === 'science' && String(e.topicId || '').indexOf('cns_') === 0) ||
+        (e.subject === 'physics' && String(e.topicId || '').indexOf('cnp_') === 0);
+    }).sort(function (a, b) { return (b.ts || 0) - (a.ts || 0); });
   }
-  function count(childId) { return bucketOf(store(), childId).length; }
+  function count(childId) { return list(childId).length; }
 
   function remove(childId, qid) {
     var s = store();

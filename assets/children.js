@@ -8,7 +8,7 @@
   var MAX_RECORDS = 40;
   var MAX_BACKUP_BYTES = 10 * 1024 * 1024;
   var GRADES = ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三'];
-  var TEXTBOOKS = ['人教版', '北师大版', '苏教版', '沪教版', '外研版', '译林版', '其他'];
+  var TEXTBOOKS = ['教科版', '人教版', '其他'];
 
   function read(k, fallback) {
     try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? fallback : v; } catch (e) { return fallback; }
@@ -89,11 +89,13 @@
 
   function recordsOf(childId) {
     var r = records()[childId];
-    return Array.isArray(r) ? r.slice().sort(function (a, b) { return String(b.savedAt).localeCompare(String(a.savedAt)); }) : [];
+    return Array.isArray(r) ? r.filter(function (rec) {
+      return rec && (rec.subject === 'science' || rec.subject === 'physics');
+    }).sort(function (a, b) { return String(b.savedAt).localeCompare(String(a.savedAt)); }) : [];
   }
   /* 按 rec.key 覆盖：同一次诊断反复打开结果页、更正答案，只会更新这一条 */
   function saveRecord(childId, rec) {
-    if (!childId || !rec || !rec.key) return false;
+    if (!childId || !rec || !rec.key || (rec.subject !== 'science' && rec.subject !== 'physics')) return false;
     var all = records();
     var arr = Array.isArray(all[childId]) ? all[childId] : [];
     var keepImportedHistory = arr.length > MAX_RECORDS;
@@ -224,7 +226,7 @@
       var keys = new Set();
       history[id].forEach(function (r) {
         if (!isObject(r) || typeof r.key !== 'string' || !r.key || keys.has(r.key) ||
-            ['math', 'chinese', 'science', 'morality', 'history', 'geography', 'biology', 'chemistry', 'english', 'physics'].indexOf(r.subject) < 0 || !validDate(r.savedAt) ||
+            ['science', 'physics'].indexOf(r.subject) < 0 || !validDate(r.savedAt) ||
             (own(r, 'updatedAt') && !validDate(r.updatedAt))) throw new Error('诊断记录的标识、学科或时间不正确。');
         keys.add(r.key);
         ['weak', 'roots', 'shaky', 'mastered', 'targets'].forEach(function (field) {

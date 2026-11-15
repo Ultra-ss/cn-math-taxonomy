@@ -23,7 +23,7 @@
     if (isNaN(d)) return '';
     return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
   }
-  function subjectName(key) { return SUBJECT_NAME[key] || key || '数学'; }
+  function subjectName(key) { return SUBJECT_NAME[key] || key || '科学'; }
   function childName() {
     var c = childId !== GUEST ? CC.get(childId) : null;
     return c ? c.name : '';

@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "中小学·高中知识图谱",
-  "short_name": "知识图谱",
-  "description": "数学、英语、物理的知识图谱与自适应诊断，沿先修关系找到薄弱根因。",
+  "name": "科学·物理知识图谱",
+  "short_name": "科学物理",
+  "description": "小学科学与初高中物理的知识图谱和自适应诊断，沿先修关系找到薄弱根因。",
   "lang": "zh-CN",
   "dir": "ltr",
   "start_url": "./?source=pwa",

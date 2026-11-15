@@ -4,21 +4,10 @@
   'use strict';
   var KEY = 'cnmBlind.local.v1';
   var MAX_TOPICS = 200;
-  var SUBJECT_NAME = {
-    math: '数学', chinese: '语文', science: '科学',
-    morality: '道德与法治', history: '历史', geography: '地理', biology: '生物', chemistry: '化学', english: '英语', physics: '物理'
-  };
+  var SUBJECT_NAME = { science: '科学', physics: '物理' };
   var SESSION_KEYS = [
-    { key: 'cnmDiagnose.session.v2', subject: 'math' },
-    { key: 'cneDiagnose.session.v2', subject: 'english' },
     { key: 'cnpDiagnose.session.v2', subject: 'physics' },
-    { key: 'cncDiagnose.session.v2', subject: 'chinese' },
-    { key: 'cnsDiagnose.session.v1', subject: 'science' },
-    { key: 'cndDiagnose.session.v1', subject: 'morality' },
-    { key: 'cnhDiagnose.session.v1', subject: 'history' },
-    { key: 'cngDiagnose.session.v1', subject: 'geography' },
-    { key: 'cnbDiagnose.session.v1', subject: 'biology' },
-    { key: 'cnkDiagnose.session.v1', subject: 'chemistry' }
+    { key: 'cnsDiagnose.session.v1', subject: 'science' }
   ];
 
   function read(k, fallback) {
@@ -33,16 +22,9 @@
 
   function subjectOfId(id) {
     id = String(id || '');
-    if (id.indexOf('cne_') === 0) return 'english';
     if (id.indexOf('cnp_') === 0) return 'physics';
-    if (id.indexOf('cnc_') === 0) return 'chinese';
     if (id.indexOf('cns_') === 0) return 'science';
-    if (id.indexOf('cnd_') === 0) return 'morality';
-    if (id.indexOf('cnh_') === 0) return 'history';
-    if (id.indexOf('cng_') === 0) return 'geography';
-    if (id.indexOf('cnb_') === 0) return 'biology';
-    if (id.indexOf('cnk_') === 0) return 'chemistry';
-    return 'math';
+    return '';
   }
 
   function emptyStore() { return { v: 1, byId: {} }; }
@@ -80,7 +62,7 @@
   /* 诊断结果页调用：无论有没有孩子档案，都把本轮薄弱 / 不稳写入本机盲区账本。
    * 对不上现行题干的作答不累加错次。cnc_p124 只有带着现行戳才保持薄弱 / 不稳 / 掌握。 */
   function noteResult(payload) {
-    if (!payload || payload.demo) return false;
+    if (!payload || payload.demo || (payload.subject !== 'science' && payload.subject !== 'physics')) return false;
     var s = store();
     var now = new Date().toISOString();
     var SC = compat();
@@ -90,11 +72,11 @@
     (effect.retestTopicIds || []).forEach(function (id) { blocked[id] = true; });
     var rootSet = {};
     (payload.roots || []).forEach(function (id) { rootSet[id] = true; });
-    var subject = payload.subject || 'math';
+    var subject = payload.subject;
 
     function put(ids, status) {
       (ids || []).forEach(function (id) {
-        if (!id) return;
+        if (!id || subjectOfId(id) !== subject) return;
         var prev = s.byId[id] || { id: id, hits: 0, wrongs: 0 };
         if (blocked[id]) {
           s.byId[id] = {
@@ -141,8 +123,9 @@
     var SC = compat();
     Object.keys(by).forEach(function (id) {
       var row = by[id];
-      if (!row) return;
-      if (subject && row.subject !== subject && subjectOfId(id) !== subject) return;
+      var actualSubject = subjectOfId(id);
+      if (!row || !actualSubject || row.subject !== actualSubject) return;
+      if (subject && actualSubject !== subject) return;
       var stale = SC && id === SC.TOPIC && !SC.topicTrusted(row, id);
       if (!stale && row.status !== 'weak' && row.status !== 'shaky' && row.status !== 'retest') return;
       if (stale || row.status === 'retest') {
@@ -184,10 +167,12 @@
     var out = {};
     Object.keys(latest).forEach(function (id) {
       var info = latest[id];
-      if (!info || (info.status !== 'weak' && info.status !== 'shaky' && info.status !== 'retest')) return;
+      var actualSubject = subjectOfId(id);
+      if (!info || !actualSubject || info.subject !== actualSubject ||
+          (info.status !== 'weak' && info.status !== 'shaky' && info.status !== 'retest')) return;
       out[id] = {
         id: id,
-        subject: info.subject || subjectOfId(id),
+        subject: actualSubject,
         status: info.status,
         root: info.status === 'retest' ? false : !!info.root,
         hits: info.status === 'retest' ? 0 : 1,
@@ -301,11 +286,12 @@
   }
 
   function diagnoseHref(ids, subject, base) {
-    ids = (Array.isArray(ids) ? ids : [ids]).filter(Boolean);
-    if (!ids.length) return (base || 'diagnose/') + (subject && subject !== 'math' ? '?subject=' + subject : '');
-    var sub = subject || subjectOfId(ids[0]);
-    var q = 'target=' + ids.map(encodeURIComponent).join(',');
-    if (sub && sub !== 'math') q = 'subject=' + encodeURIComponent(sub) + '&' + q;
+    ids = (Array.isArray(ids) ? ids : [ids]).filter(function (id) {
+      return subjectOfId(id) && (!subject || subjectOfId(id) === subject);
+    });
+    var sub = ids.length ? subjectOfId(ids[0]) : (subject === 'physics' ? 'physics' : 'science');
+    if (!ids.length) return (base || 'diagnose/') + '?subject=' + sub;
+    var q = 'subject=' + sub + '&target=' + ids.map(encodeURIComponent).join(',');
     return (base || 'diagnose/') + '?' + q;
   }
 

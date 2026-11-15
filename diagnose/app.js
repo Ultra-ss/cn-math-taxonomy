@@ -39,11 +39,11 @@
   let sessionMeta = null;  // {label, chapterKey?}
   let demo = null;         // 演示模式：{oracle}
   let ui = { key: null, phase: 'ask', answer: '', verdict: null };
-  let subject = 'math';
+  let subject = 'science';
   let startQuery = '';
   let startStage = '';
   let chapterOpen = false;
-  let gradeSel = '七';     // 开始页「按年级整体诊断」：年级
+  let gradeSel = '一';     // 开始页「按年级整体诊断」：年级
   let volSel = '';         // '' 整年级 / '上' / '下'
   let seedParam = null;    // URL 参数 seed：固定选题的随机种子
   let pathCy = null;
@@ -100,62 +100,23 @@
     return LS_SESSION;
   }
   function withSubject(href) {
-    if (subject === 'math' || !href || href.indexOf('subject=') >= 0 || href.indexOf('http') === 0) return href;
+    if (!href || href.indexOf('subject=') >= 0 || href.indexOf('http') === 0) return href;
     return href + (href.indexOf('?') >= 0 ? '&' : '?') + 'subject=' + subject;
   }
   function detectSubject() {
     const params = new URLSearchParams(location.search);
     const explicit = params.get('subject');
-    if (explicit === 'english' || explicit === 'math' || explicit === 'physics' || explicit === 'chinese' || explicit === 'science' || explicit === 'morality' || explicit === 'history' || explicit === 'geography' || explicit === 'biology' || explicit === 'chemistry') return explicit;
+    if (explicit === 'physics' || explicit === 'science') return explicit;
+    if (explicit) return 'science';
     const target = params.get('target') || '';
     let hashId = (location.hash || '').replace(/^#/, '');
     try { hashId = decodeURIComponent(hashId); } catch (e) { /* 保持原样 */ }
-    if (/(^|,)\s*cne_/.test(target) || /^cne_/.test(hashId)) {
-      params.set('subject', 'english');
-      history.replaceState(null, '', location.pathname + '?' + params.toString() + location.hash);
-      return 'english';
-    }
     if (/(^|,)\s*cnp_/.test(target) || /^cnp_/.test(hashId)) {
       params.set('subject', 'physics');
       history.replaceState(null, '', location.pathname + '?' + params.toString() + location.hash);
       return 'physics';
     }
-    if (/(^|,)\s*cns_/.test(target) || /^cns_/.test(hashId)) {
-      params.set('subject', 'science');
-      history.replaceState(null, '', location.pathname + '?' + params.toString() + location.hash);
-      return 'science';
-    }
-    if (/(^|,)\s*cnd_/.test(target) || /^cnd_/.test(hashId)) {
-      params.set('subject', 'morality');
-      history.replaceState(null, '', location.pathname + '?' + params.toString() + location.hash);
-      return 'morality';
-    }
-    if (/(^|,)\s*cng_/.test(target) || /^cng_/.test(hashId)) {
-      params.set('subject', 'geography');
-      history.replaceState(null, '', location.pathname + '?' + params.toString() + location.hash);
-      return 'geography';
-    }
-    if (/(^|,)\s*cnb_/.test(target) || /^cnb_/.test(hashId)) {
-      params.set('subject', 'biology');
-      history.replaceState(null, '', location.pathname + '?' + params.toString() + location.hash);
-      return 'biology';
-    }
-    if (/(^|,)\s*cnk_/.test(target) || /^cnk_/.test(hashId)) {
-      params.set('subject', 'chemistry');
-      history.replaceState(null, '', location.pathname + '?' + params.toString() + location.hash);
-      return 'chemistry';
-    }
-    if (/(^|,)\s*cnh_/.test(target) || /^cnh_/.test(hashId)) {
-      params.set('subject', 'history');
-      history.replaceState(null, '', location.pathname + '?' + params.toString() + location.hash);
-      return 'history';
-    }
-    if (/(^|,)\s*cnc_/.test(target) || /^cnc_/.test(hashId)) {
-      params.set('subject', 'chinese');
-      history.replaceState(null, '', location.pathname + '?' + params.toString() + location.hash);
-      return 'chinese';
-    }
-    return 'math';
+    return 'science';
   }
   function applySubjectChrome() {
     document.body.classList.toggle('subject-english', subject === 'english');
@@ -1073,7 +1034,7 @@
     return raw || '本次诊断';
   }
   function buildShareModel(sum, chapters) {
-    var subjectName = subject === 'english' ? '英语' : subject === 'physics' ? '物理' : subject === 'chinese' ? '语文' : subject === 'science' ? '科学' : subject === 'morality' ? '道德与法治' : subject === 'history' ? '历史' : subject === 'geography' ? '地理' : subject === 'biology' ? '生物' : subject === 'chemistry' ? '化学' : '数学';
+    var subjectName = subject === 'physics' ? '物理' : '科学';
     var spots = [];
     var spotKind = 'topic';
     if (chapters && chapters.length) {
@@ -1100,7 +1061,7 @@
     }
     var now = new Date();
     return {
-      siteName: '中小学·高中知识图谱',
+      siteName: '科学·物理知识图谱',
       subject: subjectName,
       scope: shareScopeText(),
       mastered: sum.mastered.length,
@@ -1327,14 +1288,6 @@
 
     page.append(standardsCard(sum));
     page.append(logCard());
-    page.append(h('p', { class: 'iq-line', id: 'iq-line' },
-      '做完数学诊断，再测测思维能力？→ ',
-      h('a', {
-        href: 'https://test.pansgo.com/?from=math-result',
-        target: '_blank',
-        rel: 'noopener',
-        text: '儿童智商测试'
-      })));
     show(page);
     mountPathGraph(sum);
   }
