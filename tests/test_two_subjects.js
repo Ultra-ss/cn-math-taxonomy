@@ -127,7 +127,7 @@ test('整册诊断按学科取数，默认科学', () => {
 });
 
 test('所有 HTML 导航只含两科，公开地址指向 physicalmap', () => {
-  const pages = ['index.html', 'explore/index.html', 'diagnose/index.html', 'children/index.html', 'children/history.html', 'wrongbook/index.html', 'goods/index.html'];
+  const pages = ['index.html', 'explore/index.html', 'diagnose/index.html', 'children/index.html', 'children/history.html', 'wrongbook/index.html'];
   for (const page of pages) {
     const html = read(page);
     const subjects = Array.from(html.matchAll(/data-subject="([^"]+)"/g), match => match[1]);
@@ -165,16 +165,13 @@ test('错题本仅保存并展示两科，旧记录不会混入', () => {
   assert.equal(api.count(), 2);
 });
 
-test('学习好物不含旧学科商品和推荐文案', () => {
-  const context = { window: {} };
-  vm.runInNewContext(read('goods/goods-data.js'), context, { filename: 'goods/goods-data.js' });
-  const goods = context.window.GOODS;
-  const cats = context.window.GOODS_CATS;
-  assert.ok(Array.isArray(goods) && goods.length > 0);
-  assert.equal(new Set(goods.map(item => item.id)).size, goods.length);
-  assert.ok(goods.every(item => cats.some(cat => cat.id === item.cat)));
-  const publicText = read('goods/goods-data.js') + read('goods/index.html');
-  assert.ok(!/数学|语文|英语|词典笔|单词机/.test(publicText));
+test('网站不包含商品推广入口、页面和链接', () => {
+  assert.ok(!fs.existsSync(path.join(ROOT, 'goods')));
+  const pages = ['index.html', 'explore/index.html', 'diagnose/index.html', 'children/index.html', 'children/history.html', 'wrongbook/index.html', 'sw.js'];
+  for (const page of pages) {
+    const source = read(page);
+    assert.ok(!/goods|学习好物|京东|淘宝|佣金|union-click|s\.click\.taobao|uland\.taobao/.test(source), page);
+  }
 });
 
 console.log('\n' + passed + ' passed');
