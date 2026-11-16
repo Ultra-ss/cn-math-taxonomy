@@ -28,7 +28,7 @@
     if (next && next !== href) link.setAttribute('href', next);
   });
 
-  document.title = (subject === 'physics' ? '物理' : '科学') + ' · 科学·物理知识图谱';
+  document.title = (subject === 'physics' ? '物理' : '科学') + ' · 全网路物理学习图谱';
 
   function setText(id, value) {
     var node = document.getElementById(id);

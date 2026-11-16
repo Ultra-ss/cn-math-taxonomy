@@ -1086,7 +1086,7 @@
     }
     var now = new Date();
     return {
-      siteName: '科学·物理知识图谱',
+      siteName: '全网路物理学习图谱',
       subject: subjectName,
       scope: shareScopeText(),
       mastered: sum.mastered.length,
