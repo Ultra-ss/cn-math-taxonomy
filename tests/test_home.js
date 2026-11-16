@@ -11,9 +11,12 @@ async function test(name, fn) { await fn(); passed++; console.log('  ok   ' + na
 const flush = async () => { for (let i = 0; i < 6; i++) await new Promise(r => setImmediate(r)); };
 function element() {
   const attrs = {};
+  const classes = new Set(), listeners = new Map();
   const el = {
     textContent: '', hidden: true, children: [], className: '', href: '',
-    classList: { toggle() {}, add() {}, remove() {} },
+    classList: { toggle() {}, add(value) { classes.add(value); }, remove(value) { classes.delete(value); }, contains(value) { return classes.has(value); } },
+    addEventListener(type, fn) { if (!listeners.has(type)) listeners.set(type, []); listeners.get(type).push(fn); },
+    fire(type, event) { (listeners.get(type) || []).forEach(fn => fn(event)); },
     setAttribute(k, v) { attrs[k] = String(v); },
     getAttribute(k) { return k in attrs ? attrs[k] : null; },
     removeAttribute(k) { delete attrs[k]; },
@@ -54,6 +57,16 @@ function load(search, options = {}) {
     respond(); await flush();
     assert.equal(calls.length,1);
     assert.equal(ids['textbook-grid'].hasAttribute('aria-busy'), false);
+  });
+  await test('触摸按下提供卡片反馈，松手、滚动取消及失去捕获后清除，不阻止默认操作', async () => {
+    const {ids,respond} = load(''); respond(); await flush();
+    const grid=ids['textbook-grid'], card=grid.children[0];
+    const event={pointerType:'touch',button:0,target:{closest:()=>card},preventDefault(){throw new Error('不能阻止教材链接或滚动');}};
+    for (const type of ['pointerup','pointercancel','lostpointercapture']) {
+      grid.fire('pointerdown',event);assert.equal(card.classList.contains('is-pressed'),true);
+      grid.fire(type,event);assert.equal(card.classList.contains('is-pressed'),false);
+    }
+    grid.fire('pointerdown',{...event,pointerType:'mouse'});assert.equal(card.classList.contains('is-pressed'),false);
   });
   await test('上次位置校验或用户选择继续不阻塞首页教材', async () => {
     let resolve; const resume = new Promise(done => {resolve=done;});

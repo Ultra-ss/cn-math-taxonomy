@@ -95,6 +95,25 @@
   setText('textbook-subject', subject === 'physics' ? '物理 · 人教版' : '科学 · 教科版');
   renderTextbooks(null);
 
+  // 触摸浏览器不一定提供 :active；被动监听只提供反馈，保留链接与滚动的默认操作。
+  var cardGrid = document.getElementById('textbook-grid');
+  if (cardGrid) {
+    var pressedCard = null;
+    function clearCardPress() {
+      if (pressedCard) pressedCard.classList.remove('is-pressed');
+      pressedCard = null;
+    }
+    cardGrid.addEventListener('pointerdown', function (event) {
+      if ((event.pointerType !== 'touch' && event.pointerType !== 'pen') || event.button !== 0) return;
+      clearCardPress();
+      pressedCard = event.target.closest('.textbook-card');
+      if (pressedCard) pressedCard.classList.add('is-pressed');
+    }, { passive: true });
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (type) {
+      cardGrid.addEventListener(type, clearCardPress, { passive: true });
+    });
+  }
+
   // 首页只加载教材知识点数量，不再请求统计和题库数据。
   fetch('data/topics.json').then(function (response) {
     if (!response.ok) throw new Error('HTTP ' + response.status);
