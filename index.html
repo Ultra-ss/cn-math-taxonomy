@@ -51,19 +51,20 @@
     </span>
   </a>
   <nav class="site-nav" aria-label="主导航">
-    <div class="subject-switch" role="group" aria-label="学科">
-      <a class="nav-link subject-link" data-subject="science" href="./?subject=science">小学科学</a>
-      <a class="nav-link subject-link on" data-subject="physics" href="./?subject=physics">初高中物理</a>
-    </div>
     <div class="page-links">
       <a class="nav-link active" href="./?home=1" aria-current="page">首页</a>
       <a class="nav-link" href="explore/" data-resume-graph>知识图谱</a>
       <a class="nav-link" href="diagnose/">诊断</a>
       <a class="nav-link" href="children/">本地个人中心</a>
-      <a class="nav-link" href="wrongbook/">错题本</a>
+    </div>
+    <div class="home-nav-tools">
       <a class="nav-link resource-search-btn" href="https://pansgo.com" target="_blank" rel="noopener noreferrer" title="网盘资源搜索">
         <svg class="resource-search-ico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M11.5 10.4a5.5 5.5 0 1 0-1.1 1.1l3 3a.75.75 0 0 0 1.06-1.06zM7 11.5A4.5 4.5 0 1 1 7 2.5a4.5 4.5 0 0 1 0 9z"/></svg>资源搜索
       </a>
+      <div class="subject-switch" role="group" aria-label="学科">
+        <a class="nav-link subject-link" data-subject="science" href="./?subject=science">小学科学</a>
+        <a class="nav-link subject-link on" data-subject="physics" href="./?subject=physics">初高中物理</a>
+      </div>
     </div>
   </nav>
 </header>
@@ -141,8 +142,12 @@
     <button type="button" id="continue-learning-no">暂不继续</button>
   </div>
 </dialog>
-<footer class="site-footer">
-  <p><a href="https://github.com/Ultra-ss/cn-math-taxonomy/issues/new/choose">提交 Issue</a></p>
+<footer class="home-feedback" aria-labelledby="feedback-title">
+  <h2 id="feedback-title">欢迎交流与反馈</h2>
+  <a class="feedback-qr-link" href="assets/feedback-qr.jpg" target="_blank" rel="noopener noreferrer" aria-label="查看交流与反馈二维码原图">
+    <img src="assets/feedback-qr.jpg" width="334" height="329" loading="lazy" decoding="async" alt="交流与反馈二维码">
+  </a>
+  <p class="feedback-note">本网页仅用于个人学习，免费使用</p>
 </footer>
 <script src="assets/stem-compat.js"></script>
 <script src="assets/children.js"></script>
