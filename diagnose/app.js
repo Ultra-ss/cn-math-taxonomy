@@ -40,6 +40,7 @@
   let demo = null;         // 演示模式：{oracle}
   let ui = { key: null, phase: 'ask', answer: '', verdict: null };
   let subject = 'physics';
+  let sessionLevel = 'normal'; // 专家挑战的题库与普通检测隔离。
   let bookSel = '';
   let startQuery = '';
   let startStage = '';
@@ -292,21 +293,32 @@
     const rs = await Promise.all(urls.map(function (u) { return fetch(u); }));
     rs.forEach(function (r, i) { if (!r.ok) throw new Error(urls[i] + ' → HTTP ' + r.status); });
     const js = await Promise.all(rs.map(function (r) { return r.json(); }));
-    // 题库可选：缺失（404）或损坏时回退到 topics.json 的 diagnostic_question
+    // 普通题库保留兼容回退；专家题库必须完整可用，绝不借普通题凑数。
     let questions = null;
     try {
       const qr = await fetch('../data/questions.json');
       if (qr.ok) questions = await qr.json();
     } catch (e) { questions = null; }
-    const topics = js[0].filter(function (t) { return E.subjectOf(t) === subject; });
+    let topics = js[0].filter(function (t) { return E.subjectOf(t) === subject; });
+    if (sessionLevel === 'pro') {
+      if (subject !== 'physics') throw new Error('专家挑战目前仅开放初中物理。');
+      const qr = await fetch('../data/questions-pro.json');
+      if (!qr.ok) throw new Error('专家题库暂时无法加载，请稍后重试。');
+      const expertQuestions = await qr.json();
+      if (!window.CnmProChallenge.validateBank(topics, questions, expertQuestions)) {
+        throw new Error('专家题库校验未通过，请稍后重试。');
+      }
+      topics = topics.filter(window.CnmProChallenge.isJunior);
+      questions = expertQuestions;
+    }
     const allow = {};
     topics.forEach(function (t) { allow[t.id] = true; });
-    const deps = js[1].filter(function (d) { return allow[d.topicId] && allow[d.prerequisiteId]; });
+    const deps = sessionLevel === 'pro' ? [] : js[1].filter(function (d) { return allow[d.topicId] && allow[d.prerequisiteId]; });
     if (questions) questions = questions.filter(function (q) { return allow[q.topicId]; });
     const stdById = {};
     js[2].items.forEach(function (x) { stdById[x.id] = x; });
     const graph = E.buildGraph(topics, deps, questions);
-    D = { topics: topics, deps: deps, stdById: stdById, graph: graph, tree: buildTree(topics), aliases: (js[3] && js[3].aliases) || {} };
+    D = { topics: topics, deps: deps, stdById: stdById, graph: graph, tree: buildTree(topics), aliases: (js[3] && js[3].aliases) || {}, level: sessionLevel };
   }
 
   function buildTree(topics) {
@@ -376,7 +388,7 @@
       h('p', { class: 'muted small', style: 'margin:8px 0 0' },
         cur ? '检测做完，结果会保存到「' + cur.name + '」的档案里。' : '未选择孩子时，图谱检测标记保存在本机访客记录，不计入孩子档案。'));
   }
-  function recordKey() { return [subject, session.seed, session.targets.join(',')].join('|'); }
+  function recordKey() { return (sessionMeta && sessionMeta.level === 'pro' ? 'pro|' : '') + [subject, session.seed, session.targets.join(',')].join('|'); }
   function saveToChild(sum) {
     const cur = sessionMeta && sessionMeta.progressChildId ? CC.get(sessionMeta.progressChildId) : null;
     if (demo || !cur || !sum.asked) return;
@@ -386,6 +398,7 @@
       counts: { weak: sum.weak.length, shaky: sum.shaky.length, mastered: sum.mastered.length, untested: sum.untested.length },
       weak: sum.weak, roots: sum.roots.map(function (r) { return r.id; }), shaky: sum.shaky, mastered: sum.mastered
     };
+    if (sessionMeta.level === 'pro') rec.level = 'pro';
     if (window.StemCompat) {
       const topic = window.StemCompat.TOPIC;
       const lists = [rec.weak, rec.shaky, rec.mastered, rec.roots, rec.targets || []];
@@ -404,7 +417,7 @@
       text: '错题本（' + window.CnmWrong.count(ownerId || 'guest') + '）' });
   }
   function noteBlind(sum) {
-    if (demo || !sum || !sum.asked || !window.CnmBlind) return;
+    if (demo || !sum || !sum.asked || !window.CnmBlind || (sessionMeta && sessionMeta.level === 'pro')) return;
     window.CnmBlind.noteResult({
       subject: subject, key: recordKey(), label: sessionMeta.label, demo: demo,
       weak: sum.weak, shaky: sum.shaky, mastered: sum.mastered,
@@ -420,6 +433,7 @@
     return './?' + q;
   }
   function blindResultCard(sum) {
+    if (sessionMeta && sessionMeta.level === 'pro') return null;
     if (!(sum.weak || []).length && !(sum.shaky || []).length) return null;
     const hist = '../children/?subject=' + subject + '#weak-points';
     return h('div', { class: 'card no-print', id: 'blind-result' },
@@ -432,7 +446,8 @@
   function syncProgress() {
     if (demo || !session || !sessionMeta || sessionMeta.progressChildId === undefined || !window.CnmProgress) return;
     window.CnmProgress.recordSession({
-      childId: sessionMeta.progressChildId, subject: subject, key: recordKey(), session: session
+      childId: sessionMeta.progressChildId, subject: subject, key: recordKey(), session: session,
+      level: sessionMeta.level === 'pro' ? 'pro' : 'normal'
     });
   }
   function save() {
@@ -440,6 +455,7 @@
     lsSet(sessionKey(), {
       v: 2, mode: session.mode, targets: session.targets, limit: session.limit, confirm: session.confirm,
       order: session.orderKind || undefined, volume: session.volume || undefined,
+      level: sessionMeta.level === 'pro' ? 'pro' : undefined,
       progressChildId: sessionMeta.progressChildId,
       returnTo: safeReturnTo(sessionMeta.returnTo) || undefined,
       label: sessionMeta.label, answers: session.answers,
@@ -450,6 +466,15 @@
   }
 
   function startSession(targets, label, limit, mode, volume) {
+    const cur = CC.current();
+    if (sessionLevel === 'pro') {
+      const passed = window.CnmProgress && window.CnmProgress.statuses(cur ? cur.id : null, subject);
+      if (mode && mode !== 'target' || !window.CnmProChallenge.eligible(D.graph.byId, targets, passed)) {
+        showProError('请先通过这个初中物理知识点的普通检测，再挑战专家水平。');
+        return;
+      }
+      label = '专家挑战 · ' + targets.map(nameOf).join('、');
+    }
     pathExpanded = false;
     resultPanelState = { analysis: false, log: false, more: false };
     const screen = mode === 'screen' || mode === 'textbook';
@@ -457,8 +482,7 @@
     session = E.createSession(D.graph, targets, {
       mode: mode, volume: volume, limit: limit || (screen ? st.screenLimit : st.limit), confirm: st.confirm, seed: newSeed(), avoid: seenList()
     });
-    const cur = CC.current();
-    sessionMeta = { label: label, excluded: [], progressChildId: cur ? cur.id : null, returnTo: returnToParam || '' };
+    sessionMeta = { label: label, excluded: [], progressChildId: cur ? cur.id : null, returnTo: returnToParam || '', level: sessionLevel === 'pro' ? 'pro' : undefined };
     sessionMeta.returnTo = returnPath();
     resetUi();
     save();
@@ -467,6 +491,14 @@
 
   function restoreSession(saved) {
     try {
+      if ((saved.level === 'pro') !== (D.level === 'pro')) return false;
+      if (saved.level !== undefined && saved.level !== 'normal' && saved.level !== 'pro') return false;
+      if (saved.level === 'pro') {
+        const passed = window.CnmProgress && window.CnmProgress.statuses(saved.progressChildId, subject);
+        if (!Object.prototype.hasOwnProperty.call(saved, 'progressChildId') || saved.mode && saved.mode !== 'target' ||
+            !window.CnmProChallenge.eligible(D.graph.byId, saved.targets, passed) ||
+            !window.CnmProChallenge.validAnswers(D.graph, saved)) return false;
+      }
       const parts = window.StemCompat
         ? window.StemCompat.restoreParts(saved)
         : { answers: saved.answers, excluded: [], avoid: saved.avoid || [] };
@@ -481,6 +513,7 @@
         progressChildId: Object.prototype.hasOwnProperty.call(saved, 'progressChildId') ? saved.progressChildId : undefined,
         returnTo: returnToParam == null ? safeReturnTo(saved.returnTo) : returnToParam
       };
+      if (saved.level === 'pro') sessionMeta.level = 'pro';
       sessionMeta.returnTo = returnPath();
       syncProgress();
       return true;
@@ -517,6 +550,11 @@
   }
 
   function restart() {
+    if (sessionMeta && sessionMeta.level === 'pro') {
+      lsDel(sessionKey());
+      location.assign(location.pathname + '?subject=' + subject);
+      return;
+    }
     pathExpanded = false;
     resultPanelState = { analysis: false, log: false, more: false };
     session = null; demo = null;
@@ -922,7 +960,7 @@
         h('button', { id: 'btn-test-restart', onclick: function () { if (confirm('确定放弃当前检测并回到开始页吗？')) restart(); } }, '重新开始')));
     const card = h('div', { class: 'card question-card' + (denseQuestion ? ' question-dense' : '') },
       h('div', { class: 'test-statusbar' },
-        h('span', { class: 'test-step' }, (demo ? '演示 · ' : '') + '第 ' + (n + 1) + ' 题'),
+        h('span', { class: 'test-step' }, (demo ? '演示 · ' : sessionMeta && sessionMeta.level === 'pro' ? '专家挑战 · ' : '') + '第 ' + (n + 1) + ' 题'),
         tools),
       h('div', { class: 'progress', 'aria-label': '本轮已完成 ' + n + ' 题' },
         h('i', { style: 'width:' + Math.round(n / session.limit * 100) + '%' })),
@@ -1180,11 +1218,14 @@
       const status = E.statusOf(session, id);
       const passed = status === 'mastered';
       const failed = status === 'weak' || status === 'shaky';
+      const expert = sessionMeta && sessionMeta.level === 'pro';
       return {
-        title: nameOf(id),
-        label: passed ? '✓ 通过' : failed ? '× 未通过' : '尚未完成',
+        title: (expert ? '专家挑战 · ' : '') + nameOf(id),
+        label: passed ? (expert ? '⭐ 专家通过' : '✓ 通过') : failed ? '× 未通过' : '尚未完成',
         tone: passed ? 'passed' : failed ? 'failed' : 'pending',
-        note: passed ? '这个知识点已通过，可以继续学习其他知识点。'
+        note: expert && passed ? '已获得专家标记。首次通过额外获得 1⭐，重复通过不重复计分。'
+          : expert && failed ? '本次专家挑战未通过，普通检测的通关记录仍然保留。'
+          : passed ? '这个知识点已通过，可以继续学习其他知识点。'
           : status === 'shaky' ? '这个知识点还不够稳定，建议再巩固一次。'
           : failed ? '这个知识点还需要巩固，可以返回图谱继续学习。'
           : '本轮尚未完成这个知识点的检测，可在「更多操作」中继续。'
@@ -1732,6 +1773,7 @@
     const out = {
       tool: 'cn-math-taxonomy/diagnose', version: 2, mode: session.mode || 'target', generatedAt: new Date().toISOString(),
       order: session.orderKind || undefined, volume: session.volume || undefined,
+      level: sessionMeta.level === 'pro' ? 'pro' : undefined,
       note: '自动判题是近似的，以参考答案为准。',
       label: sessionMeta.label,
       targets: session.targets.map(brief),
@@ -1890,22 +1932,47 @@
     return retry;
   }
 
+  function showProError(message) {
+    const stored = lsGet(sessionKey());
+    const resume = new URLSearchParams(location.search).get('resume') === '1';
+    const back = safeReturnTo(returnToParam) || (resume && stored && stored.level === 'pro' && safeReturnTo(stored.returnTo)) || returnPath();
+    show(h('div', { class: 'card', id: 'pro-challenge-error' },
+      h('h2', { text: '专家挑战' }),
+      h('p', { text: message }),
+      h('a', { class: 'btn btn-primary', href: back, onclick: selectSessionOwner }, '返回知识图谱')));
+  }
+
   async function init() {
     subject = detectSubject();
     applySubjectChrome();
+    const params = new URLSearchParams(location.search);
+    const savedAtEntry = lsGet(sessionKey());
+    sessionLevel = params.get('level') === 'pro' || (params.get('resume') === '1' && !params.has('level') && savedAtEntry && savedAtEntry.level === 'pro') ? 'pro' : 'normal';
+    returnToParam = params.has('returnTo') ? safeReturnTo(params.get('returnTo')) : null;
+    if (params.has('level') && params.get('level') !== 'pro' && params.get('level') !== 'normal') {
+      showProError('无法识别这份挑战，请从知识图谱重新进入。');
+      return;
+    }
+    if (sessionLevel === 'pro') document.title = '专家挑战 · 初中物理';
     try { await loadData(); } catch (e) {
+      if (sessionLevel === 'pro') { showProError(String(e.message || e)); return; }
       clearRoot();
       root.append(h('div', { class: 'card' }, h('h2', { class: 'err', text: '数据加载失败' }),
         h('p', null, String(e.message || e)),
         h('p', null, '请在项目根目录运行 ', h('code', { text: 'python3 -m http.server 8000' }), '，再访问 http://localhost:8000/diagnose/ （不能直接用 file:// 打开）。')));
       return;
     }
-    const params = new URLSearchParams(location.search);
     const retryCompleted = consumeRetry(params);
-    returnToParam = params.has('returnTo') ? safeReturnTo(params.get('returnTo')) : null;
     if (params.has('confirm')) confirmParam = E.clampConfirm(params.get('confirm'));
     let resolved = null;
-    try { resolved = resolveTargets(params); } catch (e) { renderStart(e.message); return; }
+    try { resolved = resolveTargets(params); } catch (e) {
+      if (sessionLevel === 'pro') showProError(e.message); else renderStart(e.message);
+      return;
+    }
+    if (sessionLevel === 'pro' && params.has('demo')) {
+      showProError('专家挑战需要真实作答，请从已通过的知识点进入。');
+      return;
+    }
     if (params.get('seed')) seedParam = params.get('seed');
     const paramLimit = parseInt(params.get('limit'), 10);
     const limit = paramLimit > 0 ? paramLimit : undefined;
@@ -1925,8 +1992,11 @@
     }
     if (resolved) {
       const saved = lsGet(sessionKey());
+      const cur = CC.current();
       const same = saved && JSON.stringify(saved.targets) === JSON.stringify(Array.from(new Set(resolved.ids))) &&
-        (saved.mode || 'target') === (resolved.mode || 'target') && (seedParam == null || saved.seed === seedParam);
+        (saved.mode || 'target') === (resolved.mode || 'target') && (seedParam == null || saved.seed === seedParam) &&
+        (saved.level === 'pro' ? 'pro' : 'normal') === sessionLevel &&
+        (sessionLevel !== 'pro' || saved.progressChildId === (cur ? cur.id : null));
       if (same && restoreSession(saved) && (!retryCompleted || E.nextItem(D.graph, session))) { render(); return; }
       startSession(resolved.ids, resolved.label, limit, resolved.mode, resolved.volume);
       return;
@@ -1934,11 +2004,14 @@
     if (params.get('resume') === '1') {
       const restored = resumeStoredSession();
       if (restored === 'restored') render();
-      else renderStart(restored === 'missing'
-        ? '当前没有可继续的检测，请选择教材开始挑战。'
-        : '这份检测进度暂时无法恢复，请到本地个人中心查看。原进度仍保留。');
+      else {
+        const message = restored === 'missing' ? '当前没有可继续的检测，请选择教材开始挑战。'
+          : '这份检测进度暂时无法恢复，请到本地个人中心查看。原进度仍保留。';
+        if (sessionLevel === 'pro') showProError(message); else renderStart(message);
+      }
       return;
     }
+    if (sessionLevel === 'pro') { showProError('请从已通过的初中物理知识点进入专家挑战。'); return; }
     renderStart();
   }
 

@@ -129,3 +129,26 @@ main.kids { width: min(760px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
 @media print {
   .center-wrongbook, .center-learning, #weak-points, #center-sessions, .kid-card, .kid-form, .kid-backup, .kid-section > .rec, .kid-empty-card { background: #fff; color: #000; box-shadow: none; }
 }
+
+/* 成就用紫、黄、蓝的柔和层次区分累计积分与兑换后的徽章。 */
+.center-achievements { background-image: linear-gradient(125deg, var(--node-junior-bg), var(--bg-elev) 55%, var(--node-senior-bg)); }
+.achievement-owner-label { display: flex; gap: 6px; align-items: center; color: var(--muted); font-size: .82rem; }
+.achievement-owner-label select { max-width: 150px; min-height: 36px; padding: 5px 28px 5px 9px; font-size: .88rem; }
+.achievement-score { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 14px 0 8px; }
+.achievement-total { display: flex; gap: 8px; align-items: baseline; color: var(--brand-strong); }
+.achievement-total > strong { font-size: 2rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.achievement-total > span { font-size: .85rem; }
+.achievement-medals { display: flex; flex-wrap: wrap; gap: 6px; }
+.achievement-medal { display: flex; align-items: center; gap: 5px; border: 1px solid var(--line); border-radius: 12px; padding: 7px 9px; background: var(--bg-elev); font-variant-numeric: tabular-nums; }
+.achievement-icon { font-size: 1.3rem; }
+.achievement-breakdown { font-weight: 700; font-size: .9rem; }
+.achievement-chapters { border-top: 1px solid var(--line); margin-top: 12px; }
+.achievement-chapters > summary { cursor: pointer; padding: 12px 0; font-weight: 750; min-height: 44px; }
+.achievement-chapters ul { padding-left: 20px; margin: 8px 0 0; }
+.achievement-chapters li { margin: 8px 0; overflow-wrap: anywhere; }
+.achievement-chapters a { color: var(--brand-strong); font-weight: 650; }
+@media (max-width: 420px) {
+  .center-achievements .center-section-head { align-items: flex-start; flex-wrap: wrap; }
+  .achievement-owner-label { margin-left: auto; }
+  .achievement-medal { padding: 6px 8px; }
+}

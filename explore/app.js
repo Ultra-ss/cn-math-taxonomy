@@ -33,6 +33,7 @@
   var aliasHitIds = new Set();
   var subject = 'physics';
   var progress = {};
+  var proProgress = {};
   var progressStamp = '';
   var upDepth = 2;
   var ancestorsOpen = false;
@@ -156,21 +157,30 @@
   function currentChild() {
     return window.CnmChildren && window.CnmChildren.current ? window.CnmChildren.current() : null;
   }
-  function progressOf(id) { return progress[id] || null; }
-  function progressLabel(row) {
-    return !row ? '尚未完成检测' : row.status === 'mastered' ? '已通过检测' : '未通过检测，建议巩固后再测';
+  function progressOf(id) {
+    var row = progress[id] || null;
+    if (row && row.status === 'mastered' && proProgress[id] && proProgress[id].status === 'mastered') {
+      return { status: row.status, at: row.at, key: row.key, expert: true };
+    }
+    return row;
   }
-  function progressClass(row) { return row ? row.status === 'mastered' ? 'test-passed' : 'test-failed' : ''; }
+  function progressMark(row) { return !row ? '' : row.expert ? '⭐' : row.status === 'mastered' ? '✓' : '×'; }
+  function progressLabel(row) {
+    return !row ? '尚未完成检测' : row.expert ? '已通过专家挑战' : row.status === 'mastered' ? '已通过检测' : '未通过检测，建议巩固后再测';
+  }
+  function progressClass(row) { return row ? row.expert ? 'test-expert' : row.status === 'mastered' ? 'test-passed' : 'test-failed' : ''; }
   function progressBadge(row) {
-    return row ? el('span', { class: 'topic-state ' + progressClass(row), 'aria-label': progressLabel(row), title: progressLabel(row), text: row.status === 'mastered' ? '✓' : '×' }) : null;
+    return row ? el('span', { class: 'topic-state ' + progressClass(row), 'aria-label': progressLabel(row), title: progressLabel(row), text: progressMark(row) }) : null;
   }
   function refreshProgress(force) {
     var child = currentChild();
     var next = window.CnmProgress && window.CnmProgress.statuses ? window.CnmProgress.statuses(child ? child.id : null, subject) : {};
-    var stamp = JSON.stringify([child ? child.id : null, next]);
+    var nextPro = window.CnmProgress && window.CnmProgress.statuses ? window.CnmProgress.statuses(child ? child.id : null, subject, 'pro') : {};
+    var stamp = JSON.stringify([child ? child.id : null, next, nextPro]);
     if (!force && progressStamp === stamp) return;
     progressStamp = stamp;
     progress = next;
+    proProgress = nextPro;
     if ($('progress-owner')) $('progress-owner').textContent = child ? '检测记录：' + child.name : '检测记录：本机访客';
     if (topics.length) {
       renderList();
@@ -180,7 +190,7 @@
         cy.nodes().forEach(function (node) {
           if (!byId.has(node.id())) return;
           var row = progressOf(node.id());
-          node.removeClass('test-passed test-failed');
+          node.removeClass('test-passed test-failed test-expert');
           if (row) node.addClass(progressClass(row));
           node.data('testStatus', row ? row.status : '');
           node.data('testLabel', progressLabel(row));
@@ -339,7 +349,7 @@
     return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   }
   function testBadge(passed, color, ink) {
-    var path = passed ? 'm6 11 3 3 7-7' : 'm7 7 8 8m0-8-8 8';
+    var path = passed === 'expert' ? 'm11 3 2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.6-4.8 2.6.9-5.4L3.2 8.7l5.4-.8Z' : passed ? 'm6 11 3 3 7-7' : 'm7 7 8 8m0-8-8 8';
     return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10" fill="' + color + '" stroke="' + ink + '" stroke-width="2"/><path d="' + path + '" fill="none" stroke="' + ink + '" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
   }
   function theme() {
@@ -356,7 +366,8 @@
       edge: cssVar('--edge'),
       edgeSoft: cssVar('--edge-soft'),
       passedBadge: testBadge(true, cssVar('--ok'), cssVar('--on-ok')),
-      failedBadge: testBadge(false, cssVar('--bad'), cssVar('--on-bad'))
+      failedBadge: testBadge(false, cssVar('--bad'), cssVar('--on-bad')),
+      expertBadge: testBadge('expert', cssVar('--node-senior-bg'), cssVar('--node-senior'))
     };
   }
 
@@ -529,7 +540,7 @@
     if (name) name.textContent = topic ? topic.name : '先选择知识点';
     if (state) {
       var row = topic ? progressOf(topic.id) : null;
-      state.textContent = row ? (row.status === 'mastered' ? '✓ 已通过' : '× 未通过') : '尚未检测';
+      state.textContent = row ? progressMark(row) + (row.expert ? ' 专家已通过' : row.status === 'mastered' ? ' 已通过' : ' 未通过') : '尚未检测';
       state.className = 'mobile-topic-state ' + progressClass(row);
     }
     if (button) {
@@ -581,10 +592,14 @@
     document.querySelector('.explore').classList.toggle('options-open', open);
     syncMobileChrome();
   }
+  function canChallengeExpert(id) {
+    var topic = byId.get(id), row = progressOf(id);
+    return !!(subject === 'physics' && topic && topic.grade >= 8 && topic.grade <= 9 && row && row.status === 'mastered');
+  }
   function nodeDiagnosisHref(id) {
     if (!byId.has(id)) return '';
     rememberViewport();
-    return withReturn('../diagnose/?subject=' + subject + '&target=' + encodeURIComponent(id) + '&retry=1');
+    return withReturn('../diagnose/?subject=' + subject + '&target=' + encodeURIComponent(id) + '&retry=1' + (canChallengeExpert(id) ? '&level=pro' : ''));
   }
   function closeNodeDiagnosis() {
     var dialog = $('node-diagnose-dialog');
@@ -596,7 +611,10 @@
     if (!dialog || dialog.open) return false;
     nodeDialogId = id;
     nodeDialogScroll = { x: window.scrollX, y: window.scrollY };
-    $('node-dialog-question').textContent = '要进入“' + byId.get(id).name + '”的检测吗？';
+    var expert = canChallengeExpert(id);
+    $('node-dialog-title').textContent = expert ? '是否挑战专家水平' : '检测这个知识点';
+    $('node-dialog-question').textContent = expert ? '“' + byId.get(id).name + '”已通过普通检测。挑战更进一步的 Pro 题目，首次通过再得 1⭐。' : '要进入“' + byId.get(id).name + '”的检测吗？';
+    $('node-dialog-try').textContent = expert ? '我要挑战' : '我要试试';
     $('node-dialog-try').setAttribute('href', nodeDiagnosisHref(id));
     dialog.showModal();
     return true;
@@ -709,7 +727,7 @@
       if (!row) { row = { completed: 0, total: 0 }; counts.set(key, row); }
       row.total++;
       var tested = progressOf(topic.id);
-      if (tested && ['mastered', 'weak', 'shaky'].indexOf(tested.status) >= 0) row.completed++;
+      if (tested && tested.status === 'mastered') row.completed++;
     });
     return counts;
   }
@@ -765,8 +783,8 @@
             el('span', {
               class: 'chapter-progress' + (completed.completed === completed.total ? ' is-complete' : ''),
               text: completed.completed + '/' + completed.total,
-              'aria-label': '已完成检测 ' + completed.completed + ' 个，共 ' + completed.total + ' 个知识点',
-              title: '已完成检测 / 本章知识点'
+              'aria-label': '已通过检测 ' + completed.completed + ' 个，共 ' + completed.total + ' 个知识点',
+              title: '已通过检测 / 本章知识点'
             }))));
         chapter.topics.forEach(function (topic) {
           chapterDetails.append(el('button', {
@@ -834,15 +852,15 @@
     }
     parts.push(el('h1', { class: 'detail-title', text: topic.name }));
     var tested = progressOf(topic.id);
-    parts.push(el('p', { class: 'detail-test-state ' + progressClass(tested), text: (tested ? (tested.status === 'mastered' ? '✓ ' : '× ') : '') + progressLabel(tested) }));
+    parts.push(el('p', { class: 'detail-test-state ' + progressClass(tested), text: (tested ? progressMark(tested) + ' ' : '') + progressLabel(tested) }));
     var diagHref = '../diagnose/?target=' + encodeURIComponent(topic.id);
     if (subject !== 'math') diagHref = '../diagnose/?subject=' + subject + '&target=' + encodeURIComponent(topic.id);
-    diagHref += '&retry=1';
+    diagHref += '&retry=1' + (canChallengeExpert(topic.id) ? '&level=pro' : '');
     parts.push(el('a', {
       class: 'btn btn-primary btn-lg diag-btn',
       href: withReturn(diagHref),
       'data-diagnose-return': diagHref
-    }, tested ? '重新检测这个知识点' : '检测这个知识点'));
+    }, canChallengeExpert(topic.id) ? '挑战专家水平' : tested ? '重新检测这个知识点' : '检测这个知识点'));
     parts.push(el('dl', { class: 'meta-grid' },
       metaItem('年级册次', gradeLabel(topic), true),
       metaItem('章节', topic.chapter, true)));
@@ -1125,7 +1143,7 @@
     cyEl.dataset.total = String(total);
     var heavy = !folded && total > 80;
     cyEl.dataset.view = hasBookScope() && showWholeBook ? 'book' : 'local';
-    cyEl.setAttribute('aria-label', (hasBookScope() && showWholeBook ? scopeTitle() + '完整知识图谱' : '选中知识点的局部先修图') + '；勾表示检测通过，叉表示未通过，目录中也可查看检测状态。');
+    cyEl.setAttribute('aria-label', (hasBookScope() && showWholeBook ? scopeTitle() + '完整知识图谱' : '选中知识点的局部先修图') + '；勾表示普通检测通过，星表示专家挑战通过，叉表示普通检测未通过，目录中也可查看检测状态。');
     if (heavy) meta.textContent = '正在排列全部 ' + total + ' 个知识点…';
 
     var kick = heavy ? function (fn) { setTimeout(fn, 40); } : requestAnimationFrame;
@@ -1166,7 +1184,7 @@
             shape: 'round-rectangle', width: boxW, height: 34, padding: 0, 'corner-radius': 8
           } },
           { selector: 'node.current', style: { 'border-width': 4, 'z-index': 10 } },
-          { selector: 'node.test-passed, node.test-failed', style: {
+          { selector: 'node.test-passed, node.test-failed, node.test-expert', style: {
             'background-width': 22, 'background-height': 22, 'background-fit': 'none',
             'background-position-x': '100%', 'background-position-y': '0%',
             'background-offset-x': 7, 'background-offset-y': -7, 'background-clip': 'none',
@@ -1174,6 +1192,7 @@
           } },
           { selector: 'node.test-passed', style: { 'background-image': colors.passedBadge } },
           { selector: 'node.test-failed', style: { 'background-image': colors.failedBadge } },
+          { selector: 'node.test-expert', style: { 'background-image': colors.expertBadge } },
           { selector: 'edge', style: {
             width: 1.6, 'line-color': 'data(color)', 'target-arrow-color': 'data(color)',
             'target-arrow-shape': 'triangle', 'curve-style': dense ? 'straight' : 'bezier',

@@ -31,6 +31,8 @@ const REQUIRED = [
   './data/dependencies.json',
   './data/cn-curriculum-standards.json',
   './data/questions.json',
+  './data/questions-pro.json',
+  './data/pro-sources.json',
   './data/id-aliases.json'
 ];
 const FAKE_TOKEN = 'test-token-not-for-live';

@@ -116,6 +116,18 @@ jobs:
       - name: tests/test_explore_scope.js
         run: node tests/test_explore_scope.js
 
+      - name: tests/test_explore_pro.js
+        run: node tests/test_explore_pro.js
+
+      - name: tests/test_pro_challenge.js
+        run: node tests/test_pro_challenge.js
+
+      - name: scripts/validate_pro_questions.py
+        run: python3 scripts/validate_pro_questions.py
+
+      - name: tests/test_pro_bank.js
+        run: node tests/test_pro_bank.js
+
       - name: 课标映射严格模式（仅报告）
         continue-on-error: true
         env:

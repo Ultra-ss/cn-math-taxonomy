@@ -38,6 +38,21 @@
   <h1>本地个人中心</h1>
   <p class="lede">管理这台设备上的孩子档案、学习记录与备份。资料只保存在当前浏览器；选好当前孩子后，可以分别查看每次的检测结果和薄弱知识点。</p>
   <p id="back" class="quiet-link" hidden></p>
+  <section class="center-achievements center-learning" id="achievements" aria-labelledby="achievements-title">
+    <div class="center-section-head">
+      <h2 id="achievements-title">我的学习成就</h2>
+      <label class="achievement-owner-label" for="achievement-owner">当前档案<select id="achievement-owner" aria-label="查看学习成就的档案"></select></label>
+    </div>
+    <p class="muted small" id="achievement-owner-name"></p>
+    <div class="achievement-score" id="achievement-score" aria-live="polite"></div>
+    <p class="achievement-breakdown" id="achievement-breakdown"></p>
+    <p class="muted small">普通检测首次通过得 1⭐，专家挑战首次通过再得 1⭐；重复通过不重复计分。每 5⭐ 自动合为 1🌙，每 5🌙 合为 1🌞，总积分始终保留。</p>
+    <details class="achievement-chapters" id="achievement-chapters">
+      <summary id="achievement-chapters-summary">已解锁章节</summary>
+      <p class="muted small">一章内全部知识点通过普通检测后解锁；章节进度以当前通过状态为准。</p>
+      <ul id="achievement-chapter-list"></ul>
+    </details>
+  </section>
   <section class="center-wrongbook" aria-labelledby="center-wrongbook-title">
     <div>
       <h2 id="center-wrongbook-title">错题本</h2>
@@ -67,7 +82,7 @@
   </section>
   <section class="kid-backup" aria-labelledby="backup-title">
     <h2 id="backup-title">备份与恢复</h2>
-    <p>备份所有孩子的资料，以及科学、物理的检测记录、错题、进行中检测、薄弱知识点和图谱检测进度。没有建立档案的学习进度也可以迁移。</p>
+    <p>备份所有孩子的资料，以及科学、物理的检测记录、错题、进行中检测、薄弱知识点、图谱检测进度和成就积分。没有建立档案的学习进度也可以迁移。</p>
     <button type="button" id="export-backup">导出全部学习数据</button>
     <p id="export-status" class="small" role="status" hidden></p>
     <div class="kid-import">

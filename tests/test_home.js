@@ -147,6 +147,7 @@ function load(search, options = {}) {
     const {ids,respond} = load(''); respond(); await flush();
     const cards=ids['textbook-grid'].children;
     assert.deepEqual(cards.map(card=>card.getAttribute('data-volume')), ['八上','八下','九全','必修一','必修二','必修三','选必一','选必二','选必三']);
+    assert.deepEqual(cards.map(card=>card.children[0].textContent), ['初中','初中','初中','高中','高中','高中','高中','高中','高中']);
     assert.deepEqual(cards.map(card=>parseInt(card.children[2].textContent,10)), [28,24,40,27,25,37,28,26,34]);
     for (const card of cards) {
       const url=new URL(card.href,'https://physicalmap.pages.dev/');

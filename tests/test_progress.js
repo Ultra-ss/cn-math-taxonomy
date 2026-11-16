@@ -180,4 +180,106 @@ test('历史迁移必须显式提供归属，records.mastered汇总不能直接�
   assert.equal(api.statuses(null,'science').cns_a.mark,'✓');
   assert.equal(api.recordSession({childId:'child-a',subject:'science',key:'summary',session:{mastered:['cns_a']}}),false);
 });
+test('首次直接通关得星，重复通过、失败及撤销不重复计分；无推断或demo积分', () => {
+  const { api } = load();
+  record(api,'normal',run('cns_b',['correct','correct','correct']));
+  assert.equal(api.achievements('child-a').total,1);
+  assert.equal(api.achievements('child-a').earned.normal.cns_a,undefined);
+  record(api,'again',run('cns_b',['correct','correct','correct']),t2);
+  record(api,'normal',run('cns_b',['correct']),t3);
+  record(api,'failed',run('cns_b',['wrong','wrong']),t4);
+  record(api,'demo',run('cns_a',['correct','correct','correct']),t4,{demo:true});
+  assert.equal(api.achievements('child-a').total,1);
+  assert.equal(api.achievements('child-a').normal,1);
+});
+
+test('专家与普通状态和积分分开，专家首次通关额外一星，重复不累加', () => {
+  const { api } = load();
+  record(api,'shared',run('cnp_a',['correct','correct','correct']),t1,{subject:'physics'});
+  record(api,'shared',run('cnp_a',['wrong','wrong']),t2,{subject:'physics',level:'pro'});
+  assert.equal(api.statuses('child-a','physics').cnp_a.status,'mastered');
+  assert.equal(api.statuses('child-a','physics','pro').cnp_a.status,'weak');
+  assert.equal(api.achievements('child-a').total,1);
+  record(api,'shared',run('cnp_a',['correct','correct','correct']),t3,{subject:'physics',level:'pro'});
+  record(api,'expert-again',run('cnp_a',['correct','correct','correct']),t4,{subject:'physics',level:'pro'});
+  assert.equal(api.achievements('child-a').total,2);
+  assert.equal(api.achievements('child-a').pro,1);
+  assert.equal(api.statuses('child-a','physics','pro').cnp_a.status,'mastered');
+});
+
+test('没有同档案普通通关的专家记录不发星；不能用未来的普通通关补旧专家星', () => {
+  const { api } = load();
+  record(api,'expert-before-base',run('cnp_a',['correct','correct','correct']),t1,{subject:'physics',level:'pro'});
+  assert.equal(api.achievements('child-a').total,0);
+  record(api,'base',run('cnp_a',['correct','correct','correct']),t2,{subject:'physics'});
+  assert.equal(api.achievements('child-a').total,1);
+  record(api,'science-expert',run('cns_a',['correct','correct','correct']),t3,{level:'pro'});
+  assert.equal(api.achievements('child-a').total,1);
+});
+
+test('已失去普通通关状态时不能取得新的专家奖励，先前已获得的专家星不扣除', () => {
+  const {api}=load();
+  record(api,'base',run('cnp_a',['correct','correct','correct']),t1,{subject:'physics'});
+  record(api,'base-fail',run('cnp_a',['wrong','wrong']),t2,{subject:'physics'});
+  record(api,'expert',run('cnp_a',['correct','correct','correct']),t3,{subject:'physics',level:'pro'});
+  assert.equal(api.achievements('child-a').pro,0);
+  record(api,'base-again',run('cnp_a',['correct','correct','correct']),t4,{subject:'physics'});
+  assert.equal(api.achievements('child-a').pro,0);
+  record(api,'expert-again',run('cnp_a',['correct','correct','correct']),t4,{subject:'physics',level:'pro'});
+  assert.equal(api.achievements('child-a').pro,1);
+});
+
+test('成就按孩子、访客和学科隔离，刷新保留；删除档案清理该档案积分', () => {
+  const {api,storage}=load();
+  record(api,'a',run('cns_a',['correct','correct','correct']));
+  record(api,'b',run('cns_b',['correct','correct','correct']),t1,{childId:'child-b'});
+  record(api,'g',run('cnp_a',['correct','correct','correct']),t1,{subject:'physics',childId:null});
+  const fresh=load(Object.fromEntries(storage)).api;
+  assert.equal(fresh.achievements('child-a','science').total,1);
+  assert.equal(fresh.achievements('child-a','physics').total,0);
+  assert.equal(fresh.achievements('child-b').total,1);
+  assert.equal(fresh.achievements(null).total,1);
+  fresh.eraseChild('child-a');
+  assert.equal(fresh.achievements('child-a').total,0);
+  assert.equal(fresh.achievements('child-b').total,1);
+  assert.equal(fresh.achievements(null).total,1);
+});
+
+test('星月日按5与25进位，保留累计积分总额', () => {
+  const {api}=load();
+  const session={answers:[],status:{}};
+  for(let i=1;i<=26;i++) {
+    const id='cnp_n'+i;session.answers.push({id,qid:id+'_q1',result:'correct'});session.status[id]={s:'mastered',src:'direct'};
+    api.recordSession({childId:'child-a',subject:'physics',key:'series',session,at:t1});
+    const score=api.achievements('child-a');
+    if(i===5) assert.deepStrictEqual([score.total,score.suns,score.moons,score.stars],[5,0,1,0]);
+    if(i===25) assert.deepStrictEqual([score.total,score.suns,score.moons,score.stars],[25,1,0,0]);
+  }
+  const score=api.achievements('child-a');
+  assert.deepStrictEqual([score.total,score.suns,score.moons,score.stars],[26,1,0,1]);
+});
+
+test('旧直接通关自动回填成就，读取不写数据，后续更正保留首次积分', () => {
+  const legacy={v:1,byChild:{'child-a':{runs:[{key:'old',subject:'science',at:t1,states:{cns_a:{status:'mastered',at:t1}}}]}}};
+  const {api,storage,writes}=load({['cnmProgress.v1']:JSON.stringify(legacy)});
+  assert.equal(api.achievements('child-a').total,1);assert.equal(writes.length,0);
+  record(api,'old',run('cns_a',['wrong','wrong']),t2);
+  assert.equal(api.statuses('child-a','science').cns_a.status,'weak');
+  assert.equal(api.achievements('child-a').total,1);
+  assert.equal(JSON.parse(storage.get(api.KEY)).byChild['child-a'].earned.normal.cns_a,t1);
+});
+
+test('章节仅全部普通通过才解锁，失败、不稳、推断及专家状态不算普通完成', () => {
+  const {api}=load();
+  const rows=[{id:'cnp_a',grade:9,semester:'全',chapter:'九全 第十三章 内能 13.1'},
+    {id:'cnp_b',grade:9,semester:'全',chapter:'九全 第十三章 内能 13.2'}];
+  record(api,'failed',run('cnp_a',['wrong','wrong']),t1,{subject:'physics'});
+  let chapter=api.chapters('child-a',rows)[0];assert.equal(chapter.completed,0);assert.equal(chapter.unlocked,false);
+  record(api,'pass',run('cnp_a',['correct','correct','correct']),t2,{subject:'physics'});
+  chapter=api.chapters('child-a',rows)[0];assert.equal(chapter.completed,1);assert.equal(chapter.total,2);assert.equal(chapter.unlocked,false);
+  const direct={answers:[{id:'cnp_b',qid:'cnp_b_q1',result:'correct'}],status:{cnp_b:{s:'mastered',src:'direct'}}};
+  api.recordSession({childId:'child-a',subject:'physics',key:'other',session:direct,at:t3});
+  chapter=api.chapters('child-a',rows)[0];assert.equal(chapter.title,'第十三章 内能');assert.equal(chapter.completed,2);assert.equal(chapter.unlocked,true);
+});
+
 console.log('\n'+passed+' passed, 0 failed');

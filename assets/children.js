@@ -113,7 +113,8 @@
   }
   /* 按 rec.key 覆盖：同一次检测反复打开结果页、更正答案，只会更新这一条 */
   function saveRecord(childId, rec) {
-    if (!childId || !rec || !rec.key || (rec.subject !== 'science' && rec.subject !== 'physics')) return false;
+    if (!childId || !rec || !rec.key || (rec.subject !== 'science' && rec.subject !== 'physics') ||
+        (own(rec, 'level') && rec.level !== 'normal' && rec.level !== 'pro') || (rec.level === 'pro' && rec.subject !== 'physics')) return false;
     var all = records();
     var arr = Array.isArray(all[childId]) ? all[childId] : [];
     var keepImportedHistory = arr.length > MAX_RECORDS;
@@ -157,8 +158,8 @@
   /* 把某个孩子的全部记录合成「每个知识点现在的状态」：越新的记录越说了算。
    * 返回 { id: { status, recKey, at, label, root, subject, needsRetest } }。
    * 没有现行题干戳的 cnc_p124 不记成语气的掌握 / 薄弱 / 不稳，只标需重测。 */
-  function latestStatus(childId, subject) {
-    var recs = recordsOf(childId).filter(function (r) { return !subject || r.subject === subject; }).reverse();
+  function latestStatus(childId, subject, level) {
+    var recs = recordsOf(childId).filter(function (r) { return (!subject || r.subject === subject) && (r.level === 'pro' ? 'pro' : 'normal') === (level === 'pro' ? 'pro' : 'normal'); }).reverse();
     var by = {};
     recs.forEach(function (r) {
       var view = presentRecord(r);
@@ -241,7 +242,8 @@
       history[id].forEach(function (r) {
         if (!isObject(r) || typeof r.key !== 'string' || !r.key || keys.has(r.key) ||
             ['science', 'physics'].indexOf(r.subject) < 0 || !validDate(r.savedAt) ||
-            (own(r, 'updatedAt') && !validDate(r.updatedAt))) throw new Error('检测记录的标识、学科或时间不正确。');
+            (own(r, 'updatedAt') && !validDate(r.updatedAt)) ||
+            (own(r, 'level') && r.level !== 'normal' && r.level !== 'pro') || (r.level === 'pro' && r.subject !== 'physics')) throw new Error('检测记录的标识、学科或时间不正确。');
         keys.add(r.key);
         ['weak', 'roots', 'shaky', 'mastered', 'targets'].forEach(function (field) {
           if (!own(r, field) || (field === 'targets' && r[field] === null)) return;
@@ -311,7 +313,9 @@
           // 历史其他学科题号也仅用于排重，不能按本次活动学科限制。
           return shortText(qid, 160) && /^cn[a-z]_[A-Za-z0-9]+_q[1-9][0-9]*$/.test(qid);
         })))) throw new Error('进行中检测的范围、设置或时间不正确。');
-    if ((own(session, 'progressChildId') && session.progressChildId !== null && !validId(session.progressChildId)) ||
+    if ((own(session, 'level') && session.level !== 'normal' && session.level !== 'pro') ||
+        (session.level === 'pro' && (subject !== 'physics' || session.mode !== 'target' || session.targets.length !== 1)) ||
+        (own(session, 'progressChildId') && session.progressChildId !== null && !validId(session.progressChildId)) ||
         (own(session, 'volume') && !shortText(session.volume, 100)) ||
         (own(session, 'order') && session.order !== 'book') ||
         (own(session, 'returnTo') && !validReturnTo(session.returnTo))) throw new Error('进行中检测的归属、教材或返回位置不正确。');
@@ -372,12 +376,18 @@
     Object.keys(progress.byChild).forEach(function (bucket) {
       var box = progress.byChild[bucket];
       if (!validId(bucket) || !isObject(box) || !Array.isArray(box.runs)) throw new Error('图谱进度分组不正确。');
+      if (own(box, 'earned') && (!isObject(box.earned) || Object.keys(box.earned).some(function (level) {
+        return ['normal', 'pro'].indexOf(level) < 0 || !isObject(box.earned[level]) || Object.keys(box.earned[level]).some(function (id) {
+          return !subjectOfTopic(id) || (level === 'pro' && subjectOfTopic(id) !== 'physics') || !validDate(box.earned[level][id]);
+        });
+      }))) throw new Error('成就积分数据不正确。');
       var keys = new Set();
       box.runs.forEach(function (run) {
         if (!isObject(run) || !shortText(run.key, 20000) || !run.key || !validDate(run.at) ||
             ['science', 'physics'].indexOf(run.subject) < 0 || !isObject(run.states) ||
-            keys.has(run.subject + '|' + run.key)) throw new Error('图谱检测记录的标识或时间不正确。');
-        keys.add(run.subject + '|' + run.key);
+            (own(run, 'level') && run.level !== 'normal' && run.level !== 'pro') || (run.level === 'pro' && run.subject !== 'physics') ||
+            keys.has(progressRunKey(run))) throw new Error('图谱检测记录的标识或时间不正确。');
+        keys.add(progressRunKey(run));
         Object.keys(run.states).forEach(function (id) {
           var state = run.states[id];
           if (subjectOfTopic(id) !== run.subject || !isObject(state) ||
@@ -439,6 +449,18 @@
     if (!found) learning.archivedSessions.push({ subject: subject, session: copy(session) });
     return !found;
   }
+  function progressRunKey(run) { return (run.level === 'pro' ? 'pro' : 'normal') + '|' + run.subject + '|' + run.key; }
+  function progressEarned(box) {
+    var earned = { normal: {}, pro: {} };
+    function put(level, id, at) { if (!earned[level][id] || Date.parse(at) < Date.parse(earned[level][id])) earned[level][id] = at; }
+    ['normal', 'pro'].forEach(function (level) {
+      Object.keys(box.earned && box.earned[level] || {}).forEach(function (id) { put(level, id, box.earned[level][id]); });
+    });
+    box.runs.forEach(function (run) {
+      Object.keys(run.states).forEach(function (id) { if (run.level !== 'pro' && run.states[id].status === 'mastered') put('normal', id, run.states[id].at); });
+    });
+    return earned;
+  }
   function mergeLearning(local, incoming, summary) {
     var merged = copy(local);
     Object.keys(incoming.wrongbook).forEach(function (bucket) {
@@ -478,14 +500,28 @@
     var progress = incoming.progress || { v: 1, byChild: {} };
     Object.keys(progress.byChild).forEach(function (bucket) {
       if (!own(merged.progress.byChild, bucket)) merged.progress.byChild[bucket] = { runs: [] };
-      var runs = new Map();
-      merged.progress.byChild[bucket].runs.forEach(function (run) { runs.set(run.subject + '|' + run.key, run); });
-      progress.byChild[bucket].runs.forEach(function (run) {
-        var key = run.subject + '|' + run.key, old = runs.get(key);
+      var box = merged.progress.byChild[bucket], source = progress.byChild[bucket], runs = new Map();
+      var localEarned = progressEarned(box), incomingEarned = progressEarned(source);
+      var keepEarned = own(box, 'earned') || own(source, 'earned');
+      box.runs.forEach(function (run) { runs.set(progressRunKey(run), run); });
+      source.runs.forEach(function (run) {
+        var key = progressRunKey(run), old = runs.get(key);
+        // 新版快照仍决定图谱状态；两份快照都保留已获得的首次通关积分。
+        if (old && stableJSON(old) !== stableJSON(run)) keepEarned = true;
         if (!old) { runs.set(key, copy(run)); summary.addedProgress++; }
         else if (Date.parse(run.at) > Date.parse(old.at)) { runs.set(key, copy(run)); summary.updatedProgress++; }
       });
-      merged.progress.byChild[bucket].runs = Array.from(runs.values());
+      box.runs = Array.from(runs.values());
+      if (keepEarned) {
+        ['normal', 'pro'].forEach(function (level) {
+          Object.keys(incomingEarned[level]).forEach(function (id) {
+            var at = incomingEarned[level][id];
+            if (!localEarned[level][id] || Date.parse(at) < Date.parse(localEarned[level][id])) localEarned[level][id] = at;
+          });
+        });
+        Object.keys(localEarned.pro).forEach(function (id) { if (!localEarned.normal[id] || Date.parse(localEarned.normal[id]) > Date.parse(localEarned.pro[id])) delete localEarned.pro[id]; });
+        box.earned = localEarned;
+      }
     });
     return merged;
   }
@@ -589,7 +625,7 @@
   function archivedSessions() {
     var snapshot = importSnapshot();
     return { token: snapshot.token, items: snapshot.learning.archivedSessions.map(function (entry, index) {
-      return { index: index, subject: entry.subject, label: entry.session.label,
+      return { index: index, subject: entry.subject, level: entry.session.level === 'pro' ? 'pro' : 'normal', label: entry.session.label,
         savedAt: entry.session.savedAt, answered: entry.session.answers.length };
     }) };
   }

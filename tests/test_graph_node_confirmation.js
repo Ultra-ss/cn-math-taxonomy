@@ -29,7 +29,7 @@ function element() {
     listenerCount(type) { return (listeners.get(type) || []).length; }
   };
 }
-const ids = Object.fromEntries(['node-diagnose-dialog', 'node-dialog-question', 'node-dialog-try', 'node-dialog-no', 'cy', 'detail', 'main-nav', 'graph-options', 'mobile-menu-toggle', 'mobile-options-toggle'].map(x=>[x,element()]));
+const ids = Object.fromEntries(['node-diagnose-dialog', 'node-dialog-title', 'node-dialog-question', 'node-dialog-try', 'node-dialog-no', 'cy', 'detail', 'main-nav', 'graph-options', 'mobile-menu-toggle', 'mobile-options-toggle'].map(x=>[x,element()]));
 const header = element(), explore = element();
 let mobile = true;
 const ctx = {
@@ -40,6 +40,7 @@ const ctx = {
   selected:'cnp_029', explicitNodeSelection:null, currentAlias:null, volume:'八下', subject:'physics', stage:'', domain:'', query:'', showWholeBook:true, upDepth:2,
   ancestorsOpen:false, nodeDialogId:null, nodeDialogScroll:null, cy:null, mobileScroll:{detail:0}, graphNeedsRender:false,
   $: id => ids[id],
+  progressOf: () => null,
   document: {querySelector: s=>s==='.site-header'?header:explore, querySelectorAll:()=>[]},
   window: {scrollX:0,scrollY:23,matchMedia:()=>({matches:mobile}),scrollTo(x,y){this.scrollX=x;this.scrollY=y;}},
   requestAnimationFrame: fn=>fn(),
@@ -127,6 +128,31 @@ yes.fire('click',{preventDefault(){prevented=true;}});
 assert.equal(prevented,true);
 assert.equal(dialog.open,false);
 assert.equal(ids['node-dialog-no'].listenerCount('click'),1);
+
+// 普通通过的初中物理点仍须先选中，再确认专家挑战；保留原图谱返回位置。
+ctx.selected = 'cnp_029'; ctx.explicitNodeSelection = null;
+ctx.progressOf = id => id === 'cnp_029' ? {status:'mastered'} : null;
+assert.equal(ctx.activateGraphNode('cnp_029'), false);
+assert.equal(dialog.open, false);
+assert.equal(ctx.activateGraphNode('cnp_029'), true);
+assert.equal(ids['node-dialog-title'].textContent, '是否挑战专家水平');
+assert.equal(yes.textContent, '我要挑战');
+link = new URL(yes.getAttribute('href'), ctx.location.origin);
+assert.equal(link.searchParams.get('level'), 'pro');
+assert.equal(new URL(link.searchParams.get('returnTo'), ctx.location.origin).hash, '#cnp_029');
+ids['node-dialog-no'].fire('click');
+ctx.progressOf = () => ({status:'weak'});
+ctx.activateGraphNode('cnp_029');
+assert.equal(ids['node-dialog-title'].textContent, '检测这个知识点');
+assert.equal(yes.textContent, '我要试试');
+assert.equal(new URL(yes.getAttribute('href'),ctx.location.origin).searchParams.has('level'),false);
+ids['node-dialog-no'].fire('click');
+ctx.progressOf = () => ({status:'mastered'});
+ctx.byId.set('cnp_h001',{name:'高中点',grade:10});
+assert.equal(ctx.canChallengeExpert('cnp_h001'),false,'高中不进入初中 Pro 题库');
+ctx.subject = 'science';
+assert.equal(ctx.canChallengeExpert('cnp_029'),false,'科学不进入初中 Pro 题库');
+ctx.subject = 'physics';
 
 // 移动默认收起菜单和选项，桌面自动显示，不依赖CSS暴露已隐藏的内容。
 ctx.syncMobileChrome();

@@ -3,7 +3,7 @@
  * 改了 SHELL 或 DATA 列表、或数据结构变了，就把 VERSION 加一。 */
 'use strict';
 
-var VERSION = 'v50';
+var VERSION = 'v51';
 var CACHE = 'cnm-pwa-' + VERSION;
 var SCOPE = self.registration.scope;
 
@@ -15,6 +15,7 @@ var SHELL = [
   'diagnose/',
   'diagnose/app.js',
   'diagnose/engine.js',
+  'diagnose/pro-challenge.js',
   'diagnose/share.js',
   'diagnose/style.css',
   'children/',
@@ -57,6 +58,8 @@ var DATA = [
   'data/dependencies.json',
   'data/cn-curriculum-standards.json',
   'data/questions.json',
+  'data/questions-pro.json',
+  'data/pro-sources.json',
   'data/id-aliases.json'
 ];
 

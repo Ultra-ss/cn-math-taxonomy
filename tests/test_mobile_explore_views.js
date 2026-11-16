@@ -31,6 +31,7 @@ const ctx={
   mobileView:'graph',mobileFiltersOpen:false,mobileScroll:{directory:0,detail:0},graphNeedsRender:false,pendingGraphRestore:true,
   renderedCameraContext:null,renderedExpanded:false,liveCamera:null,changingCamera:false,viewportSaveTimer:null,cy:graph,
   byId:new Map([['cnp_053',{name:'热量 比热容'}]]),progressOf:()=>row,progressClass:r=>r?'test-passed':'',
+  progressMark:r=>!r?'':r.expert?'⭐':r.status==='mastered'?'✓':'×',
   requestAnimationFrame:fn=>fn(),setTimeout:fn=>{fn();return 1;},clearTimeout(){},
   renderGraph(){renders++;ctx.graphNeedsRender=false;}
 };

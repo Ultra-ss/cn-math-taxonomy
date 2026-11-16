@@ -105,4 +105,21 @@ test('存储不可用时各个只读入口仍可正常打开',()=>{
   const {api,unchanged}=load({blocked:true});
   assert.deepEqual(plain(api.savedSessions()),[]);assert.deepEqual(plain(api.weakPoints()),[]);assert.deepEqual(plain(api.legacyWeakPoints()),[]);unchanged();
 });
+test('专家会话保留独立完成key与等级，专家失败不加入普通薄弱知识点',()=>{
+  const saved=session({level:'pro',progressChildId:'a',answers:[{id:'cnp_053',qid:'cnp_053_q101',result:'wrong'}]});
+  const {api,unchanged}=load({records:['a|pro|physics|round-a|cnp_053'],storage:{[PHYSICS]:saved}});
+  const row=plain(api.savedSessions())[0];assert.equal(row.level,'pro');assert.equal(row.completed,true);
+  assert.deepEqual(ids(api.weakPoints({childId:'a'})),[]);unchanged();
+  const invalid=load({storage:{[PHYSICS]:session({level:'other'})}}).api;
+  assert.deepEqual(plain(invalid.savedSessions()),[]);
+});
+test('访客专家通过和失败都能从独立进度识别完成，不依赖普通盲区台账',()=>{
+  const saved=session({level:'pro',progressChildId:null,answers:[{id:'cnp_053',qid:'cnp_053_q101',result:'correct'}]});
+  for(const status of ['mastered','weak','shaky']) {
+    const progress={v:1,byChild:{guest:{runs:[{key:'pro|physics|round-a|cnp_053',subject:'physics',level:'pro',at:date,states:{cnp_053:{status,at:date}}}]}}};
+    const {api,unchanged}=load({storage:{[PHYSICS]:saved,'cnmProgress.v1':progress}});
+    assert.equal(api.savedSessions()[0].completed,true);unchanged();
+  }
+  assert.equal(load({storage:{[PHYSICS]:saved}}).api.savedSessions()[0].completed,false);
+});
 console.log('test_local_learning: '+passed+' passed');

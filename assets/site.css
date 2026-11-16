@@ -886,6 +886,13 @@ body.page-home {
 }
 
 
+/* 物理教材始终先显示学段，手机与多选模式也保持相同层级。 */
+.page-home.subject-physics .textbook-stage { display: block; color: var(--text); font-size: 0.86rem; font-weight: 750; text-align: center; }
+@media (max-width: 900px), (max-height: 600px) {
+  .page-home.subject-physics .textbook-stage { font-size: 0.76rem; line-height: 1.2; }
+  .page-home.subject-physics .textbook-card { row-gap: 3px; }
+}
+
 /* 项目说明入口独立于主导航，避让答题区与系统安全区域。 */
 a.site-about {
   position: fixed;

@@ -19,7 +19,8 @@
       Number.isSafeInteger(saved.limit) && saved.limit > 0 && saved.limit <= 1000 &&
       Number.isSafeInteger(saved.confirm) && saved.confirm > 0 && saved.confirm <= 10 &&
       typeof saved.seed === 'string' && saved.seed.length <= 256 && typeof saved.label === 'string' && saved.label.length <= 4000 &&
-      stamp(saved.savedAt) && (!own(saved, 'progressChildId') || saved.progressChildId === null ||
+      stamp(saved.savedAt) && (!own(saved, 'level') || saved.level === 'normal' || saved.level === 'pro') &&
+      (saved.level !== 'pro' || (subject === 'physics' && saved.mode === 'target' && saved.targets.length === 1)) && (!own(saved, 'progressChildId') || saved.progressChildId === null ||
         (typeof saved.progressChildId === 'string' && /^[A-Za-z0-9_-]{1,128}$/.test(saved.progressChildId))) &&
       Array.isArray(saved.answers) && saved.answers.length <= 5000 && saved.answers.every(function (a) {
         return object(a) && subjectOf(a.id) === subject &&
@@ -27,10 +28,18 @@
           ['correct', 'wrong', 'skip'].indexOf(a.result) >= 0;
       });
   }
-  function keyOf(subject, saved) { return [subject, saved.seed, saved.targets.join(',')].join('|'); }
+  function keyOf(subject, saved) { return (saved.level === 'pro' ? 'pro|' : '') + [subject, saved.seed, saved.targets.join(',')].join('|'); }
   function completed(subject, saved) {
     var key = keyOf(subject, saved), CC = root.CnmChildren;
     if (saved.progressChildId) return !!(CC && CC.hasRecord && CC.hasRecord(saved.progressChildId, key));
+    if (saved.level === 'pro' && own(saved, 'progressChildId') && saved.progressChildId === null) {
+      var progress = read('cnmProgress.v1'), guest = object(progress) && object(progress.byChild) && progress.byChild.guest;
+      return !!(object(guest) && Array.isArray(guest.runs) && guest.runs.some(function (run) {
+        var state = object(run) && object(run.states) && run.states[saved.targets[0]];
+        return object(run) && run.key === key && run.subject === subject && run.level === 'pro' && object(state) &&
+          ['mastered', 'weak', 'shaky'].indexOf(state.status) >= 0;
+      }));
+    }
     var ledger = read('cnmBlind.local.v1');
     return !!(object(ledger) && object(ledger.byId) && Object.keys(ledger.byId).some(function (id) {
       var row = ledger.byId[id]; return subjectOf(id) === subject && object(row) && row.lastKey === key;
@@ -43,7 +52,7 @@
       if (!validSession(saved, subject)) return null;
       var recordedOwner = own(saved, 'progressChildId'), id = recordedOwner ? owner(saved.progressChildId) : undefined;
       var child = id && CC && CC.get ? CC.get(id) : null;
-      return { subject: subject, label: saved.label.replace(/\u8bca\u65ad/g, '检测'), answered: saved.answers.length,
+      return { subject: subject, level: saved.level === 'pro' ? 'pro' : 'normal', label: saved.label.replace(/\u8bca\u65ad/g, '检测'), answered: saved.answers.length,
         savedAt: saved.savedAt, ownerId: id, ownerLabel: !recordedOwner ? '归属未记录' : id ? (child ? child.name : '原档案已删除') : '本机访客',
         completed: completed(subject, saved), href: '../diagnose/?subject=' + subject + '&resume=1' };
     }).filter(Boolean);
@@ -70,7 +79,7 @@
         Object.keys(states).forEach(function (id) { put(id, states[id], sub); });
       }
       var saved = read(KEYS[sub]);
-      if (!validSession(saved, sub) || !own(saved, 'progressChildId') || owner(saved.progressChildId) !== childId || completed(sub, saved)) return;
+      if (!validSession(saved, sub) || saved.level === 'pro' || !own(saved, 'progressChildId') || owner(saved.progressChildId) !== childId || completed(sub, saved)) return;
       saved.answers.forEach(function (answer) {
         // 已有直接结论优先；旧会话的答错不能把后来已掌握的点重新列为薄弱。
         if ((answer.result !== 'wrong' && answer.result !== 'skip') || by[answer.id]) return;

@@ -741,4 +741,47 @@ test('图谱进度拒绝错误学科、状态、时间、重复run、非法签�
   for(const mutate of cases){const data=learningBackup();mutate(data);assert.throws(()=>load().api.parseBackup(JSON.stringify(data)));}
 });
 
+test('专家会话、历史与成就完整备份，普通和专家同key进度保持独立', () => {
+  const data=learningBackup();
+  data.learning.sessions.physics={...data.learning.sessions.physics,level:'pro',mode:'target',targets:['cnp_001'],progressChildId:'child-a'};
+  data.records['child-a'][0].level='pro';data.records['child-a'][0].subject='physics';
+  for(const key of ['weak','roots','shaky','mastered','targets']) if(data.records['child-a'][0][key]) data.records['child-a'][0][key]=['cnp_001'];
+  const at='2026-11-15T00:00:00.000Z', later='2026-11-16T00:00:00.000Z';
+  data.learning.progress.byChild['child-a']={runs:[{key:'shared',subject:'physics',at,states:{cnp_001:{status:'mastered',at}}},
+    {key:'shared',subject:'physics',level:'pro',at:later,states:{cnp_001:{status:'mastered',at:later}}}],earned:{normal:{cnp_001:at},pro:{cnp_001:later}}};
+  const {api,storage}=load();importInto(api,api.parseBackup(JSON.stringify(data)));
+  assert.equal(stored(storage,PHY_SESSION).level,'pro');
+  assert.equal(stored(storage,PROGRESS_KEY).byChild['child-a'].runs.length,2);
+  assert.equal(api.exportBackup().learning.progress.byChild['child-a'].earned.pro.cnp_001,later);
+  const before=Object.fromEntries(storage);importInto(api,data);assert.deepStrictEqual(Object.fromEntries(storage),before);
+});
+
+test('积分合并按知识点首次时间去重，状态取新版但不扣首次积分', () => {
+  const at='2026-11-10T00:00:00.000Z', later='2026-11-16T00:00:00.000Z';
+  const data=learningBackup(),entries=learningFixture();
+  const local=JSON.parse(entries[PROGRESS_KEY]);
+  local.byChild['child-a'].earned={normal:{cns_p001:at},pro:{}};
+  local.byChild['child-a'].runs[0]={...local.byChild['child-a'].runs[0],at:later,states:{cns_p001:{status:'weak',at:later}}};
+  entries[PROGRESS_KEY]=JSON.stringify(local);
+  data.learning.progress.byChild['child-a'].earned={normal:{cns_p001:'2026-11-12T00:00:00.000Z',cnp_001:at},pro:{cnp_001:later}};
+  const {api,storage}=load(entries);importInto(api,data);
+  const box=stored(storage,PROGRESS_KEY).byChild['child-a'];
+  assert.equal(box.earned.normal.cns_p001,at);assert.equal(box.earned.normal.cnp_001,at);assert.equal(box.earned.pro.cnp_001,later);
+  assert.equal(box.runs[0].states.cns_p001.status,'weak');
+  const before=Object.fromEntries(storage);importInto(api,data);assert.deepStrictEqual(Object.fromEntries(storage),before);
+});
+
+test('专家记录不混入普通弱点汇总，非法等级及积分数据拒绝导入', () => {
+  const entries=fixture();const history=JSON.parse(entries[RECORD_KEY]);
+  history['child-a'].push({...history['child-a'][0],key:'pro-record',subject:'physics',level:'pro',savedAt:'2026-11-18T00:00:00.000Z',weak:['cnp_001'],shaky:[],mastered:[],roots:[]});
+  entries[RECORD_KEY]=JSON.stringify(history);const {api}=load(entries);
+  assert.equal(api.latestStatus('child-a','physics').cnp_001,undefined);
+  assert.equal(api.latestStatus('child-a','physics','pro').cnp_001.status,'weak');
+  const cases=[d=>{d.learning.sessions.physics.level='elite';},d=>{d.learning.sessions.science.level='pro';},
+    d=>{d.learning.progress.byChild['child-a'].runs[0].level='elite';},
+    d=>{d.learning.progress.byChild['child-a'].earned={normal:{cnp_001:'bad'}};},
+    d=>{d.learning.progress.byChild['child-a'].earned={pro:{cns_p001:'2026-11-18T00:00:00.000Z'}};}];
+  for(const mutate of cases){const data=learningBackup();mutate(data);assert.throws(()=>load().api.parseBackup(JSON.stringify(data)));}
+});
+
 console.log('\n' + passed + ' passed, 0 failed');

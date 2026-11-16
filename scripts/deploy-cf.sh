@@ -35,6 +35,8 @@ cp "$ROOT/data/topics.json" \
    "$ROOT/data/dependencies.json" \
    "$ROOT/data/cn-curriculum-standards.json" \
    "$ROOT/data/questions.json" \
+   "$ROOT/data/questions-pro.json" \
+   "$ROOT/data/pro-sources.json" \
    "$ROOT/data/id-aliases.json" \
    "$DIST/data/"
 

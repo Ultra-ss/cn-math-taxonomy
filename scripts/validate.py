@@ -1263,7 +1263,8 @@ Q_DIFFICULTIES = ("basic", "standard", "challenge")
 Q_DIFFICULTY_ALIASES = {"advanced": "challenge"}  # 旧名，与 challenge 同档
 Q_TYPES = ("numeric", "choice", "short", "self")
 Q_FIELDS = {"id", "topicId", "difficulty", "type", "prompt", "answer", "choices", "accept",
-            "explanation", "verify", "unordered", "fixed_from_source", "figure", "hideChoiceText", "percent"}
+            "explanation", "verify", "unordered", "fixed_from_source", "figure", "hideChoiceText", "percent",
+            "level", "origin", "sourceRefs"}
 # 与知识点无关的纯整数/小数四则（不含分数写法 a/b）。
 # 一至六年级 challenge 不得直接「计算：…＝？」。低年级允许写进情境里的简单计算，
 # 但整题不能只是「计算：2＋3＝？」或「3＋2 的得数是哪一个？」。
@@ -1324,6 +1325,14 @@ def question_errors(questions, topics_by_id, require_coverage=True):
         unknown = set(q) - Q_FIELDS
         if unknown:
             errs.append("%s 含未知字段：%s" % (w, "、".join(sorted(unknown))))
+        if "level" in q and q["level"] != "pro":
+            errs.append("%s level 只能为 pro" % w)
+        if "origin" in q and q["origin"] != "original":
+            errs.append("%s origin 只能为 original" % w)
+        if "sourceRefs" in q and not (isinstance(q["sourceRefs"], list)
+                and all(isinstance(ref, str) and re.fullmatch(r"gd20(?:19|2[0-6])", ref) for ref in q["sourceRefs"])
+                and len(set(q["sourceRefs"])) == len(q["sourceRefs"])):
+            errs.append("%s sourceRefs 必须是已登记广东中考来源的去重数组" % w)
         tid = q.get("topicId")
         t = topics_by_id.get(tid) if isinstance(tid, str) else None
         if t is None:

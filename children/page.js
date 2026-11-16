@@ -142,9 +142,43 @@
     renderLearningOverview();
   }
 
-  var topicNames = {};
+  var topicNames = {}, achievementTopics = null;
   function cleanLabel(value) { return String(value || '').replace(/\u8bca\u65ad/g, '检测'); }
+  function renderAchievements() {
+    var P = window.CnmProgress;
+    if (!P || !P.achievements) return;
+    var current = CC.current(), id = current ? current.id : null, score = P.achievements(id);
+    var ownerSelect = document.getElementById('achievement-owner'); ownerSelect.textContent = '';
+    var guest = el('option', null, '本机访客'); guest.value = ''; ownerSelect.appendChild(guest);
+    CC.list().forEach(function (child) { var option = el('option', null, child.name); option.value = child.id; ownerSelect.appendChild(option); });
+    ownerSelect.value = id || '';
+    document.getElementById('achievement-owner-name').textContent = '当前：' + (current ? current.name : '本机访客') + ' · 成就按档案分别保存';
+    var scoreBox = document.getElementById('achievement-score'); scoreBox.textContent = '';
+    var total = el('div', 'achievement-total');
+    total.appendChild(el('strong', null, String(score.total))); total.appendChild(el('span', null, '总积分（⭐）')); scoreBox.appendChild(total);
+    var medals = el('div', 'achievement-medals');
+    [['🌞', score.suns, '太阳'], ['🌙', score.moons, '月亮'], ['⭐', score.stars, '星星']].forEach(function (row) {
+      var item = el('span', 'achievement-medal'); item.setAttribute('aria-label', row[2] + ' ' + row[1] + ' 个');
+      item.appendChild(el('span', 'achievement-icon', row[0])); item.appendChild(el('strong', null, '× ' + row[1])); medals.appendChild(item);
+    });
+    scoreBox.appendChild(medals);
+    document.getElementById('achievement-breakdown').textContent = '普通通关 ' + score.normal + ' 个 · 专家通关 ' + score.pro + ' 个';
+    var list = document.getElementById('achievement-chapter-list'); list.textContent = '';
+    if (achievementTopics === null) { document.getElementById('achievement-chapters-summary').textContent = '已解锁章节 · 正在读取'; return; }
+    var chapters = P.chapters(id, achievementTopics), unlocked = chapters.filter(function (chapter) { return chapter.unlocked; });
+    document.getElementById('achievement-chapters-summary').textContent = '已解锁章节 ' + unlocked.length + ' / ' + chapters.length;
+    if (!unlocked.length) list.appendChild(el('li', 'muted small', '还没有整章通关。完成一章内所有知识点的普通检测，即可在这里点亮章节。'));
+    unlocked.forEach(function (chapter) {
+      var item = el('li'), link = el('a', null, '✓ ' + chapter.book + ' · ' + chapter.title);
+      link.href = '../explore/?subject=' + chapter.subject + '#' + encodeURIComponent(chapter.firstTopicId);
+      item.appendChild(link); item.appendChild(el('span', 'muted small', ' ' + chapter.completed + '/' + chapter.total)); list.appendChild(item);
+    });
+  }
+  document.getElementById('achievement-owner').addEventListener('change', function (event) {
+    if (CC.setCurrent(event.target.value || null)) render();
+  });
   function renderLearningOverview() {
+    renderAchievements();
     var learning = window.CnmLocalLearning;
     if (!learning) return;
     var current = CC.current(), childId = current ? current.id : null;
@@ -174,7 +208,7 @@
     section.hidden = !saved.length;
     saved.forEach(function (entry) {
       var item = el('li', 'center-learning-item'), info = el('div', 'center-learning-info');
-      info.appendChild(el('strong', null, (entry.subject === 'physics' ? '物理' : '小学科学') + ' · ' + cleanLabel(entry.label)));
+      info.appendChild(el('strong', null, (entry.subject === 'physics' ? '物理' : '小学科学') + (entry.level === 'pro' ? ' · 专家挑战' : '') + ' · ' + cleanLabel(entry.label)));
       info.appendChild(el('span', 'muted small', entry.ownerLabel + ' · 已答 ' + entry.answered + ' 题'));
       item.appendChild(info);
       var resume = el('a', 'btn', entry.completed ? '查看结果' : '继续查看');
@@ -195,7 +229,7 @@
       archive.items.forEach(function (entry) {
         var row = el('li');
         var subjectName = entry.subject === 'physics' ? '物理' : '科学';
-        row.appendChild(el('span', null, subjectName + ' · ' + String(entry.label).replace(/\u8bca\u65ad/g, '检测') + ' · 已答 ' + entry.answered + ' 题 · ' +
+        row.appendChild(el('span', null, subjectName + (entry.level === 'pro' ? ' · 专家挑战' : '') + ' · ' + String(entry.label).replace(/\u8bca\u65ad/g, '检测') + ' · 已答 ' + entry.answered + ' 题 · ' +
           new Date(entry.savedAt).toLocaleString('zh-CN') + ' '));
         var restore = el('button', null, '恢复这份进度');
         restore.type = 'button';
@@ -353,7 +387,10 @@
     return response.json();
   }).then(function (rows) {
     if (!Array.isArray(rows)) return;
+    achievementTopics = rows;
     rows.forEach(function (topic) { if (topic && typeof topic.id === 'string') topicNames[topic.id] = topic.name; });
     renderLearningOverview();
-  }).catch(function () { /* 知识点编号仍可用于浏览与再测。 */ });
+  }).catch(function () {
+    document.getElementById('achievement-chapters-summary').textContent = '已解锁章节 · 暂时无法读取';
+  });
 })();

@@ -68,7 +68,7 @@
       ['选必一', 13, '上', '选择性必修第一册'], ['选必二', 14, '上', '选择性必修第二册'], ['选必三', 15, '上', '选择性必修第三册']
     ].map(function (book) {
       return { volume: book[0], grade: book[1], term: book[2], title: book[3],
-        stage: book[1] < 10 ? '初中物理' : '高中物理', klass: book[1] < 10 ? 'is-junior' : 'is-senior' };
+        stage: book[1] < 10 ? '初中' : '高中', klass: book[1] < 10 ? 'is-junior' : 'is-senior' };
     });
   }
 
