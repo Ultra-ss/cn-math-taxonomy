@@ -1,0 +1,105 @@
+#!/usr/bin/env node
+'use strict';
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+const vm = require('vm');
+const source = fs.readFileSync(path.join(__dirname, '../assets/explore-viewport.js'), 'utf8');
+const KEY = 'cnmExplore.viewport.v1';
+const scene = {subject:'physics', volume:'八下', topicId:'cnp_030', view:'book', depth:2, layout:'labels-8'};
+const state = {zoom:0.9375, centerX:1234.25, centerY:-678.125, width:390, height:613, expanded:false};
+function load(options={}) {
+  const entries = new Map(Object.entries(options.entries || {}));
+  const root = {sessionStorage:{
+    getItem(key) { if (options.failRead) throw new Error('read denied'); return entries.has(key) ? entries.get(key) : null; },
+    setItem(key,value) { if (options.failWrite) throw new Error('quota'); entries.set(key,value); },
+    removeItem(key) { if (options.failClear) throw new Error('clear denied'); entries.delete(key); }
+  }};
+  if (options.denied) Object.defineProperty(root, 'sessionStorage', {get(){throw new Error('storage denied');}});
+  const ctx={window:root,module:{exports:{}}};
+  vm.runInNewContext(source, ctx, {filename:'assets/explore-viewport.js'});
+  return {api:ctx.module.exports,entries};
+}
+const plain=value=>JSON.parse(JSON.stringify(value));
+let passed=0;
+function test(name,fn){fn();passed++;console.log('  ok   '+name);}
+test('空标签页没有相机，浏览器与Node接口均可用',()=>{
+  const {api}=load();assert.equal(api.KEY,KEY);assert.equal(api.read(scene),null);
+  const node=require('../assets/explore-viewport.js');assert.equal(node.KEY,KEY);assert.equal(node.read(scene),null);
+});
+test('保存模型中心、精确缩放和折叠状态，重新加载模块后仍可读取',()=>{
+  const {api,entries}=load();assert.equal(api.save(scene,{...state,expanded:true}),true);
+  assert.deepEqual(plain(api.read(scene)),{...state,expanded:true});
+  const next=load({entries:Object.fromEntries(entries)});assert.deepEqual(plain(next.api.read(scene)),{...state,expanded:true});
+  const changed=next.api.read(scene);changed.zoom=9;assert.equal(next.api.read(scene).zoom,state.zoom,'读取结果为独立副本');
+});
+test('检测返回的五字段上下文和节点几何均须精确一致',()=>{
+  const {api,entries}=load();api.save(scene,state);const before=entries.get(KEY);
+  for(const fields of [
+    {subject:'science',volume:'三下',topicId:'cns_p086'}, {volume:'八上'}, {topicId:'cnp_031'},
+    {view:'local'}, {depth:3}, {depth:'all'}, {layout:'labels-10'}
+  ]) assert.equal(api.read({...scene,...fields}),null,JSON.stringify(fields));
+  assert.equal(entries.get(KEY),before,'不匹配时不删旧场景');assert.deepEqual(plain(api.read(scene)),state);
+});
+test('仅保留最近场景，科学、高中和全部教材也能独立保存',()=>{
+  const {api,entries}=load();api.save(scene,state);
+  for(const fields of [
+    {subject:'science',volume:'三下',topicId:'cns_p086'}, {volume:'必修二',topicId:'cnp_h028'}, {volume:'',topicId:'cnp_071'}
+  ]) {
+    const next={...scene,...fields};assert.equal(api.save(next,state),true);assert.deepEqual(plain(api.read(next)),state);assert.equal(api.read(scene),null);
+  }
+  assert.equal(entries.size,1);
+});
+test('可选布局为空与省略等价，expanded省略默认为收起',()=>{
+  const {api}=load();const noLayout={...scene};delete noLayout.layout;const noExpanded={...state};delete noExpanded.expanded;
+  assert.equal(api.save(noLayout,noExpanded),true);assert.deepEqual(plain(api.read({...noLayout,layout:''})),state);
+});
+test('拒绝未知学科、跨科节点、非法册次、非数值层数或任意URL',()=>{
+  const {api,entries}=load();api.save(scene,state);const before=entries.get(KEY);
+  for(const fields of [
+    {subject:'english'}, {topicId:'cns_p086'}, {volume:'三下'}, {volume:'https://example.org/'},
+    {topicId:'https://example.org/'}, {topicId:'cnp_030\n'}, {view:'graph'}, {depth:'2'},
+    {depth:Infinity}, {layout:'https://example.org/'}, {layout:'a'.repeat(101)}, {layout:[]}
+  ]) {assert.equal(api.save({...scene,...fields},state),false,JSON.stringify(fields));assert.equal(api.read({...scene,...fields}),null);}
+  const invalidScience={...scene,subject:'science',topicId:'cns_p086',volume:'八下'};
+  assert.equal(api.save(invalidScience,state),false);
+  assert.equal(entries.get(KEY),before,'非法保存不覆盖已有有效相机');
+});
+test('拒绝NaN、Infinity、数值字符串、极端坐标和隐藏容器，保留原记录',()=>{
+  const {api,entries}=load();api.save(scene,state);const before=entries.get(KEY);
+  const cases=[
+    {zoom:NaN},{zoom:Infinity},{zoom:'1'},{zoom:0},{zoom:-1},{zoom:10.01},{zoom:0.001},
+    {centerX:1e9},{centerY:-1e9},{centerX:'12'},{centerY:null},{centerX:Infinity},
+    {width:0},{height:0},{width:-10},{height:Infinity},{width:20001},{height:'844'},{expanded:1}
+  ];
+  for(const fields of cases) assert.equal(api.save(scene,{...state,...fields}),false,String(Object.keys(fields)[0]));
+  assert.equal(api.save(scene,[]),false);assert.equal(api.save(scene,null),false);
+  assert.equal(entries.get(KEY),before);
+  assert.equal(api.save(scene,{...state,zoom:0.01,centerX:-1e6,centerY:1e6,width:1,height:20000}),true,'合法边界可保存');
+});
+test('损坏、超长或不完整记录安全回退，不操作其他本机数据',()=>{
+  const record={v:1,context:scene,camera:state};
+  for(const raw of ['{broken','[]','null','"https://example.org/"','x'.repeat(4097),JSON.stringify({...record,v:2}),
+    JSON.stringify({...record,context:[]}),JSON.stringify({...record,camera:{...state,zoom:null}}),
+    JSON.stringify({...record,camera:{...state,width:0}})]) {
+    const {api,entries}=load({entries:{[KEY]:raw,'cnmProgress.v1':'untouched'}});
+    assert.equal(api.read(scene),null);assert.equal(entries.get('cnmProgress.v1'),'untouched');
+  }
+});
+test('不采纳额外字段、继承字段或会抛错的对象属性',()=>{
+  const {api,entries}=load();
+  assert.equal(api.save({...scene,url:'https://example.org/'},{...state,pan:{x:0,y:0}}),true);
+  const raw=JSON.parse(entries.get(KEY));assert.deepEqual(Object.keys(raw),['v','context','camera']);
+  assert.ok(!entries.get(KEY).includes('example.org'));assert.ok(!Object.prototype.hasOwnProperty.call(raw.camera,'pan'));
+  assert.equal(api.save(Object.create(scene),state),false);
+  const broken={...state};Object.defineProperty(broken,'zoom',{get(){throw new Error('bad getter');}});
+  assert.equal(api.save(scene,broken),false);
+});
+test('存储禁用、读写失败和删除失败均不抛错，不改写学习记录',()=>{
+  for(const option of ['denied','failWrite']) {const {api}=load({[option]:true});assert.equal(api.save(scene,state),false);}
+  for(const option of ['denied','failRead']) {const {api}=load({[option]:true});assert.equal(api.read(scene),null);}
+  for(const option of ['denied','failClear']) {const {api}=load({[option]:true});assert.equal(api.clear(),false);}
+  const {api,entries}=load({entries:{[KEY]:'old','cnmLastLocation.v1':'last-topic','cnmProgress.v1':'marks'}});
+  assert.equal(api.clear(),true);assert.equal(entries.has(KEY),false);assert.equal(entries.get('cnmLastLocation.v1'),'last-topic');assert.equal(entries.get('cnmProgress.v1'),'marks');
+});
+console.log('test_explore_viewport: '+passed+' passed');

@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>知识图谱 · 全网路物理学习图谱</title>
 <meta name="description" content="538 个科学与物理知识点及 974 条先修关系构成的全图谱：点开任意知识点，看它建立在什么之上、又通向哪里。">
 <meta property="og:type" content="website">
@@ -52,13 +52,18 @@
     </div>
   </nav>
 </header>
-<div class="explore">
+<div class="explore" data-mobile-view="graph">
   <div class="explore-mobile-bar" id="mobile-controls">
     <strong id="mobile-book-title">物理知识图谱</strong>
-    <button type="button" id="list-toggle" class="list-toggle" aria-expanded="false" aria-controls="side" aria-label="展开知识点目录">目录</button>
+    <button type="button" id="list-toggle" class="list-toggle" aria-expanded="false" aria-controls="side" aria-label="展开知识点目录" hidden>目录</button>
     <button type="button" id="mobile-options-toggle" aria-expanded="false" aria-controls="graph-options" aria-label="展开图谱选项">选项</button>
   </div>
-  <aside id="side" class="side">
+  <nav id="mobile-view-tabs" class="mobile-view-tabs" role="tablist" aria-label="学习视图">
+    <button type="button" id="mobile-tab-directory" role="tab" data-mobile-view="directory" aria-controls="side" aria-selected="false">目录</button>
+    <button type="button" id="mobile-tab-graph" role="tab" data-mobile-view="graph" aria-controls="graph-pane" aria-selected="true">图谱</button>
+    <button type="button" id="mobile-tab-detail" role="tab" data-mobile-view="detail" aria-controls="detail" aria-selected="false">详情</button>
+  </nav>
+  <aside id="side" class="side" aria-label="章节目录">
     <div class="side-tools">
       <input id="q" type="search" placeholder="搜索名称、章节或编号" autocomplete="off" aria-label="搜索知识点">
       <div class="stage-tabs" id="stage-tabs" role="tablist" aria-label="学段">
@@ -81,7 +86,7 @@
     </div>
     <div id="list" class="list"><p class="muted" style="padding:12px">正在加载知识点…</p></div>
   </aside>
-  <section class="graph-pane" aria-label="教材知识图谱">
+  <section id="graph-pane" class="graph-pane" aria-label="教材知识图谱">
     <div id="graph-options" class="graph-options" hidden>
     <div class="book-context" aria-label="当前教材与检测">
       <div>
@@ -112,6 +117,11 @@
       </div>
     </div>
     <p id="graph-fold" class="graph-fold" hidden></p>
+    <details class="mobile-graph-help">
+      <summary>图谱说明</summary>
+      <p>知识点之间的箭头表示先修关系。实线为硬先修，虚线为软先修。</p>
+      <p>✓ 表示已通过检测，× 表示未通过；尚未完成检测的知识点不标记。</p>
+    </details>
     </div>
     <div id="graph-stage" class="graph-stage">
       <div id="cy" hidden role="img" tabindex="0" aria-label="选中知识点的局部先修图"></div>
@@ -129,13 +139,20 @@
       <li><i class="swatch sw-c"></i>当前</li>
       <li><i class="swatch line-hard"></i>硬先修（实线）</li>
       <li><i class="swatch line-soft"></i>软先修（虚线）</li>
-      <li><span class="test-symbol test-passed" aria-hidden="true">✓</span>已通过检测</li>
-      <li><span class="test-symbol test-failed" aria-hidden="true">×</span>未通过，需巩固</li>
+      <li class="legend-status"><span class="test-symbol test-passed" aria-hidden="true">✓</span>已通过检测</li>
+      <li class="legend-status"><span class="test-symbol test-failed" aria-hidden="true">×</span>未通过，需巩固</li>
     </ul>
     <p class="progress-note">角标来自当前孩子或本机访客的实际检测；尚未完成的知识点不标记。</p>
     <p id="graph-meta" class="graph-meta"></p>
+    <div id="mobile-topic-summary" class="mobile-topic-summary" aria-live="polite" hidden>
+      <div>
+        <strong id="mobile-topic-name">选择一个知识点</strong>
+        <span id="mobile-topic-state">尚未完成检测</span>
+      </div>
+      <button type="button" id="mobile-show-detail">查看详情</button>
+    </div>
   </section>
-  <aside id="detail" class="detail"><p class="muted">正在加载…</p></aside>
+  <aside id="detail" class="detail" aria-label="知识点详情"><p class="muted">正在加载…</p></aside>
 </div>
 <dialog id="node-diagnose-dialog" class="node-diagnose-dialog" aria-labelledby="node-dialog-title" aria-describedby="node-dialog-question">
   <h2 id="node-dialog-title">检测这个知识点</h2>
@@ -151,6 +168,7 @@
 <script src="../assets/children.js"></script>
 <script src="../assets/progress.js"></script>
 <script src="../assets/last-location.js"></script>
+<script src="../assets/explore-viewport.js"></script>
 <script src="app.js"></script>
 <script src="../assets/stats-config.js"></script>
 <script src="../assets/stats.js"></script>

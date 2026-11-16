@@ -29,7 +29,7 @@ function element() {
     listenerCount(type) { return (listeners.get(type) || []).length; }
   };
 }
-const ids = Object.fromEntries(['node-diagnose-dialog', 'node-dialog-question', 'node-dialog-try', 'node-dialog-no', 'cy', 'main-nav', 'graph-options', 'mobile-menu-toggle', 'mobile-options-toggle'].map(x=>[x,element()]));
+const ids = Object.fromEntries(['node-diagnose-dialog', 'node-dialog-question', 'node-dialog-try', 'node-dialog-no', 'cy', 'detail', 'main-nav', 'graph-options', 'mobile-menu-toggle', 'mobile-options-toggle'].map(x=>[x,element()]));
 const header = element(), explore = element();
 let mobile = true;
 const ctx = {
@@ -37,13 +37,14 @@ const ctx = {
   location: {origin:'https://physicalmap.pages.dev',href:'https://physicalmap.pages.dev/explore/?subject=physics&volume=八下',pathname:'/explore/',search:'?subject=physics&volume=八下'},
   byId: new Map([['cnp_029',{name:'力'}],['cnp_030',{name:'弹力'}]]),
   selected:'cnp_029', explicitNodeSelection:null, currentAlias:null, volume:'八下', subject:'physics', stage:'', domain:'', query:'', showWholeBook:true, upDepth:2,
-  ancestorsOpen:false, nodeDialogId:null, nodeDialogScroll:null, cy:null,
+  ancestorsOpen:false, nodeDialogId:null, nodeDialogScroll:null, cy:null, mobileScroll:{detail:0}, graphNeedsRender:false,
   $: id => ids[id],
   document: {querySelector: s=>s==='.site-header'?header:explore, querySelectorAll:()=>[]},
   window: {scrollX:0,scrollY:23,matchMedia:()=>({matches:mobile}),scrollTo(x,y){this.scrollX=x;this.scrollY=y;}},
   requestAnimationFrame: fn=>fn(),
   resolveId: id=>ctx.byId.has(id)?{id,alias:null}:null,
   volumeOf:()=> '八下', highlight() {}, renderDetail() {}, writeHash() {}, closeDrawerIfMobile() {}, rememberLocation() {},
+  rememberViewport() {}, syncMobileTopic() {}, syncMobilePanels() {}, resizeGraphViewport() {},
   rebuilds:0
 };
 ctx.renderGraph = () => {ctx.rebuilds++;ctx.explicitNodeSelection=null;};
@@ -82,6 +83,16 @@ assert.equal(dialog.opens,2);
 let cancelled=false;
 dialog.fire('cancel',{preventDefault(){cancelled=true;}});
 assert.equal(cancelled,true);
+assert.equal(dialog.open,false);
+
+// 浏览器延迟派发上次的close时，新弹窗已经打开，不能清空新一轮检测目标。
+ctx.activateGraphNode('cnp_029');
+dialog.fire('close');
+assert.equal(dialog.open,true);
+assert.equal(ctx.nodeDialogId,'cnp_029');
+let staleClosePrevented=false;
+yes.fire('click',{preventDefault(){staleClosePrevented=true;}});
+assert.equal(staleClosePrevented,false,'快速关闭、重开仍可进入当前知识点检测');
 assert.equal(dialog.open,false);
 
 // 不同点第一次只选择、重绘一次；第二次询问新点，不沿用旧点URL。

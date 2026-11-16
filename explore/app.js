@@ -45,6 +45,15 @@
   var explicitNodeSelection = null;
   var nodeDialogId = null;
   var nodeDialogScroll = null;
+  var mobileView = 'graph';
+  var mobileScroll = { directory: 0, detail: 0 };
+  var graphNeedsRender = false;
+  var pendingGraphRestore = true;
+  var renderedCameraContext = null;
+  var renderedExpanded = false;
+  var liveCamera = null;
+  var changingCamera = false;
+  var viewportSaveTimer = null;
 
   function $(id) { return document.getElementById(id); }
 
@@ -136,6 +145,7 @@
     if (topics.length) {
       renderList();
       renderDetail();
+      syncMobileTopic();
       if (cy) {
         cy.nodes().forEach(function (node) {
           if (!byId.has(node.id())) return;
@@ -360,11 +370,122 @@
 
   function closeDrawerIfMobile() {
     if (!window.matchMedia('(max-width: 900px)').matches) return;
-    $('side').classList.remove('open');
-    var toggle = $('list-toggle');
-    toggle.setAttribute('aria-expanded', 'false');
-    toggle.textContent = '目录';
-    toggle.setAttribute('aria-label', '展开知识点目录');
+    setMobileView('graph', mobileView === 'directory', true);
+  }
+
+  function graphIsVisible() {
+    return (!window.matchMedia('(max-width: 900px)').matches || mobileView === 'graph') &&
+      $('cy').clientWidth > 0 && $('cy').clientHeight > 0;
+  }
+  function cameraContext() {
+    return { subject: subject, volume: volume, topicId: selected,
+      view: showWholeBook ? 'book' : 'local', depth: upDepth, layout: 'labels-' + labelLimit() };
+  }
+  function captureViewport() {
+    if (!cy || changingCamera || !renderedCameraContext || $('cy').dataset.ready !== '1' || !graphIsVisible()) return null;
+    var zoom = cy.zoom(), pan = cy.pan(), width = $('cy').clientWidth, height = $('cy').clientHeight;
+    return { zoom: zoom, centerX: (width / 2 - pan.x) / zoom, centerY: (height / 2 - pan.y) / zoom,
+      width: width, height: height, expanded: renderedExpanded };
+  }
+  function saveLiveCamera() {
+    if (liveCamera && window.CnmExploreViewport) window.CnmExploreViewport.save(liveCamera.context, liveCamera.camera);
+  }
+  function rememberViewport() {
+    var camera = captureViewport();
+    if (camera) liveCamera = { context: renderedCameraContext, camera: camera };
+    saveLiveCamera();
+    return camera;
+  }
+  function queueViewportSave() {
+    var camera = captureViewport();
+    if (!camera) return;
+    liveCamera = { context: renderedCameraContext, camera: camera };
+    clearTimeout(viewportSaveTimer);
+    viewportSaveTimer = setTimeout(saveLiveCamera, 120);
+  }
+  function applyViewport(camera) {
+    if (!cy || !camera || !graphIsVisible()) return;
+    changingCamera = true;
+    try {
+      cy.resize();
+      var zoom = Math.max(cy.minZoom(), Math.min(cy.maxZoom(), camera.zoom));
+      cy.viewport({ zoom: zoom, pan: {
+        x: $('cy').clientWidth / 2 - camera.centerX * zoom,
+        y: $('cy').clientHeight / 2 - camera.centerY * zoom
+      } });
+    } finally { changingCamera = false; }
+  }
+  function resizeGraphViewport() {
+    if (!cy || !graphIsVisible()) return;
+    var current = cy;
+    requestAnimationFrame(function () {
+      if (cy !== current || !graphIsVisible()) return;
+      if (liveCamera && liveCamera.context === renderedCameraContext) applyViewport(liveCamera.camera);
+      else cy.resize();
+      rememberViewport();
+    });
+  }
+  function syncMobilePanels() {
+    var mobile = window.matchMedia('(max-width: 900px)').matches;
+    var frame = document.querySelector('.explore');
+    frame.dataset.mobileView = mobileView;
+    var panels = { directory: 'side', graph: 'graph-pane', detail: 'detail' };
+    Object.keys(panels).forEach(function (view) {
+      var panel = $(panels[view]);
+      if (!panel) return;
+      var inactive = mobile && view !== mobileView;
+      panel.inert = inactive;
+      if (mobile) {
+        panel.setAttribute('aria-hidden', inactive ? 'true' : 'false');
+        panel.setAttribute('role', 'tabpanel');
+        panel.setAttribute('aria-labelledby', 'mobile-tab-' + view);
+      } else {
+        panel.removeAttribute('aria-hidden');
+        panel.removeAttribute('role');
+        panel.removeAttribute('aria-labelledby');
+      }
+      var tab = $('mobile-tab-' + view);
+      if (tab) {
+        tab.setAttribute('aria-selected', view === mobileView ? 'true' : 'false');
+        tab.tabIndex = view === mobileView ? 0 : -1;
+        tab.classList.toggle('on', view === mobileView);
+      }
+    });
+    var legacy = $('list-toggle');
+    if (legacy) legacy.setAttribute('aria-expanded', mobileView === 'directory' ? 'true' : 'false');
+  }
+  function setMobileView(view, focusTab, deferRender) {
+    if (['directory', 'graph', 'detail'].indexOf(view) < 0) return;
+    var mobile = window.matchMedia('(max-width: 900px)').matches;
+    if (mobile && view !== mobileView) {
+      if (mobileView === 'graph') rememberViewport();
+      if (mobileView === 'directory') mobileScroll.directory = $('list').scrollTop;
+      if (mobileView === 'detail') mobileScroll.detail = $('detail').scrollTop;
+    }
+    mobileView = view;
+    document.querySelector('.site-header').classList.remove('menu-open');
+    document.querySelector('.explore').classList.remove('options-open');
+    syncMobileChrome();
+    if (mobile && view === 'directory') $('list').scrollTop = mobileScroll.directory;
+    if (mobile && view === 'detail') $('detail').scrollTop = mobileScroll.detail;
+    if (view === 'graph' && graphNeedsRender && !deferRender) renderGraph(pendingGraphRestore);
+    if (view === 'graph') resizeGraphViewport();
+    if (focusTab && $('mobile-tab-' + view)) $('mobile-tab-' + view).focus({ preventScroll: true });
+  }
+  function syncMobileTopic() {
+    var topic = selected && byId.get(selected);
+    var name = $('mobile-topic-name'), state = $('mobile-topic-state'), button = $('mobile-show-detail');
+    if (name) name.textContent = topic ? topic.name : '先选择知识点';
+    if (state) {
+      var row = topic ? progressOf(topic.id) : null;
+      state.textContent = row ? (row.status === 'mastered' ? '✓ 已通过' : '× 未通过') : '尚未检测';
+      state.className = 'mobile-topic-state ' + progressClass(row);
+    }
+    if (button) {
+      button.disabled = !topic;
+      button.setAttribute('aria-label', topic ? '查看“' + topic.name + '”详情' : '选择知识点后查看详情');
+    }
+    if ($('mobile-topic-summary')) $('mobile-topic-summary').hidden = !topic;
   }
 
   function syncMobileChrome() {
@@ -378,18 +499,22 @@
     $('mobile-options-toggle').setAttribute('aria-expanded', optionsOpen ? 'true' : 'false');
     $('mobile-options-toggle').textContent = optionsOpen ? '收起' : '选项';
     $('mobile-options-toggle').setAttribute('aria-label', optionsOpen ? '收起图谱选项' : '展开图谱选项');
-    requestAnimationFrame(function () { if (cy) cy.resize(); });
+    syncMobilePanels();
+    if (!mobile && graphNeedsRender) renderGraph(pendingGraphRestore);
+    resizeGraphViewport();
   }
   function setMobileMenu(open) {
     document.querySelector('.site-header').classList.toggle('menu-open', open);
     syncMobileChrome();
   }
   function setMobileOptions(open) {
+    rememberViewport();
     document.querySelector('.explore').classList.toggle('options-open', open);
     syncMobileChrome();
   }
   function nodeDiagnosisHref(id) {
     if (!byId.has(id)) return '';
+    rememberViewport();
     return withReturn('../diagnose/?subject=' + subject + '&target=' + encodeURIComponent(id) + '&retry=1');
   }
   function closeNodeDiagnosis() {
@@ -425,6 +550,8 @@
       if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) closeNodeDiagnosis();
     });
     dialog.addEventListener('close', function () {
+      // close 事件异步派发；关闭后快速重开时，旧事件不能清除新弹窗的选择。
+      if (dialog.open) return;
       nodeDialogId = null;
       var point = nodeDialogScroll;
       nodeDialogScroll = null;
@@ -873,12 +1000,23 @@
     return elements;
   }
 
-  function renderGraph() {
+  function renderGraph(restoreSavedCamera) {
+    if (window.matchMedia('(max-width: 900px)').matches && mobileView !== 'graph') {
+      graphNeedsRender = true;
+      pendingGraphRestore = restoreSavedCamera !== false;
+      return;
+    }
+    rememberViewport();
+    graphNeedsRender = false;
+    var nextContext = cameraContext();
+    var savedCamera = restoreSavedCamera !== false && window.CnmExploreViewport ? window.CnmExploreViewport.read(nextContext) : null;
+    if (savedCamera) ancestorsOpen = savedCamera.expanded;
     explicitNodeSelection = null;
     var token = ++graphToken;
     tipFromTap = false;
     hideTip();
     if (cy) { cy.destroy(); cy = null; window.__cy = null; }
+    renderedCameraContext = null;
     var cyEl = $('cy');
     var emptyEl = $('graph-empty');
     var meta = $('graph-meta');
@@ -890,6 +1028,7 @@
       emptyEl.hidden = false;
       meta.textContent = '';
       updateFold(0, false);
+      syncMobileTopic();
       return;
     }
     var depth = upDepth === 'all' ? Infinity : upDepth;
@@ -926,9 +1065,13 @@
     var kick = heavy ? function (fn) { setTimeout(fn, 40); } : requestAnimationFrame;
     kick(function () {
       if (token !== graphToken) return;
+      if (!graphIsVisible()) {
+        graphNeedsRender = true;
+        pendingGraphRestore = restoreSavedCamera !== false;
+        return;
+      }
       try {
         ensureDagre();
-        if (cyEl.clientHeight < 40) cyEl.style.minHeight = '420px';
         var colors = theme();
         var narrow = labelLimit() <= 8;
         var textMax = narrow ? 104 : 126;
@@ -974,6 +1117,9 @@
         ];
         cy = window.cytoscape(cyOptions);
         window.__cy = cy;
+        renderedCameraContext = nextContext;
+        renderedExpanded = ancestorsOpen;
+        cy.on('pan zoom', queueViewportSave);
         cy.on('mouseover', 'node', function (event) { showTip(event.target); });
         cy.on('mouseout', 'node', function () { if (!tipFromTap) hideTip(); });
         cy.on('tap', 'node', function (event) {
@@ -998,6 +1144,11 @@
           if (token !== graphToken) return;
           requestAnimationFrame(function () {
             if (token !== graphToken || !cy) return;
+            if (!graphIsVisible()) {
+              graphNeedsRender = true;
+              pendingGraphRestore = restoreSavedCamera !== false;
+              return;
+            }
             cy.resize();
             cy.fit(undefined, dense ? 24 : 28);
             var framed = false;
@@ -1012,7 +1163,9 @@
                 + (framed ? '已对准当前知识点，可拖动查看其余节点。' : '')
                 + note;
             }
+            if (savedCamera) applyViewport(savedCamera);
             cyEl.dataset.ready = '1';
+            rememberViewport();
           });
         });
         layout.run();
@@ -1035,6 +1188,7 @@
       }
       return;
     }
+    rememberViewport();
     var switchedBook = volume && volumeOf(byId.get(hit.id)) !== volume;
     if (switchedBook) {
       volume = volumeOf(byId.get(hit.id));
@@ -1047,7 +1201,11 @@
       renderList();
     }
     var same = hit.id === selected && !currentAlias && !hit.alias;
-    if (hit.id !== selected) ancestorsOpen = false;
+    if (hit.id !== selected) {
+      ancestorsOpen = false;
+      mobileScroll.detail = 0;
+      $('detail').scrollTop = 0;
+    }
     selected = hit.id;
     if (switchedBook) syncBookQuery();
     currentAlias = source === 'user' ? null : hit.alias;
@@ -1058,7 +1216,8 @@
     }
     highlight(true);
     renderDetail();
-    if (!same) renderGraph();
+    syncMobileTopic();
+    if (!same || graphNeedsRender) renderGraph();
   }
 
   function zoomBy(factor) {
@@ -1200,14 +1359,30 @@
   function bind() {
     $('mobile-menu-toggle').addEventListener('click', function () {
       var open = !document.querySelector('.site-header').classList.contains('menu-open');
-      if (open) { setMobileOptions(false); closeDrawerIfMobile(); }
+      if (open) setMobileOptions(false);
       setMobileMenu(open);
     });
     $('mobile-options-toggle').addEventListener('click', function () {
       var open = !document.querySelector('.explore').classList.contains('options-open');
-      if (open) { setMobileMenu(false); closeDrawerIfMobile(); }
+      if (open) { setMobileView('graph'); setMobileMenu(false); }
       setMobileOptions(open);
     });
+    $('mobile-view-tabs').addEventListener('click', function (event) {
+      var tab = event.target.closest('[data-mobile-view]');
+      if (tab) setMobileView(tab.getAttribute('data-mobile-view'), true);
+    });
+    $('mobile-view-tabs').addEventListener('keydown', function (event) {
+      var views = ['directory', 'graph', 'detail'];
+      var index = views.indexOf(mobileView), next = index;
+      if (event.key === 'ArrowRight') next = (index + 1) % views.length;
+      else if (event.key === 'ArrowLeft') next = (index + 2) % views.length;
+      else if (event.key === 'Home') next = 0;
+      else if (event.key === 'End') next = 2;
+      else return;
+      event.preventDefault();
+      setMobileView(views[next], true);
+    });
+    $('mobile-show-detail').addEventListener('click', function () { setMobileView('detail', true); });
     document.addEventListener('keydown', function (event) {
       if (event.key !== 'Escape' || $('node-diagnose-dialog').open) return;
       if (document.querySelector('.site-header').classList.contains('menu-open')) {
@@ -1221,6 +1396,7 @@
     var mobileChrome = window.matchMedia('(max-width: 900px)');
     if (mobileChrome.addEventListener) mobileChrome.addEventListener('change', syncMobileChrome);
     syncMobileChrome();
+    syncMobileTopic();
     bindNodeConfirmation();
     $('q').addEventListener('input', function () {
       query = $('q').value.trim().toLowerCase();
@@ -1249,6 +1425,8 @@
     window.addEventListener('storage', function () { refreshProgress(); });
     window.addEventListener('focus', function () { refreshProgress(); });
     window.addEventListener('cnm:progress', function () { refreshProgress(); });
+    window.addEventListener('pagehide', rememberViewport);
+    document.addEventListener('visibilitychange', function () { if (document.hidden) rememberViewport(); });
     $('fDomain').addEventListener('change', function () {
       domain = $('fDomain').value;
       renderList();
@@ -1270,15 +1448,10 @@
       if (event.target.closest('#btn-expand-all')) ancestorsOpen = true;
       else if (event.target.closest('#btn-collapse-all')) ancestorsOpen = false;
       else return;
-      renderGraph();
+      renderGraph(false);
     });
     $('list-toggle').addEventListener('click', function () {
-      setMobileMenu(false);
-      setMobileOptions(false);
-      var open = $('side').classList.toggle('open');
-      $('list-toggle').setAttribute('aria-expanded', open ? 'true' : 'false');
-      $('list-toggle').textContent = open ? '收起' : '目录';
-      $('list-toggle').setAttribute('aria-label', open ? '收起知识点目录' : '展开知识点目录');
+      setMobileView(mobileView === 'directory' ? 'graph' : 'directory', true);
     });
     $('btn-fit').addEventListener('click', fitGraph);
     $('side-collapse').addEventListener('click', function () {
@@ -1298,6 +1471,7 @@
       if (hit) select(hit.id, 'user');
     });
     document.body.addEventListener('click', function (event) {
+      if (event.target.closest('a')) rememberViewport();
       var jump = event.target.closest('[data-jump]');
       if (!jump) return;
       select(jump.getAttribute('data-jump'), 'user');
@@ -1307,7 +1481,7 @@
       if (hash) select(hash, 'hash');
     });
     if (window.ResizeObserver) {
-      new ResizeObserver(function () { if (cy) cy.resize(); }).observe($('cy'));
+      new ResizeObserver(resizeGraphViewport).observe($('cy'));
     }
     var colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
     if (colorScheme.addEventListener) {
