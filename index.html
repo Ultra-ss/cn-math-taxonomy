@@ -116,22 +116,6 @@
     <div id="load-error" class="load-error" role="status" hidden></div>
   </section>
 
-  <h2 class="section-title">图谱里有什么</h2>
-  <div class="stat-grid" id="stats">
-    <div class="stat-card"><div class="stat-num" id="n-topics">…</div><div class="stat-label">知识点</div></div>
-    <div class="stat-card"><div class="stat-num" id="n-edges">…</div><div class="stat-label">先修边</div></div>
-    <div class="stat-card"><div class="stat-num" id="n-questions">…</div><div class="stat-label">题目</div></div>
-    <div class="stat-card"><div class="stat-num" id="n-standards">…</div><div class="stat-label">课标条目</div></div>
-  </div>
-  <p class="stat-note">以上数字在打开页面时从当前学科的知识点、先修、题库和课标统计。默认是物理。</p>
-
-  <section class="blind-home" id="blind-home" hidden>
-    <h2 class="section-title">本机盲区</h2>
-    <p class="muted" id="blind-home-lead">根据本机诊断记录汇总的薄弱 / 不稳知识点。只存在这台浏览器，可一键再测。</p>
-    <ul class="blind-home-list" id="blind-home-list"></ul>
-    <p class="blind-home-actions" id="blind-home-actions"></p>
-  </section>
-
 </main>
 <dialog id="continue-learning-dialog" class="continue-learning-dialog" aria-labelledby="continue-learning-title" aria-describedby="continue-learning-location">
   <h2 id="continue-learning-title">是否继续学习</h2>
@@ -149,9 +133,6 @@
   </a>
   <p class="feedback-note">本网页仅用于个人学习，免费使用</p>
 </footer>
-<script src="assets/stem-compat.js"></script>
-<script src="assets/children.js"></script>
-<script src="assets/blindspots.js"></script>
 <script src="assets/last-location.js"></script>
 <script src="assets/home.js"></script>
 <script>window.__cnmHomeResume = window.CnmLastLocation ? window.CnmLastLocation.resumeHome() : Promise.resolve(false);</script>

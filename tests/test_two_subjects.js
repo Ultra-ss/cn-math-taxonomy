@@ -140,7 +140,8 @@ test('所有 HTML 导航只含两科，公开地址指向 physicalmap', () => {
     assert.ok(!/subject=(?:math|chinese|english|morality|history|geography|biology|chemistry)/.test(html), page);
   }
   assert.ok(read('index.html').includes('物理'));
-  assert.ok(read('index.html').indexOf('id="textbooks"') < read('index.html').indexOf('id="stats"'));
+  assert.ok(read('index.html').includes('id="textbooks"'));
+  assert.ok(!read('index.html').includes('id="stats"'));
   assert.ok(read('diagnose/share.js').includes('https://physicalmap.pages.dev/?from=share'));
   assert.ok(read('assets/pwa.js').includes('physicalmap.pages.dev'));
 });
