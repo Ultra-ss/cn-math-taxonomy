@@ -11,10 +11,10 @@ async function test(name, fn) { await fn(); passed++; console.log('  ok   ' + na
 const flush = async () => { for (let i = 0; i < 6; i++) await new Promise(r => setImmediate(r)); };
 function element() {
   const attrs = {};
-  const classes = new Set(), listeners = new Map();
+  const listeners = new Map();
   const el = {
     textContent: '', hidden: true, children: [], className: '', href: '',
-    classList: { toggle() {}, add(value) { classes.add(value); }, remove(value) { classes.delete(value); }, contains(value) { return classes.has(value); } },
+    classList: { toggle() {}, add() {}, remove() {} },
     addEventListener(type, fn) { if (!listeners.has(type)) listeners.set(type, []); listeners.get(type).push(fn); },
     fire(type, event) { (listeners.get(type) || []).forEach(fn => fn(event)); },
     setAttribute(k, v) { attrs[k] = String(v); },
@@ -30,7 +30,7 @@ function element() {
 const actual = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/topics.json'), 'utf8'));
 function load(search, options = {}) {
   const ids = {};
-  ['load-error', 'textbook-grid', 'textbook-subject', 'textbook-title', 'textbook-description'].forEach(id => { ids[id] = element(); });
+  ['load-error', 'textbook-grid', 'textbook-subject', 'textbook-title', 'textbook-description', 'card-motion-toggle'].forEach(id => { ids[id] = element(); });
   ids['textbook-grid'].setAttribute('aria-busy', 'true');
   const calls = [];
   function fetch(url) {
@@ -38,8 +38,10 @@ function load(search, options = {}) {
     const promise = new Promise((res, rej) => { resolve = res; reject = rej; });
     calls.push({url, resolve, reject}); return promise;
   }
+  let motionChange;
+  const motionPreference={matches:!!options.reducedMotion,addEventListener(type,fn){if(type==='change')motionChange=fn;}};
   vm.runInNewContext(source, {
-    window: options.resume ? {__cnmHomeResume: options.resume} : {},
+    window: {__cnmHomeResume: options.resume,matchMedia:()=>motionPreference},
     location: {hash:options.hash || '', search:search || ''}, URLSearchParams, fetch,
     document: { title:'', body:{classList:{toggle(){}}}, querySelectorAll(){return [];},
       getElementById(id){return ids[id] || null;}, createElement(){return element();} }
@@ -47,7 +49,7 @@ function load(search, options = {}) {
   function respond(data = actual, status = 200) {
     calls[0].resolve({ok:status>=200 && status<300,status,json:()=>Promise.resolve(data)});
   }
-  return {ids,calls,respond};
+  return {ids,calls,respond,setReducedMotion(value){motionPreference.matches=value;if(motionChange)motionChange();}};
 }
 (async () => {
   await test('首页先显示全部教材入口，只请求知识点文件', async () => {
@@ -58,15 +60,19 @@ function load(search, options = {}) {
     assert.equal(calls.length,1);
     assert.equal(ids['textbook-grid'].hasAttribute('aria-busy'), false);
   });
-  await test('触摸按下提供卡片反馈，松手、滚动取消及失去捕获后清除，不阻止默认操作', async () => {
-    const {ids,respond} = load(''); respond(); await flush();
-    const grid=ids['textbook-grid'], card=grid.children[0];
-    const event={pointerType:'touch',button:0,target:{closest:()=>card},preventDefault(){throw new Error('不能阻止教材链接或滚动');}};
-    for (const type of ['pointerup','pointercancel','lostpointercapture']) {
-      grid.fire('pointerdown',event);assert.equal(card.classList.contains('is-pressed'),true);
-      grid.fire(type,event);assert.equal(card.classList.contains('is-pressed'),false);
-    }
-    grid.fire('pointerdown',{...event,pointerType:'mouse'});assert.equal(card.classList.contains('is-pressed'),false);
+  await test('卡片动效可暂停和恢复，教材数据加载不重置暂停状态', async () => {
+    const {ids,respond}=load('');const grid=ids['textbook-grid'],toggle=ids['card-motion-toggle'];
+    assert.equal(toggle.hidden,false);assert.equal(toggle.textContent,'暂停晃动');
+    toggle.fire('click');assert.equal(grid.getAttribute('data-motion-paused'),'true');assert.equal(toggle.textContent,'继续晃动');
+    respond();await flush();assert.equal(grid.getAttribute('data-motion-paused'),'true');assert.equal(grid.children.length,9);
+    toggle.fire('click');assert.equal(grid.getAttribute('data-motion-paused'),'false');assert.equal(toggle.textContent,'暂停晃动');
+  });
+  await test('减少动态效果时隐藏控制，并响应系统设置变化且保留暂停选择', async () => {
+    const {ids,setReducedMotion}=load('',{reducedMotion:true});
+    const toggle=ids['card-motion-toggle'];assert.equal(toggle.hidden,true);
+    setReducedMotion(false);assert.equal(toggle.hidden,false);toggle.fire('click');
+    setReducedMotion(true);assert.equal(toggle.hidden,true);
+    setReducedMotion(false);assert.equal(toggle.textContent,'继续晃动');assert.equal(ids['textbook-grid'].getAttribute('data-motion-paused'),'true');
   });
   await test('上次位置校验或用户选择继续不阻塞首页教材', async () => {
     let resolve; const resume = new Promise(done => {resolve=done;});

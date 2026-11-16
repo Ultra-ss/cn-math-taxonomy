@@ -780,6 +780,10 @@ body.page-home {
   line-height: 1.3;
   letter-spacing: -0.03em;
 }
+.page-home .textbook-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 5px; }
+.page-home .textbook-intro .textbook-heading h1 { min-width: 0; margin: 0; }
+.page-home #card-motion-toggle { flex: none; min-height: 44px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg-elev); color: var(--muted); font-size: 0.75rem; line-height: 1.3; white-space: nowrap; cursor: pointer; }
+.page-home #card-motion-toggle:hover { color: var(--brand-strong); border-color: var(--brand); }
 .page-home .textbook-intro > p:last-child { margin: 0; color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
 .page-home .textbook-grid {
   flex: 1;
@@ -789,6 +793,10 @@ body.page-home {
   gap: clamp(8px, 1.4vh, 14px);
 }
 .page-home a.textbook-card {
+  --textbook-edge: #d2d8e4;
+  --textbook-shadow: rgb(15 23 42 / 11%);
+  --textbook-sheen: rgb(255 255 255 / 70%);
+  --textbook-rim: rgb(255 255 255 / 90%);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 4px 8px;
@@ -798,29 +806,36 @@ body.page-home {
   min-width: 0;
   min-height: 88px;
   padding: 12px 14px;
-  background: var(--bg-elev);
+  background-color: var(--bg-elev);
+  background-image: linear-gradient(135deg, var(--textbook-sheen), transparent 58%);
   border: 1px solid var(--line);
   border-top: 3px solid var(--node-primary);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  box-shadow: 0 3px 0 var(--textbook-edge), 0 8px 16px var(--textbook-shadow), inset 0 1px 0 var(--textbook-rim);
   color: var(--text);
   text-decoration: none;
 }
 .page-home a.textbook-card.is-junior { border-top-color: var(--node-junior); }
 .page-home a.textbook-card.is-senior { border-top-color: var(--node-senior); }
-.page-home a.textbook-card:hover, .page-home a.textbook-card:active, .page-home a.textbook-card.is-pressed { border-color: var(--brand); background: var(--brand-soft); }
+.page-home a.textbook-card:hover, .page-home a.textbook-card:active { border-color: var(--brand); background-color: var(--brand-soft); }
 .page-home a.textbook-card:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-@keyframes textbook-card-wobble {
-  0%, 100% { transform: translateY(0) rotate(0); }
-  25% { transform: translateY(-2px) rotate(-1.2deg); }
-  50% { transform: translateY(-1px) rotate(1.2deg); }
-  75% { transform: translateY(-1px) rotate(-0.6deg); }
+/* 每张卡片绕自身中心轻轻浮动；只变换图层，不改变布局或持续重画阴影。 */
+@keyframes textbook-card-float {
+  0%, 100% { transform: perspective(820px) translateY(0) rotateX(2.5deg) rotateY(-3.5deg); }
+  25% { transform: perspective(820px) translateY(-2px) rotateX(-2deg) rotateY(1deg); }
+  50% { transform: perspective(820px) translateY(-0.5px) rotateX(-2.5deg) rotateY(3.5deg); }
+  75% { transform: perspective(820px) translateY(-1.5px) rotateX(1.5deg) rotateY(-1deg); }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .page-home a.textbook-card:active, .page-home a.textbook-card:focus-visible, .page-home a.textbook-card.is-pressed { animation: textbook-card-wobble 360ms ease-in-out 1; }
+  .page-home a.textbook-card { animation: textbook-card-float 6s ease-in-out -0.8s infinite; }
+  .page-home a.textbook-card:nth-child(3n + 2) { animation-duration: 5.6s; animation-delay: -2.4s; }
+  .page-home a.textbook-card:nth-child(3n) { animation-duration: 6.4s; animation-delay: -4.1s; }
+  .page-home a.textbook-card:nth-child(4n) { animation-duration: 6.8s; animation-delay: -3.2s; }
+  .page-home a.textbook-card:nth-child(even) { animation-direction: reverse; }
+  .page-home #textbook-grid[data-motion-paused="true"] .textbook-card { animation-play-state: paused; }
 }
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .page-home a.textbook-card:hover { animation: textbook-card-wobble 360ms ease-in-out 1; }
+@media (prefers-color-scheme: dark) {
+  .page-home a.textbook-card { --textbook-edge: #0d131e; --textbook-shadow: rgb(0 0 0 / 30%); --textbook-sheen: rgb(255 255 255 / 8%); --textbook-rim: rgb(255 255 255 / 12%); }
 }
 .page-home .textbook-card strong { grid-column: 1 / -1; font-size: 1.05rem; line-height: 1.35; letter-spacing: -0.02em; overflow-wrap: anywhere; }
 .page-home .textbook-stage { grid-column: 1 / -1; color: var(--muted); font-size: 0.78rem; font-weight: 650; line-height: 1.35; }
@@ -858,7 +873,7 @@ body.page-home {
   .page-home .textbook-intro h1 { font-size: 1.18rem; margin-bottom: 3px; }
   .page-home .textbook-intro > p:last-child { font-size: 0.75rem; line-height: 1.35; }
   .page-home .textbook-grid { flex: none; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: minmax(80px, auto); gap: 7px; align-content: start; }
-  .page-home a.textbook-card { grid-template-columns: 1fr; min-height: 80px; padding: 8px; gap: 4px; border-radius: 10px; box-shadow: 0 2px 6px rgb(15 23 42 / 4%); }
+  .page-home a.textbook-card { grid-template-columns: 1fr; min-height: 80px; padding: 8px; gap: 4px; border-radius: 10px; }
   .page-home .textbook-stage, .page-home .textbook-action { display: none; }
   .page-home .textbook-card strong { font-size: 0.88rem; line-height: 1.3; }
   .page-home .textbook-card[data-volume^="选必"] strong { max-width: 5em; }
@@ -882,11 +897,15 @@ body.page-home {
   .page-home .brand { min-height: 28px; }
   .page-home .logo { width: 24px; height: 24px; }
   .page-home .nav-link { min-height: 30px; }
-  .page-home > .home { padding-top: 6px; padding-bottom: 6px; }
+  .page-home > .home { padding-top: 4px; padding-bottom: 4px; }
+  .page-home .textbook-intro { margin-bottom: 6px; }
+  .page-home .textbook-heading { margin-bottom: 0; }
   .page-home .textbook-grid { grid-auto-rows: minmax(68px, auto); }
   .page-home a.textbook-card { min-height: 68px; padding: 5px 6px; }
-  .page-home .feedback-qr-link { width: 76px; }
+  .page-home .feedback-qr-link { width: 68px; }
   .page-home .home-feedback { padding-top: 4px; padding-bottom: 8px; }
+  .page-home .home-feedback h2 { margin-bottom: 3px; }
+  .page-home .home-feedback .feedback-note { margin-top: 3px; }
 }
 @media (min-width: 601px) and (max-width: 900px) and (max-height: 480px) {
   .page-home .textbook-intro { margin-bottom: 6px; }

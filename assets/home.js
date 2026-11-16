@@ -95,23 +95,23 @@
   setText('textbook-subject', subject === 'physics' ? '物理 · 人教版' : '科学 · 教科版');
   renderTextbooks(null);
 
-  // 触摸浏览器不一定提供 :active；被动监听只提供反馈，保留链接与滚动的默认操作。
+  // 卡片开页自动悬浮；暂停入口只控制显示，不干预教材链接。
   var cardGrid = document.getElementById('textbook-grid');
-  if (cardGrid) {
-    var pressedCard = null;
-    function clearCardPress() {
-      if (pressedCard) pressedCard.classList.remove('is-pressed');
-      pressedCard = null;
+  var motionToggle = document.getElementById('card-motion-toggle');
+  if (cardGrid && motionToggle) {
+    var motionPreference = typeof window.matchMedia === 'function' ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+    function syncCardMotionControl() {
+      var paused = cardGrid.getAttribute('data-motion-paused') === 'true';
+      motionToggle.hidden = !!(motionPreference && motionPreference.matches);
+      motionToggle.textContent = paused ? '继续晃动' : '暂停晃动';
+      motionToggle.setAttribute('aria-label', paused ? '继续卡片自动晃动' : '暂停卡片自动晃动');
     }
-    cardGrid.addEventListener('pointerdown', function (event) {
-      if ((event.pointerType !== 'touch' && event.pointerType !== 'pen') || event.button !== 0) return;
-      clearCardPress();
-      pressedCard = event.target.closest('.textbook-card');
-      if (pressedCard) pressedCard.classList.add('is-pressed');
-    }, { passive: true });
-    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (type) {
-      cardGrid.addEventListener(type, clearCardPress, { passive: true });
+    motionToggle.addEventListener('click', function () {
+      cardGrid.setAttribute('data-motion-paused', cardGrid.getAttribute('data-motion-paused') === 'true' ? 'false' : 'true');
+      syncCardMotionControl();
     });
+    if (motionPreference && motionPreference.addEventListener) motionPreference.addEventListener('change', syncCardMotionControl);
+    syncCardMotionControl();
   }
 
   // 首页只加载教材知识点数量，不再请求统计和题库数据。
