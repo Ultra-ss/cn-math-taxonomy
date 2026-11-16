@@ -292,6 +292,10 @@
     return typeof qid === 'string' && new RegExp('^' + topic + '_q[1-9][0-9]*$').test(qid);
   }
   function shortText(value, max) { return typeof value === 'string' && value.length <= (max || 4000); }
+  function validReturnTo(value) {
+    return shortText(value, 4096) && !/[\u0000-\u0020\u007f\\]/.test(value) &&
+      /^\/(?:[^/?#\s\\]+\/)*explore\/(?:index\.html)?(?:[?#][^\s\\]*)?$/.test(value);
+  }
   function natural(value) { return Number.isSafeInteger(value) && value >= 0; }
   function emptyLearning() {
     return { wrongbook: {}, sessions: {}, blindspots: { v: 1, byId: {} }, archivedSessions: [], progress: { v: 1, byChild: {} } };
@@ -309,7 +313,8 @@
         })))) throw new Error('进行中诊断的范围、设置或时间不正确。');
     if ((own(session, 'progressChildId') && session.progressChildId !== null && !validId(session.progressChildId)) ||
         (own(session, 'volume') && !shortText(session.volume, 100)) ||
-        (own(session, 'order') && session.order !== 'book')) throw new Error('进行中诊断的归属或教材设置不正确。');
+        (own(session, 'order') && session.order !== 'book') ||
+        (own(session, 'returnTo') && !validReturnTo(session.returnTo))) throw new Error('进行中诊断的归属、教材或返回位置不正确。');
     session.answers.forEach(function (answer) {
       if (!isObject(answer) || subjectOfTopic(answer.id) !== subject || !validQuestion(answer.qid, answer.id) ||
           ['correct', 'wrong', 'skip'].indexOf(answer.result) < 0 ||

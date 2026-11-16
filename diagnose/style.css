@@ -46,6 +46,20 @@ label { font-weight: 700; }
 .textbook-progress p { margin: 6px 0; }
 .textbook-back { display: inline-block; min-height: 32px; padding: 4px 0; }
 #book-select { display: block; width: 100%; margin: 8px 0; }
+.result-conclusion { padding: 28px 24px; text-align: center; }
+.result-conclusion h2 { font-size: 1.55rem; overflow-wrap: anywhere; }
+.result-kicker { margin: 0 0 12px; }
+.result-verdict { font-size: 1.65rem; font-weight: 800; margin: 18px 0 10px; }
+.result-verdict.passed { color: var(--ok); }
+.result-verdict.failed { color: var(--bad); }
+.result-verdict.pending { color: var(--warn); }
+.result-note { margin: 0 0 24px; }
+.result-return { display: flex; align-items: center; justify-content: center; width: 100%; max-width: 360px; min-height: 60px; margin: 0 auto; font-size: 1.25rem; font-weight: 800; }
+.result-return-hint { margin: 10px 0 0; }
+.result-disclosures { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.result-disclosure { min-height: 44px; }
+.result-panel[hidden] { display: none; }
+.result-panel:not([hidden]) { margin-top: 16px; }
 .ans-input { width: 100%; font-size: 1.1rem; }
 .notice { color: var(--warn); background: var(--warn-bg); padding: 8px 12px; border-radius: 10px; margin-top: 12px; }
 .verdict { padding: 10px 12px; border-radius: 10px; margin: 10px 0; font-weight: 800; }
@@ -222,6 +236,7 @@ table.log select { min-height: 44px; }
 @media print {
   body { background: #fff; }
   .no-print { display: none !important; }
+  .result-panel[hidden] { display: block; }
   main#root { max-width: none; padding: 0; }
   .card { break-inside: avoid-page; box-shadow: none; }
   details.topic { break-inside: avoid; }

@@ -703,6 +703,30 @@ test('教材诊断会话与记录可备份，包括教材顺序、册次和明�
   assert.equal(stored(storage,RECORD_KEY)['child-a'][0].mode,'textbook');
 });
 
+test('会话备份保留站内图谱返回位置，旧会话没有该字段也能恢复', () => {
+  const data=learningBackup();
+  const source='/explore/?subject=physics&volume=%E5%85%AB%E4%B8%8B&view=local#cnp_029';
+  data.learning.sessions.physics.returnTo=source;
+  data.learning.archivedSessions.push({subject:'science',session:{...data.learning.sessions.science,
+    returnTo:'/school/explore/?subject=science&volume=%E4%B8%80%E4%B8%8A#cns_p001'}});
+  const {api,storage}=load();
+  importInto(api,api.parseBackup(JSON.stringify(data)));
+  assert.equal(stored(storage,PHY_SESSION).returnTo,source);
+  assert.ok(stored(storage,ARCHIVE_KEY).some(x=>x.session.returnTo && x.session.returnTo.includes('/school/explore/')));
+  assert.equal(api.exportBackup().learning.sessions.physics.returnTo,source);
+});
+
+test('会话返回位置拒绝外站、非图谱路径、控制字符和超长值，失败不改本机数据', () => {
+  for(const value of ['https://evil.example/explore/','//evil.example/explore/','javascript:alert(1)',
+    '/other/','/explore/\\evil','/explore/\n?subject=physics',42,null,'/explore/?q='+ 'a'.repeat(4096)]) {
+    const data=learningBackup();data.learning.sessions.physics.returnTo=value;
+    const {api,storage,writes}=load(fixture());
+    assert.throws(()=>api.parseBackup(JSON.stringify(data)));
+    assert.deepStrictEqual(Object.fromEntries(storage),fixture());
+    assert.deepStrictEqual(writes,[]);
+  }
+});
+
 test('图谱进度拒绝错误学科、状态、时间、重复run、非法签名与危险对象键', () => {
   const cases=[
     d=>{d.learning.progress.v=2;},

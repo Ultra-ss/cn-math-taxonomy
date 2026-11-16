@@ -48,6 +48,8 @@
   let volSel = '';         // '' 整年级 / '上' / '下'
   let seedParam = null;    // URL 参数 seed：固定选题的随机种子
   let confirmParam = null; // URL 参数 confirm：本次确认题数，不在演示模式写入本机设置
+  let returnToParam = null; // null 表示没有显式返回参数；空字符串表示显式参数无效
+  let resultPanelState = { analysis: false, log: false, more: false };
   let pathCy = null;
   let pathToken = 0;
   let pathTipLock = false;
@@ -104,6 +106,33 @@
   function withSubject(href) {
     if (!href || href.indexOf('subject=') >= 0 || href.indexOf('http') === 0) return href;
     return href + (href.indexOf('?') >= 0 ? '&' : '?') + 'subject=' + subject;
+  }
+  function explorePath() {
+    const base = /^(.*\/)diagnose(?:\/(?:index\.html)?)?$/.exec(location.pathname);
+    return (base ? base[1] : '/') + 'explore/';
+  }
+  function safeReturnTo(value) {
+    if (typeof value !== 'string' || !value || value.length > 4096 ||
+        value.charAt(0) !== '/' || value.charAt(1) === '/' || /[\s\\\x00-\x1f\x7f]/.test(value)) return '';
+    try {
+      const url = new URL(value, location.origin);
+      const path = explorePath();
+      if (url.origin !== location.origin || (url.pathname !== path && url.pathname !== path + 'index.html')) return '';
+      return url.pathname + url.search + url.hash;
+    } catch (e) { return ''; }
+  }
+  function returnPath() {
+    const explicit = safeReturnTo(sessionMeta && sessionMeta.returnTo);
+    if (explicit) return explicit;
+    const id = session && session.targets && session.targets[0];
+    const topic = id && D && D.graph.byId[id];
+    const volume = session && session.volume || (topic ? E.parseChapter(topic.chapter).volume : '');
+    const params = new URLSearchParams({ subject: subject });
+    if (volume) params.set('volume', volume);
+    return explorePath() + '?' + params.toString() + (id ? '#' + encodeURIComponent(id) : '');
+  }
+  function selectSessionOwner() {
+    if (sessionMeta && sessionMeta.progressChildId !== undefined) CC.setCurrent(sessionMeta.progressChildId);
   }
   function detectSubject() {
     const params = new URLSearchParams(location.search);
@@ -439,6 +468,7 @@
       v: 2, mode: session.mode, targets: session.targets, limit: session.limit, confirm: session.confirm,
       order: session.orderKind || undefined, volume: session.volume || undefined,
       progressChildId: sessionMeta.progressChildId,
+      returnTo: safeReturnTo(sessionMeta.returnTo) || undefined,
       label: sessionMeta.label, answers: session.answers,
       excluded: sessionMeta.excluded || [],
       seed: session.seed, avoid: session.avoid, savedAt: new Date().toISOString()
@@ -448,13 +478,15 @@
 
   function startSession(targets, label, limit, mode, volume) {
     pathExpanded = false;
+    resultPanelState = { analysis: false, log: false, more: false };
     const screen = mode === 'screen' || mode === 'textbook';
     const st = getSettings();
     session = E.createSession(D.graph, targets, {
       mode: mode, volume: volume, limit: limit || (screen ? st.screenLimit : st.limit), confirm: st.confirm, seed: newSeed(), avoid: seenList()
     });
     const cur = CC.current();
-    sessionMeta = { label: label, excluded: [], progressChildId: cur ? cur.id : null };
+    sessionMeta = { label: label, excluded: [], progressChildId: cur ? cur.id : null, returnTo: returnToParam || '' };
+    sessionMeta.returnTo = returnPath();
     resetUi();
     save();
     render();
@@ -473,8 +505,10 @@
       sessionMeta = {
         label: saved.label || saved.targets.map(nameOf).join('、'),
         excluded: parts.excluded || [],
-        progressChildId: Object.prototype.hasOwnProperty.call(saved, 'progressChildId') ? saved.progressChildId : undefined
+        progressChildId: Object.prototype.hasOwnProperty.call(saved, 'progressChildId') ? saved.progressChildId : undefined,
+        returnTo: returnToParam == null ? safeReturnTo(saved.returnTo) : returnToParam
       };
+      sessionMeta.returnTo = returnPath();
       syncProgress();
       return true;
     } catch (e) { return false; }
@@ -482,7 +516,9 @@
 
   function restart() {
     pathExpanded = false;
+    resultPanelState = { analysis: false, log: false, more: false };
     session = null; demo = null;
+    returnToParam = null;
     lsDel(sessionKey());
     history.replaceState(null, '', location.pathname + (subject !== 'math' ? '?subject=' + subject : ''));
     render();
@@ -881,6 +917,7 @@
   }
 
   function renderQuestion(item) {
+    resultPanelState = { analysis: false, log: false, more: false };
     const id = item.topicId;
     const q = item.question;
     const t = D.graph.byId[id];
@@ -1163,19 +1200,67 @@
     return out;
   }
 
+  function compactConclusion(sum) {
+    if (session.targets.length === 1) {
+      const id = session.targets[0];
+      const status = E.statusOf(session, id);
+      const passed = status === 'mastered';
+      const failed = status === 'weak' || status === 'shaky';
+      return {
+        title: nameOf(id),
+        label: passed ? '✓ 通过' : failed ? '× 未通过' : '尚未完成',
+        tone: passed ? 'passed' : failed ? 'failed' : 'pending',
+        note: passed ? '这个知识点已通过，可以继续学习其他知识点。'
+          : status === 'shaky' ? '这个知识点还不够稳定，建议再巩固一次。'
+          : failed ? '这个知识点还需要巩固，可以返回图谱继续学习。'
+          : '本轮尚未完成这个知识点的检测，可在「更多操作」中继续。'
+      };
+    }
+    const direct = session.targets.filter(function (id) { return session.status[id] && session.status[id].src === 'direct'; });
+    const passed = direct.filter(function (id) { return session.status[id].s === 'mastered'; }).length;
+    const failed = direct.length - passed;
+    const pending = session.targets.length - direct.length;
+    return {
+      title: sessionMeta.label,
+      label: '✓ ' + passed + ' 个通过 · × ' + failed + ' 个未通过',
+      tone: failed ? 'failed' : pending ? 'pending' : 'passed',
+      note: pending ? '还有 ' + pending + ' 个知识点尚未完成检测，' +
+        (sum.limitReached ? '可在「更多操作」中继续。' : '可返回图谱逐点检查。') : '本轮检测已完成，可以返回图谱继续学习。'
+    };
+  }
+
+  function resultDisclosure(label, key, panel, onOpen) {
+    const button = h('button', {
+      type: 'button', id: 'btn-result-' + key, class: 'result-disclosure',
+      'aria-controls': panel.id, 'aria-expanded': panel.hidden ? 'false' : 'true',
+      onclick: function () {
+        panel.hidden = !panel.hidden;
+        resultPanelState[key] = !panel.hidden;
+        button.setAttribute('aria-expanded', panel.hidden ? 'false' : 'true');
+        if (!panel.hidden && onOpen) requestAnimationFrame(function () {
+          if (!panel.hidden && document.body.contains(panel)) onOpen();
+        });
+      }
+    }, label);
+    return button;
+  }
+
   function renderResult() {
     const sum = E.summarize(D.graph, session);
     const rootSet = new Set(sum.roots.map(function (r) { return r.id; }));
     const textbook = session.mode === 'textbook';
     const screen = !!session.scope;
     const targetSet = new Set(screen ? [] : session.targets);
-    const page = h('div');
-    if (demo) page.append(demoBanner());
+    const page = h('div', { class: 'compact-result' });
+    const analysis = h('section', { id: 'result-analysis', class: 'result-panel', hidden: !resultPanelState.analysis, 'aria-label': '详细分析' });
+    const log = h('section', { id: 'result-log', class: 'result-panel', hidden: !resultPanelState.log, 'aria-label': '答题记录' });
+    const morePanel = h('section', { id: 'result-more', class: 'result-panel', hidden: !resultPanelState.more, 'aria-label': '更多操作' });
+    if (demo) morePanel.append(demoBanner());
     saveToChild(sum);
     noteBlind(sum);
-    append(page, childBar('result'));
+    append(morePanel, childBar('result'));
     const dropped = excludedNote();
-    if (dropped) page.append(dropped);
+    if (dropped) morePanel.append(dropped);
 
     const targetsMastered = session.targets.every(function (id) { return E.statusOf(session, id) === 'mastered'; });
     const chapters = screen ? E.chapterSummary(D.graph, session) : null;
@@ -1199,8 +1284,8 @@
     const more = textbook ? getSettings().screenLimit : screen ? 10 : 4;
     const nextLimit = textbook ? session.limit + more : Math.min(session.limit + more, 60);
     const nextTopic = session.stack.find(function (id) { return !session.status[id]; });
-    const summaryCard = h('div', { class: 'card', id: 'summary' },
-      h('h2', { text: '诊断结果：' + sessionMeta.label }),
+    const advancedCard = h('div', { class: 'card', id: 'result-statistics' },
+      h('h2', { text: '本轮统计和操作' }),
       textbookProgress(nextTopic),
       h('p', null, headline),
       h('div', { class: 'stats' },
@@ -1223,12 +1308,12 @@
         wrongbookLink(),
         h('button', { onclick: function () { if (confirm('重新开始会清除当前进度，确定吗？')) restart(); } }, '重新开始'),
         session.answers.length ? h('button', { onclick: function () { rebuild(session.answers.slice(0, -1)); } }, '撤销上一题') : null));
-    page.append(summaryCard);
+    morePanel.append(advancedCard);
     const blindCard = blindResultCard(sum);
-    if (blindCard) page.append(blindCard);
-    if (screen) page.append(chaptersCard(chapters, outOfScope));
+    if (blindCard) morePanel.append(blindCard);
+    if (screen) analysis.append(chaptersCard(chapters, outOfScope));
 
-    page.append(h('div', { class: 'card', id: 'roots' },
+    analysis.append(h('div', { class: 'card', id: 'roots' },
       h('h2', { text: '薄弱的先修知识点（根因）' }),
       h('p', { class: 'muted small' }, '根因 = 被判为薄弱、且它的直接先修里没有薄弱点的知识点。点击展开看描述、掌握标准和课标条目。'),
       sum.roots.length ? sum.roots.map(function (r) {
@@ -1239,19 +1324,19 @@
         return topicItem(r.id, statusTags(r.id, rootSet, targetSet), notes);
       }) : h('p', { text: targetsMastered ? '没有。' : '暂未发现。' })));
 
-    page.append(h('div', { class: 'card', id: 'shaky' },
+    analysis.append(h('div', { class: 'card', id: 'shaky' },
       h('h2', { text: '不稳的知识点（' + sum.shaky.length + '）' }),
       h('p', { class: 'muted small' }, '中途答错过，但确认题（同级或更容易）答对了：可能是粗心，也可能掌握得不牢。它们会出现在学习路径里需要巩固，但工具没有继续向它们的先修回溯（只有确认后仍错才回溯）。'),
       sum.shaky.length ? sum.shaky.map(function (id) { return topicItem(id, statusTags(id, rootSet, targetSet)); }) : h('p', { text: '没有。' })));
 
-    page.append(h('div', { class: 'card', id: 'path' },
+    analysis.append(h('div', { class: 'card', id: 'path' },
       h('h2', { text: '推荐学习路径' }),
       h('p', { class: 'muted small' }, '从根因（和「不稳」的点）出发到目标之间、尚未判定为掌握的知识点，按年级从低到高排列（同一年级里先修在前），从上往下学。「不稳」「未测」的点也在路径上，建议先巩固 / 自查。'),
       sum.path.length ? h('ol', { class: 'path' }, sum.path.map(function (p) {
         return h('li', null, topicItem(p.id, statusTags(p.id, rootSet, targetSet)));
       })) : h('p', { text: '不需要补课。' })));
 
-    page.append(h('div', { class: 'card', id: 'graph' },
+    analysis.append(h('div', { class: 'card', id: 'graph' },
       h('h2', { text: '路径图' }),
       h('p', { class: 'muted small' }, '小学、初中和高中用不同颜色。硬先修是实线，软先修是虚线，点线表示中间省略了没画出来的知识点。红框是薄弱根因，橙框是目标。节点较多时先按年级收起中间点，可再展开。名称太长会省略，悬停或点按可看全名。滚轮缩放，拖动平移。上面的列表是完整学习顺序。'),
       h('div', { class: 'path-tools no-print' },
@@ -1272,22 +1357,35 @@
         h('div', { id: 'path-cy', role: 'img', 'aria-label': '先修路径图' }),
         h('div', { id: 'node-tip', class: 'node-tip', role: 'tooltip', hidden: true }))));
 
-    page.append(h('details', { class: 'card', id: 'mastered' },
+    analysis.append(h('details', { class: 'card', id: 'mastered' },
       h('summary', null, h('b', null, '已掌握的知识点（' + sum.mastered.length + '）')),
       sum.mastered.map(function (id) {
         const src = session.status[id].src === 'direct' ? '答对' : '由后续知识点答对推断';
         return topicItem(id, [tag('mastered', src)].concat(D.graph.byId[id].external ? [tag('ext', '小学')] : []));
       })));
 
-    page.append(h('details', { class: 'card', id: 'untested' },
+    analysis.append(h('details', { class: 'card', id: 'untested' },
       h('summary', null, h('b', null, '未测的知识点（' + sum.untested.length + '）')),
       h('p', { class: 'muted small' }, '题量用完，或不必再测，所以没问到的知识点。小学知识点同样会出题。'),
       sum.untested.map(function (id) { return topicItem(id, statusTags(id, rootSet, targetSet)); })));
 
-    page.append(standardsCard(sum));
-    page.append(logCard());
+    analysis.append(standardsCard(sum));
+    log.append(logCard());
+    const conclusion = compactConclusion(sum);
+    page.append(h('div', { class: 'card result-conclusion', id: 'summary' },
+      h('p', { class: 'muted small result-kicker', text: demo ? '演示检测结果' : '本次检测结果' }),
+      h('h2', { text: conclusion.title }),
+      h('p', { class: 'result-verdict ' + conclusion.tone, text: conclusion.label }),
+      h('p', { class: 'muted result-note', text: conclusion.note }),
+      h('a', { class: 'btn btn-primary result-return no-print', id: 'btn-return-continue', href: returnPath(), onclick: selectSessionOwner }, '返回继续'),
+      h('p', { class: 'muted small result-return-hint' }, '回到原来的教材图谱，继续选择其他知识点。')));
+    page.append(h('div', { class: 'result-disclosures no-print' },
+      resultDisclosure('查看详细分析', 'analysis', analysis, function () { mountPathGraph(sum); }),
+      resultDisclosure('答题记录', 'log', log),
+      resultDisclosure('更多操作', 'more', morePanel)));
+    page.append(analysis, log, morePanel);
     show(page);
-    mountPathGraph(sum);
+    if (resultPanelState.analysis) mountPathGraph(sum);
   }
 
   function nameList(ids) { return ids.map(nameOf).join('、'); }
@@ -1559,12 +1657,12 @@
     const token = ++pathToken;
     if (pathCy) { pathCy.destroy(); pathCy = null; window.__pathCy = null; }
     const cyEl = document.getElementById('path-cy');
-    if (!cyEl) return;
+    if (!cyEl || cyEl.closest('[hidden]')) return;
     cyEl.dataset.ready = '0';
     hidePathTip();
     const lay = E.layout(D.graph, session, sum);
     requestAnimationFrame(function () {
-      if (token !== pathToken || !document.body.contains(cyEl)) return;
+      if (token !== pathToken || !document.body.contains(cyEl) || cyEl.closest('[hidden]')) return;
       try {
         ensureDagre();
         const colors = theme();
@@ -1711,13 +1809,33 @@
     setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
   }
 
-  function printPage() { window.print(); }
-  window.addEventListener('beforeprint', function () {
+  function preparePrint() {
+    document.querySelectorAll('.result-panel[hidden]').forEach(function (panel) {
+      panel.hidden = false; panel.dataset.printHidden = '1';
+    });
     document.querySelectorAll('details:not([open])').forEach(function (d) { d.setAttribute('open', ''); d.dataset.autoOpen = '1'; });
+    const graph = document.getElementById('path-cy');
+    if (session && graph && !pathCy && graph.dataset.ready !== '0') mountPathGraph(E.summarize(D.graph, session));
     if (pathCy) { pathCy.resize(); pathCy.fit(undefined, 20); }
+  }
+  function printPage() {
+    preparePrint();
+    let frames = 0;
+    const ready = function () {
+      const graph = document.getElementById('path-cy');
+      if (graph && graph.dataset.ready === '0' && frames++ < 30) return requestAnimationFrame(ready);
+      window.print();
+    };
+    requestAnimationFrame(ready);
+  }
+  window.addEventListener('beforeprint', function () {
+    preparePrint();
   });
   window.addEventListener('afterprint', function () {
     document.querySelectorAll('details[data-auto-open]').forEach(function (d) { d.removeAttribute('open'); delete d.dataset.autoOpen; });
+    document.querySelectorAll('.result-panel[data-print-hidden]').forEach(function (panel) {
+      panel.hidden = true; delete panel.dataset.printHidden;
+    });
   });
 
   /* ------------------------------------------------------------ 启动 */
@@ -1799,6 +1917,7 @@
       return;
     }
     const params = new URLSearchParams(location.search);
+    returnToParam = params.has('returnTo') ? safeReturnTo(params.get('returnTo')) : null;
     if (params.has('confirm')) confirmParam = E.clampConfirm(params.get('confirm'));
     let resolved = null;
     try { resolved = resolveTargets(params); } catch (e) { renderStart(e.message); return; }
@@ -1812,7 +1931,8 @@
         limit: limit || (resolved.mode === 'screen' || resolved.mode === 'textbook' ? getSettings().screenLimit : getSettings().limit),
         confirm: getSettings().confirm, seed: seedParam == null ? 'demo' : seedParam
       });
-      sessionMeta = { label: resolved.label };
+      sessionMeta = { label: resolved.label, returnTo: returnToParam || '' };
+      sessionMeta.returnTo = returnPath();
       const step = parseInt(params.get('step'), 10);
       runDemo(step >= 0 ? step : Infinity);
       render();

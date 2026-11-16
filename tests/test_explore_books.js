@@ -58,4 +58,76 @@ assert.equal(marker.result.data.testStatus, 'mastered');
 assert.ok(marker.result.classes.includes('test-passed'));
 assert.ok(source.includes("'background-position-x': '100%'"));
 assert.ok(source.includes("'background-position-y': '0%'"));
-console.log('test_explore_books: subject, textbook filters, first topics and independent corner status passed');
+
+// 从当前界面生成可恢复的同源返回目标，包含没有写进地址栏的筛选和视图状态。
+const returnContext = {
+  URL, URLSearchParams,
+  location: {
+    origin: 'https://physicalmap.pages.dev',
+    href: 'https://physicalmap.pages.dev/explore/?grade=8&returnTo=https%3A%2F%2Fevil.example%2F',
+    pathname: '/explore/', search: '?grade=8&returnTo=https%3A%2F%2Fevil.example%2F'
+  },
+  subject: 'physics', volume: '八下', stage: 'j', domain: '运动和相互作用', query: '力',
+  showWholeBook: false, upDepth: 3, selected: 'cnp_029'
+};
+vm.createContext(returnContext);
+vm.runInContext(section('function graphReturnTo()', 'function syncBook()'), returnContext);
+const base = 'https://physicalmap.pages.dev';
+let bookLink = new URL(returnContext.bookHref(), base);
+assert.equal(bookLink.pathname, '/diagnose/');
+assert.equal(bookLink.searchParams.get('volume'), '八下');
+assert.equal(bookLink.searchParams.get('order'), 'book');
+let back = new URL(bookLink.searchParams.get('returnTo'), base);
+assert.equal(back.origin, base);
+assert.equal(back.pathname, '/explore/');
+assert.equal(back.searchParams.get('subject'), 'physics');
+assert.equal(back.searchParams.get('volume'), '八下');
+assert.equal(back.searchParams.get('stage'), 'j');
+assert.equal(back.searchParams.get('domain'), '运动和相互作用');
+assert.equal(back.searchParams.get('q'), '力');
+assert.equal(back.searchParams.get('view'), 'local');
+assert.equal(back.searchParams.get('depth'), '3');
+assert.equal(back.hash, '#cnp_029');
+assert.ok(!back.searchParams.has('returnTo'), '不把其他地址传来的 returnTo 当作目的地');
+assert.ok(!back.searchParams.has('grade'), '已选册次优先于旧的整年级参数');
+let pointLink = new URL(returnContext.withReturn('../diagnose/?subject=physics&target=cnp_029'), base);
+assert.equal(pointLink.searchParams.get('returnTo'), bookLink.searchParams.get('returnTo'));
+for (const unsafe of ['https://evil.example/diagnose/', '//evil.example/diagnose/', 'javascript:alert(1)']) {
+  const safe = new URL(returnContext.withReturn(unsafe), base);
+  assert.equal(safe.origin, base);
+  assert.equal(safe.pathname, '/diagnose/');
+  assert.equal(new URL(safe.searchParams.get('returnTo'), base).origin, base);
+}
+returnContext.location.pathname = '//example.invalid/explore/';
+assert.equal(new URL(returnContext.graphReturnTo(), base).origin, base, '返回路径不能变为协议相对外站地址');
+
+// 高中、科学与子目录部署都保留当前教材和知识点。
+for (const [subjectName, book, id, prefix] of [
+  ['physics', '必修二', 'cnp_h028', ''], ['science', '三下', 'cns_p086', '/school']
+]) {
+  Object.assign(returnContext, {subject: subjectName, volume: book, selected: id, stage:'', domain:'', query:'', showWholeBook:true, upDepth:2});
+  Object.assign(returnContext.location, {pathname: prefix+'/explore/', href: base+prefix+'/explore/', search:''});
+  const link = new URL(returnContext.bookHref(), base);
+  const target = new URL(link.searchParams.get('returnTo'), base);
+  assert.equal(link.pathname, prefix+'/diagnose/');
+  assert.equal(target.pathname, prefix+'/explore/');
+  assert.equal(target.searchParams.get('subject'), subjectName);
+  assert.equal(target.searchParams.get('volume'), book);
+  assert.equal(target.hash, '#'+id);
+  assert.equal(target.searchParams.get('view'), 'book');
+}
+
+// 返回后 applyQuery 使用相同的真实查询解析函数恢复筛选、视图与层数。
+const qInput = {value:''};
+context.URLSearchParams = URLSearchParams;
+context.location = {search: '?subject=science&volume=三下&stage=p&domain=物质科学&q=声音&view=local&depth=all'};
+context.$ = () => qInput;
+vm.runInContext(section('function applyQuery()', 'function bootSelection()')+';applyQuery();',context);
+assert.equal(context.volume,'三下');
+assert.equal(context.stage,'p');
+assert.equal(context.domain,'物质科学');
+assert.equal(context.query,'声音');
+assert.equal(qInput.value,'声音');
+assert.equal(context.showWholeBook,false);
+assert.equal(context.upDepth,'all');
+console.log('test_explore_books: textbook filters, corner status and restorable diagnosis return links passed');

@@ -191,8 +191,36 @@
       }
     }
   }
+  function graphReturnTo() {
+    // 从当前同源图谱状态生成返回地址，不采用 URL 中传入的 returnTo。
+    var params = new URLSearchParams(location.search);
+    params.delete('returnTo');
+    params.set('subject', subject);
+    params.delete('grade');
+    if (volume) params.set('volume', volume); else params.delete('volume');
+    if (stage) params.set('stage', stage); else params.delete('stage');
+    if (domain) params.set('domain', domain); else params.delete('domain');
+    if (query) params.set('q', query); else params.delete('q');
+    if (volume) params.set('view', showWholeBook ? 'book' : 'local'); else params.delete('view');
+    params.set('depth', String(upDepth));
+    var pathname = '/' + location.pathname.replace(/^\/+/, '');
+    return pathname + '?' + params.toString() + (selected ? '#' + encodeURIComponent(selected) : '');
+  }
+  function withReturn(href) {
+    var fallback = new URL('../diagnose/?subject=' + subject, location.href);
+    var target;
+    try { target = new URL(href, location.href); } catch (error) { target = fallback; }
+    if (target.origin !== location.origin || !/\/diagnose\/(?:index\.html)?$/.test(target.pathname)) target = fallback;
+    target.searchParams.set('returnTo', graphReturnTo());
+    return target.pathname + target.search + target.hash;
+  }
+  function refreshDiagnosisLinks() {
+    document.querySelectorAll('a[data-diagnose-return]').forEach(function (link) {
+      link.setAttribute('href', withReturn(link.getAttribute('data-diagnose-return')));
+    });
+  }
   function bookHref() {
-    return '../diagnose/?subject=' + subject + '&volume=' + encodeURIComponent(volume) + '&order=book';
+    return withReturn('../diagnose/?subject=' + subject + '&volume=' + encodeURIComponent(volume) + '&order=book');
   }
   function syncBook() {
     var title = $('book-title');
@@ -202,16 +230,15 @@
     $('book-note').textContent = volume ? '本册 ' + topics.filter(function (topic) { return volumeOf(topic) === volume; }).length + ' 个知识点，检测从教材第一个知识点开始。' : '在教材选择器中选择册次，或从首页进入。';
     action.hidden = !volume;
     action.href = volume ? bookHref() : '#';
+    if (volume) action.setAttribute('data-diagnose-return', '../diagnose/?subject=' + subject + '&volume=' + encodeURIComponent(volume) + '&order=book');
+    else action.removeAttribute('data-diagnose-return');
     $('book-view').hidden = !volume;
     $('book-view').textContent = showWholeBook ? '查看局部先修' : '查看本册全图';
     $('book-view').setAttribute('aria-pressed', showWholeBook ? 'true' : 'false');
+    refreshDiagnosisLinks();
   }
   function syncBookQuery() {
-    var params = new URLSearchParams(location.search);
-    params.set('subject', subject);
-    params.delete('grade');
-    if (volume) params.set('volume', volume); else params.delete('volume');
-    history.replaceState(null, '', location.pathname + '?' + params.toString() + (selected ? '#' + selected : ''));
+    history.replaceState(null, '', graphReturnTo());
   }
   function chooseBook(key) {
     volume = bookSpec(key) ? key : '';
@@ -482,6 +509,7 @@
     });
     if (!shown) box.append(el('p', { class: 'muted', text: '没有匹配的知识点。', style: 'padding:12px' }));
     $('count').textContent = '显示 ' + shown + ' / ' + topics.length;
+    refreshDiagnosisLinks();
   }
 
   function sideVisible() {
@@ -543,6 +571,7 @@
         el('h1', { text: '选择一个知识点' }),
         el('p', { text: '可以搜索，也可以按年级、册、章展开。选中之后，中间只画它附近的先修，以及后面一层会用到它的知识点。' })));
       document.title = subject === 'physics' ? '知识图谱 · 物理' : '知识图谱 · 小学科学';
+      refreshDiagnosisLinks();
       return;
     }
     var topic = byId.get(selected);
@@ -552,7 +581,10 @@
       parts.push(el('div', { class: 'alias-note' },
         '旧编号 ', el('code', { text: currentAlias.id }),
         '（' + (currentAlias.name || '未命名') + '）已对应到这个知识点。用该旧编号开始诊断时，会包含映射中的全部 ' + currentAlias.targets.length + ' 个小学知识点。 ',
-        el('a', { href: '../diagnose/?target=' + encodeURIComponent(currentAlias.id) }, '按旧编号诊断')));
+        el('a', {
+          href: withReturn('../diagnose/?subject=' + subject + '&target=' + encodeURIComponent(currentAlias.id)),
+          'data-diagnose-return': '../diagnose/?subject=' + subject + '&target=' + encodeURIComponent(currentAlias.id)
+        }, '按旧编号诊断')));
     }
     parts.push(el('h1', { class: 'detail-title', text: topic.name }));
     var tested = progressOf(topic.id);
@@ -564,7 +596,8 @@
     if (subject !== 'math') diagHref = '../diagnose/?subject=' + subject + '&target=' + encodeURIComponent(topic.id);
     parts.push(el('a', {
       class: 'btn btn-primary btn-lg diag-btn',
-      href: diagHref
+      href: withReturn(diagHref),
+      'data-diagnose-return': diagHref
     }, tested ? '重新检测这个知识点' : '检测这个知识点'));
     parts.push(el('dl', { class: 'meta-grid' },
       metaItem('年级册次', gradeLabel(topic)),
@@ -613,6 +646,7 @@
       posts.length ? posts.map(relButton) : el('p', { text: '还没有后续知识点依赖它。' })));
 
     box.replaceChildren.apply(box, parts);
+    refreshDiagnosisLinks();
     document.title = topic.name + ' · 知识图谱';
   }
 
@@ -1095,6 +1129,12 @@
     var allowedStages = subject === 'physics' ? ['', 'j', 'h'] : ['', 'p'];
     stage = allowedStages.indexOf(stageValue) >= 0 ? stageValue : '';
     domain = params.get('domain') || '';
+    query = (params.get('q') || '').trim().toLowerCase();
+    $('q').value = params.get('q') || '';
+    showWholeBook = params.get('view') !== 'local';
+    var depth = params.get('depth');
+    if (/^[123]$/.test(depth || '')) upDepth = Number(depth);
+    else if (depth === 'all') upDepth = 'all';
   }
 
   function bootSelection() {
@@ -1148,6 +1188,7 @@
       ancestorsOpen = false;
       try { sessionStorage.setItem('cnmExplore.depth', value); } catch (error) { /* 忽略 */ }
       syncDepthButtons();
+      refreshDiagnosisLinks();
       renderGraph();
     });
     $('graph-fold').addEventListener('click', function (event) {

@@ -80,6 +80,9 @@ jobs:
       - name: tests/test_textbook_order.js
         run: node tests/test_textbook_order.js
 
+      - name: tests/test_compact_result.js
+        run: node tests/test_compact_result.js
+
       - name: 课标映射严格模式（仅报告）
         continue-on-error: true
         env:

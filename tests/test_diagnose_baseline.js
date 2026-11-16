@@ -63,9 +63,22 @@ assert.strictEqual(ctx.confirmParam, null);
 assert.strictEqual(JSON.parse(entries.get('settings')).confirm, 2);
 ctx.D = { graph }; ctx.window = {}; ctx.session = null; ctx.sessionMeta = null;
 ctx.syncProgress = function () {};
+ctx.URL = URL; ctx.URLSearchParams = URLSearchParams;
+ctx.location = { pathname: '/diagnose/', origin: 'https://physicalmap.pages.dev' };
+ctx.subject = 'physics'; ctx.returnToParam = null;
+vm.runInContext(section('function explorePath()', 'function selectSessionOwner()'), ctx);
 vm.runInContext(section('function restoreSession(saved)', 'function restart()'), ctx);
 assert.strictEqual(ctx.restoreSession({ targets: ['cnp_071'], answers: [], confirm: 5, label: '欧姆定律' }), true);
 assert.strictEqual(ctx.session.confirm, 4);
+assert.ok(ctx.sessionMeta.returnTo.includes('volume=%E4%B9%9D%E5%85%A8#cnp_071'));
+const savedReturn = '/explore/?subject=physics&volume=%E5%85%AB%E4%B8%8B#cnp_029';
+const urlReturn = '/explore/?subject=physics&volume=%E5%85%AB%E4%B8%8A#cnp_001';
+ctx.returnToParam = urlReturn;
+assert.strictEqual(ctx.restoreSession({ targets: ['cnp_071'], answers: [], label: '欧姆定律', returnTo: savedReturn }), true);
+assert.strictEqual(ctx.sessionMeta.returnTo, urlReturn, '显式 URL 来源优先于旧存档');
+ctx.returnToParam = null;
+assert.strictEqual(ctx.restoreSession({ targets: ['cnp_071'], answers: [], label: '欧姆定律', returnTo: savedReturn }), true);
+assert.strictEqual(ctx.sessionMeta.returnTo, savedReturn, '无显式来源时恢复存档上下文');
 
 // 新默认学科和按册入口直接进入教材模式，八上 / 八下不能合并。
 const routeContext = {
@@ -125,8 +138,10 @@ vm.runInContext(appendCode, domContext);
 const node = { nodeType: 1 };
 domContext.append({ append(child) { appended.push(child); } }, [null, false, node]);
 assert.deepStrictEqual(appended, [node]);
-for (const mode of ['start', 'question', 'result']) {
+for (const mode of ['start', 'question']) {
   assert.ok(source.includes("append(page, childBar('" + mode + "'))"));
   assert.ok(!source.includes("page.append(childBar('" + mode + "'))"));
 }
+assert.ok(source.includes("append(morePanel, childBar('result'))"));
+assert.ok(!source.includes("page.append(childBar('result'))"));
 console.log('test_diagnose_baseline: ok');
