@@ -24,6 +24,29 @@ button.bad:hover { background: var(--bad); filter: brightness(1.06); }
 button:disabled { opacity: .55; cursor: not-allowed; }
 label { font-weight: 700; }
 
+/* 开始页优先展示教材挑战，其余设置按需展开。 */
+.challenge-card .challenge-intro { margin: 6px 0 14px; }
+.challenge-card > label { display: block; font-size: 0.9rem; }
+.challenge-card #grade-info { margin: 8px 0; }
+.challenge-card .challenge-owner { margin: 10px 0 12px; overflow-wrap: anywhere; }
+.challenge-actions #btn-grade-start { min-height: 48px; padding: 10px 22px; font-size: 1.05rem; }
+.testing-settings { padding-top: 8px; padding-bottom: 8px; }
+.testing-settings > summary { cursor: pointer; font-weight: 800; font-size: 1.05rem; min-height: 44px; padding: 10px 0; line-height: 1.4; overflow-wrap: anywhere; }
+.testing-settings-body { padding: 8px 0 6px; }
+.testing-limit-fields { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.testing-limit-fields > label { display: grid; grid-template-columns: minmax(0, 1fr) 100px; gap: 10px; align-items: center; font-size: 0.9rem; }
+.testing-limit-fields input, .testing-limit-fields select { width: 100%; min-height: 44px; margin: 0; font-size: 16px; }
+.testing-settings #search { width: 100%; min-height: 44px; font-size: 16px; }
+@media (max-width: 600px) {
+  .testing-start .challenge-card { padding: 14px; }
+  .challenge-card .challenge-intro { margin: 6px 0 10px; font-size: 0.88rem; }
+  .challenge-card #book-select { min-height: 44px; font-size: 16px; margin: 6px 0; }
+  .challenge-card #grade-info, .challenge-card .challenge-owner { font-size: 0.82rem; line-height: 1.5; }
+  .challenge-card .challenge-owner { margin: 8px 0 10px; }
+  .challenge-actions, .challenge-actions #btn-grade-start { width: 100%; }
+  .testing-settings > summary { font-size: 1rem; }
+}
+
 .banner { background: var(--brand-soft); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 14px; }
 .banner.demo { background: var(--warn-bg); }
 .chapter-browser > summary { cursor: pointer; font-weight: 800; min-height: 44px; display: flex; align-items: center; }

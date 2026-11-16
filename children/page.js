@@ -101,7 +101,7 @@
       use.addEventListener('click', function () { CC.setCurrent(c.id); render(); });
       row.appendChild(use);
     }
-    var hist = el('a', 'btn', '盲区与历史');
+    var hist = el('a', 'btn', '薄弱知识点与历史');
     hist.href = 'history.html?child=' + encodeURIComponent(c.id);
     row.appendChild(hist);
     var edit = el('button', null, '编辑');
@@ -139,6 +139,49 @@
       listBox.appendChild(note);
     }
     renderArchivedSessions();
+    renderLearningOverview();
+  }
+
+  var topicNames = {};
+  function cleanLabel(value) { return String(value || '').replace(/\u8bca\u65ad/g, '检测'); }
+  function renderLearningOverview() {
+    var learning = window.CnmLocalLearning;
+    if (!learning) return;
+    var current = CC.current(), childId = current ? current.id : null;
+    var rows = learning.weakPoints({ childId: childId });
+    var weakList = document.getElementById('center-weak-list');
+    weakList.textContent = '';
+    document.getElementById('weak-points-owner').textContent = '当前：' + (current ? current.name : '本机访客') + ' · 共 ' + rows.length + ' 个';
+    document.getElementById('center-weak-all').href = 'history.html?' + (childId ? 'child=' + encodeURIComponent(childId) : 'scope=guest');
+    if (!rows.length) weakList.appendChild(el('li', 'muted small', '暂无薄弱知识点，完成检测后会在这里汇总。'));
+    rows.slice(0, 5).forEach(function (row) {
+      var item = el('li', 'center-learning-item'), info = el('div', 'center-learning-info');
+      var name = el('a', 'center-topic-name', topicNames[row.id] || row.id);
+      name.href = '../explore/?subject=' + row.subject + '#' + encodeURIComponent(row.id);
+      info.appendChild(name);
+      info.appendChild(el('span', 'kid-tag ' + (row.status === 'weak' ? 'weak' : row.status === 'retest' ? 'unk' : 'shaky'), row.status === 'weak' ? '薄弱' : row.status === 'retest' ? '待复测' : '不稳'));
+      info.appendChild(el('span', 'muted small', row.subject === 'physics' ? '物理' : '小学科学'));
+      item.appendChild(info);
+      var retest = el('a', 'btn center-retest', '再测');
+      retest.href = '../diagnose/?subject=' + row.subject + '&target=' + encodeURIComponent(row.id) + '&retry=1';
+      item.appendChild(retest);
+      weakList.appendChild(item);
+    });
+    document.getElementById('legacy-weak-details').hidden = !learning.legacyWeakPoints({}).length;
+    var saved = learning.savedSessions(), section = document.getElementById('center-sessions');
+    var sessions = document.getElementById('center-session-list');
+    sessions.textContent = '';
+    section.hidden = !saved.length;
+    saved.forEach(function (entry) {
+      var item = el('li', 'center-learning-item'), info = el('div', 'center-learning-info');
+      info.appendChild(el('strong', null, (entry.subject === 'physics' ? '物理' : '小学科学') + ' · ' + cleanLabel(entry.label)));
+      info.appendChild(el('span', 'muted small', entry.ownerLabel + ' · 已答 ' + entry.answered + ' 题'));
+      item.appendChild(info);
+      var resume = el('a', 'btn', entry.completed ? '查看结果' : '继续查看');
+      resume.href = entry.href;
+      item.appendChild(resume);
+      sessions.appendChild(item);
+    });
   }
 
   function renderArchivedSessions() {
@@ -163,8 +206,9 @@
             status.className = 'small';
             status.textContent = '进度已恢复。';
             var link = el('a', null, '打开' + subjectName + '检测');
-            link.href = '../diagnose/?subject=' + subject;
+            link.href = '../diagnose/?subject=' + subject + '&resume=1';
             status.appendChild(link);
+            renderLearningOverview();
             section.hidden = false;
           } catch (error) {
             renderArchivedSessions();
@@ -217,10 +261,10 @@
       '新增 ' + preview.addedChildren + ' 个孩子，合并 ' + preview.matchedChildren + ' 个已有档案；' +
       '新增 ' + preview.addedRecords + ' 条记录，更新 ' + preview.updatedRecords + ' 条记录；' +
       '新增错题 ' + preview.addedWrongs + ' 道、更新 ' + preview.updatedWrongs + ' 道；' +
-      '新增盲区 ' + preview.addedBlindspots + ' 个、更新 ' + preview.updatedBlindspots + ' 个；' +
+      '新增薄弱知识点 ' + preview.addedBlindspots + ' 个、更新 ' + preview.updatedBlindspots + ' 个；' +
       '恢复检测进度 ' + preview.restoredSessions + ' 份、归档 ' + preview.archivedSessions + ' 份。' +
       '图谱检测记录新增 ' + preview.addedProgress + ' 份、更新 ' + preview.updatedProgress + ' 份。' +
-      (preview.legacy ? '这是旧版档案备份，不包含错题、进行中检测和盲区台账。' : '');
+      (preview.legacy ? '这是旧版档案备份，不包含错题、进行中检测和薄弱知识点台账。' : '');
     var children = document.getElementById('import-children');
     children.textContent = '';
     preview.children.forEach(function (c) {
@@ -260,7 +304,7 @@
       resetForm();
       render();
       importStatus.textContent = '导入完成：新增 ' + result.addedChildren + ' 个孩子，合并 ' + result.matchedChildren +
-        ' 个已有档案；新增记录 ' + result.addedRecords + ' 条、错题 ' + result.addedWrongs + ' 道、盲区 ' +
+        ' 个已有档案；新增记录 ' + result.addedRecords + ' 条、错题 ' + result.addedWrongs + ' 道、薄弱知识点 ' +
         result.addedBlindspots + ' 个；恢复进度 ' + result.restoredSessions + ' 份，归档进度 ' + result.archivedSessions +
         ' 份；图谱检测记录新增 ' + result.addedProgress + ' 份、更新 ' + result.updatedProgress + ' 份。';
       importStatus.hidden = false;
@@ -299,4 +343,17 @@
 
   resetForm();
   render();
+  if (window.addEventListener) {
+    window.addEventListener('storage', renderLearningOverview);
+    window.addEventListener('focus', renderLearningOverview);
+    window.addEventListener('cnm:progress', renderLearningOverview);
+  }
+  fetch('../data/topics.json').then(function (response) {
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    return response.json();
+  }).then(function (rows) {
+    if (!Array.isArray(rows)) return;
+    rows.forEach(function (topic) { if (topic && typeof topic.id === 'string') topicNames[topic.id] = topic.name; });
+    renderLearningOverview();
+  }).catch(function () { /* 知识点编号仍可用于浏览与再测。 */ });
 })();

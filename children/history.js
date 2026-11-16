@@ -9,6 +9,7 @@
   var topics = null;
   var childId = null;
   var subjectSel = '';
+  var historyScope = 'child';
 
   function el(tag, cls, text) {
     var n = document.createElement(tag);
@@ -43,15 +44,14 @@
   }
 
   function enrichInfo(id, info) {
-    var row = Object.assign({}, info);
-    if (window.CnmBlind) {
-      var hit = window.CnmBlind.list({}).filter(function (x) { return x.id === id; })[0];
-      if (hit) {
-        row.hits = hit.hits;
-        row.wrongs = hit.wrongs;
-      }
-    }
-    return row;
+    return Object.assign({}, info);
+  }
+  function bindRetestOwner(link) {
+    link.addEventListener('click', function () {
+      if (historyScope === 'child' && childId) CC.setCurrent(childId);
+      else if (historyScope === 'guest') CC.setCurrent(null);
+    });
+    return link;
   }
 
   function topicRow(id, info) {
@@ -61,7 +61,7 @@
     var a = el('a', 'wk-name', nameOf(id));
     a.href = exploreHref(id);
     top.appendChild(a);
-    top.appendChild(tag(info.status === 'weak' ? 'weak' : 'shaky', info.status === 'weak' ? '薄弱' : '不稳'));
+    top.appendChild(tag(info.status === 'weak' ? 'weak' : info.status === 'retest' ? 'unk' : 'shaky', info.status === 'weak' ? '薄弱' : info.status === 'retest' ? '待复测' : '不稳'));
     if (info.root) top.appendChild(tag('root', '根因'));
     top.appendChild(tag('sub', SUBJECT_NAME[subjectOfId(id)] || SUBJECT_NAME[info.subject] || '科学'));
     li.appendChild(top);
@@ -74,31 +74,23 @@
     li.appendChild(el('p', 'wk-meta', meta.join(' · ')));
     var re = el('a', 'wk-retest', '再测一次');
     re.href = retestHref([id], info.subject || subjectOfId(id));
+    if (re.href.indexOf('target=') >= 0) re.href += '&retry=1';
+    bindRetestOwner(re);
     li.appendChild(re);
     return li;
   }
 
   function weakSection(child) {
-    var by = CC.latestStatus(child.id, subjectSel || null);
-    var ids = Object.keys(by).filter(function (id) {
-      return subjectOfId(id) && (by[id].status === 'weak' || by[id].status === 'shaky');
-    });
-    /* 没有孩子记录时，仍展示本机盲区账本（含未建档时的检测）。 */
-    if (!ids.length && window.CnmBlind) {
-      window.CnmBlind.list({ subject: subjectSel || null }).forEach(function (row) {
-        if (!by[row.id]) {
-          by[row.id] = { status: row.status, root: row.root, at: row.at, label: row.label, subject: row.subject };
-          ids.push(row.id);
-        }
-      });
-    }
+    var by = {}, rows = window.CnmLocalLearning ? window.CnmLocalLearning.weakPoints({ childId: child.id, subject: subjectSel || null }) : [];
+    rows.forEach(function (row) { by[row.id] = row; });
+    var ids = rows.map(function (row) { return row.id; });
     var rank = function (id) { return (by[id].status === 'weak' ? 0 : 2) + (by[id].root ? 0 : 1); };
     ids.sort(function (a, b) {
       return rank(a) - rank(b) || ((topics && topics[a] && topics[a].grade) || 99) - ((topics && topics[b] && topics[b].grade) || 99) || String(by[b].at || '').localeCompare(String(by[a].at || ''));
     });
     var sec = el('section', 'kid-section');
     var weakN = ids.filter(function (id) { return by[id].status === 'weak'; }).length;
-    sec.appendChild(el('h2', null, '盲区汇总（薄弱 / 不稳）'));
+    sec.appendChild(el('h2', null, '我的薄弱知识点'));
     if (!CC.recordsOf(child.id).length && !ids.length) {
       sec.appendChild(el('p', 'kid-empty', '还没有检测记录。做完一次检测，薄弱点会汇总在这里，并可一键再测。'));
       return sec;
@@ -107,7 +99,8 @@
       sec.appendChild(el('p', 'kid-empty', '按最近的检测结果，没有薄弱或不稳的知识点。'));
       return sec;
     }
-    sec.appendChild(el('p', 'muted small', '同一个知识点测过好几次，以最近一次为准。薄弱 ' + weakN + ' 个，不稳 ' + (ids.length - weakN) + ' 个。点名称进知识图谱；「再测」会按该点重新检测。数据只留在本机。'));
+    var retestN = ids.filter(function (id) { return by[id].status === 'retest'; }).length;
+    sec.appendChild(el('p', 'muted small', '同一个知识点测过好几次，以最近一次直接结论为准。薄弱 ' + weakN + ' 个，不稳 ' + (ids.length - weakN - retestN) + ' 个，待复测 ' + retestN + ' 个。点名称进知识图谱；「再测」会按该点重新检测。数据只留在本机。'));
 
     var groups = {};
     var order = [];
@@ -124,6 +117,8 @@
       var weakChap = chapIds.filter(function (id) { return by[id].status === 'weak'; });
       var reAll = el('a', 'wk-retest', weakChap.length ? '再测本章薄弱（' + weakChap.length + '）' : '再测本章（' + chapIds.length + '）');
       reAll.href = retestHref(weakChap.length ? weakChap : chapIds, subjectOfId(chapIds[0]));
+      reAll.href += '&retry=1';
+      bindRetestOwner(reAll);
       head.appendChild(reAll);
       block.appendChild(head);
       var ul = el('ul', 'wk-list');
@@ -210,20 +205,24 @@
   function renderPicker(kids) {
     picker.textContent = '';
     if (!kids.length) return;
-    var label = el('label', null, '孩子');
+    var label = el('label', null, '查看身份');
     label.setAttribute('for', 'kid-select');
     var sel = el('select');
     sel.id = 'kid-select';
+    [['guest', '本机访客'], ['local', '本机历史汇总（归属未记录）']].forEach(function (entry) {
+      var option = el('option', null, entry[1]); option.value = entry[0]; sel.appendChild(option);
+    });
     kids.forEach(function (c) {
       var o = el('option', null, c.name + '（' + c.grade + '）');
       o.value = c.id;
       sel.appendChild(o);
     });
-    sel.value = childId;
+    sel.value = historyScope === 'child' ? childId : historyScope;
     sel.addEventListener('change', function () {
-      childId = sel.value;
-      CC.setCurrent(childId);
-      history.replaceState(null, '', location.pathname + '?child=' + encodeURIComponent(childId));
+      historyScope = sel.value === 'guest' || sel.value === 'local' ? sel.value : 'child';
+      childId = historyScope === 'child' ? sel.value : null;
+      if (historyScope !== 'local') CC.setCurrent(childId);
+      history.replaceState(null, '', location.pathname + (childId ? '?child=' + encodeURIComponent(childId) : '?scope=' + historyScope));
       render();
     });
     var manage = el('a', 'btn', '管理档案');
@@ -252,27 +251,29 @@
     var kids = CC.list();
     renderPicker(kids);
     content.textContent = '';
-    if (!kids.length) {
-      content.appendChild(el('p', 'kid-empty', '还没有孩子档案。检测结果仍会记入本机盲区；添加孩子后还能按人分开保存。'));
-      var add = el('a', 'btn btn-primary', '去添加孩子');
-      add.href = './';
-      content.appendChild(add);
+    if (historyScope !== 'child' || !kids.length) {
+      var localMode = historyScope === 'local';
+      content.appendChild(el('p', 'kid-meta', localMode ? '本机历史汇总（归属未记录）' : '本机访客'));
+      if (localMode) content.appendChild(el('p', 'muted small', '旧版全局记录没有档案归属，单独展示，不计入任何孩子的薄弱知识点。'));
       content.appendChild(renderTabs());
-      if (window.CnmBlind) {
-        var localRows = window.CnmBlind.list({ subject: subjectSel || null });
+      if (window.CnmLocalLearning) {
+        var localRows = localMode ? window.CnmLocalLearning.legacyWeakPoints({ subject: subjectSel || null }) : window.CnmLocalLearning.weakPoints({ childId: null, subject: subjectSel || null });
         if (localRows.length) {
           var fakeBy = {};
           localRows.forEach(function (row) {
             fakeBy[row.id] = { status: row.status, root: row.root, at: row.at, label: row.label, subject: row.subject, hits: row.hits, wrongs: row.wrongs };
           });
           var sec = el('section', 'kid-section');
-          sec.appendChild(el('h2', null, '本机盲区（未建档）'));
-          sec.appendChild(el('p', 'muted small', '共 ' + localRows.length + ' 个薄弱或不稳知识点，只存在这台浏览器。'));
+          sec.appendChild(el('h2', null, localMode ? '本机历史汇总（归属未记录）' : '我的薄弱知识点'));
+          sec.appendChild(el('p', 'muted small', '共 ' + localRows.length + ' 个薄弱、不稳或待复测知识点，只存在这台浏览器。'));
           var ul = el('ul', 'wk-list');
           localRows.forEach(function (row) { ul.appendChild(topicRow(row.id, fakeBy[row.id])); });
           sec.appendChild(ul);
           content.appendChild(sec);
-        }
+        } else content.appendChild(el('p', 'kid-empty', localMode ? '没有旧版汇总记录。' : '暂无薄弱知识点，完成检测后会在这里汇总。'));
+      }
+      if (!localMode && window.CnmLocalLearning && window.CnmLocalLearning.legacyWeakPoints({}).length) {
+        var legacy = el('a', 'btn', '查看本机历史汇总（归属未记录）'); legacy.href = 'history.html?scope=local'; content.appendChild(legacy);
       }
       return;
     }
@@ -287,10 +288,12 @@
 
   function init() {
     var kids = CC.list();
-    var want = new URLSearchParams(location.search).get('child');
+    var params = new URLSearchParams(location.search), want = params.get('child');
+    var scope = params.get('scope');
+    subjectSel = ['physics', 'science'].indexOf(params.get('subject')) >= 0 ? params.get('subject') : '';
     var cur = CC.current();
-    childId = (want && CC.get(want) && want) || (cur && cur.id) || (kids[0] && kids[0].id) || null;
-    if (!kids.length) { render(); return; }
+    childId = (want && CC.get(want) && want) || (cur && cur.id) || null;
+    historyScope = scope === 'local' || scope === 'guest' ? scope : childId ? 'child' : 'guest';
     fetch('../data/topics.json').then(function (r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();

@@ -80,6 +80,36 @@ ctx.returnToParam = null;
 assert.strictEqual(ctx.restoreSession({ targets: ['cnp_071'], answers: [], label: '欧姆定律', returnTo: savedReturn }), true);
 assert.strictEqual(ctx.sessionMeta.returnTo, savedReturn, '无显式来源时恢复存档上下文');
 
+// 个人中心的显式继续入口恢复原题目/归属；坏数据只提示，不能删掉或重放为新随机会话。
+const previousSession=ctx.session,previousMeta=ctx.sessionMeta;
+// 与页面 loadData 一致，只为当前学科建图。
+const physicsTopics=topics.filter(topic=>E.subjectOf(topic)==='physics');
+const physicsIds=new Set(physicsTopics.map(topic=>topic.id));
+ctx.D.graph=E.buildGraph(physicsTopics,deps.filter(edge=>physicsIds.has(edge.topicId)&&physicsIds.has(edge.prerequisiteId)),questions.filter(q=>physicsIds.has(q.topicId)));
+ctx.sessionKey = () => 'center-resume';
+let resumedOwner, ownerChanges = 0;
+ctx.selectSessionOwner = () => { resumedOwner = ctx.sessionMeta.progressChildId; ownerChanges++; };
+assert.strictEqual(ctx.resumeStoredSession(), 'missing');
+let run = E.createSession(graph, ['cnp_071'], {confirm:3,seed:'center-resume'});
+const first = E.nextItem(graph, run);
+run = E.applyAnswer(graph, run, first.topicId, 'correct');
+const saved = {v:2,mode:run.mode,targets:run.targets,answers:run.answers,limit:run.limit,confirm:run.confirm,
+  seed:run.seed,avoid:run.avoid,progressChildId:'child-a',label:'继续欧姆定律',savedAt:'2026-11-16T09:00:00.000Z',returnTo:savedReturn};
+entries.set('center-resume',JSON.stringify(saved));
+assert.strictEqual(ctx.resumeStoredSession(),'restored');
+assert.strictEqual(resumedOwner,'child-a');assert.strictEqual(ownerChanges,1);
+assert.strictEqual(ctx.session.answers.length,run.answers.length);
+assert.strictEqual(E.nextItem(graph,ctx.session).question.id,E.nextItem(graph,run).question.id);
+assert.strictEqual(ctx.sessionMeta.returnTo,savedReturn);
+for(const patch of [{v:9},{seed:{}},{confirm:'3'},{progressChildId:{}},{progressChildId:'__proto__'},
+  {limit:'16'},{targets:['cns_p001']},{answers:[{id:'cnp_071',qid:'cns_p001_q1',result:'correct'}]}]){
+  const raw=JSON.stringify({...saved,...patch});entries.set('center-resume',raw);
+  assert.strictEqual(ctx.resumeStoredSession(),'invalid',JSON.stringify(patch));
+  assert.strictEqual(entries.get('center-resume'),raw,'无法恢复时保留存档');
+  assert.strictEqual(ctx.session,null);assert.strictEqual(ctx.sessionMeta,null);assert.strictEqual(ownerChanges,1);
+}
+ctx.D.graph=graph;ctx.session=previousSession;ctx.sessionMeta=previousMeta;
+
 // 新默认学科和按册入口直接进入教材模式，八上 / 八下不能合并。
 const routeContext = {
   URLSearchParams, E, D: { graph, aliases: {} }, subject: 'physics',

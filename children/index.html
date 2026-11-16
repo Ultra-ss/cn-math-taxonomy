@@ -44,9 +44,29 @@
     </div>
     <a class="btn btn-primary" id="center-wrongbook-link" href="../wrongbook/">打开错题本</a>
   </section>
+  <section class="center-learning" id="weak-points" aria-labelledby="weak-points-title">
+    <div class="center-section-head">
+      <div>
+        <h2 id="weak-points-title">我的薄弱知识点</h2>
+        <p class="muted small" id="weak-points-owner"></p>
+      </div>
+      <a class="btn" id="center-weak-all" href="history.html?scope=guest">查看全部</a>
+    </div>
+    <ul class="center-learning-list" id="center-weak-list"></ul>
+    <details class="center-legacy" id="legacy-weak-details" hidden>
+      <summary>本机历史汇总（归属未记录）</summary>
+      <p class="muted small">旧版汇总没有保存档案归属，单独保留在这里，不计入当前孩子的薄弱知识点。</p>
+      <a class="btn" href="history.html?scope=local">查看本机历史汇总</a>
+    </details>
+  </section>
+  <section class="center-learning" id="center-sessions" aria-labelledby="center-sessions-title" hidden>
+    <h2 id="center-sessions-title">检测进度与结果</h2>
+    <p class="muted small">本机保存的最近检测，各自保留原来的档案归属；可接着作答或查看结果。</p>
+    <ul class="center-learning-list" id="center-session-list"></ul>
+  </section>
   <section class="kid-backup" aria-labelledby="backup-title">
     <h2 id="backup-title">备份与恢复</h2>
-    <p>备份所有孩子的资料，以及科学、物理的检测记录、错题、进行中检测、盲区和图谱检测进度。没有建立档案的学习进度也可以迁移。</p>
+    <p>备份所有孩子的资料，以及科学、物理的检测记录、错题、进行中检测、薄弱知识点和图谱检测进度。没有建立档案的学习进度也可以迁移。</p>
     <button type="button" id="export-backup">导出全部学习数据</button>
     <p id="export-status" class="small" role="status" hidden></p>
     <div class="kid-import">
@@ -58,7 +78,7 @@
         <h3>导入预览</h3>
         <p id="import-summary"></p>
         <ul id="import-children"></ul>
-        <p class="muted small">相同档案保留本机资料；同一条记录、错题或盲区采用较新的状态，时间相同保留本机。累计错次取两份数据中的较大值，重复导入不累加。历史不会因合并被截断。</p>
+        <p class="muted small">相同档案保留本机资料；同一条记录、错题或薄弱知识点采用较新的状态，时间相同保留本机。累计错次取两份数据中的较大值，重复导入不累加。历史不会因合并被截断。</p>
         <p class="muted small">本机已有同学科的检测进度时会保留，导入的不同进度存入下方“其他检测进度”，可以随时切换。</p>
         <div class="kid-actions">
           <button type="button" id="confirm-import" class="primary" disabled>确认合并导入</button>
@@ -69,7 +89,7 @@
     </div>
     <div id="session-archive" hidden>
       <h3>其他检测进度</h3>
-      <p class="muted small">恢复后，到检测页点击“继续”。当前同学科的进度会存入此列表，供之后切换。</p>
+      <p class="muted small">恢复后可直接继续检测。当前同学科的进度会存入此列表，供之后切换。</p>
       <ul id="archived-sessions"></ul>
       <p id="archive-status" class="small" role="status" hidden></p>
     </div>
@@ -97,6 +117,8 @@
 <script src="../assets/stem-compat.js"></script>
 <script src="../assets/progress.js"></script>
 <script src="../assets/children.js"></script>
+<script src="../assets/blindspots.js"></script>
+<script src="../assets/local-learning.js"></script>
 <script src="page.js"></script>
 <script src="../assets/stats-config.js"></script>
 <script src="../assets/stats.js"></script>

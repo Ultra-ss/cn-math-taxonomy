@@ -16,6 +16,27 @@ main.kids { width: min(760px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
 .center-wrongbook h2 { margin-bottom: 4px; }
 .center-wrongbook p { margin: 0; color: var(--muted); overflow-wrap: anywhere; }
 .center-wrongbook .btn { flex: none; }
+.center-learning { padding: 14px 16px; margin-bottom: 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-elev); scroll-margin-top: 16px; }
+.center-learning > p { margin: 4px 0 10px; }
+.center-section-head { display: flex; align-items: center; justify-content: space-between; gap: 8px 12px; }
+.center-section-head > div { min-width: 0; }
+.center-section-head h2 { margin-bottom: 4px; }
+.center-section-head p { margin: 0; }
+.center-section-head .btn { flex: none; }
+.center-learning-list { list-style: none; padding: 0; margin: 8px 0 0; }
+.center-learning-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); }
+.center-learning-info { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 8px; min-width: 0; }
+.center-learning-info > strong, .center-topic-name { flex-basis: 100%; overflow-wrap: anywhere; }
+.center-topic-name { color: var(--brand-strong); font-weight: 750; }
+.center-learning-item > .btn { flex: none; min-height: 44px; }
+.center-legacy { margin-top: 10px; border-top: 1px solid var(--line); }
+.center-legacy summary { cursor: pointer; min-height: 44px; padding: 10px 0; font-size: 0.88rem; color: var(--muted); }
+.center-legacy p { margin-top: 0; }
+@media (max-width: 420px) {
+  .center-learning { padding: 12px; }
+  .center-learning .small { font-size: 0.82rem; }
+  .center-section-head .btn, .center-learning-item > .btn { padding: 8px 10px; font-size: 0.85rem; }
+}
 
 .kid-card, .kid-form, .kid-backup, .kid-section > .rec, .kid-empty-card {
   background: var(--bg-elev);

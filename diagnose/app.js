@@ -44,6 +44,7 @@
   let startQuery = '';
   let startStage = '';
   let chapterOpen = false;
+  let settingsOpen = false;
   let gradeSel = '一';     // 开始页「按年级整体检测」：年级
   let volSel = '';         // '' 整年级 / '上' / '下'
   let seedParam = null;    // URL 参数 seed：固定选题的随机种子
@@ -368,9 +369,9 @@
     return h('div', { class: 'card child-bar no-print', id: 'child-bar' },
       h('div', { class: 'row' },
         h('label', { for: 'child-select' }, '当前孩子'),
-        childSelect(function (id) { CC.setCurrent(id); renderStart(); }),
+        childSelect(function (id) { CC.setCurrent(id); renderStart(null, true); }),
         h('span', { class: 'grow' }),
-        cur ? h('a', { class: 'btn', href: childrenHref('history.html?child=' + encodeURIComponent(cur.id)), text: '盲区与历史' }) : null,
+        cur ? h('a', { class: 'btn', href: childrenHref('history.html?child=' + encodeURIComponent(cur.id)), text: '薄弱知识点与历史' }) : null,
         h('a', { class: 'btn', href: childrenHref(fromQuery()), text: '孩子档案' })),
       h('p', { class: 'muted small', style: 'margin:8px 0 0' },
         cur ? '检测做完，结果会保存到「' + cur.name + '」的档案里。' : '未选择孩子时，图谱检测标记保存在本机访客记录，不计入孩子档案。'));
@@ -418,48 +419,13 @@
     if (subject !== 'math') q = 'subject=' + subject + '&' + q;
     return './?' + q;
   }
-  function blindStartCard() {
-    if (!window.CnmBlind) return null;
-    const rows = window.CnmBlind.list({ subject: subject, limit: 6 });
-    if (!rows.length) return null;
-    const cur = CC.current();
-    const more = window.CnmBlind.historyHref(cur && cur.id, '../children/');
-    return h('div', { class: 'card', id: 'blind-start' },
-      h('h2', { text: '本机盲区（最近薄弱点）' }),
-      h('p', { class: 'muted small' }, '根据本机检测记录汇总，数据只留在这台浏览器。点「再测」会按该知识点重新检测。'),
-      h('ul', { class: 'blind-list' }, rows.map(function (row) {
-        return h('li', { class: 'blind-item' },
-          h('span', { class: 'blind-name', text: nameOf(row.id) }),
-          ' ',
-          h('span', {
-            class: 'tag ' + (row.status === 'weak' ? 'weak' : row.status === 'retest' ? 'unknown' : 'shaky'),
-            text: row.status === 'weak' ? (row.root ? '根因' : '薄弱') : row.status === 'retest' ? '需重测' : '不稳'
-          }),
-          row.wrongs && row.status !== 'retest' ? h('span', { class: 'muted small', text: ' · 答错 ' + row.wrongs + ' 次' }) : null,
-          ' ',
-          h('a', { class: 'blind-retest', href: diagnoseHrefFor([row.id]), text: '再测' }));
-      })),
-      h('p', { class: 'row' },
-        h('a', { class: 'btn', href: more, text: '查看全部盲区' }),
-        rows[0] ? h('a', { class: 'btn btn-primary', href: diagnoseHrefFor(rows.filter(function (r) { return r.status === 'weak'; }).slice(0, 5).map(function (r) { return r.id; })), text: '再测前几个薄弱点' }) : null));
-  }
   function blindResultCard(sum) {
-    const weakIds = (sum.weak || []).slice();
-    const rootIds = (sum.roots || []).map(function (r) { return r.id; });
-    const shakyIds = (sum.shaky || []).slice();
-    if (!weakIds.length && !shakyIds.length) return null;
-    const cur = sessionMeta && sessionMeta.progressChildId ? CC.get(sessionMeta.progressChildId) : null;
-    const hist = window.CnmBlind ? window.CnmBlind.historyHref(cur && cur.id, '../children/') : '../children/history.html';
+    if (!(sum.weak || []).length && !(sum.shaky || []).length) return null;
+    const hist = '../children/?subject=' + subject + '#weak-points';
     return h('div', { class: 'card no-print', id: 'blind-result' },
-      h('h2', { text: '盲区再测' }),
-      h('p', { class: 'muted small' }, '把本轮判为薄弱或不稳的知识点收进本机盲区汇总，可一键再测。不会上传答题内容。'),
-      rootIds.length ? h('p', null,
-        h('a', { class: 'btn btn-primary', href: diagnoseHrefFor(rootIds), text: '再测薄弱根因（' + rootIds.length + '）' })) : null,
-      weakIds.length && weakIds.join(',') !== rootIds.join(',') ? h('p', null,
-        h('a', { class: 'btn', href: diagnoseHrefFor(weakIds.slice(0, 8)), text: '再测薄弱知识点（' + Math.min(8, weakIds.length) + (weakIds.length > 8 ? '+' : '') + '）' })) : null,
-      shakyIds.length ? h('p', null,
-        h('a', { class: 'btn', href: diagnoseHrefFor(shakyIds.slice(0, 8)), text: '再测不稳知识点（' + Math.min(8, shakyIds.length) + (shakyIds.length > 8 ? '+' : '') + '）' })) : null,
-      h('p', null, h('a', { href: hist, text: '打开本机盲区汇总' })));
+      h('h2', { text: '我的薄弱知识点' }),
+      h('p', { class: 'muted small' }, '本轮薄弱和不稳的知识点已记录，可在本地个人中心查看和再测。'),
+      h('a', { class: 'btn btn-primary', id: 'btn-my-weak-points', href: hist, onclick: selectSessionOwner, text: '查看我的薄弱知识点' }));
   }
 
   /* ------------------------------------------------------------ 会话 */
@@ -519,6 +485,35 @@
       syncProgress();
       return true;
     } catch (e) { return false; }
+  }
+
+  function resumeStoredSession() {
+    const saved = lsGet(sessionKey());
+    if (!saved) return 'missing';
+    const own = function (key) { return Object.prototype.hasOwnProperty.call(saved, key); };
+    const answerShape = function (answer) {
+      const prefix = subject === 'science' ? /^cns_[A-Za-z0-9]+$/ : /^cnp_[A-Za-z0-9]+$/;
+      return answer && !Array.isArray(answer) && typeof answer === 'object' && typeof answer.id === 'string' && prefix.test(answer.id) &&
+        ['correct', 'wrong', 'skip'].indexOf(answer.result) >= 0 &&
+        (answer.qid == null || (typeof answer.qid === 'string' && new RegExp('^' + answer.id + '_q[1-9][0-9]*$').test(answer.qid))) &&
+        (answer.text === undefined || (typeof answer.text === 'string' && answer.text.length <= 4000)) &&
+        (answer.prompt === undefined || (typeof answer.prompt === 'string' && answer.prompt.length <= 4000));
+    };
+    const valid = saved.v === 2 && Array.isArray(saved.targets) && saved.targets.length > 0 &&
+      saved.targets.every(function (id) { return typeof id === 'string' && D.graph.byId[id] && !D.graph.byId[id].external; }) &&
+      Array.isArray(saved.answers) && saved.answers.every(answerShape) &&
+      typeof saved.seed === 'string' && saved.seed.length <= 256 &&
+      Number.isSafeInteger(saved.confirm) && saved.confirm >= 1 && saved.confirm <= 10 &&
+      (!own('progressChildId') || saved.progressChildId === null || (typeof saved.progressChildId === 'string' &&
+        /^[A-Za-z0-9_-]{1,128}$/.test(saved.progressChildId) && ['__proto__', 'constructor', 'prototype'].indexOf(saved.progressChildId) < 0)) &&
+      Number.isSafeInteger(saved.limit) && saved.limit > 0 && saved.limit <= 1000 &&
+      (saved.mode === undefined || ['target', 'screen', 'textbook'].indexOf(saved.mode) >= 0);
+    if (!valid || !restoreSession(saved)) {
+      session = null; sessionMeta = null;
+      return 'invalid';
+    }
+    selectSessionOwner();
+    return 'restored';
   }
 
   function restart() {
@@ -626,27 +621,21 @@
   function stageButton(value, label) {
     return h('button', {
       type: 'button',
+      id: 'start-stage-' + (value || 'all'),
       class: 'stage-tab' + (startStage === value ? ' on' : ''),
       role: 'tab',
       'aria-selected': startStage === value ? 'true' : 'false',
-      onclick: function () { startStage = value; renderStart(); }
+      onclick: function () { startStage = value; renderStart(null, true); }
     }, label);
   }
 
-  function renderStart(errMsg) {
-    const page = h('div');
-    const saved = lsGet(sessionKey());
-    if (saved && saved.targets && D.graph.byId[saved.targets[0]]) {
-      page.append(h('div', { class: 'banner' },
-        h('b', { text: '有一份未清除的检测：' }), saved.label || saved.targets.map(nameOf).join('、'),
-        '（已答 ' + (saved.answers || []).length + ' 题）　',
-        h('button', { class: 'primary', onclick: function () { if (restoreSession(saved)) render(); else { lsDel(sessionKey()); renderStart('存档无法恢复，已清除。'); } } }, '继续'),
-        ' ', h('button', { onclick: function () { lsDel(sessionKey()); renderStart(); } }, '放弃存档')));
-    }
+  function renderStart(errMsg, keepScroll) {
+    const previousSettings = document.getElementById('testing-settings');
+    if (previousSettings) settingsOpen = previousSettings.open;
+    const focusedId = keepScroll && document.activeElement && document.activeElement.id;
+    const page = h('div', { class: 'testing-start' });
+    page.append(gradeCard());
     if (errMsg) page.append(h('p', { class: 'err', text: errMsg }));
-    append(page, childBar('start'));
-    const startBlind = blindStartCard();
-    if (startBlind) page.append(startBlind);
 
     const st = getSettings();
     const limitInput = h('input', { type: 'number', min: LIMIT_MIN, max: LIMIT_MAX, step: 1, value: String(st.limit), id: 'limit-input', 'aria-label': '题量上限' });
@@ -664,7 +653,16 @@
     confirmSelect.addEventListener('change', function () {
       const v = E.clampConfirm(confirmSelect.value);
       setSetting('confirm', v);
-      renderStart();
+      renderStart(null, true);
+    });
+    const screenLimitInput = h('input', {
+      type: 'number', min: SCREEN_MIN, max: SCREEN_MAX, step: 1, value: String(st.screenLimit),
+      id: 'screen-limit-input', 'aria-label': '每轮教材检测题量上限'
+    });
+    screenLimitInput.addEventListener('change', function () {
+      const value = Math.max(SCREEN_MIN, Math.min(SCREEN_MAX, parseInt(screenLimitInput.value, 10) || E.SCREEN_LIMIT));
+      screenLimitInput.value = String(value);
+      setSetting('screenLimit', value);
     });
     const listBox = h('div', { id: 'target-list' });
     const browser = h('details', { class: 'chapter-browser', id: 'chapter-browser', open: chapterOpen || !!startQuery },
@@ -672,28 +670,17 @@
       h('p', { class: 'muted small', text: '列表按年级、册、章折叠。想直接开始，用上面的搜索更快。' }),
       listBox);
     browser.addEventListener('toggle', function () { chapterOpen = browser.open; });
-    const confirmHelp = '同一知识点连续答对 ' + st.confirm + ' 题（可在下方改成 2 / 3 / 4；题库更少时以题库为准）才算掌握；答错会再出一道同级或更容易的题——确认题也错才算薄弱并回溯先修，确认题答对则标为「不稳」。';
-    page.append(h('div', { class: 'card' },
-      h('h1', { text: '选择检测目标' }),
-      h('p', { class: 'muted' }, subject === 'physics'
-        ? '选一个想学会或想检查的物理知识点。' + confirmHelp
-        : subject === 'english'
-        ? '选一个想学会或想检查的英语知识点。' + confirmHelp
-        : subject === 'chinese'
-        ? '选一个想学会或想检查的语文知识点。' + confirmHelp
-        : subject === 'science'
-        ? '选一个想学会或想检查的科学知识点。' + confirmHelp
-        : subject === 'morality'
-        ? '选一个想学会或想检查的道德与法治知识点。' + confirmHelp
-        : subject === 'history'
-        ? '选一个想学会或想检查的历史知识点。' + confirmHelp
-        : subject === 'geography'
-        ? '选一个想学会或想检查的地理知识点。' + confirmHelp
-        : subject === 'biology'
-        ? '选一个想学会或想检查的生物知识点。' + confirmHelp
-        : subject === 'chemistry'
-        ? '选一个想学会或想检查的化学知识点。' + confirmHelp
-        : '选一个想学会或想检查的知识点。' + confirmHelp),
+    const limitFields = h('div', { class: 'row testing-limit-fields' },
+      h('label', null, '单点 / 整章题量上限（' + LIMIT_MIN + '–' + LIMIT_MAX + '）', limitInput),
+      h('label', null, '一口气挑战每轮题量上限（' + SCREEN_MIN + '–' + SCREEN_MAX + '）', screenLimitInput),
+      h('label', null, '每知识点确认题数', confirmSelect),
+      h('span', { class: 'muted small' }, '挑战达到本轮题量上限后，可继续下一轮，从当前知识点接着完成本册。'));
+    const confirmHelp = '同一知识点连续答对 ' + st.confirm + ' 题才算掌握；题库不足时以实际题数为准。中途答错会追加确认题，确认答对为不稳，再次答错为薄弱。';
+    const setup = h('details', { class: 'card testing-settings', id: 'testing-settings', open: settingsOpen },
+      h('summary', { text: '每次检测题目数量修改' }),
+      h('div', { class: 'testing-settings-body' },
+      limitFields,
+      h('p', { class: 'muted small' }, confirmHelp + '也可在下面搜索知识点单独检测。'),
       h('div', { class: 'stage-tabs', role: 'tablist', 'aria-label': '学段' },
         subject === 'physics' || subject === 'chemistry' ? [stageButton('', '全部'), stageButton('j', '初中'), stageButton('h', '高中')]
           : subject === 'history' || subject === 'geography' || subject === 'biology' ? [stageButton('', '全部'), stageButton('j', '初中')]
@@ -710,18 +697,19 @@
           if (startQuery.trim()) { browser.open = true; chapterOpen = true; }
         }
       }),
-      h('p', { class: 'muted small', id: 'match-count' }),
-      h('div', { class: 'row' },
-        h('label', null, '单点 / 整章题量上限（' + LIMIT_MIN + '–' + LIMIT_MAX + '）', limitInput),
-        h('label', null, '每知识点确认题数', confirmSelect),
-        h('span', { class: 'muted small' }, '连续答对这么多题才判掌握；中途答错会再出一道确认题。到上限后，没测到的标为「未测」。'))));
-    page.append(gradeCard());
+      h('p', { class: 'muted small', id: 'match-count' })));
+    setup.addEventListener('toggle', function () { settingsOpen = setup.open; });
+    page.append(setup);
+    append(page, childBar('start'));
     page.append(h('div', { class: 'card' }, browser));
     page.append(h('p', { class: 'muted small' },
       '可以检测的知识点：' + D.topics.length + ' 个。进度和出过的题只保存在这台浏览器里。'));
-    show(page);
+    show(page, !!keepScroll);
     fillList(listBox);
-    if (startQuery) { const el = document.getElementById('search'); if (el) el.focus(); }
+    if (focusedId) {
+      const focused = document.getElementById(focusedId);
+      if (focused) focused.focus({ preventScroll: true });
+    }
   }
 
   function seniorGrade(sel) {
@@ -740,38 +728,29 @@
     if (!choices.some(function (v) { return v[0] === bookSel; })) bookSel = choices.length ? choices[0][0] : '';
     const select = h('select', { id: 'book-select', 'aria-label': '选择教材册次' },
       choices.map(function (v) { return h('option', { value: v[0], selected: v[0] === bookSel }, v[1]); }));
-    const info = h('p', { class: 'muted', id: 'grade-info' });
+    const info = h('p', { class: 'muted small', id: 'grade-info' });
     const updateInfo = function () {
       const book = E.gradeTargets(D.graph, bookSel, subject);
-      info.textContent = book ? book.label + '：' + book.ids.length + ' 个知识点，从第一个知识点开始。' : '这个范围没有知识点。';
+      info.textContent = book ? '本册 ' + book.ids.length + ' 个知识点，从第一个开始。' : '这个范围没有知识点。';
     };
     select.addEventListener('change', function () { bookSel = select.value; updateInfo(); });
     updateInfo();
-    const limitInput = h('input', {
-      type: 'number', min: SCREEN_MIN, max: SCREEN_MAX, step: 1, value: String(getSettings().screenLimit),
-      id: 'screen-limit-input', 'aria-label': '每轮教材检测题量上限'
-    });
-    limitInput.addEventListener('change', function () {
-      const value = Math.max(SCREEN_MIN, Math.min(SCREEN_MAX, parseInt(limitInput.value, 10) || E.SCREEN_LIMIT));
-      limitInput.value = String(value);
-      setSetting('screenLimit', value);
-    });
-    return h('div', { class: 'card', id: 'grade-card' },
-      h('h2', { text: '按教材顺序逐点学习' }),
-      h('p', { class: 'muted' }, '选择一册教材，按课本顺序逐个检查知识点。每个点都要实际作答；答错只在本点确认，然后继续下一个点。不会跳过知识点，也不会跳到其他册。'),
+    const owner = CC.current();
+    return h('div', { class: 'card challenge-card', id: 'grade-card' },
+      h('h1', { text: '开启一口气挑战' }),
+      h('p', { class: 'muted challenge-intro' }, '选一册教材，按课本顺序逐点检测。'),
       h('label', { for: 'book-select' }, '教材册次'), select, info,
-      h('div', { class: 'row' },
-        h('label', null, '每轮题量上限（' + SCREEN_MIN + '–' + SCREEN_MAX + '）', limitInput),
+      h('p', { class: 'muted small challenge-owner' }, '记录归属：' + (owner ? childLabel(owner) : '本机访客') + '　', h('a', { href: '#child-bar', text: '更换' })),
+      h('div', { class: 'row challenge-actions' },
         h('button', { class: 'primary', id: 'btn-grade-start', onclick: function () {
           const book = E.gradeTargets(D.graph, bookSel, subject);
           if (!book) return;
           const params = new URLSearchParams(location.search);
-          ['target', 'chapter', 'grade', 'demo', 'step'].forEach(function (key) { params.delete(key); });
+          ['target', 'chapter', 'grade', 'demo', 'step', 'resume'].forEach(function (key) { params.delete(key); });
           params.set('subject', subject); params.set('volume', bookSel); params.set('order', 'book');
           history.replaceState(null, '', location.pathname + '?' + params.toString());
           startSession(book.ids, book.label + '（教材顺序）', null, 'textbook', bookSel);
-        } }, '从第一个知识点开始')),
-      h('p', { class: 'muted small' }, '达到本轮题量上限后，可继续下一轮，接着当前知识点和后续未测点完成本册。刷新页面可恢复已答进度。'));
+        } }, '开始挑战')));
   }
 
   function fillList(box) {
@@ -1950,6 +1929,14 @@
         (saved.mode || 'target') === (resolved.mode || 'target') && (seedParam == null || saved.seed === seedParam);
       if (same && restoreSession(saved) && (!retryCompleted || E.nextItem(D.graph, session))) { render(); return; }
       startSession(resolved.ids, resolved.label, limit, resolved.mode, resolved.volume);
+      return;
+    }
+    if (params.get('resume') === '1') {
+      const restored = resumeStoredSession();
+      if (restored === 'restored') render();
+      else renderStart(restored === 'missing'
+        ? '当前没有可继续的检测，请选择教材开始挑战。'
+        : '这份检测进度暂时无法恢复，请到本地个人中心查看。原进度仍保留。');
       return;
     }
     renderStart();
