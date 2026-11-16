@@ -843,7 +843,7 @@
       const a = session.answers[i];
       if (a.result === 'correct') continue;
       const p = D.graph.prereqs[a.id].find(function (x) { return x.id === id; });
-      if (p && E.statusOf(session, a.id) === 'weak') return '因为「' + nameOf(a.id) + '」确认后仍没通过，现在检查它的' + (p.strength === 'hard' ? '硬' : '软') + '先修知识点。';
+      if (p && E.statusOf(session, a.id) === 'weak') return '因为「' + nameOf(a.id) + '」确认后仍没通过，现在检查与它' + (p.strength === 'hard' ? '强关联' : '弱关联') + '的知识点。';
     }
     if (session.mode === 'screen') return '整体检测：先测本年级知识点（离章末近的先测）。先出提高题，答对再出拓展题确认；答错先补基础题。';
     if (session.targets.length > 1) return '这是所选章节的知识点（离章末最近的先测，连续答对会连带跳过它的先修）。';
@@ -1312,7 +1312,7 @@
 
     analysis.append(h('div', { class: 'card', id: 'graph' },
       h('h2', { text: '路径图' }),
-      h('p', { class: 'muted small' }, '小学、初中和高中用不同颜色。硬先修是实线，软先修是虚线，点线表示中间省略了没画出来的知识点。红框是薄弱根因，橙框是目标。节点较多时先按年级收起中间点，可再展开。名称太长会省略，悬停或点按可看全名。滚轮缩放，拖动平移。上面的列表是完整学习顺序。'),
+      h('p', { class: 'muted small' }, '小学、初中和高中用不同颜色。强关联是实线，弱关联是虚线，点线表示中间省略了没画出来的知识点。红框是薄弱根因，蓝框是目标。节点较多时先按年级收起中间点，可再展开。名称太长会省略，悬停或点按可看全名。滚轮缩放，拖动平移。上面的列表是完整学习顺序。'),
       h('div', { class: 'path-tools no-print' },
         h('button', { type: 'button', id: 'path-zoom-out', onclick: function () { pathZoom(0.8); } }, '缩小'),
         h('button', { type: 'button', id: 'path-zoom-in', onclick: function () { pathZoom(1.25); } }, '放大'),
@@ -1324,8 +1324,8 @@
         h('li', null, h('i', { class: 'swatch sw-h' }), '高中'),
         h('li', null, h('i', { class: 'swatch sw-root' }), '薄弱根因'),
         h('li', null, h('i', { class: 'swatch sw-target' }), '目标'),
-        h('li', null, h('i', { class: 'swatch line-hard' }), '硬先修（实线）'),
-        h('li', null, h('i', { class: 'swatch line-soft' }), '软先修（虚线）'),
+        h('li', null, h('i', { class: 'swatch line-hard' }), '强关联（实线）'),
+        h('li', null, h('i', { class: 'swatch line-soft' }), '弱关联（虚线）'),
         h('li', null, h('i', { class: 'swatch line-skip' }), '中间省略（点线）')),
       h('div', { class: 'path-graph' },
         h('div', { id: 'path-cy', role: 'img', 'aria-label': '先修路径图' }),
