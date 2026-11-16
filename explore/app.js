@@ -4,10 +4,6 @@
 
   var FONT = '"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", sans-serif';
   var CN = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
-  var TYPE_ZH = {
-    conceptual: '概念理解', procedural: '程序性技能', reasoning: '推理证明',
-    application: '应用', modeling: '建模'
-  };
   var DOMAIN_ORDER = ['数与代数', '图形与几何', '统计与概率', '综合与实践'];
   var SCI_DOMAIN_ORDER = ['物质科学', '生命科学', '地球与宇宙科学', '技术与工程'];
   var MOR_DOMAIN_ORDER = ['生活与安全', '学校生活', '家庭与亲情', '社会规则', '公民与国家', '自然与环境'];
@@ -46,7 +42,6 @@
   var graphToken = 0;
   var dagreReady = false;
   var FOLD_AT = 40;
-  var questionsByTopic = new Map();
   var explicitNodeSelection = null;
   var nodeDialogId = null;
   var nodeDialogScroll = null;
@@ -71,47 +66,6 @@
     if (Array.isArray(child)) { child.forEach(function (item) { append(node, item); }); return; }
     node.append(child.nodeType ? child : document.createTextNode(String(child)));
   }
-  function figureEl(svg) {
-    if (typeof svg !== 'string' || svg.indexOf('<svg') !== 0) return null;
-    if (/<\s*script|foreignObject|<\s*image\b|https?:\/\//i.test(svg.replace('xmlns="http://www.w3.org/2000/svg"', ''))) return null;
-    var wrap = el('div', { class: 'q-figure' });
-    wrap.innerHTML = svg;
-    var node = wrap.querySelector('svg');
-    if (!node) return null;
-    node.setAttribute('role', 'img');
-    node.setAttribute('aria-hidden', 'true');
-    node.setAttribute('focusable', 'false');
-    return wrap;
-  }
-  function sampleFigureNodes(topic) {
-    var list = questionsByTopic.get(topic.id) || [];
-    var q1 = null;
-    for (var i = 0; i < list.length; i++) {
-      if (list[i].id === topic.id + '_q1') q1 = list[i];
-    }
-    if (!q1) return [];
-    var nodes = [];
-    var stem = q1.figure ? figureEl(q1.figure) : null;
-    if (stem) nodes.push(stem);
-    var choices = q1.choices || [];
-    var anyFig = choices.some(function (c) { return c && c.figure; });
-    if (!anyFig) return nodes;
-    var box = el('div', { class: 'sample-choices' + (q1.hideChoiceText ? ' fig-icons' : '') });
-    choices.forEach(function (c) {
-      var hideName = !!(q1.hideChoiceText && c.figure);
-      var item = el('div', { class: 'sample-choice' });
-      item.append(el('b', { text: hideName ? c.key : (c.key + '.') }));
-      if (!hideName) item.append(document.createTextNode(' ' + c.text));
-      if (c.figure) {
-        var fig = figureEl(c.figure);
-        if (fig) item.append(fig);
-      }
-      box.append(item);
-    });
-    nodes.push(box);
-    return nodes;
-  }
-
   function stageKind(grade) {
     if (grade <= 6) return 'primary';
     if (grade <= 9) return 'junior';
@@ -546,8 +500,27 @@
     return true;
   }
 
+  function chapterProgressKey(topic) {
+    return topic.grade + '|' + topic.semester + '|' + chapterOf(topic);
+  }
+
+  function chapterProgress() {
+    var counts = new Map();
+    // 按完整章节统计，不因搜索或领域筛选缩小分母。
+    topics.forEach(function (topic) {
+      var key = chapterProgressKey(topic);
+      var row = counts.get(key);
+      if (!row) { row = { completed: 0, total: 0 }; counts.set(key, row); }
+      row.total++;
+      var tested = progressOf(topic.id);
+      if (tested && ['mastered', 'weak', 'shaky'].indexOf(tested.status) >= 0) row.completed++;
+    });
+    return counts;
+  }
+
   function renderList() {
     recomputeAliasHits();
+    var chapterCounts = chapterProgress();
     var volumes = [];
     var volumeMap = new Map();
     topics.forEach(function (topic) {
@@ -589,7 +562,16 @@
         var chapterHas = chapter.topics.some(function (topic) { return topic.id === selected; });
         var chapterDetails = el('details', { class: 'chap' });
         chapterDetails.open = !!query || chapterHas;
-        chapterDetails.append(el('summary', { text: chapter.label }));
+        var completed = chapterCounts.get(chapterProgressKey(chapter.topics[0]));
+        chapterDetails.append(el('summary', null,
+          el('span', { class: 'chapter-heading' },
+            el('span', { class: 'chapter-name', text: chapter.label }),
+            el('span', {
+              class: 'chapter-progress' + (completed.completed === completed.total ? ' is-complete' : ''),
+              text: completed.completed + '/' + completed.total,
+              'aria-label': '已完成诊断 ' + completed.completed + ' 个，共 ' + completed.total + ' 个知识点',
+              title: '已完成诊断 / 本章知识点'
+            }))));
         chapter.topics.forEach(function (topic) {
           chapterDetails.append(el('button', {
             type: 'button',
@@ -629,32 +611,6 @@
     if (scroll && sideVisible()) current.scrollIntoView({ block: 'nearest' });
   }
 
-  function countReach(map, id) {
-    var seen = new Set();
-    var stack = [id];
-    while (stack.length) {
-      var current = stack.pop();
-      (map.get(current) || []).forEach(function (edge) {
-        if (!seen.has(edge.id)) { seen.add(edge.id); stack.push(edge.id); }
-      });
-    }
-    return seen.size;
-  }
-
-  function badge(strength) {
-    var hard = strength === 'hard';
-    return el('span', { class: 'badge ' + (hard ? 'hard' : 'soft'), text: hard ? '硬先修' : '软先修' });
-  }
-
-  function relButton(edge) {
-    var other = byId.get(edge.id);
-    return el('button', { type: 'button', class: 'rel-row', 'data-jump': edge.id },
-      badge(edge.strength),
-      el('span', { class: 'rel-name', text: other ? other.name : edge.id }),
-      el('span', { class: 'rel-where', text: other ? gradeLabel(other) : '' }),
-      edge.reason ? el('span', { class: 'why', text: edge.reason }) : null);
-  }
-
   function metaItem(label, value, wide) {
     return el('div', { class: wide ? 'span-2' : '' }, el('dt', { text: label }), el('dd', { text: value || '—' }));
   }
@@ -670,7 +626,6 @@
       return;
     }
     var topic = byId.get(selected);
-    var kind = stageKind(topic.grade);
     var parts = [];
     if (currentAlias) {
       parts.push(el('div', { class: 'alias-note' },
@@ -684,9 +639,6 @@
     parts.push(el('h1', { class: 'detail-title', text: topic.name }));
     var tested = progressOf(topic.id);
     parts.push(el('p', { class: 'detail-test-state ' + progressClass(tested), text: (tested ? (tested.status === 'mastered' ? '✓ ' : '× ') : '') + progressLabel(tested) }));
-    parts.push(el('div', { class: 'pills' },
-      el('span', { class: 'pill pill-' + (kind === 'primary' ? 'p' : kind === 'junior' ? 'j' : 'h'), text: stageLabel(topic.grade) }),
-      el('code', { class: 'id-code', text: topic.id })));
     var diagHref = '../diagnose/?target=' + encodeURIComponent(topic.id);
     if (subject !== 'math') diagHref = '../diagnose/?subject=' + subject + '&target=' + encodeURIComponent(topic.id);
     parts.push(el('a', {
@@ -695,15 +647,17 @@
       'data-diagnose-return': diagHref
     }, tested ? '重新检测这个知识点' : '检测这个知识点'));
     parts.push(el('dl', { class: 'meta-grid' },
-      metaItem('年级册次', gradeLabel(topic)),
-      metaItem('领域', topic.domain),
-      metaItem('类型', TYPE_ZH[topic.type] || topic.type),
+      metaItem('年级册次', gradeLabel(topic), true),
       metaItem('章节', topic.chapter, true)));
-    if (topic.description) parts.push(el('p', { class: 'desc', text: topic.description }));
-    if (topic.root_reason) parts.push(el('p', { class: 'root-reason', text: topic.root_reason }));
+    if (topic.description || topic.root_reason) {
+      parts.push(el('section', { class: 'detail-section learning-goals' },
+        el('h2', { text: '学习目标' }),
+        topic.description ? el('p', { class: 'desc', text: topic.description }) : null,
+        topic.root_reason ? el('p', { class: 'root-reason', text: topic.root_reason }) : null));
+    }
 
     if (topic.mastery_criteria && topic.mastery_criteria.length) {
-      parts.push(el('section', null,
+      parts.push(el('section', { class: 'detail-section mastery-criteria' },
         el('h2', { text: '掌握标准' }),
         el('ul', { class: 'plain' }, topic.mastery_criteria.map(function (item) { return el('li', { text: item }); }))));
     }
@@ -716,29 +670,9 @@
         el('p', { text: item ? item.text : '（课标文件中找不到该条目）' }),
         entry.note ? el('p', { class: 'muted', text: '说明：' + entry.note }) : null);
     }) : [el('p', { class: 'muted', text: '没有对应的课标条目。' })];
-    parts.push(el('section', null, el('h2', { text: '课标条目' }), standardNodes));
-
-    if (topic.diagnostic_question && topic.diagnostic_question.question) {
-      var answer = el('details', { class: 'ans' });
-      answer.append(el('summary', { text: '查看答案' }), el('p', { text: topic.diagnostic_question.answer || '' }));
-      parts.push(el('section', null,
-        el('h2', { text: '样题' }),
-        el('p', { class: 'sample-q', text: topic.diagnostic_question.question }),
-        sampleFigureNodes(topic),
-        answer));
-    }
-
-    var pres = pre.get(topic.id) || [];
-    parts.push(el('section', null,
-      el('h2', { text: '先修' }),
-      el('p', { class: 'muted', text: '直接 ' + pres.length + ' 个，全部上游 ' + countReach(pre, topic.id) + ' 个。图上默认只画向上 2 层；选「全部」且超过 ' + FOLD_AT + ' 个时先按年级收起。' }),
-      pres.length ? pres.map(relButton) : el('p', { text: '这是起点，没有更早的先修。' })));
-
-    var posts = post.get(topic.id) || [];
-    parts.push(el('section', null,
-      el('h2', { text: '被哪些知识点依赖' }),
-      el('p', { class: 'muted', text: '直接 ' + posts.length + ' 个，全部下游 ' + countReach(post, topic.id) + ' 个。图上只画向下 1 层。' }),
-      posts.length ? posts.map(relButton) : el('p', { text: '还没有后续知识点依赖它。' })));
+    parts.push(el('details', { class: 'standards-disclosure' },
+      el('summary', { text: '课标条目' }),
+      el('div', { class: 'standards-content' }, standardNodes)));
 
     box.replaceChildren.apply(box, parts);
     refreshDiagnosisLinks();
@@ -1384,22 +1318,6 @@
     }
   }
 
-  async function loadQuestions() {
-    questionsByTopic = new Map();
-    try {
-      var response = await fetch('../data/questions.json');
-      if (!response.ok) return;
-      var rows = await response.json();
-      if (!Array.isArray(rows)) return;
-      rows.forEach(function (q) {
-        if (!q || !q.topicId) return;
-        var bucket = questionsByTopic.get(q.topicId);
-        if (!bucket) questionsByTopic.set(q.topicId, bucket = []);
-        bucket.push(q);
-      });
-    } catch (e) { /* 题库读不到时，样题只显示原来的文字 */ }
-  }
-
   async function load() {
     var files = ['topics.json', 'dependencies.json', 'id-aliases.json', 'cn-curriculum-standards.json'];
     var responses = await Promise.all(files.map(function (file) { return fetch('../data/' + file); }));
@@ -1441,7 +1359,7 @@
   syncDepthButtons();
   applyQuery();
   bind();
-  load().then(function () { return loadQuestions(); }).then(function () {
+  load().then(function () {
     fillMoralityGrades();
     fillDomain();
     syncControls();
