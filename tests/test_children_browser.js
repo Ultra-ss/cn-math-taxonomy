@@ -92,7 +92,7 @@ let chrome, source, target, browser;
     await cdp.send('Page.navigate', { url: base + pathname });
     await until(() => cdp.eval('document.readyState === "complete" && !!window.CnmChildren'), 'page load');
   }
-  const snapshot = cdp => cdp.eval('({profiles:localStorage.getItem("cnmChildren.v1"),records:localStorage.getItem("cnmChildren.records.v1")})');
+  const snapshot = cdp => cdp.eval('({profiles:localStorage.getItem("cnmChildren.v1"),records:localStorage.getItem("cnmChildren.records.v1"),progress:localStorage.getItem("cnmProgress.v1")})');
   async function choose(cdp, file) {
     const { root: document } = await cdp.send('DOM.getDocument');
     const { nodeId } = await cdp.send('DOM.querySelector', { nodeId: document.nodeId, selector: '#import-backup' });
@@ -117,6 +117,11 @@ let chrome, source, target, browser;
       CnmChildren.saveRecord(kids[0].id,{key:subject+'|seed|'+id,subject,label:'测试诊断 '+i,mode:'target',asked:8,targets:[id],
         counts:{weak:1,shaky:0,mastered:0,untested:0},weak:[id],roots:[id],shaky:[],mastered:[]});
     });
+    const answers=[1,2,3].map(n=>({id:'cns_p001',qid:'cns_p001_q'+n,result:'correct'}));
+    CnmProgress.recordSession({childId:kids[0].id,subject:'science',key:'science|progress|cns_p001',
+      session:{status:{cns_p001:{s:'mastered',src:'direct'}},answers},at:'2026-11-15T00:00:00.000Z'});
+    CnmProgress.recordSession({childId:null,subject:'physics',key:'physics|guest|cnp_001',
+      session:{status:{cnp_001:{s:'weak',src:'direct'}},answers:[{id:'cnp_001',qid:'cnp_001_q1',result:'wrong'}]},at:'2026-11-15T00:00:00.000Z'});
   })()`);
   await page(source);
   const original = await snapshot(source);
@@ -126,19 +131,23 @@ let chrome, source, target, browser;
   const backup = JSON.parse(fs.readFileSync(file, 'utf8'));
   assert.deepStrictEqual(backup.profiles, JSON.parse(original.profiles));
   assert.deepStrictEqual(backup.records, JSON.parse(original.records));
+  assert.deepStrictEqual(backup.learning.progress, JSON.parse(original.progress));
   assert.deepStrictEqual(await snapshot(source), original);
   const { browserContextId } = await browser.send('Target.createBrowserContext');
   const { targetId } = await browser.send('Target.createTarget', { url:'about:blank', browserContextId });
   target = await connect(targetId); await initialize(target); await page(target);
-  assert.deepStrictEqual(await snapshot(target), {profiles:null,records:null});
+  assert.deepStrictEqual(await snapshot(target), {profiles:null,records:null,progress:null});
   await preview(file);
-  assert.deepStrictEqual(await snapshot(target), {profiles:null,records:null});
+  assert.deepStrictEqual(await snapshot(target), {profiles:null,records:null,progress:null});
   await target.eval('document.getElementById("cancel-import").click()');
-  assert.deepStrictEqual(await snapshot(target), {profiles:null,records:null});
+  assert.deepStrictEqual(await snapshot(target), {profiles:null,records:null,progress:null});
   await preview(file); await confirm();
   const restored=await snapshot(target);
   assert.deepStrictEqual(JSON.parse(restored.profiles),backup.profiles);
   assert.deepStrictEqual(JSON.parse(restored.records),backup.records);
+  assert.deepStrictEqual(JSON.parse(restored.progress),backup.learning.progress);
+  assert.equal(await target.eval(`CnmProgress.statuses(${JSON.stringify(backup.profiles.children[0].id)},"science").cns_p001.mark`),"✓");
+  assert.equal(await target.eval('CnmProgress.statuses(null,"physics").cnp_001.mark'),"×");
   await page(target,'/children/history.html?child='+backup.profiles.children[0].id);
   await until(() => target.eval('document.querySelectorAll(".rec").length === 2'), 'two subjects in restored history');
   assert.equal(await target.eval('document.querySelectorAll(".wk-name").length'),2);

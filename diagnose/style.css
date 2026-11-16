@@ -42,6 +42,10 @@ label { font-weight: 700; }
 .q-title { font-size: 1.35rem; margin: 8px 0; letter-spacing: -0.02em; overflow-wrap: anywhere; }
 .q-text { font-size: 1.12rem; line-height: 1.65; padding: 14px 14px; background: var(--bg-muted); border-radius: 12px; margin: 12px 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 .reason { color: var(--muted); }
+.textbook-progress { background: var(--brand-soft); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; overflow-wrap: anywhere; }
+.textbook-progress p { margin: 6px 0; }
+.textbook-back { display: inline-block; min-height: 32px; padding: 4px 0; }
+#book-select { display: block; width: 100%; margin: 8px 0; }
 .ans-input { width: 100%; font-size: 1.1rem; }
 .notice { color: var(--warn); background: var(--warn-bg); padding: 8px 12px; border-radius: 10px; margin-top: 12px; }
 .verdict { padding: 10px 12px; border-radius: 10px; margin: 10px 0; font-weight: 800; }

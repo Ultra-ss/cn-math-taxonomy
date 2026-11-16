@@ -7,17 +7,17 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="科学·物理知识图谱">
 <meta property="og:title" content="科学·物理知识图谱">
-<meta property="og:description" content="小学科学与初高中物理知识图谱：沿先修关系自适应诊断，找到薄弱根因和补学路径。">
+<meta property="og:description" content="小学科学与初高中物理知识图谱：按教材浏览知识点、梳理先修关系，再按需要检查掌握情况。">
 <meta property="og:url" content="https://physicalmap.pages.dev/">
 <meta property="og:image" content="https://physicalmap.pages.dev/assets/og-cover.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="科学·物理知识图谱">
-<meta name="twitter:description" content="小学科学与初高中物理知识图谱：沿先修关系自适应诊断，找到薄弱根因和补学路径。">
+<meta name="twitter:description" content="小学科学与初高中物理知识图谱：按教材浏览知识点、梳理先修关系，再按需要检查掌握情况。">
 <meta name="twitter:image" content="https://physicalmap.pages.dev/assets/og-cover.jpg">
 
-<meta name="description" content="科学（教科版小学一至六年级）与物理（人教版初中八、九年级和高中必修、选择性必修）的知识图谱。沿先修关系自适应出题，从选中的知识点往回找到薄弱根因。">
+<meta name="description" content="科学（教科版小学一至六年级）与物理（人教版初中八、九年级和高中必修、选择性必修）的知识图谱。按册进入知识图谱，沿教材章节学习，也可诊断薄弱点。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23dff3ef%22%20stroke%3D%22%230f6e62%22%20stroke-width%3D%221.7%22%20stroke-linejoin%3D%22round%22%20d%3D%22M6.6%204.8H17L27.4%2015.2V25Q27.4%2027.4%2025.2%2027.4H6.6Q4.4%2027.4%204.4%2025.2V7Q4.4%204.8%206.6%204.8Z%22%2F%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M17.7%206.3%2026.1%2014.7H17.7Z%22%2F%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22%230f6e62%22%20stroke-width%3D%221.35%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22M17.7%206.3V14.7H26.1%22%2F%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22%230f6e62%22%20stroke-width%3D%222.15%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22M8.3%2024.2H12.4Q14.2%2024.2%2014.2%2022.4V20.2Q14.2%2018.6%2016%2018.6H18.8%22%2F%3E%3Cpath%20fill%3D%22%230f6e62%22%20d%3D%22M18.5%2016.85%2023%2018.6%2018.5%2020.35Z%22%2F%3E%3C%2Fsvg%3E">
 <script>
 (function () {
@@ -52,8 +52,8 @@
   </a>
   <nav class="site-nav" aria-label="主导航">
     <div class="subject-switch" role="group" aria-label="学科">
-      <a class="nav-link subject-link on" data-subject="science" href="./?subject=science">科学</a>
-      <a class="nav-link subject-link" data-subject="physics" href="./?subject=physics">物理</a>
+      <a class="nav-link subject-link" data-subject="science" href="./?subject=science">科学</a>
+      <a class="nav-link subject-link on" data-subject="physics" href="./?subject=physics">物理</a>
     </div>
     <div class="page-links">
       <a class="nav-link active" href="./" aria-current="page">首页</a>
@@ -69,35 +69,52 @@
   </nav>
 </header>
 <main class="home">
-  <section class="hero">
-    <p class="eyebrow">科学：小学一至六年级 · 物理：初中到高中</p>
-    <h1>先找到真正没学会的那一步</h1>
-    <p class="lede">沿着先修关系自适应出题。科学覆盖教科版小学一至六年级，物理覆盖人教版初中八、九年级和高中必修、选择性必修。从你选的知识点往回追，定位薄弱根因，并给出一条按学习顺序排起的路径。</p>
-    <div class="hero-actions">
-      <a class="btn btn-primary btn-lg" href="diagnose/?subject=science">开始诊断</a>
-      <a class="btn btn-lg" href="explore/?subject=science">浏览知识图谱</a>
+  <section class="textbooks" id="textbooks" aria-labelledby="textbook-title">
+    <div class="textbook-intro">
+      <p class="eyebrow" id="textbook-subject">物理 · 人教版</p>
+      <h1 id="textbook-title">从一本教材开始学习</h1>
+      <p id="textbook-description">选择正在学的教材，按章节浏览知识点，理清知识之间的联系。</p>
     </div>
-    <p class="quiet-link"><a href="diagnose/?subject=science&amp;grade=一上&amp;demo=1">先看一遍演示：一年级上册科学</a></p>
+    <div class="textbook-grid" id="textbook-grid" aria-busy="true">
+      <a class="textbook-card is-junior" data-volume="八上" href="explore/?subject=physics&amp;volume=%E5%85%AB%E4%B8%8A">
+        <span class="textbook-stage">初中物理</span><strong>八年级上册</strong>
+        <span class="textbook-count">28 个知识点</span><span class="textbook-action">进入教材 <span aria-hidden="true">→</span></span>
+      </a>
+      <a class="textbook-card is-junior" data-volume="八下" href="explore/?subject=physics&amp;volume=%E5%85%AB%E4%B8%8B">
+        <span class="textbook-stage">初中物理</span><strong>八年级下册</strong>
+        <span class="textbook-count">24 个知识点</span><span class="textbook-action">进入教材 <span aria-hidden="true">→</span></span>
+      </a>
+      <a class="textbook-card is-junior" data-volume="九全" href="explore/?subject=physics&amp;volume=%E4%B9%9D%E5%85%A8">
+        <span class="textbook-stage">初中物理</span><strong>九年级全一册</strong>
+        <span class="textbook-count">40 个知识点</span><span class="textbook-action">进入教材 <span aria-hidden="true">→</span></span>
+      </a>
+      <a class="textbook-card is-senior" data-volume="必修一" href="explore/?subject=physics&amp;volume=%E5%BF%85%E4%BF%AE%E4%B8%80">
+        <span class="textbook-stage">高中物理</span><strong>必修第一册</strong>
+        <span class="textbook-count">27 个知识点</span><span class="textbook-action">进入教材 <span aria-hidden="true">→</span></span>
+      </a>
+      <a class="textbook-card is-senior" data-volume="必修二" href="explore/?subject=physics&amp;volume=%E5%BF%85%E4%BF%AE%E4%BA%8C">
+        <span class="textbook-stage">高中物理</span><strong>必修第二册</strong>
+        <span class="textbook-count">25 个知识点</span><span class="textbook-action">进入教材 <span aria-hidden="true">→</span></span>
+      </a>
+      <a class="textbook-card is-senior" data-volume="必修三" href="explore/?subject=physics&amp;volume=%E5%BF%85%E4%BF%AE%E4%B8%89">
+        <span class="textbook-stage">高中物理</span><strong>必修第三册</strong>
+        <span class="textbook-count">37 个知识点</span><span class="textbook-action">进入教材 <span aria-hidden="true">→</span></span>
+      </a>
+      <a class="textbook-card is-senior" data-volume="选必一" href="explore/?subject=physics&amp;volume=%E9%80%89%E5%BF%85%E4%B8%80">
+        <span class="textbook-stage">高中物理</span><strong>选择性必修第一册</strong>
+        <span class="textbook-count">28 个知识点</span><span class="textbook-action">进入教材 <span aria-hidden="true">→</span></span>
+      </a>
+      <a class="textbook-card is-senior" data-volume="选必二" href="explore/?subject=physics&amp;volume=%E9%80%89%E5%BF%85%E4%BA%8C">
+        <span class="textbook-stage">高中物理</span><strong>选择性必修第二册</strong>
+        <span class="textbook-count">26 个知识点</span><span class="textbook-action">进入教材 <span aria-hidden="true">→</span></span>
+      </a>
+      <a class="textbook-card is-senior" data-volume="选必三" href="explore/?subject=physics&amp;volume=%E9%80%89%E5%BF%85%E4%B8%89">
+        <span class="textbook-stage">高中物理</span><strong>选择性必修第三册</strong>
+        <span class="textbook-count">34 个知识点</span><span class="textbook-action">进入教材 <span aria-hidden="true">→</span></span>
+      </a>
+    </div>
+    <div id="load-error" class="load-error" role="status" hidden></div>
   </section>
-
-  <h2 class="section-title">三步</h2>
-  <ol class="steps">
-    <li>
-      <span class="step-no">1</span>
-      <h3>选知识点</h3>
-      <p>科学从一年级到六年级，物理从八年级上册到高中选择性必修第三册。搜索或按册、章找到想检查的内容。</p>
-    </li>
-    <li>
-      <span class="step-no">2</span>
-      <h3>自适应答题</h3>
-      <p>先问目标本身。答错再出一道同级或更容易的题，仍然错才沿着先修往回追。</p>
-    </li>
-    <li>
-      <span class="step-no">3</span>
-      <h3>找到根因和学习路径</h3>
-      <p>标出薄弱根因和不稳的点，并按年级从低到高排出建议补学的顺序。</p>
-    </li>
-  </ol>
 
   <h2 class="section-title">图谱里有什么</h2>
   <div class="stat-grid" id="stats">
@@ -106,8 +123,7 @@
     <div class="stat-card"><div class="stat-num" id="n-questions">…</div><div class="stat-label">题目</div></div>
     <div class="stat-card"><div class="stat-num" id="n-standards">…</div><div class="stat-label">课标条目</div></div>
   </div>
-  <p class="stat-note">以上数字在打开页面时从当前学科的知识点、先修、题库和课标统计。默认是科学。</p>
-  <div id="load-error" class="load-error" hidden></div>
+  <p class="stat-note">以上数字在打开页面时从当前学科的知识点、先修、题库和课标统计。默认是物理。</p>
 
   <section class="blind-home" id="blind-home" hidden>
     <h2 class="section-title">本机盲区</h2>
@@ -116,8 +132,6 @@
     <p class="blind-home-actions" id="blind-home-actions"></p>
   </section>
 
-  <h2 class="section-title">按年级进入</h2>
-  <div class="grade-grid" id="grades" aria-busy="true"></div>
 </main>
 <footer class="site-footer">
   <p><a href="https://github.com/Ultra-ss/cn-math-taxonomy/issues/new/choose">提交 Issue</a></p>

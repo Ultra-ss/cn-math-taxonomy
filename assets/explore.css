@@ -54,6 +54,7 @@ body.page-explore .site-footer { flex: none; }
 .chap > summary { font-weight: 700; font-size: 0.95rem; }
 .count-pill { color: var(--muted); font-weight: 700; font-size: 0.85rem; }
 .topic-item {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -67,7 +68,22 @@ body.page-explore .site-footer { flex: none; }
   border-radius: 10px;
   padding: 8px 10px;
 }
-.topic-item .nm { font-weight: 700; overflow-wrap: anywhere; }
+.topic-item .nm { font-weight: 700; overflow-wrap: anywhere; padding-right: 20px; }
+.topic-state { position: absolute; top: 5px; right: 9px; font-weight: 900; font-size: 1.1rem; }
+.test-passed { color: #137847; }
+.test-failed { color: #bd2828; }
+.test-symbol { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border: 2px solid currentColor; border-radius: 50%; background: var(--bg-elev); font-size: 0.8rem; font-weight: 900; }
+.detail-test-state { font-size: 0.9rem; font-weight: 750; }
+.detail-test-state:not(.test-passed):not(.test-failed) { color: var(--muted); }
+.progress-note { margin: 0; padding: 5px 12px 0; color: var(--muted); font-size: 0.8rem; }
+.book-context { display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 13px 14px; border-bottom: 1px solid var(--line); background: var(--bg-elev); }
+.book-context > div { min-width: 0; }
+.book-context h1 { font-size: 1.18rem; line-height: 1.4; margin: 0 0 3px; }
+.book-context p { margin: 0; font-size: 0.85rem; }
+.book-context .book-eyebrow { color: var(--muted); font-size: 0.75rem; margin-bottom: 4px; }
+.book-context .btn { flex: none; font-size: 0.87rem; }
+.book-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+.book-actions > * { white-space: nowrap; }
 .topic-item .meta { color: var(--muted); font-size: 0.85rem; font-weight: 600; }
 .topic-item:hover { background: var(--bg-muted); }
 .topic-item.sel { background: var(--brand-soft); box-shadow: inset 3px 0 0 var(--brand); color: var(--text); }
@@ -218,6 +234,14 @@ body.page-explore .site-footer { flex: none; }
   #cy { height: 420px; flex: none; }
   .detail { border-left: none; border-top: 1px solid var(--line); }
   .graph-toolbar { padding: 8px; }
+  .book-context { align-items: flex-start; flex-wrap: wrap; }
+  .book-actions { width: 100%; justify-content: flex-start; }
+  .book-context .btn { flex: 1; justify-content: center; text-align: center; }
+}
+
+@media (prefers-color-scheme: dark) {
+  .test-passed { color: #76dba4; }
+  .test-failed { color: #ff9292; }
 }
 
 /* 手机宽度：层数和缩放并成一行，页面本身不横向溢出。放不下时可在工具条内横滑。 */

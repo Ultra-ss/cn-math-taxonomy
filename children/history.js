@@ -38,7 +38,7 @@
     if (window.CnmBlind) return window.CnmBlind.diagnoseHref(ids, sub || subjectOfId(ids[0]), '../diagnose/');
     ids = (ids || []).filter(Boolean);
     var s = sub || subjectOfId(ids[0]);
-    var q = 'subject=' + encodeURIComponent(s || 'science') + '&target=' + ids.map(encodeURIComponent).join(',');
+    var q = 'subject=' + encodeURIComponent(s || 'physics') + '&target=' + ids.map(encodeURIComponent).join(',');
     return '../diagnose/?' + q;
   }
 
@@ -202,7 +202,7 @@
       recs.forEach(function (r) { sec.appendChild(recordCard(child, r)); });
     }
     var go = el('a', 'btn btn-primary', '去做一次诊断');
-    go.href = '../diagnose/?subject=' + (subjectSel === 'physics' ? 'physics' : 'science');
+    go.href = '../diagnose/?subject=' + (subjectSel === 'science' ? 'science' : 'physics');
     sec.appendChild(go);
     return sec;
   }

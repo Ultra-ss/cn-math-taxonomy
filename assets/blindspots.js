@@ -291,7 +291,7 @@
     ids = (Array.isArray(ids) ? ids : [ids]).filter(function (id) {
       return subjectOfId(id) && (!subject || subjectOfId(id) === subject);
     });
-    var sub = ids.length ? subjectOfId(ids[0]) : (subject === 'physics' ? 'physics' : 'science');
+    var sub = ids.length ? subjectOfId(ids[0]) : (subject === 'science' ? 'science' : 'physics');
     if (!ids.length) return (base || 'diagnose/') + '?subject=' + sub;
     var q = 'subject=' + sub + '&target=' + ids.map(encodeURIComponent).join(',');
     return (base || 'diagnose/') + '?' + q;

@@ -10,6 +10,7 @@
  *         gradeTargets(graph, '一年级'|'七上'|'高一'|'选必二', subject?) -> {ids, volumes, label} | null
  *           默认 subject 为 science；physics 只取物理（八上、八下、九全及高中册次），all 可跨两科汇总
  *         createSession(graph, ids, {mode:'screen', confirm}) -> 筛查会话：范围 = 目标本身，回溯不出范围，默认题量上限 SCREEN_LIMIT
+ *         createSession(graph, ids, {mode:'textbook', volume}) -> 教材会话：按 topics 顺序逐点实答，不推断、不回溯、不跨范围
  *         chapterSummary(graph, session) -> 按章汇总（薄弱章节在前）
  *         layout(graph, session, summary) -> 路径图的分层布局
  *         judgeQuestion(question, userText) -> {verdict:'correct'|'wrong'|'manual', reason}
@@ -194,18 +195,22 @@
     if (!ts.length) throw new Error('至少需要一个目标知识点');
     ts.forEach(function (id) { if (!graph.byId[id]) throw new Error('未知知识点：' + id); });
     const screen = opts.mode === 'screen';
-    const limit = Math.max(1, Math.floor(opts.limit == null ? (screen ? SCREEN_LIMIT : DEFAULT_LIMIT) : opts.limit));
+    const textbook = opts.mode === 'textbook' || opts.order === 'book';
+    const bounded = screen || textbook;
+    if (textbook) ts.sort(function (a, b) { return graph.index[a] - graph.index[b]; });
+    const limit = Math.max(1, Math.floor(opts.limit == null ? (bounded ? SCREEN_LIMIT : DEFAULT_LIMIT) : opts.limit));
     const confirm = normalizeConfirm(opts.confirm == null ? DEFAULT_CONFIRM : opts.confirm);
-    // 筛查模式：诊断范围就是目标集合本身（不把先修祖先并进来），回溯只在范围内进行
-    const sub = screen ? { nodes: topoSort(graph, ts) } : subgraph(graph, ts);
+    // 教材模式严格按原教材顺序；筛查只限制范围，仍按先修拓扑筛查。
+    const sub = bounded ? { nodes: textbook ? ts.slice() : topoSort(graph, ts) } : subgraph(graph, ts);
     const pos = Object.create(null);
     sub.nodes.forEach(function (id, i) { pos[id] = i; });
-    // 离目标最近（拓扑序最靠后）的目标先问；其余目标作为后备留在栈里
+    // 教材从第一个点往后走；其它模式从拓扑序最靠后的目标先问。
     const stack = ts.filter(function (id) { return isTestable(graph, id); })
-      .sort(function (a, b) { return pos[b] - pos[a]; });
+      .sort(function (a, b) { return textbook ? pos[a] - pos[b] : pos[b] - pos[a]; });
     return {
       targets: ts, limit: limit, confirm: confirm, order: sub.nodes, status: {}, stack: stack, answers: [], attempts: {},
-      mode: screen ? 'screen' : 'target', scope: screen ? ts.slice() : null,
+      mode: textbook ? 'textbook' : screen ? 'screen' : 'target', scope: bounded ? ts.slice() : null,
+      orderKind: textbook ? 'book' : null, volume: opts.volume || null,
       seed: opts.seed == null ? 'default' : String(opts.seed),
       avoid: Array.from(new Set(opts.avoid || []))
     };
@@ -217,7 +222,8 @@
     return {
       targets: s.targets.slice(), limit: s.limit, confirm: s.confirm, order: s.order, stack: s.stack.slice(),
       status: Object.assign({}, s.status), answers: s.answers.slice(), attempts: attempts,
-      seed: s.seed, avoid: s.avoid, mode: s.mode, scope: s.scope ? s.scope.slice() : null
+      seed: s.seed, avoid: s.avoid, mode: s.mode, scope: s.scope ? s.scope.slice() : null,
+      orderKind: s.orderKind || null, volume: s.volume || null
     };
   }
 
@@ -331,9 +337,11 @@
     if (result === 'correct') {
       if (fails === 0 && corrects >= need) {
         s.status[id] = { s: 'mastered', src: 'direct' };
-        (s.mode === 'screen' ? hardAncestorSet(graph, id) : ancestorSet(graph, id)).forEach(function (a) {
-          if (!s.status[a]) s.status[a] = { s: 'mastered', src: 'inferred' };
-        });
+        if (s.mode !== 'textbook') {
+          (s.mode === 'screen' ? hardAncestorSet(graph, id) : ancestorSet(graph, id)).forEach(function (a) {
+            if (!s.status[a]) s.status[a] = { s: 'mastered', src: 'inferred' };
+          });
+        }
       } else if (fails > 0) {
         s.status[id] = { s: 'shaky', src: 'direct' };
       }
@@ -342,12 +350,14 @@
       // 第一次没过：等确认题再下结论
     } else {
       s.status[id] = { s: 'weak', src: 'direct' };
-      const scope = s.scope ? new Set(s.scope) : null;
-      const push = graph.prereqs[id]
-        .map(function (p) { return p.id; })
-        .filter(function (p) { return isTestable(graph, p) && !s.status[p] && (!scope || scope.has(p)); });
-      const pushed = new Set(push);
-      s.stack = push.concat(s.stack.filter(function (x) { return !pushed.has(x); }));
+      if (s.mode !== 'textbook') {
+        const scope = s.scope ? new Set(s.scope) : null;
+        const push = graph.prereqs[id]
+          .map(function (p) { return p.id; })
+          .filter(function (p) { return isTestable(graph, p) && !s.status[p] && (!scope || scope.has(p)); });
+        const pushed = new Set(push);
+        s.stack = push.concat(s.stack.filter(function (x) { return !pushed.has(x); }));
+      }
     }
     return s;
   }
@@ -448,7 +458,7 @@
         return { id: id, status: st(id), isRoot: rootSet.has(id), isTarget: targetSet.has(id) };
       });
     // 学习路径按年级从低到高；同一年级内保持拓扑序（先修在前）。没有 grade 的手造图保持原顺序。
-    path.sort(function (a, b) {
+    if (session.mode !== 'textbook') path.sort(function (a, b) {
       return gradeRank(graph, a.id) - gradeRank(graph, b.id) || topoPos[a.id] - topoPos[b.id];
     });
 
@@ -456,6 +466,7 @@
     const next = nextQuestion(graph, session);
     return {
       mode: session.mode || 'target',
+      orderKind: session.orderKind || null,
       targets: session.targets.slice(),
       asked: session.answers.length,
       limit: session.limit,
@@ -679,7 +690,7 @@
 
   /**
    * 按章汇总：范围内每章的 掌握 / 不稳 / 薄弱 / 未测 数量和薄弱、不稳的知识点 id。
-   * 章按教材顺序给出，再按「薄弱数多、不稳数多」稳定排序，薄弱的章排前面。
+   * 教材模式按课本顺序；其它模式再按「薄弱数多、不稳数多」稳定排序。
    */
   function chapterSummary(graph, session) {
     const inOrder = new Set(session.order);
@@ -706,7 +717,7 @@
       else if (st === 'weak') { ch.weak++; ch.weakIds.push(t.id); }
       else { ch.untested++; ch.untestedIds.push(t.id); }
     });
-    list.sort(function (a, b) { return b.weak - a.weak || b.shaky - a.shaky || a._i - b._i; });
+    if (session.mode !== 'textbook') list.sort(function (a, b) { return b.weak - a.weak || b.shaky - a.shaky || a._i - b._i; });
     list.forEach(function (ch) { delete ch._i; });
     return list;
   }

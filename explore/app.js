@@ -29,10 +29,16 @@
   var currentAlias = null;
   var stage = '';
   var grade = '';
+  var volume = '';
+  var showWholeBook = true;
   var domain = '';
   var query = '';
   var aliasHitIds = new Set();
-  var subject = 'science';
+  var subject = 'physics';
+  var progress = {};
+  var progressStamp = '';
+  var PASS_BADGE = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10" fill="#137847" stroke="white" stroke-width="2"/><path d="m6 11 3 3 7-7" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  var FAIL_BADGE = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10" fill="#bd2828" stroke="white" stroke-width="2"/><path d="m7 7 8 8m0-8-8 8" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>');
   var upDepth = 2;
   var ancestorsOpen = false;
   var tipFromTap = false;
@@ -130,6 +136,103 @@
     13: ['选必二', '选必二 · 选择性必修第二册'],
     14: ['选必三', '选必三 · 选择性必修第三册']
   };
+  function booksForSubject() {
+    if (subject === 'physics') return [
+      ['八上', '八年级上册', 8, '上'], ['八下', '八年级下册', 8, '下'], ['九全', '九年级全一册', 9, '全'],
+      ['必修一', '必修第一册', 10], ['必修二', '必修第二册', 11], ['必修三', '必修第三册', 12],
+      ['选必一', '选择性必修第一册', 13], ['选必二', '选择性必修第二册', 14], ['选必三', '选择性必修第三册', 15]
+    ];
+    var list = [];
+    for (var g = 1; g <= 6; g++) {
+      list.push([CN[g] + '上', CN[g] + '年级上册', g, '上']);
+      list.push([CN[g] + '下', CN[g] + '年级下册', g, '下']);
+    }
+    return list;
+  }
+  function volumeOf(topic) {
+    if (topic.grade >= 10) return EN_BOOK[topic.grade] ? EN_BOOK[topic.grade][0] : '';
+    return CN[topic.grade] + (topic.semester === '全' ? '全' : topic.semester);
+  }
+  function bookSpec(key) {
+    return booksForSubject().find(function (book) { return book[0] === key; }) || null;
+  }
+  function bookTitle(key) { var book = bookSpec(key); return book ? book[1] : key; }
+  function currentChild() {
+    return window.CnmChildren && window.CnmChildren.current ? window.CnmChildren.current() : null;
+  }
+  function progressOf(id) { return progress[id] || null; }
+  function progressLabel(row) {
+    return !row ? '尚未完成检测' : row.status === 'mastered' ? '已通过检测' : '未通过检测，建议巩固后再测';
+  }
+  function progressClass(row) { return row ? row.status === 'mastered' ? 'test-passed' : 'test-failed' : ''; }
+  function progressBadge(row) {
+    return row ? el('span', { class: 'topic-state ' + progressClass(row), 'aria-label': progressLabel(row), title: progressLabel(row), text: row.status === 'mastered' ? '✓' : '×' }) : null;
+  }
+  function refreshProgress(force) {
+    var child = currentChild();
+    var next = window.CnmProgress && window.CnmProgress.statuses ? window.CnmProgress.statuses(child ? child.id : null, subject) : {};
+    var stamp = JSON.stringify([child ? child.id : null, next]);
+    if (!force && progressStamp === stamp) return;
+    progressStamp = stamp;
+    progress = next;
+    if ($('progress-owner')) $('progress-owner').textContent = child ? '检测记录：' + child.name : '检测记录：本机访客';
+    if (topics.length) {
+      renderList();
+      renderDetail();
+      if (cy) {
+        cy.nodes().forEach(function (node) {
+          if (!byId.has(node.id())) return;
+          var row = progressOf(node.id());
+          node.removeClass('test-passed test-failed');
+          if (row) node.addClass(progressClass(row));
+          node.data('testStatus', row ? row.status : '');
+          node.data('testLabel', progressLabel(row));
+        });
+      }
+    }
+  }
+  function bookHref() {
+    return '../diagnose/?subject=' + subject + '&volume=' + encodeURIComponent(volume) + '&order=book';
+  }
+  function syncBook() {
+    var title = $('book-title');
+    var action = $('book-diagnose');
+    if (!title || !action) return;
+    title.textContent = volume ? bookTitle(volume) : '选择一本教材';
+    $('book-note').textContent = volume ? '本册 ' + topics.filter(function (topic) { return volumeOf(topic) === volume; }).length + ' 个知识点，检测从教材第一个知识点开始。' : '在教材选择器中选择册次，或从首页进入。';
+    action.hidden = !volume;
+    action.href = volume ? bookHref() : '#';
+    $('book-view').hidden = !volume;
+    $('book-view').textContent = showWholeBook ? '查看局部先修' : '查看本册全图';
+    $('book-view').setAttribute('aria-pressed', showWholeBook ? 'true' : 'false');
+  }
+  function syncBookQuery() {
+    var params = new URLSearchParams(location.search);
+    params.set('subject', subject);
+    params.delete('grade');
+    if (volume) params.set('volume', volume); else params.delete('volume');
+    history.replaceState(null, '', location.pathname + '?' + params.toString() + (selected ? '#' + selected : ''));
+  }
+  function chooseBook(key) {
+    volume = bookSpec(key) ? key : '';
+    grade = '';
+    stage = '';
+    domain = '';
+    query = '';
+    $('q').value = '';
+    showWholeBook = true;
+    selected = null;
+    currentAlias = null;
+    ancestorsOpen = false;
+    syncControls();
+    syncBook();
+    syncBookQuery();
+    renderList();
+    var first = topics.find(passFilter);
+    if (first && volume) select(first.id, 'user');
+    else { renderDetail(); renderGraph(); }
+  }
+
   function gradeWord(grade) {
     if (subject === 'chemistry' && CHEM_BOOK[grade]) return CHEM_BOOK[grade][0];
     if ((subject === 'english' || subject === 'physics') && EN_BOOK[grade]) return EN_BOOK[grade][0];
@@ -229,7 +332,7 @@
       button.classList.toggle('on', on);
       button.setAttribute('aria-selected', on ? 'true' : 'false');
     });
-    $('fGrade').value = grade;
+    $('fGrade').value = volume;
     var domainSelect = $('fDomain');
     if (Array.prototype.some.call(domainSelect.options, function (option) { return option.value === domain; })) {
       domainSelect.value = domain;
@@ -311,6 +414,7 @@
       if (stage === 'j' && (topic.grade < 7 || topic.grade > 9)) return false;
       if (stage === 'h' && topic.grade < 10) return false;
     }
+    if (volume && volumeOf(topic) !== volume) return false;
     if (grade && String(topic.grade) !== grade) return false;
     if (domain && topic.domain !== domain) return false;
     if (query) {
@@ -349,7 +453,7 @@
     var shown = 0;
     var box = $('list');
     box.replaceChildren();
-    var filtering = !!(query || grade || stage || domain);
+    var filtering = !!(query || volume || grade || stage || domain);
     volumes.forEach(function (volume) {
       var count = volume.chapters.reduce(function (sum, chapter) { return sum + chapter.topics.length; }, 0);
       shown += count;
@@ -368,8 +472,9 @@
           chapterDetails.append(el('button', {
             type: 'button',
             class: 'topic-item' + (topic.id === selected ? ' sel' : ''),
-            'data-jump': topic.id
-          }, el('span', { class: 'nm', text: topic.name }), el('span', { class: 'meta', text: topic.domain })));
+            'data-jump': topic.id,
+            'aria-label': topic.name + '，' + progressLabel(progressOf(topic.id))
+          }, el('span', { class: 'nm', text: topic.name }), progressBadge(progressOf(topic.id)), el('span', { class: 'meta', text: topic.domain })));
         });
         details.append(chapterDetails);
       });
@@ -450,6 +555,8 @@
         el('a', { href: '../diagnose/?target=' + encodeURIComponent(currentAlias.id) }, '按旧编号诊断')));
     }
     parts.push(el('h1', { class: 'detail-title', text: topic.name }));
+    var tested = progressOf(topic.id);
+    parts.push(el('p', { class: 'detail-test-state ' + progressClass(tested), text: (tested ? (tested.status === 'mastered' ? '✓ ' : '× ') : '') + progressLabel(tested) }));
     parts.push(el('div', { class: 'pills' },
       el('span', { class: 'pill pill-' + (kind === 'primary' ? 'p' : kind === 'junior' ? 'j' : 'h'), text: stageLabel(topic.grade) }),
       el('code', { class: 'id-code', text: topic.id })));
@@ -458,7 +565,7 @@
     parts.push(el('a', {
       class: 'btn btn-primary btn-lg diag-btn',
       href: diagHref
-    }, '诊断这个知识点'));
+    }, tested ? '重新检测这个知识点' : '检测这个知识点'));
     parts.push(el('dl', { class: 'meta-grid' },
       metaItem('年级册次', gradeLabel(topic)),
       metaItem('领域', topic.domain),
@@ -548,7 +655,7 @@
     if (!tip || !stage || !cy || !node || node.empty()) return;
     var text = node.data('full') || node.data('label') || '';
     if (!text) { tip.hidden = true; return; }
-    tip.textContent = text;
+    tip.textContent = text + (node.data('testStatus') ? ' · ' + node.data('testLabel') : '');
     tip.hidden = false;
     var stageRect = stage.getBoundingClientRect();
     var cyRect = cy.container().getBoundingClientRect();
@@ -587,9 +694,11 @@
         label: clipLabel(name),
         bg: current ? colors.currentBg : tone.bg,
         border: current ? colors.currentBorder : tone.border,
-        color: colors.text
+        color: colors.text,
+        testStatus: progressOf(id) ? progressOf(id).status : '',
+        testLabel: progressLabel(progressOf(id))
       },
-      classes: tone.cls + (current ? ' current' : '')
+      classes: tone.cls + (current ? ' current' : '') + ' ' + progressClass(progressOf(id))
     };
   }
 
@@ -722,8 +831,12 @@
     var upSet = upstream(selected, depth);
     var nodeSet = new Set(upSet);
     (post.get(selected) || []).forEach(function (edge) { nodeSet.add(edge.id); });
+    if (volume) {
+      if (showWholeBook) nodeSet = new Set(topics.filter(function (topic) { return volumeOf(topic) === volume; }).map(function (topic) { return topic.id; }));
+      else nodeSet = new Set(Array.from(nodeSet).filter(function (id) { return volumeOf(byId.get(id)) === volume; }));
+    }
     var total = nodeSet.size;
-    var folded = upDepth === 'all' && total > FOLD_AT && !ancestorsOpen;
+    var folded = !volume && upDepth === 'all' && total > FOLD_AT && !ancestorsOpen;
     var edgeCount = 0;
     if (!folded) {
       deps.forEach(function (edge) {
@@ -741,6 +854,8 @@
     cyEl.dataset.mode = folded ? 'grade' : 'full';
     cyEl.dataset.total = String(total);
     var heavy = !folded && total > 80;
+    cyEl.dataset.view = volume && showWholeBook ? 'book' : 'local';
+    cyEl.setAttribute('aria-label', (volume && showWholeBook ? bookTitle(volume) + '完整知识图谱' : '选中知识点的局部先修图') + '；绿色勾表示检测通过，红色叉表示未通过，目录中也可查看检测状态。');
     if (heavy) meta.textContent = '正在排列全部 ' + total + ' 个知识点…';
 
     var kick = heavy ? function (fn) { setTimeout(fn, 40); } : requestAnimationFrame;
@@ -777,6 +892,14 @@
             shape: 'round-rectangle', width: boxW, height: 34, padding: 0, 'corner-radius': 8
           } },
           { selector: 'node.current', style: { 'border-width': 4, 'z-index': 10 } },
+          { selector: 'node.test-passed, node.test-failed', style: {
+            'background-width': 22, 'background-height': 22, 'background-fit': 'none',
+            'background-position-x': '100%', 'background-position-y': '0%',
+            'background-offset-x': 7, 'background-offset-y': -7, 'background-clip': 'none',
+            'background-image-containment': 'over', 'bounds-expansion': 10
+          } },
+          { selector: 'node.test-passed', style: { 'background-image': PASS_BADGE } },
+          { selector: 'node.test-failed', style: { 'background-image': FAIL_BADGE } },
           { selector: 'edge', style: {
             width: 1.6, 'line-color': 'data(color)', 'target-arrow-color': 'data(color)',
             'target-arrow-shape': 'triangle', 'curve-style': dense ? 'straight' : 'bezier',
@@ -814,14 +937,14 @@
             cy.resize();
             cy.fit(undefined, dense ? 24 : 28);
             var framed = false;
-            if (heavy && cy.zoom() < 0.72) {
-              cy.zoom(0.85);
+            if ((heavy || (volume && showWholeBook)) && cy.zoom() < 0.65) {
+              cy.zoom(0.75);
               var focus = cy.getElementById(selected);
               if (focus && !focus.empty()) cy.center(focus);
               framed = true;
             }
             if (!folded) {
-              meta.textContent = '局部图 ' + total + ' 个知识点、' + edgeCount + ' 条先修。向上 ' + depthLabel + '，向下 1 层。'
+              meta.textContent = (volume && showWholeBook ? '本册全图 ' + total + ' 个知识点、' + edgeCount + ' 条先修。可拖动、缩放查看。' : '局部图 ' + total + ' 个知识点、' + edgeCount + ' 条先修。向上 ' + depthLabel + '，向下 1 层。')
                 + (framed ? '已对准当前知识点，可拖动查看其余节点。' : '')
                 + note;
             }
@@ -846,9 +969,21 @@
       }
       return;
     }
+    var switchedBook = volume && volumeOf(byId.get(hit.id)) !== volume;
+    if (switchedBook) {
+      volume = volumeOf(byId.get(hit.id));
+      grade = '';
+      stage = '';
+      domain = '';
+      showWholeBook = true;
+      syncControls();
+      syncBook();
+      renderList();
+    }
     var same = hit.id === selected && !currentAlias && !hit.alias;
     if (hit.id !== selected) ancestorsOpen = false;
     selected = hit.id;
+    if (switchedBook) syncBookQuery();
     currentAlias = source === 'user' ? null : hit.alias;
     if (source === 'user') {
       writeHash(selected);
@@ -914,26 +1049,18 @@
     var params = new URLSearchParams(location.search);
     var explicit = params.get('subject');
     if (explicit === 'physics' || explicit === 'science') return explicit;
-    if (explicit) return 'science';
     var hash = readHash();
-    if (/^cnp_[A-Za-z0-9]+$/.test(hash)) {
-      params.set('subject', 'physics');
+    if (/^cns_[A-Za-z0-9]+$/.test(hash)) {
+      params.set('subject', 'science');
       history.replaceState(null, '', location.pathname + '?' + params.toString() + '#' + hash);
-      return 'physics';
+      return 'science';
     }
-    return 'science';
+    return 'physics';
   }
 
   function configureSubject() {
-    document.body.classList.toggle('subject-english', subject === 'english');
     document.body.classList.toggle('subject-physics', subject === 'physics');
-    document.body.classList.toggle('subject-chinese', subject === 'chinese');
     document.body.classList.toggle('subject-science', subject === 'science');
-    document.body.classList.toggle('subject-morality', subject === 'morality');
-    document.body.classList.toggle('subject-history', subject === 'history');
-    document.body.classList.toggle('subject-geography', subject === 'geography');
-    document.body.classList.toggle('subject-biology', subject === 'biology');
-    document.body.classList.toggle('subject-chemistry', subject === 'chemistry');
     document.querySelectorAll('.site-nav a:not(.subject-link), a.brand').forEach(function (link) {
       var href = link.getAttribute('href');
       var next = withSubject(href);
@@ -942,145 +1069,28 @@
     document.querySelectorAll('.subject-link').forEach(function (link) {
       var on = link.getAttribute('data-subject') === subject;
       link.classList.toggle('on', on);
-      if (on) link.setAttribute('aria-current', 'true');
-      else link.removeAttribute('aria-current');
+      if (on) link.setAttribute('aria-current', 'true'); else link.removeAttribute('aria-current');
     });
-    if (subject === 'physics') {
-      document.querySelectorAll('#stage-tabs [data-stage]').forEach(function (button) {
-        button.hidden = button.getAttribute('data-stage') === 'p';
-      });
-      var physicsGrade = $('fGrade');
-      physicsGrade.replaceChildren();
-      physicsGrade.append(el('option', { value: '', text: '全部年级' }));
-      physicsGrade.append(el('option', { value: '8', text: '八年级（上、下册）' }));
-      physicsGrade.append(el('option', { value: '9', text: '九年级全一册' }));
-      [
-        [10, '必修第一册'], [11, '必修第二册'], [12, '必修第三册'],
-        [13, '选择性必修第一册'], [14, '选择性必修第二册'], [15, '选择性必修第三册']
-      ].forEach(function (row) {
-        physicsGrade.append(el('option', { value: String(row[0]), text: row[1] }));
-      });
-      var physicsSample = $('pick-sample');
-      if (physicsSample) physicsSample.textContent = '先看看「欧姆定律」';
-      document.title = '知识图谱 · 物理';
-      return;
-    }
-    if (subject === 'science') {
-      document.querySelectorAll('#stage-tabs [data-stage]').forEach(function (button) {
-        var sciStage = button.getAttribute('data-stage');
-        button.hidden = sciStage === 'j' || sciStage === 'h';
-      });
-      var sciGrade = $('fGrade');
-      sciGrade.replaceChildren();
-      sciGrade.append(el('option', { value: '', text: '全部年级' }));
-      [1, 2, 3, 4, 5, 6].forEach(function (g) {
-        sciGrade.append(el('option', { value: String(g), text: CN[g] + '年级' }));
-      });
-      var sciSample = $('pick-sample');
-      if (sciSample) sciSample.textContent = '先看看「昼夜交替的解释」';
-      document.title = '知识图谱 · 小学科学';
-      return;
-    }
-    if (subject === 'morality') {
-      document.querySelectorAll('#stage-tabs [data-stage]').forEach(function (button) {
-        button.hidden = button.getAttribute('data-stage') === 'h';
-      });
-      fillMoralityGrades();
-      var morSample = $('pick-sample');
-      if (morSample) morSample.textContent = '先看看「我向国旗敬个礼」';
-      document.title = '知识图谱 · 道德与法治';
-      return;
-    }
-    if (subject === 'history') {
-      document.querySelectorAll('#stage-tabs [data-stage]').forEach(function (button) {
-        var hisStage = button.getAttribute('data-stage');
-        button.hidden = hisStage === 'p' || hisStage === 'h';
-      });
-      var hisGrade = $('fGrade');
-      hisGrade.replaceChildren();
-      hisGrade.append(el('option', { value: '', text: '全部年级' }));
-      [7, 8, 9].forEach(function (g) {
-        hisGrade.append(el('option', { value: String(g), text: CN[g] + '年级' }));
-      });
-      var hisSample = $('pick-sample');
-      if (hisSample) hisSample.textContent = '先看看「远古时期的人类活动」';
-      document.title = '知识图谱 · 初中历史';
-      return;
-    }
-    if (subject === 'geography') {
-      document.querySelectorAll('#stage-tabs [data-stage]').forEach(function (button) {
-        var geoStage = button.getAttribute('data-stage');
-        button.hidden = geoStage === 'p' || geoStage === 'h';
-      });
-      var geoGrade = $('fGrade');
-      geoGrade.replaceChildren();
-      geoGrade.append(el('option', { value: '', text: '全部年级' }));
-      [7, 8].forEach(function (g) {
-        geoGrade.append(el('option', { value: String(g), text: CN[g] + '年级' }));
-      });
-      var geoSample = $('pick-sample');
-      if (geoSample) geoSample.textContent = '先看看「地球的宇宙环境」';
-      document.title = '知识图谱 · 初中地理';
-      return;
-    }
-    if (subject === 'biology') {
-      document.querySelectorAll('#stage-tabs [data-stage]').forEach(function (button) {
-        var bioStage = button.getAttribute('data-stage');
-        button.hidden = bioStage === 'p' || bioStage === 'h';
-      });
-      var bioGrade = $('fGrade');
-      bioGrade.replaceChildren();
-      bioGrade.append(el('option', { value: '', text: '全部年级' }));
-      [7, 8].forEach(function (g) {
-        bioGrade.append(el('option', { value: String(g), text: CN[g] + '年级' }));
-      });
-      var bioSample = $('pick-sample');
-      if (bioSample) bioSample.textContent = '先看看「观察周边环境中的生物」';
-      document.title = '知识图谱 · 初中生物';
-      return;
-    }
-    if (subject === 'chemistry') {
-      document.querySelectorAll('#stage-tabs [data-stage]').forEach(function (button) {
-        var chemStage = button.getAttribute('data-stage');
-        button.hidden = chemStage === 'p';
-      });
-      var chemGrade = $('fGrade');
-      chemGrade.replaceChildren();
-      chemGrade.append(el('option', { value: '', text: '全部年级' }));
-      chemGrade.append(el('option', { value: '9', text: '九年级' }));
-      chemGrade.append(el('option', { value: '10', text: '必修第一册' }));
-      chemGrade.append(el('option', { value: '11', text: '必修第二册' }));
-      chemGrade.append(el('option', { value: '12', text: '选择性必修第一册' }));
-      chemGrade.append(el('option', { value: '13', text: '选择性必修第二册' }));
-      chemGrade.append(el('option', { value: '14', text: '选择性必修第三册' }));
-      var chemSample = $('pick-sample');
-      if (chemSample) chemSample.textContent = '先看看「质量守恒定律」';
-      document.title = '知识图谱 · 化学';
-      return;
-    }
-    if (subject === 'chinese') {
-      document.querySelectorAll('#stage-tabs [data-stage]').forEach(function (button) {
-        button.hidden = button.getAttribute('data-stage') === 'h';
-      });
-      var zhGrade = $('fGrade');
-      zhGrade.replaceChildren();
-      zhGrade.append(el('option', { value: '', text: '全部年级' }));
-      [1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(function (g) {
-        zhGrade.append(el('option', { value: String(g), text: CN[g] + '年级' }));
-      });
-      var zhSample = $('pick-sample');
-      if (zhSample) zhSample.textContent = '先看看「静夜思」';
-      document.title = '知识图谱 · 语文';
-      return;
-    }
-
+    document.querySelectorAll('#stage-tabs [data-stage]').forEach(function (button) {
+      var value = button.getAttribute('data-stage');
+      button.hidden = subject === 'physics' ? value === 'p' : value === 'j' || value === 'h';
+    });
+    var select = $('fGrade');
+    select.replaceChildren(el('option', { value: '', text: '全部教材' }));
+    booksForSubject().forEach(function (book) { select.append(el('option', { value: book[0], text: book[1] })); });
+    $('pick-sample').textContent = subject === 'physics' ? '先看看「欧姆定律」' : '先看看「昼夜交替的解释」';
+    document.title = subject === 'physics' ? '知识图谱 · 物理' : '知识图谱 · 小学科学';
   }
 
   function applyQuery() {
     var params = new URLSearchParams(location.search);
-    var gradeValue = params.get('grade') || '';
-    var gradeOk = subject === 'physics' ? /^(?:[89]|1[0-5])$/ : /^[1-6]$/;
-    if (gradeOk.test(gradeValue)) grade = gradeValue;
+    var chosen = params.get('volume') || '';
+    if (bookSpec(chosen)) volume = chosen;
+    else {
+      var legacyGrade = Number(params.get('grade'));
+      var legacy = booksForSubject().find(function (book) { return book[2] === legacyGrade; });
+      if (legacy) volume = legacy[0];
+    }
     var stageValue = params.get('stage') || '';
     var allowedStages = subject === 'physics' ? ['', 'j', 'h'] : ['', 'p'];
     stage = allowedStages.indexOf(stageValue) >= 0 ? stageValue : '';
@@ -1089,8 +1099,8 @@
 
   function bootSelection() {
     var hash = readHash();
-    if (hash && resolveId(hash)) { select(hash, 'hash'); return; }
-    if (grade) {
+    if (hash && resolveId(hash) && (!volume || volumeOf(byId.get(resolveId(hash).id)) === volume)) { select(hash, 'hash'); return; }
+    if (volume || grade) {
       var first = topics.filter(passFilter)[0];
       if (first) { select(first.id, 'user'); return; }
     }
@@ -1108,44 +1118,23 @@
       var button = event.target.closest('[data-stage]');
       if (!button || button.hidden) return;
       stage = button.getAttribute('data-stage');
-      if (subject === 'english') {
-        var enGrade = parseInt(grade, 10);
-        if (stage === 'p' && enGrade >= 7) grade = '';
-        if (stage === 'j' && (enGrade <= 6 || enGrade >= 10)) grade = '';
-        if (stage === 'h' && enGrade > 0 && enGrade <= 9) grade = '';
-        syncControls();
-        renderList();
-        highlight(false);
-        return;
-      }
-      var gradeNumber = parseInt(grade, 10);
-      if (stage === 'p' && gradeNumber >= 7) grade = '';
-      if (stage === 'j' && (gradeNumber <= 6 || gradeNumber >= 10)) grade = '';
-      if (stage === 'h' && gradeNumber <= 9) grade = '';
+      var current = bookSpec(volume);
+      if (current && ((stage === 'j' && current[2] >= 10) || (stage === 'h' && current[2] <= 9))) volume = '';
       syncControls();
+      syncBook();
+      syncBookQuery();
       renderList();
       highlight(false);
     });
-    $('fGrade').addEventListener('change', function () {
-      grade = $('fGrade').value;
-      if (subject === 'english') {
-        var enGrade = parseInt(grade, 10);
-        if (enGrade >= 3 && enGrade <= 6 && (stage === 'j' || stage === 'h')) stage = 'p';
-        if (enGrade >= 7 && enGrade <= 9 && (stage === 'p' || stage === 'h')) stage = 'j';
-        if (enGrade >= 10 && (stage === 'p' || stage === 'j')) stage = 'h';
-        syncControls();
-        renderList();
-        highlight(false);
-        return;
-      }
-      var gradeNumber = parseInt(grade, 10);
-      if (gradeNumber >= 1 && gradeNumber <= 6 && (stage === 'j' || stage === 'h')) stage = 'p';
-      if (gradeNumber >= 7 && gradeNumber <= 9 && (stage === 'p' || stage === 'h')) stage = 'j';
-      if (gradeNumber >= 10 && (stage === 'p' || stage === 'j')) stage = 'h';
-      syncControls();
-      renderList();
-      highlight(false);
+    $('fGrade').addEventListener('change', function () { chooseBook($('fGrade').value); });
+    $('book-view').addEventListener('click', function () {
+      showWholeBook = !showWholeBook;
+      syncBook();
+      renderGraph();
     });
+    window.addEventListener('storage', function () { refreshProgress(); });
+    window.addEventListener('focus', function () { refreshProgress(); });
+    window.addEventListener('cnm:progress', function () { refreshProgress(); });
     $('fDomain').addEventListener('change', function () {
       domain = $('fDomain').value;
       renderList();
@@ -1271,6 +1260,8 @@
     fillMoralityGrades();
     fillDomain();
     syncControls();
+    refreshProgress(true);
+    syncBook();
     renderList();
     bootSelection();
   }).catch(function (error) {

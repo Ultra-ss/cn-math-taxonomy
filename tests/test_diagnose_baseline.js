@@ -62,9 +62,57 @@ assert.strictEqual(ctx.getSettings().confirm, 2, '界面改动应取代 URL 初�
 assert.strictEqual(ctx.confirmParam, null);
 assert.strictEqual(JSON.parse(entries.get('settings')).confirm, 2);
 ctx.D = { graph }; ctx.window = {}; ctx.session = null; ctx.sessionMeta = null;
+ctx.syncProgress = function () {};
 vm.runInContext(section('function restoreSession(saved)', 'function restart()'), ctx);
 assert.strictEqual(ctx.restoreSession({ targets: ['cnp_071'], answers: [], confirm: 5, label: '欧姆定律' }), true);
 assert.strictEqual(ctx.session.confirm, 4);
+
+// 新默认学科和按册入口直接进入教材模式，八上 / 八下不能合并。
+const routeContext = {
+  URLSearchParams, E, D: { graph, aliases: {} }, subject: 'physics',
+  location: { search: '', hash: '', pathname: '/diagnose/' },
+  history: { replaceState() {} }
+};
+vm.createContext(routeContext);
+vm.runInContext(section('function detectSubject()', 'function applySubjectChrome()') +
+  section('function resolveTargets(params)', 'async function init()'), routeContext);
+assert.strictEqual(routeContext.detectSubject(), 'physics');
+routeContext.location.search = '?subject=removed';
+assert.strictEqual(routeContext.detectSubject(), 'physics');
+routeContext.location.search = '?target=cns_p001';
+assert.strictEqual(routeContext.detectSubject(), 'science');
+routeContext.location.search = '?subject=science';
+assert.strictEqual(routeContext.detectSubject(), 'science');
+for (const [volume, count, first] of [['八上', 28, 'cnp_001'], ['八下', 24, 'cnp_029'], ['必修一', 27, 'cnp_h001']]) {
+  const resolved = routeContext.resolveTargets(new URLSearchParams({ volume }));
+  assert.strictEqual(resolved.mode, 'textbook');
+  assert.strictEqual(resolved.volume, volume);
+  assert.strictEqual(resolved.ids.length, count);
+  assert.strictEqual(resolved.ids[0], first);
+}
+assert.strictEqual(routeContext.resolveTargets(new URLSearchParams({ grade: '八年级' })).mode, 'screen');
+assert.throws(() => routeContext.resolveTargets(new URLSearchParams({ grade: '八年级', order: 'book' })), /不合并上下册/);
+
+// 真实进度同步入口排除演示和旧归属未知存档，已绑定会话保持原孩子。
+const syncCalls = [];
+const syncContext = {
+  demo: null, session: ctx.session, sessionMeta: {}, subject: 'physics',
+  recordKey() { return 'physics|seed|cnp_071'; },
+  window: { CnmProgress: { recordSession(payload) { syncCalls.push(payload); } } }
+};
+vm.createContext(syncContext);
+vm.runInContext(section('function syncProgress()', 'function save()'), syncContext);
+syncContext.syncProgress();
+assert.strictEqual(syncCalls.length, 0, '旧归属未知不能自动写给当前孩子');
+syncContext.sessionMeta.progressChildId = null;
+syncContext.syncProgress();
+assert.strictEqual(syncCalls[0].childId, null, '显式访客可以保存');
+syncContext.sessionMeta.progressChildId = 'child-a';
+syncContext.syncProgress();
+assert.strictEqual(syncCalls[1].childId, 'child-a');
+syncContext.demo = {};
+syncContext.syncProgress();
+assert.strictEqual(syncCalls.length, 2, '演示绝不写学习进度');
 
 // 三个视图都通过空值过滤 helper 插入可选档案条，原生 append(null) 会显示 "null"。
 const appendCode = section('function append(el, c)', 'function figureEl(svg)');

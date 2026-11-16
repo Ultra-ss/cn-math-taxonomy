@@ -1,4 +1,4 @@
-/* 首页：只展示小学科学与物理，统计和年级入口从当前数据计算。 */
+/* 首页：按教材进入科学与物理，知识点数量与统计从当前数据计算。 */
 (function () {
   'use strict';
   var raw = location.hash.replace(/^#/, '');
@@ -6,7 +6,7 @@
   if (/^(?:cnp|cns)_[A-Za-z0-9]+$/.test(raw)) return;
 
   var CN = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
-  var subject = new URLSearchParams(location.search).get('subject') === 'physics' ? 'physics' : 'science';
+  var subject = new URLSearchParams(location.search).get('subject') === 'science' ? 'science' : 'physics';
 
   function withSubject(href) {
     if (!href || href.indexOf('subject=') >= 0 || href.indexOf('http') === 0 || href.charAt(0) === '#') return href;
@@ -27,29 +27,7 @@
     if (next && next !== href) link.setAttribute('href', next);
   });
 
-  var eye = document.querySelector('.eyebrow');
-  var primary = document.querySelector('.hero-actions a.btn-primary');
-  var browse = document.querySelector('.hero-actions a.btn:not(.btn-primary)');
-  var demo = document.querySelector('.quiet-link a');
-  if (subject === 'physics') {
-    document.title = '物理 · 科学·物理知识图谱';
-    if (eye) eye.textContent = '物理：初中八、九年级 · 高中必修与选择性必修';
-    if (primary) primary.setAttribute('href', 'diagnose/?subject=physics');
-    if (browse) browse.setAttribute('href', 'explore/?subject=physics');
-    if (demo) {
-      demo.setAttribute('href', 'diagnose/?subject=physics&grade=' + encodeURIComponent('八上') + '&demo=1');
-      demo.textContent = '先看一遍演示：八年级上册物理';
-    }
-  } else {
-    document.title = '科学 · 科学·物理知识图谱';
-    if (eye) eye.textContent = '科学：小学一至六年级 · 教科版';
-    if (primary) primary.setAttribute('href', 'diagnose/?subject=science');
-    if (browse) browse.setAttribute('href', 'explore/?subject=science');
-    if (demo) {
-      demo.setAttribute('href', 'diagnose/?subject=science&grade=' + encodeURIComponent('一上') + '&demo=1');
-      demo.textContent = '先看一遍演示：一年级上册科学';
-    }
-  }
+  document.title = (subject === 'physics' ? '物理' : '科学') + ' · 科学·物理知识图谱';
 
   function setText(id, value) {
     var node = document.getElementById(id);
@@ -61,6 +39,8 @@
     if (!box) return;
     box.hidden = false;
     box.textContent = message;
+    var grid = document.getElementById('textbook-grid');
+    if (grid) grid.removeAttribute('aria-busy');
   }
 
   function renderBlindHome(allTopics) {
@@ -112,6 +92,58 @@
     }
   }
 
+  function textbookList() {
+    if (subject === 'science') {
+      var books = [];
+      for (var g = 1; g <= 6; g++) {
+        ['上', '下'].forEach(function (term) {
+          books.push({ volume: CN[g] + term, grade: g, term: term,
+            title: CN[g] + '年级' + term + '册', stage: '小学科学', klass: 'is-primary' });
+        });
+      }
+      return books;
+    }
+    return [
+      ['八上', 8, '上', '八年级上册'], ['八下', 8, '下', '八年级下册'], ['九全', 9, '全', '九年级全一册'],
+      ['必修一', 10, '上', '必修第一册'], ['必修二', 11, '上', '必修第二册'], ['必修三', 12, '上', '必修第三册'],
+      ['选必一', 13, '上', '选择性必修第一册'], ['选必二', 14, '上', '选择性必修第二册'], ['选必三', 15, '上', '选择性必修第三册']
+    ].map(function (book) {
+      return { volume: book[0], grade: book[1], term: book[2], title: book[3],
+        stage: book[1] < 10 ? '初中物理' : '高中物理', klass: book[1] < 10 ? 'is-junior' : 'is-senior' };
+    });
+  }
+
+  function renderTextbooks(topics) {
+    var grid = document.getElementById('textbook-grid');
+    if (!grid) return;
+    grid.replaceChildren();
+    textbookList().forEach(function (book) {
+      var link = document.createElement('a');
+      link.className = 'textbook-card ' + book.klass;
+      link.setAttribute('data-volume', book.volume);
+      link.href = 'explore/?subject=' + subject + '&volume=' + encodeURIComponent(book.volume);
+      var stage = document.createElement('span');
+      stage.className = 'textbook-stage';
+      stage.textContent = book.stage;
+      var title = document.createElement('strong');
+      title.textContent = book.title;
+      var count = document.createElement('span');
+      count.className = 'textbook-count';
+      count.textContent = topics ? topics.filter(function (topic) {
+        return topic.grade === book.grade && topic.semester === book.term;
+      }).length + ' 个知识点' : '正在加载知识点…';
+      var action = document.createElement('span');
+      action.className = 'textbook-action';
+      action.textContent = '进入教材 →';
+      link.append(stage, title, count, action);
+      grid.appendChild(link);
+    });
+    if (topics) grid.removeAttribute('aria-busy');
+  }
+
+  setText('textbook-subject', subject === 'physics' ? '物理 · 人教版' : '科学 · 教科版');
+  renderTextbooks(null);
+
   var fetchInflight = {};
   function fetchJsonWithRetry(url, attempts) {
     attempts = attempts || 2;
@@ -141,15 +173,27 @@
   }
 
   var homeLoadToken = subject;
+  // 教材入口只等待知识点文件，题库及其他统计失败仍能选教材。
+  var topicsPromise = fetch('data/topics.json').then(function (response) {
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    return response.json();
+  }).then(function (allTopics) {
+    if (!Array.isArray(allTopics)) throw new Error('知识点数据格式无法识别');
+    var selected = allTopics.filter(function (topic) { return topic.subject === subject; });
+    renderTextbooks(selected);
+    renderBlindHome(selected);
+    return allTopics;
+  });
   Promise.all([
-    fetch('data/topics.json'),
+    topicsPromise,
     fetch('data/dependencies.json'),
     fetch('data/cn-curriculum-standards.json')
   ]).then(function (responses) {
-    responses.forEach(function (response) {
+    return Promise.all(responses.map(function (response, index) {
+      if (index === 0) return response;
       if (!response.ok) throw new Error('HTTP ' + response.status);
-    });
-    return Promise.all(responses.map(function (response) { return response.json(); }));
+      return response.json();
+    }));
   }).then(function (data) {
     if (homeLoadToken !== subject) return;
     if (!Array.isArray(data[0]) || !Array.isArray(data[1])) throw new Error('数据格式无法识别');
@@ -180,51 +224,6 @@
     });
     function qTokenExpired() { return homeLoadToken !== subject; }
 
-    var grades = document.getElementById('grades');
-    if (!grades) return;
-    grades.replaceChildren();
-    grades.removeAttribute('aria-busy');
-    function addCard(g, stageName, title, klass, splitText) {
-      var list = topics.filter(function (topic) { return topic.grade === g; });
-      var link = document.createElement('a');
-      link.className = 'grade-card ' + klass;
-      link.href = 'explore/?subject=' + subject + '&grade=' + g;
-      var stage = document.createElement('span');
-      stage.className = 'grade-stage';
-      stage.textContent = stageName;
-      var name = document.createElement('strong');
-      name.textContent = title;
-      var count = document.createElement('span');
-      count.className = 'grade-count';
-      count.textContent = list.length + ' 个知识点';
-      var split = document.createElement('span');
-      split.className = 'grade-stage';
-      split.textContent = splitText;
-      link.append(stage, name, count, split);
-      grades.append(link);
-    }
-
-    if (subject === 'science') {
-      for (var g = 1; g <= 6; g++) {
-        var list = topics.filter(function (topic) { return topic.grade === g; });
-        var up = list.filter(function (topic) { return topic.semester === '上'; }).length;
-        var down = list.filter(function (topic) { return topic.semester === '下'; }).length;
-        addCard(g, '小学科学', CN[g] + '年级', 'is-primary', '上 ' + up + ' · 下 ' + down);
-      }
-    } else {
-      [8, 9].forEach(function (g) {
-        var list = topics.filter(function (topic) { return topic.grade === g; });
-        var up = list.filter(function (topic) { return topic.semester === '上'; }).length;
-        var down = list.filter(function (topic) { return topic.semester === '下'; }).length;
-        var whole = list.filter(function (topic) { return topic.semester === '全'; }).length;
-        addCard(g, '初中物理', CN[g] + '年级', 'is-junior', whole ? '全一册 ' + whole : '上 ' + up + ' · 下 ' + down);
-      });
-      [
-        [10, '必修一', '必修第一册'], [11, '必修二', '必修第二册'], [12, '必修三', '必修第三册'],
-        [13, '选必一', '选择性必修第一册'], [14, '选必二', '选择性必修第二册'], [15, '选必三', '选择性必修第三册']
-      ].forEach(function (book) { addCard(book[0], '高中物理', book[1], 'is-senior', book[2]); });
-    }
-    renderBlindHome(topics);
   }).catch(function (error) {
     fail('数据没有加载成功（' + (error && error.message ? error.message : error) + '）。请稍后刷新重试。');
   });

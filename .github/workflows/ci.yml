@@ -71,6 +71,15 @@ jobs:
       - name: tests/test_wrongbook.js
         run: node tests/test_wrongbook.js
 
+      - name: tests/test_explore_books.js
+        run: node tests/test_explore_books.js
+
+      - name: tests/test_progress.js
+        run: node tests/test_progress.js
+
+      - name: tests/test_textbook_order.js
+        run: node tests/test_textbook_order.js
+
       - name: 课标映射严格模式（仅报告）
         continue-on-error: true
         env:

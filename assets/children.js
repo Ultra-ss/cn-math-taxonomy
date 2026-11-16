@@ -10,8 +10,9 @@
   var WRONG_KEY = 'cnmWrong.v1';
   var BLIND_KEY = 'cnmBlind.local.v1';
   var ARCHIVE_KEY = 'cnmDiagnose.archived.v1';
+  var PROGRESS_KEY = 'cnmProgress.v1';
   var SESSION_KEYS = { science: 'cnsDiagnose.session.v1', physics: 'cnpDiagnose.session.v2' };
-  var BACKUP_KEYS = [KEY, REC_KEY, WRONG_KEY, BLIND_KEY, SESSION_KEYS.science, SESSION_KEYS.physics, ARCHIVE_KEY];
+  var BACKUP_KEYS = [KEY, REC_KEY, WRONG_KEY, BLIND_KEY, SESSION_KEYS.science, SESSION_KEYS.physics, ARCHIVE_KEY, PROGRESS_KEY];
   var GRADES = ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三'];
   var TEXTBOOKS = ['教科版', '人教版', '其他'];
 
@@ -86,10 +87,22 @@
     var s = state();
     s.children = s.children.filter(function (c) { return c.id !== id; });
     if (s.current === id) s.current = s.children.length ? s.children[0].id : null;
-    write(KEY, s);
+    if (!write(KEY, s)) return false;
     var r = records();
     delete r[id];
     write(REC_KEY, r);
+    // 不依赖 progress.js 已加载；档案删除后也清理该孩子的图谱进度，访客及其他孩子保留。
+    try {
+      var rawProgress = localStorage.getItem(PROGRESS_KEY);
+      if (rawProgress !== null) {
+        var progress = JSON.parse(rawProgress);
+        checkProgress(progress);
+        delete progress.byChild[id];
+        localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+        emitProgress();
+      }
+    } catch (e) { /* 存储异常时保留原数据 */ }
+    return true;
   }
 
   function recordsOf(childId) {
@@ -175,7 +188,9 @@
     if (!snapshot.profiles.children.length && !Object.keys(snapshot.learning.wrongbook).some(function (id) {
       return snapshot.learning.wrongbook[id].length;
     }) && !Object.keys(snapshot.learning.blindspots.byId).length && !Object.keys(snapshot.learning.sessions).length &&
-        !snapshot.learning.archivedSessions.length) throw new Error('还没有可导出的档案或学习数据。');
+        !snapshot.learning.archivedSessions.length && !Object.keys(snapshot.learning.progress.byChild).length) {
+      throw new Error('还没有可导出的档案或学习数据。');
+    }
     var backup = {
       format: 'cn-math-taxonomy.children',
       version: 2,
@@ -236,7 +251,7 @@
         });
         if ((own(r, 'asked') && (!Number.isInteger(r.asked) || r.asked < 0)) ||
             (own(r, 'label') && typeof r.label !== 'string') ||
-            (own(r, 'mode') && ['target', 'screen'].indexOf(r.mode) < 0)) throw new Error('诊断记录的范围或题数不正确。');
+            (own(r, 'mode') && ['target', 'screen', 'textbook'].indexOf(r.mode) < 0)) throw new Error('诊断记录的范围或题数不正确。');
         if (own(r, 'counts') && (!isObject(r.counts) || !Object.keys(r.counts).every(function (key) {
           return Number.isInteger(r.counts[key]) && r.counts[key] >= 0;
         }))) throw new Error('诊断记录的统计不正确。');
@@ -278,10 +293,12 @@
   }
   function shortText(value, max) { return typeof value === 'string' && value.length <= (max || 4000); }
   function natural(value) { return Number.isSafeInteger(value) && value >= 0; }
-  function emptyLearning() { return { wrongbook: {}, sessions: {}, blindspots: { v: 1, byId: {} }, archivedSessions: [] }; }
+  function emptyLearning() {
+    return { wrongbook: {}, sessions: {}, blindspots: { v: 1, byId: {} }, archivedSessions: [], progress: { v: 1, byChild: {} } };
+  }
   function checkSession(session, subject) {
     function topics(ids) { return Array.isArray(ids) && ids.every(function (id) { return subjectOfTopic(id) === subject; }); }
-    if (!isObject(session) || session.v !== 2 || ['target', 'screen'].indexOf(session.mode) < 0 ||
+    if (!isObject(session) || session.v !== 2 || ['target', 'screen', 'textbook'].indexOf(session.mode) < 0 ||
         !topics(session.targets) || !session.targets.length || !natural(session.limit) || session.limit < 1 || session.limit > 1000 ||
         !natural(session.confirm) || session.confirm < 1 || session.confirm > 10 || !shortText(session.seed, 256) ||
         !shortText(session.label) || !validDate(session.savedAt) || !Array.isArray(session.answers) ||
@@ -290,6 +307,9 @@
           // 历史其他学科题号也仅用于排重，不能按本次活动学科限制。
           return shortText(qid, 160) && /^cn[a-z]_[A-Za-z0-9]+_q[1-9][0-9]*$/.test(qid);
         })))) throw new Error('进行中诊断的范围、设置或时间不正确。');
+    if ((own(session, 'progressChildId') && session.progressChildId !== null && !validId(session.progressChildId)) ||
+        (own(session, 'volume') && !shortText(session.volume, 100)) ||
+        (own(session, 'order') && session.order !== 'book')) throw new Error('进行中诊断的归属或教材设置不正确。');
     session.answers.forEach(function (answer) {
       if (!isObject(answer) || subjectOfTopic(answer.id) !== subject || !validQuestion(answer.qid, answer.id) ||
           ['correct', 'wrong', 'skip'].indexOf(answer.result) < 0 ||
@@ -306,8 +326,10 @@
     if (!isObject(learning) || !isObject(learning.wrongbook) || !isObject(learning.sessions) ||
         !isObject(learning.blindspots) || learning.blindspots.v !== 1 || !isObject(learning.blindspots.byId) ||
         !Array.isArray(learning.archivedSessions) || Object.keys(learning).some(function (key) {
-          return ['wrongbook', 'sessions', 'blindspots', 'archivedSessions'].indexOf(key) < 0;
+          return ['wrongbook', 'sessions', 'blindspots', 'archivedSessions', 'progress'].indexOf(key) < 0;
         })) throw new Error('学习备份数据格式不正确。');
+    // 新增字段保持可选，旧版 v2 学习备份可原样导入。
+    if (own(learning, 'progress')) checkProgress(learning.progress);
     Object.keys(learning.wrongbook).forEach(function (bucket) {
       if (!validId(bucket) || !Array.isArray(learning.wrongbook[bucket])) throw new Error('错题本分组不正确。');
       var seen = new Set();
@@ -340,6 +362,28 @@
       }
     });
   }
+  function checkProgress(progress) {
+    if (!isObject(progress) || progress.v !== 1 || !isObject(progress.byChild)) throw new Error('图谱检测进度格式不正确。');
+    Object.keys(progress.byChild).forEach(function (bucket) {
+      var box = progress.byChild[bucket];
+      if (!validId(bucket) || !isObject(box) || !Array.isArray(box.runs)) throw new Error('图谱进度分组不正确。');
+      var keys = new Set();
+      box.runs.forEach(function (run) {
+        if (!isObject(run) || !shortText(run.key, 20000) || !run.key || !validDate(run.at) ||
+            ['science', 'physics'].indexOf(run.subject) < 0 || !isObject(run.states) ||
+            keys.has(run.subject + '|' + run.key)) throw new Error('图谱检测记录的标识或时间不正确。');
+        keys.add(run.subject + '|' + run.key);
+        Object.keys(run.states).forEach(function (id) {
+          var state = run.states[id];
+          if (subjectOfTopic(id) !== run.subject || !isObject(state) ||
+              ['mastered', 'weak', 'shaky'].indexOf(state.status) < 0 || !validDate(state.at) ||
+              (own(state, 'signature') && (!shortText(state.signature, 16) || !/^[a-f0-9]{16}$/.test(state.signature)))) {
+            throw new Error('图谱检测进度的知识点或状态不正确。');
+          }
+        });
+      });
+    });
+  }
   function parseBackup(text) {
     if (typeof text !== 'string') throw new Error('备份文件不是文本。');
     checkSize(text);
@@ -358,6 +402,7 @@
       if (raw[WRONG_KEY] !== null) learning.wrongbook = JSON.parse(raw[WRONG_KEY]);
       if (raw[BLIND_KEY] !== null) learning.blindspots = JSON.parse(raw[BLIND_KEY]);
       if (raw[ARCHIVE_KEY] !== null) learning.archivedSessions = JSON.parse(raw[ARCHIVE_KEY]);
+      if (raw[PROGRESS_KEY] !== null) learning.progress = JSON.parse(raw[PROGRESS_KEY]);
       Object.keys(SESSION_KEYS).forEach(function (subject) {
         if (raw[SESSION_KEYS[subject]] !== null) learning.sessions[subject] = JSON.parse(raw[SESSION_KEYS[subject]]);
       });
@@ -425,6 +470,18 @@
     incoming.archivedSessions.forEach(function (entry) {
       if (archiveSession(merged, entry.subject, entry.session)) summary.archivedSessions++;
     });
+    var progress = incoming.progress || { v: 1, byChild: {} };
+    Object.keys(progress.byChild).forEach(function (bucket) {
+      if (!own(merged.progress.byChild, bucket)) merged.progress.byChild[bucket] = { runs: [] };
+      var runs = new Map();
+      merged.progress.byChild[bucket].runs.forEach(function (run) { runs.set(run.subject + '|' + run.key, run); });
+      progress.byChild[bucket].runs.forEach(function (run) {
+        var key = run.subject + '|' + run.key, old = runs.get(key);
+        if (!old) { runs.set(key, copy(run)); summary.addedProgress++; }
+        else if (Date.parse(run.at) > Date.parse(old.at)) { runs.set(key, copy(run)); summary.updatedProgress++; }
+      });
+      merged.progress.byChild[bucket].runs = Array.from(runs.values());
+    });
     return merged;
   }
   function prepareImport(backup) {
@@ -441,6 +498,7 @@
     backup.profiles.children.forEach(function (c) { if (!byId.has(c.id)) names.add(c.name); });
     var summary = { addedChildren: 0, matchedChildren: 0, renamedChildren: 0, addedRecords: 0, updatedRecords: 0, keptRecords: 0,
       addedWrongs: 0, updatedWrongs: 0, addedBlindspots: 0, updatedBlindspots: 0, restoredSessions: 0, archivedSessions: 0,
+      addedProgress: 0, updatedProgress: 0,
       children: [], token: before.token, legacy: backup.version === 1 };
     var usedNames = new Set(profiles.children.map(function (c) { return c.name; }));
     backup.profiles.children.forEach(function (source) {
@@ -490,12 +548,13 @@
       next[SESSION_KEYS[subject]] = learning.sessions[subject] ? JSON.stringify(learning.sessions[subject]) : null;
     });
     next[ARCHIVE_KEY] = JSON.stringify(learning.archivedSessions);
+    next[PROGRESS_KEY] = JSON.stringify(learning.progress);
     var written = [];
     try {
       Object.keys(next).forEach(function (key) {
         // 不创建无内容的辅助键，也避免重复导入造成无意义写入。
         if (next[key] === before.raw[key] || (before.raw[key] === null &&
-            (next[key] === '{}' || next[key] === '[]' || next[key] === '{"v":1,"byId":{}}'))) return;
+            (next[key] === '{}' || next[key] === '[]' || next[key] === '{"v":1,"byId":{}}' || next[key] === '{"v":1,"byChild":{}}'))) return;
         if (next[key] === null) localStorage.removeItem(key);
         else localStorage.setItem(key, next[key]);
         written.push(key);
@@ -516,7 +575,11 @@
     var plan = prepareImport(backup);
     if (token !== plan.before.token) throw new Error('本机档案或学习数据已发生变化，请重新预览后再导入。');
     writeSnapshot(plan.before, plan.profiles, plan.records, plan.learning);
+    emitProgress();
     return plan.summary;
+  }
+  function emitProgress() {
+    try { if (window.dispatchEvent) window.dispatchEvent(new Event('cnm:progress')); } catch (e) { /* 非浏览器环境 */ }
   }
   function archivedSessions() {
     var snapshot = importSnapshot();

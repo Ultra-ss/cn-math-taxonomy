@@ -399,6 +399,7 @@ test('科学学科的诊断记录可以备份和恢复', () => {
 const WRONG_KEY = 'cnmWrong.v1';
 const BLIND_KEY = 'cnmBlind.local.v1';
 const ARCHIVE_KEY = 'cnmDiagnose.archived.v1';
+const PROGRESS_KEY = 'cnmProgress.v1';
 const SCI_SESSION = 'cnsDiagnose.session.v1';
 const PHY_SESSION = 'cnpDiagnose.session.v2';
 function session(subject = 'science', seed = 'run-a') {
@@ -418,12 +419,16 @@ function blind(id = 'cns_p001', status = 'weak', lastAt = '2026-11-14T00:00:00.0
   return { id, subject: id.startsWith('cns_') ? 'science' : 'physics', status, root: status === 'weak',
     hits: 2, wrongs, lastAt, lastLabel: '测试诊断', lastKey: 'science|run-a|cns_p001' };
 }
+function progressRun(key = 'science|run-a|cns_p001', status = 'mastered', at = '2026-11-15T00:00:00.000Z') {
+  return { key, subject: 'science', at, states: { cns_p001: { status, at } } };
+}
 function learningFixture(withProfiles = true) {
   return { ...(withProfiles ? fixture() : {}),
     [WRONG_KEY]: JSON.stringify({ guest: [wrong()], 'child-a': [wrong('cnp_001')] }),
     [BLIND_KEY]: JSON.stringify({ v: 1, byId: { cns_p001: blind() } }),
     [SCI_SESSION]: JSON.stringify(session()), [PHY_SESSION]: JSON.stringify(session('physics')),
-    [ARCHIVE_KEY]: JSON.stringify([{ subject: 'science', session: session('science', 'earlier-run') }])
+    [ARCHIVE_KEY]: JSON.stringify([{ subject: 'science', session: session('science', 'earlier-run') }]),
+    [PROGRESS_KEY]: JSON.stringify({ v: 1, byChild: { 'child-a': { runs: [progressRun()] }, guest: { runs: [progressRun('guest-run', 'weak')] } } })
   };
 }
 function learningBackup(withProfiles = true) { return exported(load(learningFixture(withProfiles)).api); }
@@ -558,7 +563,7 @@ test('归档恢复在活动会话不存在时直接恢复；旧token和非法索
 });
 
 test('预览后任一学习存储键改变，导入停止且不会写入', () => {
-  for (const key of [WRONG_KEY, BLIND_KEY, SCI_SESSION, PHY_SESSION, ARCHIVE_KEY]) {
+  for (const key of [WRONG_KEY, BLIND_KEY, SCI_SESSION, PHY_SESSION, ARCHIVE_KEY, PROGRESS_KEY]) {
     const { api, storage, writes } = load(learningFixture());
     const data = learningBackup(), preview = api.previewImport(data);
     storage.set(key, storage.get(key) + ' ');
@@ -568,7 +573,7 @@ test('预览后任一学习存储键改变，导入停止且不会写入', () =>
 });
 
 test('每个学习键读取失败或JSON损坏都停止导出，避免部分备份', () => {
-  for (const key of [WRONG_KEY, BLIND_KEY, SCI_SESSION, PHY_SESSION, ARCHIVE_KEY]) {
+  for (const key of [WRONG_KEY, BLIND_KEY, SCI_SESSION, PHY_SESSION, ARCHIVE_KEY, PROGRESS_KEY]) {
     const { api, writes } = load(learningFixture(), key);
     assert.throws(() => api.exportBackup(), /无法读取/);
     assert.deepStrictEqual(writes, []);
@@ -578,7 +583,7 @@ test('每个学习键读取失败或JSON损坏都停止导出，避免部分备�
 
 test('任一学习键写入失败，所有已写入键回滚到导入前原字节', () => {
   const data = learningBackup();
-  for (const fail of [WRONG_KEY, BLIND_KEY, SCI_SESSION, PHY_SESSION, ARCHIVE_KEY]) {
+  for (const fail of [WRONG_KEY, BLIND_KEY, SCI_SESSION, PHY_SESSION, ARCHIVE_KEY, PROGRESS_KEY]) {
     const entries = { [PROFILE_KEY]: JSON.stringify({ ...profiles, current: null }, null, 2), [RECORD_KEY]: '{}' };
     const { api, storage } = load(entries, null, { failWrite: key => key === fail });
     assert.throws(() => importInto(api, data), /原有档案和学习数据未改变/);
@@ -634,5 +639,82 @@ test('10MB限制按UTF-8字节计算，导出和直接导入对象也不能绕�
   assert.throws(() => load(entries).api.exportBackup(), /10 MB/);
 });
 
+
+test('旧v2缺少progress字段仍能导入，保留本机检测进度', () => {
+  const data = learningBackup(); delete data.learning.progress;
+  const entries = learningFixture();
+  const { api, storage } = load(entries);
+  importInto(api, data);
+  assert.equal(storage.get(PROGRESS_KEY), entries[PROGRESS_KEY]);
+});
+
+test('进度按孩子和run合并，取新版完整快照，撤销空快照不被旧备份复活', () => {
+  const data = learningBackup();
+  const later = '2026-11-17T00:00:00.000Z';
+  const entries = learningFixture();
+  const local = JSON.parse(entries[PROGRESS_KEY]);
+  local.byChild['child-a'].runs[0] = { ...progressRun(), at: later, states: {} };
+  local.byChild['child-b'] = { runs: [progressRun('local-only')] };
+  entries[PROGRESS_KEY] = JSON.stringify(local);
+  data.learning.progress.byChild['child-a'].runs.push(progressRun('import-only','weak'));
+  const { api, storage } = load(entries);
+  const result = importInto(api, data);
+  const merged = stored(storage, PROGRESS_KEY);
+  assert.equal(result.addedProgress, 1);
+  assert.equal(merged.byChild['child-a'].runs.length, 2);
+  assert.deepStrictEqual(merged.byChild['child-a'].runs[0].states, {});
+  assert.equal(merged.byChild['child-b'].runs[0].key, 'local-only');
+  assert.equal(merged.byChild.guest.runs.length, 1);
+  const before = Object.fromEntries(storage); importInto(api,data);
+  assert.deepStrictEqual(Object.fromEntries(storage), before);
+  const newest = learningBackup();
+  newest.learning.progress.byChild['child-a'].runs[0] = progressRun(undefined,'shaky','2026-11-18T00:00:00.000Z');
+  assert.equal(importInto(api,newest).updatedProgress,1);
+  assert.equal(stored(storage,PROGRESS_KEY).byChild['child-a'].runs[0].states.cns_p001.status,'shaky');
+});
+
+test('只有访客检测进度也能备份，恢复后保留全部run和状态', () => {
+  const progress = { v:1, byChild:{ guest:{ runs:[progressRun()] } } };
+  const data = exported(load({[PROGRESS_KEY]:JSON.stringify(progress)}).api);
+  const { api, storage } = load(); importInto(api,data);
+  assert.deepStrictEqual(stored(storage,PROGRESS_KEY),progress);
+});
+
+test('删除孩子同时删除其图谱进度，其他孩子和访客保留，无需progress模块', () => {
+  const entries = learningFixture(), progress = JSON.parse(entries[PROGRESS_KEY]);
+  progress.byChild['child-b'] = {runs:[progressRun('child-b')]};
+  entries[PROGRESS_KEY]=JSON.stringify(progress);
+  const { api, storage }=load(entries);
+  assert.equal(api.remove('child-a'),true);
+  const remaining=stored(storage,PROGRESS_KEY);
+  assert.equal(remaining.byChild['child-a'],undefined);
+  assert.equal(remaining.byChild['child-b'].runs.length,1);
+  assert.equal(remaining.byChild.guest.runs.length,1);
+});
+
+test('教材诊断会话与记录可备份，包括教材顺序、册次和明确归属', () => {
+  const data=learningBackup();
+  data.learning.sessions.science={...data.learning.sessions.science,mode:'textbook',order:'book',volume:'一上',progressChildId:'child-a'};
+  data.learning.sessions.physics={...data.learning.sessions.physics,mode:'textbook',order:'book',volume:'八上',progressChildId:null};
+  data.records['child-a'][0].mode='textbook';
+  const {api,storage}=load();importInto(api,api.parseBackup(JSON.stringify(data)));
+  assert.equal(stored(storage,SCI_SESSION).progressChildId,'child-a');
+  assert.equal(stored(storage,PHY_SESSION).progressChildId,null);
+  assert.equal(stored(storage,RECORD_KEY)['child-a'][0].mode,'textbook');
+});
+
+test('图谱进度拒绝错误学科、状态、时间、重复run、非法签名与危险对象键', () => {
+  const cases=[
+    d=>{d.learning.progress.v=2;},
+    d=>{d.learning.progress.byChild['child-a'].runs[0].subject='physics';},
+    d=>{d.learning.progress.byChild['child-a'].runs[0].states.cns_p001.status='inferred';},
+    d=>{d.learning.progress.byChild['child-a'].runs[0].states.cns_p001.at='bad';},
+    d=>{d.learning.progress.byChild['child-a'].runs[0].states.cns_p001.signature='unsafe';},
+    d=>{d.learning.progress.byChild['child-a'].runs.push(d.learning.progress.byChild['child-a'].runs[0]);},
+    d=>{d.learning.sessions.science.progressChildId={};},
+    d=>{d.learning.sessions.science.order='random';}
+  ];
+  for(const mutate of cases){const data=learningBackup();mutate(data);assert.throws(()=>load().api.parseBackup(JSON.stringify(data)));}
+});
 
 console.log('\n' + passed + ' passed, 0 failed');

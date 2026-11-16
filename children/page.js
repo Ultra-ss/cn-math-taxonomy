@@ -42,7 +42,7 @@
   if (params.get('from') === 'diagnose') {
     var back = document.getElementById('back');
     var sub = params.get('subject');
-    var href = '../diagnose/?subject=' + (sub === 'physics' ? 'physics' : 'science');
+    var href = '../diagnose/?subject=' + (sub === 'science' ? 'science' : 'physics');
     var a = el('a', null, '← 回到诊断');
     a.href = href;
     back.appendChild(a);
@@ -219,6 +219,7 @@
       '新增错题 ' + preview.addedWrongs + ' 道、更新 ' + preview.updatedWrongs + ' 道；' +
       '新增盲区 ' + preview.addedBlindspots + ' 个、更新 ' + preview.updatedBlindspots + ' 个；' +
       '恢复诊断进度 ' + preview.restoredSessions + ' 份、归档 ' + preview.archivedSessions + ' 份。' +
+      '图谱检测记录新增 ' + preview.addedProgress + ' 份、更新 ' + preview.updatedProgress + ' 份。' +
       (preview.legacy ? '这是旧版档案备份，不包含错题、进行中诊断和盲区台账。' : '');
     var children = document.getElementById('import-children');
     children.textContent = '';
@@ -260,7 +261,8 @@
       render();
       importStatus.textContent = '导入完成：新增 ' + result.addedChildren + ' 个孩子，合并 ' + result.matchedChildren +
         ' 个已有档案；新增记录 ' + result.addedRecords + ' 条、错题 ' + result.addedWrongs + ' 道、盲区 ' +
-        result.addedBlindspots + ' 个；恢复进度 ' + result.restoredSessions + ' 份，归档进度 ' + result.archivedSessions + ' 份。';
+        result.addedBlindspots + ' 个；恢复进度 ' + result.restoredSessions + ' 份，归档进度 ' + result.archivedSessions +
+        ' 份；图谱检测记录新增 ' + result.addedProgress + ' 份、更新 ' + result.updatedProgress + ' 份。';
       importStatus.hidden = false;
     } catch (error) {
       // 失败后重新计算预览，防止其他页面的修改让旧预览失效。

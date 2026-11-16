@@ -85,7 +85,7 @@ test('diagnoseHref 根据科学物理知识点生成链接，拒绝旧学科', (
   assert.equal(api.diagnoseHref(['cnp_001'], 'physics', './'), './?subject=physics&target=cnp_001');
   assert.equal(api.diagnoseHref(['cnp_001', 'cnp_h001']),
     'diagnose/?subject=physics&target=cnp_001,cnp_h001');
-  assert.equal(api.diagnoseHref(['cnm_001']), 'diagnose/?subject=science');
+  assert.equal(api.diagnoseHref(['cnm_001']), 'diagnose/?subject=physics');
   assert.equal(api.diagnoseHref(['cns_p001'], 'physics'), 'diagnose/?subject=physics');
   assert.equal(api.subjectOfId('cns_p001'), 'science');
   assert.equal(api.subjectOfId('cnp_h001'), 'physics');

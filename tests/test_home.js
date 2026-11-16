@@ -47,8 +47,8 @@ const questions = [
 
 function load(search) {
   const ids = {};
-  ['n-topics', 'n-edges', 'n-questions', 'n-standards', 'load-error', 'grades'].forEach(id => { ids[id] = element(); });
-  ids.grades.setAttribute('aria-busy', 'true');
+  ['n-topics', 'n-edges', 'n-questions', 'n-standards', 'load-error', 'textbook-grid', 'textbook-subject', 'textbook-title', 'textbook-description'].forEach(id => { ids[id] = element(); });
+  ids['textbook-grid'].setAttribute('aria-busy', 'true');
   const calls = [];
   function fetch(url) {
     let resolve, reject;
@@ -95,11 +95,11 @@ function load(search) {
 
 (async () => {
   await test('元数据到后可渲染，题库先显示 …', async () => {
-    const { ids, baseMeta, respond } = load('');
+    const { ids, baseMeta, respond } = load('?subject=science');
     await baseMeta();
     assert.strictEqual(ids['n-topics'].textContent, '2');
     assert.strictEqual(ids['n-questions'].textContent, '…');
-    assert.ok(ids.grades.children.length > 0, 'grade cards rendered');
+    assert.ok(ids['textbook-grid'].children.length > 0, 'textbook cards rendered');
     respond('data/questions.json', questions);
     await flush();
     assert.strictEqual(ids['n-questions'].textContent, '3');
@@ -123,7 +123,7 @@ function load(search) {
   });
 
   await test('题库网络错误会重试至多 2 次', async () => {
-    const { ids, all, baseMeta, failNet, respond } = load('');
+    const { ids, all, baseMeta, failNet, respond } = load('?subject=science');
     await baseMeta();
     assert.strictEqual(all('data/questions.json').length, 1);
     failNet('data/questions.json');
@@ -157,6 +157,74 @@ function load(search) {
     await flush();
     assert.strictEqual(ids['n-topics'].textContent, '1');
     assert.strictEqual(ids['n-questions'].textContent, '1');
+  });
+
+  await test('默认与旧学科链接均进入物理，只有显式科学切换科学', async () => {
+    for (const search of ['', '?subject=math', '?subject=physics']) {
+      const { ids, baseMeta } = load(search);
+      await baseMeta();
+      assert.strictEqual(ids['n-topics'].textContent, '1');
+      assert.strictEqual(ids['textbook-grid'].children.length, 9);
+      assert.ok(ids['textbook-grid'].children.every(card => card.href.includes('subject=physics')));
+    }
+    const { ids, baseMeta } = load('?subject=science');
+    await baseMeta();
+    assert.strictEqual(ids['textbook-grid'].children.length, 12);
+    assert.ok(ids['textbook-grid'].children.every(card => card.href.includes('subject=science')));
+  });
+
+  await test('八上八下独立链接，高中按册进入，不使用年级合并', async () => {
+    const { ids, baseMeta } = load('');
+    await baseMeta();
+    const cards = ids['textbook-grid'].children;
+    assert.deepStrictEqual(cards.map(card => card.getAttribute('data-volume')),
+      ['八上', '八下', '九全', '必修一', '必修二', '必修三', '选必一', '选必二', '选必三']);
+    for (const card of cards) {
+      const url = new URL(card.href, 'https://physicalmap.pages.dev/');
+      assert.strictEqual(url.searchParams.get('volume'), card.getAttribute('data-volume'));
+      assert.strictEqual(url.searchParams.get('grade'), null);
+      assert.strictEqual(url.pathname, '/explore/');
+    }
+  });
+
+  await test('教材入口先于统计和题库完成，统计失败仍保留入口', async () => {
+    const { ids, respond } = load('');
+    respond('data/topics.json', topics);
+    await flush();
+    assert.strictEqual(ids['textbook-grid'].children.length, 9);
+    assert.ok(!ids['textbook-grid'].hasAttribute('aria-busy'));
+    assert.strictEqual(ids['textbook-grid'].children[0].children[2].textContent, '1 个知识点');
+    respond('data/dependencies.json', null, 404);
+    respond('data/cn-curriculum-standards.json', standards);
+    await flush();
+    assert.strictEqual(ids['load-error'].hidden, false);
+    assert.strictEqual(ids['textbook-grid'].children.length, 9);
+  });
+
+  await test('真实数据的每册数量与入口对应，物理九册覆盖269点', async () => {
+    const { ids, respond } = load('');
+    const actual = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/topics.json'), 'utf8'));
+    respond('data/topics.json', actual);
+    await flush();
+    const counts = ids['textbook-grid'].children.map(card => parseInt(card.children[2].textContent, 10));
+    assert.deepStrictEqual(counts, [28, 24, 40, 27, 25, 37, 28, 26, 34]);
+    assert.strictEqual(counts.reduce((a, b) => a + b, 0), 269);
+    const science = load('?subject=science');
+    science.respond('data/topics.json', actual);
+    await flush();
+    assert.deepStrictEqual(science.ids['textbook-grid'].children.map(card => card.getAttribute('data-volume')),
+      ['一上', '一下', '二上', '二下', '三上', '三下', '四上', '四下', '五上', '五下', '六上', '六下']);
+    assert.strictEqual(science.ids['textbook-grid'].children.reduce((sum, card) => sum + parseInt(card.children[2].textContent, 10), 0), 269);
+  });
+
+  await test('静态首页先展示教材，诊断与统计不抢占教材首屏', async () => {
+    const html = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf8');
+    const main = html.slice(html.indexOf('<main'), html.indexOf('</main>'));
+    assert.match(main, /<main[^>]*>\s*<section class="textbooks"/);
+    assert.ok(main.indexOf('id="textbook-grid"') < main.indexOf('id="stats"'));
+    assert.ok(main.indexOf('id="textbook-grid"') < main.indexOf('id="blind-home"'));
+    assert.doesNotMatch(main, /hero-actions|开始诊断|先看一遍演示/);
+    assert.strictEqual((main.match(/class="textbook-card /g) || []).length, 9);
   });
 
   console.log(passed + ' passed');

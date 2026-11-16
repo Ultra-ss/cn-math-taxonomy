@@ -79,7 +79,7 @@ test('所有关系、题目和课标引用都指向保留数据', () => {
   }
 });
 
-test('图谱与诊断的旧学科 URL 都回退科学', () => {
+test('图谱与诊断默认物理，显式科学与旧知识点链接仍可使用', () => {
   const exploreSource = read('explore/app.js');
   const exploreFn = extractFunction(exploreSource, 'readSubject', 'configureSubject');
   function exploreSubject(search, hash) {
@@ -92,9 +92,11 @@ test('图谱与诊断的旧学科 URL 都回退科学', () => {
     vm.runInNewContext(exploreFn + '\nthis.result = readSubject();', context);
     return context.result;
   }
-  assert.equal(exploreSubject('', ''), 'science');
+  assert.equal(exploreSubject('', ''), 'physics');
   assert.equal(exploreSubject('?subject=physics', ''), 'physics');
-  assert.equal(exploreSubject('?subject=math', ''), 'science');
+  assert.equal(exploreSubject('?subject=science', ''), 'science');
+  assert.equal(exploreSubject('', 'cns_p001'), 'science');
+  assert.equal(exploreSubject('?subject=math', ''), 'physics');
   assert.equal(exploreSubject('', 'cnp_071'), 'physics');
 
   const diagnoseSource = read('diagnose/app.js');
@@ -108,9 +110,11 @@ test('图谱与诊断的旧学科 URL 都回退科学', () => {
     vm.runInNewContext(diagnoseFn + '\nthis.result = detectSubject();', context);
     return context.result;
   }
-  assert.equal(diagnoseSubject(''), 'science');
+  assert.equal(diagnoseSubject(''), 'physics');
   assert.equal(diagnoseSubject('?subject=physics'), 'physics');
-  assert.equal(diagnoseSubject('?subject=math&target=cnm_221'), 'science');
+  assert.equal(diagnoseSubject('?subject=science'), 'science');
+  assert.equal(diagnoseSubject('?target=cns_p001'), 'science');
+  assert.equal(diagnoseSubject('?subject=math&target=cnm_221'), 'physics');
   assert.equal(diagnoseSubject('?target=cnp_071'), 'physics');
 });
 
@@ -135,7 +139,8 @@ test('所有 HTML 导航只含两科，公开地址指向 physicalmap', () => {
     assert.ok(!html.includes('math.pansgo.com'), page);
     assert.ok(!/subject=(?:math|chinese|english|morality|history|geography|biology|chemistry)/.test(html), page);
   }
-  assert.ok(read('index.html').includes('默认是科学'));
+  assert.ok(read('index.html').includes('物理'));
+  assert.ok(read('index.html').indexOf('id="textbooks"') < read('index.html').indexOf('id="stats"'));
   assert.ok(read('diagnose/share.js').includes('https://physicalmap.pages.dev/?from=share'));
   assert.ok(read('assets/pwa.js').includes('physicalmap.pages.dev'));
 });
@@ -147,7 +152,7 @@ test('本机盲区不接受旧学科，再测链接带正确学科', () => {
   assert.equal(api.list().length, 1);
   assert.equal(api.list()[0].subject, 'science');
   assert.equal(api.diagnoseHref(['cnp_071']), 'diagnose/?subject=physics&target=cnp_071');
-  assert.equal(api.diagnoseHref(['cnm_221'], 'math'), 'diagnose/?subject=science');
+  assert.equal(api.diagnoseHref(['cnm_221'], 'math'), 'diagnose/?subject=physics');
 });
 
 test('错题本仅保存并展示两科，旧记录不会混入', () => {
