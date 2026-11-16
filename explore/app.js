@@ -33,8 +33,6 @@
   var subject = 'physics';
   var progress = {};
   var progressStamp = '';
-  var PASS_BADGE = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10" fill="#137847" stroke="white" stroke-width="2"/><path d="m6 11 3 3 7-7" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
-  var FAIL_BADGE = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10" fill="#bd2828" stroke="white" stroke-width="2"/><path d="m7 7 8 8m0-8-8 8" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>');
   var upDepth = 2;
   var ancestorsOpen = false;
   var tipFromTap = false;
@@ -301,6 +299,10 @@
   function cssVar(name) {
     return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   }
+  function testBadge(passed, color, ink) {
+    var path = passed ? 'm6 11 3 3 7-7' : 'm7 7 8 8m0-8-8 8';
+    return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10" fill="' + color + '" stroke="' + ink + '" stroke-width="2"/><path d="' + path + '" fill="none" stroke="' + ink + '" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  }
   function theme() {
     return {
       primary: cssVar('--node-primary'),
@@ -313,7 +315,9 @@
       currentBorder: cssVar('--node-current-border'),
       text: cssVar('--node-text'),
       edge: cssVar('--edge'),
-      edgeSoft: cssVar('--edge-soft')
+      edgeSoft: cssVar('--edge-soft'),
+      passedBadge: testBadge(true, cssVar('--ok'), cssVar('--on-ok')),
+      failedBadge: testBadge(false, cssVar('--bad'), cssVar('--on-bad'))
     };
   }
 
@@ -1125,8 +1129,8 @@
             'background-offset-x': 7, 'background-offset-y': -7, 'background-clip': 'none',
             'background-image-containment': 'over', 'bounds-expansion': 10
           } },
-          { selector: 'node.test-passed', style: { 'background-image': PASS_BADGE } },
-          { selector: 'node.test-failed', style: { 'background-image': FAIL_BADGE } },
+          { selector: 'node.test-passed', style: { 'background-image': colors.passedBadge } },
+          { selector: 'node.test-failed', style: { 'background-image': colors.failedBadge } },
           { selector: 'edge', style: {
             width: 1.6, 'line-color': 'data(color)', 'target-arrow-color': 'data(color)',
             'target-arrow-shape': 'triangle', 'curve-style': dense ? 'straight' : 'bezier',

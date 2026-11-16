@@ -14,10 +14,11 @@
   margin: 0 auto;
   padding: 12px 14px;
   background: var(--bg-elev);
+  background-image: var(--surface-wash, none);
   color: var(--text);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--shadow);
 }
 .pwa-bar-icon { width: 44px; height: 44px; border-radius: 10px; flex: none; }
 .pwa-bar-text { flex: 1 1 180px; min-width: 0; display: flex; flex-direction: column; line-height: 1.4; }
@@ -47,7 +48,7 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  background: rgba(10, 14, 20, 0.55);
+  background: var(--overlay, rgb(43 39 51 / 48%));
 }
 .pwa-sheet {
   width: min(520px, 100%);
@@ -55,9 +56,10 @@
   overflow-y: auto;
   padding: 18px 16px calc(16px + env(safe-area-inset-bottom, 0px));
   background: var(--bg-elev);
+  background-image: var(--surface-wash, none);
   color: var(--text);
   border-radius: 18px 18px 0 0;
-  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow);
 }
 .pwa-sheet-title { margin: 0 0 6px; font-size: 1.25rem; letter-spacing: -0.02em; }
 .pwa-sheet-lead { margin: 0 0 12px; color: var(--muted); font-size: 0.95rem; }
@@ -72,6 +74,7 @@
   align-items: center;
   justify-content: center;
   background: var(--brand);
+  background-image: var(--brand-gradient, none);
   color: var(--on-brand);
   font-weight: 800;
   font-size: 0.9rem;

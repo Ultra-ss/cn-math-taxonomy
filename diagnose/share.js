@@ -5,6 +5,14 @@
   var W = 1080;
   var H = 1920;
   var FONT = '"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Source Han Sans SC", sans-serif';
+  // 分享图固定使用浅色纸面，便于保存和打印；与页面共用莫兰迪色系。
+  var P = {
+    paper: '#fffcf9', line: '#d9d2de', text: '#34313f', muted: '#665f70',
+    brand: '#786685', blue: '#566d83', onBrand: '#fffcff',
+    lavender: '#ece5ef', cream: '#f3ecd9', mistBlue: '#e2e9ef',
+    ok: '#496650', okBg: '#e1e9e0', shaky: '#796038', shakyBg: '#f1e6ca',
+    bad: '#8e545e', badBg: '#f0dfe2', unknown: '#536579', unknownBg: '#e2e8ef'
+  };
 
   function font(weight, size) { return weight + ' ' + size + 'px ' + FONT; }
 
@@ -26,8 +34,8 @@
   }
 
   function card(ctx, x, y, w, h, r) {
-    fillRound(ctx, x, y, w, h, r, '#ffffff');
-    ctx.strokeStyle = '#d5e0eb';
+    fillRound(ctx, x, y, w, h, r, P.paper);
+    ctx.strokeStyle = P.line;
     ctx.lineWidth = 2;
     roundRect(ctx, x, y, w, h, r);
     ctx.stroke();
@@ -64,14 +72,14 @@
   }
 
   function drawLogo(ctx, x, y, s) {
-    fillRound(ctx, x, y, s, s, s * 0.25, '#ffffff');
-    ctx.fillStyle = '#0f766e';
+    fillRound(ctx, x, y, s, s, s * 0.25, P.paper);
+    ctx.fillStyle = P.brand;
     [[0.28, 0.66], [0.53, 0.34], [0.75, 0.62]].forEach(function (p) {
       ctx.beginPath();
       ctx.arc(x + s * p[0], y + s * p[1], s * 0.075, 0, Math.PI * 2);
       ctx.fill();
     });
-    ctx.strokeStyle = '#0f766e';
+    ctx.strokeStyle = P.brand;
     ctx.lineWidth = Math.max(2, s * 0.045);
     ctx.lineCap = 'round';
     ctx.beginPath();
@@ -124,14 +132,17 @@
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
 
-    var bg = ctx.createLinearGradient(0, 0, 0, H);
-    bg.addColorStop(0, '#e7f4f2');
-    bg.addColorStop(0.45, '#f3f7fb');
-    bg.addColorStop(1, '#e7eef6');
+    var bg = ctx.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, P.lavender);
+    bg.addColorStop(0.48, P.cream);
+    bg.addColorStop(1, P.mistBlue);
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, W, H);
 
-    ctx.fillStyle = '#0f766e';
+    var header = ctx.createLinearGradient(0, 0, W, 500);
+    header.addColorStop(0, P.brand);
+    header.addColorStop(1, P.blue);
+    ctx.fillStyle = header;
     ctx.beginPath();
     ctx.moveTo(0, 0);
     ctx.lineTo(W, 0);
@@ -143,32 +154,32 @@
     ctx.fill();
 
     drawLogo(ctx, 64, 56, 84);
-    text(ctx, m.siteName || '全网路物理学习图谱', 168, 64, 800, 40, '#ffffff', 820);
-    text(ctx, '检测结果', 168, 114, 500, 26, 'rgba(255,255,255,0.86)', 820);
+    text(ctx, m.siteName || '全网路物理学习图谱', 168, 64, 800, 40, P.onBrand, 820);
+    text(ctx, '检测结果', 168, 114, 500, 26, 'rgba(255,252,255,0.86)', 820);
 
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = P.onBrand;
     ctx.font = font(800, 56);
     var headline = (m.scope || '本次检测') + '  ' + (m.subject || '');
     var lines = wrap(ctx, headline.trim(), 940, 2);
     lines.forEach(function (line, i) { ctx.fillText(line, 64, 196 + i * 70); });
-    text(ctx, '生成日期  ' + (m.date || ''), 64, 196 + lines.length * 70 + 18, 500, 28, 'rgba(255,255,255,0.9)', 900);
+    text(ctx, '生成日期  ' + (m.date || ''), 64, 196 + lines.length * 70 + 18, 500, 28, 'rgba(255,252,255,0.9)', 900);
 
     var cardX = 48;
     var cardW = W - 96;
     var statsY = 430;
     var statsH = 214;
     ctx.save();
-    ctx.shadowColor = 'rgba(22, 40, 70, 0.12)';
+    ctx.shadowColor = 'rgba(68, 55, 80, 0.12)';
     ctx.shadowBlur = 28;
     ctx.shadowOffsetY = 10;
-    fillRound(ctx, cardX, statsY, cardW, statsH, 28, '#ffffff');
+    fillRound(ctx, cardX, statsY, cardW, statsH, 28, P.paper);
     ctx.restore();
 
     var stats = [
-      { n: m.mastered, label: '已掌握', fg: '#157a3a', bg: '#dcfce7' },
-      { n: m.shaky, label: '不稳', fg: '#b45309', bg: '#fef3c7' },
-      { n: m.weak, label: '薄弱', fg: '#b91c1c', bg: '#fee2e2' },
-      { n: m.untested, label: '未测', fg: '#475569', bg: '#e8eef6' }
+      { n: m.mastered, label: '已掌握', fg: P.ok, bg: P.okBg },
+      { n: m.shaky, label: '不稳', fg: P.shaky, bg: P.shakyBg },
+      { n: m.weak, label: '薄弱', fg: P.bad, bg: P.badBg },
+      { n: m.untested, label: '未测', fg: P.unknown, bg: P.unknownBg }
     ];
     var gap = 16;
     var chipW = (cardW - 40 - gap * 3) / 4;
@@ -189,68 +200,71 @@
 
     var y = statsY + statsH + 36;
     var spotTitle = m.spotKind === 'chapter' ? '最薄弱的章节' : '最薄弱的知识点';
-    text(ctx, spotTitle, 64, y, 800, 34, '#162033');
+    text(ctx, spotTitle, 64, y, 800, 34, P.text);
     y += 52;
     var spots = Array.isArray(m.spots) ? m.spots.slice(0, 3) : [];
     if (!spots.length) {
       card(ctx, cardX, y, cardW, 88, 18);
-      text(ctx, '这次没有明显薄弱的地方', 80, y + 28, 500, 28, '#5c6d82', cardW - 64);
+      text(ctx, '这次没有明显薄弱的地方', 80, y + 28, 500, 28, P.muted, cardW - 64);
       y += 104;
     } else {
       spots.forEach(function (spot, i) {
         card(ctx, cardX, y, cardW, 112, 18);
-        ctx.fillStyle = '#0f766e';
+        ctx.fillStyle = P.brand;
         ctx.beginPath();
         ctx.arc(cardX + 48, y + 56, 22, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillStyle = '#ffffff';
+        ctx.fillStyle = P.onBrand;
         ctx.font = font(800, 24);
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(String(i + 1), cardX + 48, y + 57);
         ctx.textAlign = 'left';
         ctx.textBaseline = 'top';
-        text(ctx, spot.title || '', cardX + 88, y + 24, 700, 30, '#162033', cardW - 120);
-        text(ctx, spot.detail || '', cardX + 88, y + 64, 500, 24, '#5c6d82', cardW - 120);
+        text(ctx, spot.title || '', cardX + 88, y + 24, 700, 30, P.text, cardW - 120);
+        text(ctx, spot.detail || '', cardX + 88, y + 64, 500, 24, P.muted, cardW - 120);
         y += 126;
       });
     }
 
     y += 8;
-    text(ctx, '最该先补的根因', 64, y, 800, 34, '#162033');
+    text(ctx, '最该先补的根因', 64, y, 800, 34, P.text);
     y += 52;
     var roots = Array.isArray(m.roots) ? m.roots.slice(0, 2) : [];
     if (!roots.length) {
       card(ctx, cardX, y, cardW, 88, 18);
-      text(ctx, '这次没有判出需要先补的根因', 80, y + 28, 500, 28, '#5c6d82', cardW - 64);
+      text(ctx, '这次没有判出需要先补的根因', 80, y + 28, 500, 28, P.muted, cardW - 64);
     } else {
       roots.forEach(function (name) {
         card(ctx, cardX, y, cardW, 96, 18);
-        fillRound(ctx, cardX + 24, y + 24, 8, 48, 4, '#b91c1c');
-        text(ctx, name, cardX + 52, y + 30, 700, 30, '#162033', cardW - 90);
+        fillRound(ctx, cardX + 24, y + 24, 8, 48, 4, P.bad);
+        text(ctx, name, cardX + 52, y + 30, 700, 30, P.text, cardW - 90);
         y += 110;
       });
     }
 
-    ctx.fillStyle = '#e7f3f1';
+    var footer = ctx.createLinearGradient(0, 1504, W, H);
+    footer.addColorStop(0, P.lavender);
+    footer.addColorStop(1, P.mistBlue);
+    ctx.fillStyle = footer;
     ctx.fillRect(0, 1504, W, H - 1504);
-    ctx.fillStyle = '#d5e0eb';
+    ctx.fillStyle = P.line;
     ctx.fillRect(0, 1504, W, 2);
 
     var qrSize = 292;
     var qrX = 72;
     var qrY = 1540;
     ctx.save();
-    ctx.shadowColor = 'rgba(22, 40, 70, 0.08)';
+    ctx.shadowColor = 'rgba(68, 55, 80, 0.08)';
     ctx.shadowBlur = 18;
     ctx.shadowOffsetY = 6;
-    fillRound(ctx, qrX - 16, qrY - 16, qrSize + 32, qrSize + 32, 20, '#ffffff');
+    fillRound(ctx, qrX - 16, qrY - 16, qrSize + 32, qrSize + 32, 20, P.paper);
     ctx.restore();
     drawQr(ctx, SHARE_URL, qrX, qrY, qrSize);
 
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#0f766e';
+    ctx.fillStyle = P.brand;
     ctx.font = font(800, 48);
     ctx.fillText('扫码打开本站', qrX + qrSize + 48, qrY + qrSize / 2 - 8);
     return canvas;

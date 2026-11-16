@@ -16,6 +16,7 @@ main.wrong { width: min(760px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
   display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;
   padding: 12px 14px; margin-bottom: 16px;
   background: var(--bg-elev); border: 1px solid var(--line); border-radius: var(--radius);
+  background-image: var(--header-wash, none); box-shadow: var(--shadow);
 }
 .wb-total { font-weight: 800; margin-right: auto; }
 .wb-field { font-weight: 700; }
@@ -26,6 +27,7 @@ main.wrong { width: min(760px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
 
 .wb-card {
   background: var(--bg-elev); border: 1px solid var(--line); border-radius: var(--radius);
+  background-image: var(--surface-wash, none); box-shadow: var(--shadow);
   padding: 14px 16px; margin: 10px 0;
 }
 .wb-q { display: flex; gap: 8px; align-items: baseline; }
@@ -52,7 +54,7 @@ main.wrong { width: min(760px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
 .wb-tag.count { background: var(--diagram-shaky-bg); color: var(--diagram-shaky); }
 
 .wb-print-title { display: none; }
-.wb-answers { display: none; margin-top: 8px; padding: 14px 16px; background: var(--bg-elev); border: 1px solid var(--line); border-radius: var(--radius); }
+.wb-answers { display: none; margin-top: 8px; padding: 14px 16px; background: var(--bg-elev); background-image: var(--surface-wash, none); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
 .wb-answers.shown { display: block; }
 .wb-answer-list { list-style: none; margin: 0; padding: 0; }
 .wb-answer-list li { margin: 4px 0; overflow-wrap: anywhere; white-space: pre-wrap; }
@@ -62,15 +64,17 @@ main.wrong { width: min(760px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
   body { background: #fff; color: #000; }
   .no-print, .site-footer, .top-banner { display: none !important; }
   main.wrong { width: 100%; max-width: none; padding: 0; }
+  .wb-bar { background: #fff; color: #000; box-shadow: none; }
   .wb-print-title { display: block; margin-bottom: 12px; }
   .wb-print-title p { margin: 0; }
   .wb-group { margin-bottom: 8px; }
   .wb-group-title { border-bottom: 1px solid #999; break-after: avoid; }
-  .wb-card { border: none; border-radius: 0; padding: 8px 0 0; margin: 0; break-inside: avoid; page-break-inside: avoid; }
+  .wb-card { border: none; border-radius: 0; padding: 8px 0 0; margin: 0; break-inside: avoid; page-break-inside: avoid; background: #fff; color: #000; box-shadow: none; }
   .wb-write { display: block; height: 7em; border-bottom: 1px dashed #aaa; margin-bottom: 8px; }
   .wb-answers, .wb-answers.shown { display: none; }
   body.print-answers .wb-answers {
     display: block; border: none; padding: 0;
+    background: #fff; color: #000; box-shadow: none;
     break-before: page; page-break-before: always;
   }
 }

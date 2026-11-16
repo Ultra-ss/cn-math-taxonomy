@@ -1,329 +1,222 @@
 /* 中小学·高中知识图谱：全站配色、字号、导航。浏览页与检测页共用。 */
 
+/* 莫兰迪雾紫、奶油黄与灰蓝：UI 与 Canvas 共用这些语义色值。 */
 :root {
   color-scheme: light;
-  --bg: #f4f5f7;
-  --bg-elev: #ffffff;
-  --bg-muted: #eef0f3;
-  --text: #17191f;
-  --muted: #5c6370;
-  --line: #e3e6ed;
-  --brand: #0f6e62;
-  --brand-strong: #0c574e;
-  --brand-soft: #e6f4f1;
-  --on-brand: #ffffff;
+  --bg: #f4f1f4;
+  --bg-elev: #fffcf9;
+  --bg-muted: #e9e7ee;
+  --text: #34313f;
+  --muted: #665f70;
+  --line: #d9d2de;
+  --field-line: #92809d;
+  --purple: #786685;
+  --purple-soft: #ece5ef;
+  --blue: #526d83;
+  --blue-soft: #e0e8ee;
+  --yellow: #796038;
+  --yellow-soft: #f1e6ca;
+  --brand: #786685;
+  --brand-strong: #5e4c6c;
+  --brand-soft: #ece5ef;
+  --on-brand: #fffcff;
   --junior: #786185;
   --junior-soft: #e8e0ed;
-  --focus: #0f6e62;
-  --shadow: 0 1px 2px rgba(23, 25, 31, 0.04), 0 10px 28px rgba(23, 25, 31, 0.05);
+  --focus: #6a527b;
+  --shadow: 0 2px 5px rgb(66 53 78 / 4%), 0 12px 30px rgb(66 53 78 / 7%);
+  --header-shadow: 0 6px 24px rgb(66 53 78 / 5%);
+  --control-shadow: inset 0 1px 0 rgb(255 255 255 / 65%);
   --radius: 14px;
   --radius-sm: 10px;
-  --header-bg: #f7faf9;
-  --logo-sheet: #dff3ef;
-  --logo-fold: #ffffff;
+  --header-bg: #f4eff5;
+  --logo-sheet: #ece5ef;
+  --logo-fold: #fffcf9;
+  --page-wash: radial-gradient(ellipse at 8% 0%, rgb(193 173 202 / 20%), transparent 52%), radial-gradient(ellipse at 96% 72%, rgb(169 192 210 / 20%), transparent 55%), linear-gradient(150deg, #f5f0f6 0%, #f6f2e8 48%, #edf2f6 100%);
+  --header-wash: linear-gradient(115deg, #f1eaf5 0%, #f7f2e5 52%, #e7eef4 100%);
+  --surface-wash: linear-gradient(135deg, #fffcf9 0%, #f6f2f7 100%);
+  --brand-gradient: linear-gradient(125deg, #786685 0%, #566d83 100%);
+  --overlay: rgb(43 39 51 / 48%);
   --font: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Source Han Sans SC", sans-serif;
   --fs: 16px;
-  --ok: #157a3a;
-  --ok-bg: #dcfce7;
+  --ok: #496650;
+  --ok-bg: #e1e9e0;
   --on-ok: #ffffff;
-  --bad: #b91c1c;
-  --bad-bg: #fee2e2;
+  --bad: #8e545e;
+  --bad-bg: #f0dfe2;
   --on-bad: #ffffff;
-  --warn: #9a3412;
-  --warn-bg: #ffedd5;
-  --unk: #475569;
-  --unk-bg: #e8eef6;
-  --accent: #0f766e;
-  --panel: #ffffff;
-  --node-primary: #0f766e;
-  --node-primary-bg: #d5f3ee;
+  --warn: #796038;
+  --warn-bg: #f1e6ca;
+  --unk: #536579;
+  --unk-bg: #e2e8ef;
+  --accent: #607c91;
+  --panel: #fffcf9;
+  --node-primary: #617b90;
+  --node-primary-bg: #dfe8ee;
   --node-junior: #877491;
   --node-junior-bg: #e8e0ed;
   --node-senior: #95804d;
   --node-senior-bg: #f1e7c8;
-  --node-current-bg: #fff4e5;
-  --node-current-border: #ea580c;
-  --node-text: #162033;
-  --edge: #526274;
-  --edge-soft: #8aa0b4;
-  --hard-bg: #ffedd5;
-  --hard-fg: #9a3412;
-  --soft-bg: #e7eef6;
-  --soft-fg: #475569;
-  --diagram-ok-bg: #dcfce7;
-  --diagram-ok: #157a3a;
-  --diagram-bad-bg: #fee2e2;
-  --diagram-bad: #b91c1c;
-  --diagram-unk-bg: #f1f5f9;
-  --diagram-unk: #64748b;
-  --diagram-shaky-bg: #fef3c7;
-  --diagram-shaky: #b45309;
-  --diagram-text: #162033;
-  --diagram-edge: #64748b;
+  --node-current-bg: #d4e1eb;
+  --node-current-border: #4f6c83;
+  --node-text: #34313f;
+  --edge: #6a7387;
+  --edge-soft: #788092;
+  --hard-bg: #f1e6ca;
+  --hard-fg: #796038;
+  --soft-bg: #e2e8ef;
+  --soft-fg: #536579;
+  --diagram-ok-bg: #e1e9e0;
+  --diagram-ok: #496650;
+  --diagram-bad-bg: #f0dfe2;
+  --diagram-bad: #8e545e;
+  --diagram-unk-bg: #e2e8ef;
+  --diagram-unk: #536579;
+  --diagram-shaky-bg: #f1e6ca;
+  --diagram-shaky: #796038;
+  --diagram-text: #34313f;
+  --diagram-edge: #6d7e91;
 }
 
-body.subject-physics {
-  --brand: #b45309;
-  --brand-strong: #92400e;
-  --brand-soft: #fff7ed;
-  --on-brand: #ffffff;
-  --focus: #b45309;
-  --accent: #b45309;
-  --logo-sheet: #fde9d4;
-  --logo-fold: #ffffff;
-}
-
-body.subject-english {
-  --brand: #4338ca;
-  --brand-strong: #3730a3;
-  --brand-soft: #eef2ff;
-  --on-brand: #ffffff;
-  --focus: #4338ca;
-  --accent: #4338ca;
-  --logo-sheet: #e6e8fb;
-  --logo-fold: #ffffff;
-}
-
+/* 学科只调整雾紫 / 灰蓝重心，保持全站属于同一套色系。 */
 body.subject-science {
-  --brand: #047857;
-  --brand-strong: #065f46;
-  --brand-soft: #ecfdf5;
-  --on-brand: #ffffff;
-  --focus: #047857;
-  --accent: #047857;
-  --logo-sheet: #d1fae5;
-  --logo-fold: #ffffff;
-}
-
-body.subject-chinese {
-  --brand: #9f1239;
-  --brand-strong: #881337;
-  --brand-soft: #fff1f2;
-  --on-brand: #ffffff;
-  --focus: #9f1239;
-  --accent: #9f1239;
-  --logo-sheet: #ffe4e6;
-  --logo-fold: #ffffff;
-}
-
-body.subject-morality {
-  --brand: #c2410c;
-  --brand-strong: #9a3412;
-  --brand-soft: #fff7ed;
-  --on-brand: #ffffff;
-  --focus: #c2410c;
-  --accent: #c2410c;
-  --logo-sheet: #ffedd5;
-  --logo-fold: #ffffff;
-}
-
-body.subject-history {
-  --brand: #6b5344;
-  --brand-strong: #4a382c;
-  --brand-soft: #f6f1ea;
-  --on-brand: #ffffff;
-  --focus: #6b5344;
-  --accent: #6b5344;
-  --logo-sheet: #efe4d6;
-  --logo-fold: #ffffff;
-}
-
-body.subject-geography {
-  --brand: #0e7490;
-  --brand-strong: #155e75;
-  --brand-soft: #ecfeff;
-  --on-brand: #ffffff;
-  --focus: #0e7490;
-  --accent: #0e7490;
-  --logo-sheet: #cffafe;
-  --logo-fold: #ffffff;
-}
-
-body.subject-biology {
-  --brand: #3f6212;
-  --brand-strong: #365314;
-  --brand-soft: #f7fee7;
-  --on-brand: #ffffff;
-  --focus: #4d7c0f;
-  --accent: #4d7c0f;
-  --logo-sheet: #ecfccb;
-  --logo-fold: #ffffff;
-}
-
-body.subject-chemistry {
-  --brand: #de3b16;
-  --brand-strong: #9f2a10;
-  --brand-soft: #fff1ec;
-  --on-brand: #ffffff;
-  --focus: #de3b16;
-  --accent: #de3b16;
-  --logo-sheet: #ffe4dc;
-  --logo-fold: #ffffff;
+  --brand: #526d83;
+  --brand-strong: #40596e;
+  --brand-soft: #e0e8ee;
+  --brand-gradient: linear-gradient(125deg, #526d83 0%, #746383 100%);
+  --focus: #526d83;
+  --accent: #607c91;
+  --logo-sheet: #dce6ee;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
-    --bg: #10141c;
-    --bg-elev: #181e29;
-    --bg-muted: #232b39;
-    --text: #e8edf5;
-    --muted: #a7b2c2;
-    --line: #313b4d;
-    --brand: #2dd4bf;
-    --brand-strong: #5eead4;
-    --brand-soft: #134e4a;
-    --on-brand: #042f2e;
+    --bg: #22222c;
+    --bg-elev: #2d2d39;
+    --bg-muted: #383744;
+    --text: #efebf1;
+    --muted: #c0b7c5;
+    --line: #514b5a;
+    --field-line: #9d91ab;
+    --purple: #c1adc9;
+    --purple-soft: #463b50;
+    --blue: #b0c4d2;
+    --blue-soft: #354552;
+    --yellow: #d7c28e;
+    --yellow-soft: #4a4130;
+    --brand: #c1adc9;
+    --brand-strong: #e0cfe6;
+    --brand-soft: #463b50;
+    --on-brand: #302637;
     --junior: #bba8c9;
     --junior-soft: #3b3344;
-    --focus: #5eead4;
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 12px 28px rgba(0, 0, 0, 0.28);
-    --ok: #4ade80;
-    --ok-bg: #14532d;
-    --on-ok: #052e16;
-    --bad: #fca5a5;
-    --bad-bg: #7f1d1d;
-    --on-bad: #450a0a;
-    --warn: #fdba74;
-    --warn-bg: #7c2d12;
-    --unk: #cbd5e1;
-    --unk-bg: #223044;
-    --accent: #2dd4bf;
-    --header-bg: #171e2a;
-    --logo-sheet: #123f3c;
-    --logo-fold: #1c5c56;
-    --panel: #172232;
-    --node-primary: #5eead4;
-    --node-primary-bg: #115e59;
+    --focus: #d4bfde;
+    --shadow: 0 2px 5px rgb(13 11 19 / 22%), 0 14px 30px rgb(13 11 19 / 25%);
+    --header-shadow: 0 6px 24px rgb(13 11 19 / 18%);
+    --control-shadow: inset 0 1px 0 rgb(235 224 242 / 7%);
+    --header-bg: #2b2835;
+    --logo-sheet: #51425c;
+    --logo-fold: #72617e;
+    --page-wash: radial-gradient(ellipse at 8% 0%, rgb(137 108 153 / 12%), transparent 52%), radial-gradient(ellipse at 96% 72%, rgb(112 143 169 / 12%), transparent 55%), linear-gradient(150deg, #26222f 0%, #29282c 48%, #222a34 100%);
+    --header-wash: linear-gradient(115deg, #302839 0%, #34312f 52%, #283441 100%);
+    --surface-wash: linear-gradient(135deg, #34313e 0%, #2b2f3b 100%);
+    --brand-gradient: linear-gradient(125deg, #c4b0cf 0%, #b3c5d1 100%);
+    --overlay: rgb(16 14 22 / 70%);
+    --ok: #b1c5ae;
+    --ok-bg: #34463c;
+    --on-ok: #25372c;
+    --bad: #dfb0b8;
+    --bad-bg: #4d353f;
+    --on-bad: #38262e;
+    --warn: #d7c28e;
+    --warn-bg: #4a4130;
+    --unk: #b2c2cf;
+    --unk-bg: #35414e;
+    --accent: #b0c4d2;
+    --panel: #2d2d39;
+    --node-primary: #b0c4d2;
+    --node-primary-bg: #354552;
     --node-junior: #bba8c9;
     --node-junior-bg: #3b3344;
     --node-senior: #d0bf8c;
     --node-senior-bg: #403a2b;
-    --node-current-bg: #7c2d12;
-    --node-current-border: #fdba74;
-    --node-text: #f8fafc;
-    --edge: #94a3b8;
-    --edge-soft: #64748b;
-    --hard-bg: #7c2d12;
-    --hard-fg: #ffedd5;
-    --soft-bg: #232b39;
-    --soft-fg: #cbd5e1;
-    --diagram-ok-bg: #14532d;
-    --diagram-ok: #4ade80;
-    --diagram-bad-bg: #7f1d1d;
-    --diagram-bad: #fca5a5;
-    --diagram-unk-bg: #1e293b;
-    --diagram-unk: #cbd5e1;
-    --diagram-shaky-bg: #78350f;
-    --diagram-shaky: #fcd34d;
-    --diagram-text: #f8fafc;
-    --diagram-edge: #94a3b8;
-  }
-  body.subject-physics {
-    --brand: #fdba74;
-    --brand-strong: #fed7aa;
-    --brand-soft: #7c2d12;
-    --on-brand: #431407;
-    --focus: #fed7aa;
-    --accent: #fdba74;
-    --logo-sheet: #6b2f12;
-    --logo-fold: #8a4218;
-  }
-  body.subject-english {
-    --brand: #a5b4fc;
-    --brand-strong: #c7d2fe;
-    --brand-soft: #312e81;
-    --on-brand: #1e1b4b;
-    --focus: #c7d2fe;
-    --accent: #a5b4fc;
-    --logo-sheet: #2a2870;
-    --logo-fold: #3c3a96;
+    --node-current-bg: #2d3e4c;
+    --node-current-border: #b0c3d2;
+    --node-text: #efebf1;
+    --edge: #b4b0c3;
+    --edge-soft: #85889c;
+    --hard-bg: #4a4130;
+    --hard-fg: #e0cc9c;
+    --soft-bg: #35414e;
+    --soft-fg: #c2cdda;
+    --diagram-ok-bg: #34463c;
+    --diagram-ok: #b1c5ae;
+    --diagram-bad-bg: #4d353f;
+    --diagram-bad: #dfb0b8;
+    --diagram-unk-bg: #35414e;
+    --diagram-unk: #b2c2cf;
+    --diagram-shaky-bg: #4a4130;
+    --diagram-shaky: #d7c28e;
+    --diagram-text: #efebf1;
+    --diagram-edge: #b4b0c3;
   }
   body.subject-science {
-    --brand: #6ee7b7;
-    --brand-strong: #a7f3d0;
-    --brand-soft: #064e3b;
-    --on-brand: #022c22;
-    --focus: #a7f3d0;
-    --accent: #6ee7b7;
-    --logo-sheet: #065f46;
-    --logo-fold: #047857;
-  }
-  body.subject-chinese {
-    --brand: #fda4af;
-    --brand-strong: #fecdd3;
-    --brand-soft: #881337;
-    --on-brand: #4c0519;
-    --focus: #fecdd3;
-    --accent: #fda4af;
-    --logo-sheet: #6b1230;
-    --logo-fold: #9f1239;
-  }
-  body.subject-morality {
-    --brand: #fdba74;
-    --brand-strong: #fed7aa;
-    --brand-soft: #7c2d12;
-    --on-brand: #431407;
-    --focus: #fed7aa;
-    --accent: #fdba74;
-    --logo-sheet: #9a3412;
-    --logo-fold: #c2410c;
-  }
-  body.subject-history {
-    --brand: #d6c3ad;
-    --brand-strong: #e7d7c6;
-    --brand-soft: #3f3228;
-    --on-brand: #2a211b;
-    --focus: #e7d7c6;
-    --accent: #d6c3ad;
-    --logo-sheet: #4a382c;
-    --logo-fold: #6b5344;
-  }
-  body.subject-geography {
-    --brand: #67e8f9;
-    --brand-strong: #a5f3fc;
-    --brand-soft: #164e63;
-    --on-brand: #083344;
-    --focus: #a5f3fc;
-    --accent: #67e8f9;
-    --logo-sheet: #155e75;
-    --logo-fold: #0e7490;
-  }
-  body.subject-biology {
-    --brand: #bef264;
-    --brand-strong: #d9f99d;
-    --brand-soft: #1a2e05;
-    --on-brand: #1a2e05;
-    --focus: #d9f99d;
-    --accent: #bef264;
-    --logo-sheet: #365314;
-    --logo-fold: #4d7c0f;
-  }
-  body.subject-chemistry {
-    --brand: #ff8a65;
-    --brand-strong: #ffccbc;
-    --brand-soft: #5d1a0e;
-    --on-brand: #3e0e06;
-    --focus: #ffccbc;
-    --accent: #ff8a65;
-    --logo-sheet: #7a2614;
-    --logo-fold: #de3b16;
+    --brand: #b0c4d2;
+    --brand-strong: #d3e0e8;
+    --brand-soft: #354552;
+    --brand-gradient: linear-gradient(125deg, #b0c4d2 0%, #c5b2ce 100%);
+    --focus: #c7d9e5;
+    --accent: #b0c4d2;
+    --logo-sheet: #3b5265;
   }
 }
 
 @media print {
   :root {
+    color-scheme: light;
     --bg: #fff;
     --bg-elev: #fff;
-    --bg-muted: #f4f7fb;
-    --text: #162033;
-    --muted: #475569;
-    --line: #d5dde6;
+    --bg-muted: #f2eef4;
+    --text: #34313f;
+    --muted: #665f70;
+    --line: #d9d2de;
+    --field-line: #92809d;
     --panel: #fff;
     --header-bg: #fff;
-    --logo-sheet: #dff3ef;
-    --logo-fold: #ffffff;
+    --logo-sheet: #ece5ef;
+    --logo-fold: #fffcf9;
+    --page-wash: none;
+    --header-wash: none;
+    --surface-wash: none;
+    --brand-gradient: none;
     --shadow: none;
+    --header-shadow: none;
+    --control-shadow: none;
+    --ok: #496650; --ok-bg: #e1e9e0; --on-ok: #ffffff;
+    --bad: #8e545e; --bad-bg: #f0dfe2; --on-bad: #ffffff;
+    --warn: #796038; --warn-bg: #f1e6ca;
+    --unk: #536579; --unk-bg: #e2e8ef;
+    --junior: #786185; --junior-soft: #e8e0ed;
+    --node-primary: #617b90; --node-primary-bg: #dfe8ee;
+    --node-junior: #877491; --node-junior-bg: #e8e0ed;
+    --node-senior: #95804d; --node-senior-bg: #f1e7c8;
+    --node-current-bg: #d4e1eb; --node-current-border: #4f6c83;
+    --node-text: #34313f;
+    --edge: #6a7387; --edge-soft: #788092;
+    --hard-bg: #f1e6ca; --hard-fg: #796038;
+    --soft-bg: #e2e8ef; --soft-fg: #536579;
+    --diagram-ok-bg: #e1e9e0; --diagram-ok: #496650;
+    --diagram-bad-bg: #f0dfe2; --diagram-bad: #8e545e;
+    --diagram-unk-bg: #e2e8ef; --diagram-unk: #536579;
+    --diagram-shaky-bg: #f1e6ca; --diagram-shaky: #796038;
+    --diagram-text: #34313f; --diagram-edge: #6d7e91;
+  }
+  body, body.subject-science {
+    --brand: #786685;
+    --brand-strong: #5e4c6c;
+    --brand-soft: #ece5ef;
+    --brand-gradient: none;
+    --on-brand: #fffcff;
   }
 }
 
@@ -337,9 +230,12 @@ body {
   line-height: 1.6;
   color: var(--text);
   background: var(--bg);
+  background-image: var(--page-wash);
   letter-spacing: 0.01em;
 }
 img { max-width: 100%; height: auto; }
+a { color: var(--brand-strong); text-underline-offset: 0.18em; }
+::selection { background: var(--brand-soft); color: var(--brand-strong); }
 .node-tip {
   position: absolute;
   z-index: 6;
@@ -371,8 +267,9 @@ code { overflow-wrap: anywhere; }
   min-width: 0;
   min-height: 34px;
   padding: 5px 12px;
-  background: #17191f;
-  color: #f4f5f7;
+  background: var(--brand);
+  background-image: var(--brand-gradient);
+  color: var(--on-brand);
   font-size: 14px;
   font-weight: 650;
   line-height: 1.3;
@@ -398,6 +295,8 @@ code { overflow-wrap: anywhere; }
   gap: 8px 24px;
   padding: 12px 28px;
   background: var(--header-bg);
+  background-image: var(--header-wash);
+  box-shadow: var(--header-shadow);
   border-bottom: 1px solid var(--line);
   max-width: 100%;
 }
@@ -459,6 +358,7 @@ body:not(.page-explore) .site-header {
   padding: 3px;
   border-radius: 999px;
   background: var(--bg-muted);
+  box-shadow: var(--control-shadow);
 }
 .page-links {
   display: flex;
@@ -497,10 +397,11 @@ body:not(.page-explore) .site-header {
 .nav-link.subject-link:hover { background: transparent; color: var(--text); }
 .nav-link.subject-link.on {
   background: var(--brand);
+  background-image: var(--brand-gradient);
   color: var(--on-brand);
   font-weight: 750;
 }
-.nav-link.subject-link.on:hover { background: var(--brand); color: var(--on-brand); }
+.nav-link.subject-link.on:hover { background: var(--brand); background-image: var(--brand-gradient); color: var(--on-brand); }
 .nav-link.resource-search-btn {
   gap: 6px;
   border: 1px solid var(--brand);
@@ -549,16 +450,19 @@ button, .btn {
   border-radius: 999px;
   border: 1px solid var(--line);
   background: var(--bg-elev);
+  background-image: var(--surface-wash);
+  box-shadow: var(--control-shadow);
   color: var(--text);
   cursor: pointer;
 }
 button:hover, .btn:hover { background: var(--bg-muted); }
 button.primary, .btn-primary {
   background: var(--brand);
+  background-image: var(--brand-gradient);
   border-color: transparent;
   color: var(--on-brand);
 }
-button.primary:hover, .btn-primary:hover { filter: brightness(1.06); background: var(--brand); }
+button.primary:hover, .btn-primary:hover { filter: brightness(1.03); background: var(--brand); background-image: var(--brand-gradient); }
 
 /* 题目图示：只用 currentColor，浅色和深色都看得见。宽度跟着容器走，不写死像素。 */
 .q-figure { color: inherit; max-width: 100%; min-width: 0; margin: 8px 0 2px; }
@@ -599,12 +503,14 @@ input[type="search"], input[type="text"], input[type="number"], select, textarea
   font: inherit;
   color: var(--text);
   background: var(--bg-elev);
-  border: 1px solid var(--line);
+  border: 1px solid var(--field-line);
   border-radius: 12px;
   padding: 10px 12px;
   min-height: 44px;
   max-width: 100%;
+  box-shadow: var(--control-shadow);
 }
+input[type="checkbox"], input[type="radio"], input[type="range"], progress { accent-color: var(--brand); }
 textarea { min-height: 96px; }
 .search-lg { width: 100%; font-size: 1.08rem; min-height: 52px; }
 
@@ -612,6 +518,7 @@ textarea { min-height: 96px; }
 .stage-tab { border-radius: 999px; }
 .stage-tab.on, .stage-tab[aria-selected="true"] {
   background: var(--brand);
+  background-image: var(--brand-gradient);
   color: var(--on-brand);
   border-color: transparent;
 }
@@ -633,6 +540,7 @@ textarea { min-height: 96px; }
 .home { width: min(1040px, 100%); margin: 0 auto; padding: 20px 16px 48px; }
 .hero {
   background: var(--bg-elev);
+  background-image: var(--surface-wash);
   border: 1px solid var(--line);
   border-radius: 20px;
   padding: 28px 24px 22px;
@@ -669,6 +577,7 @@ textarea { min-height: 96px; }
 }
 .steps li {
   background: var(--bg-elev);
+  background-image: var(--surface-wash);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 16px 16px 18px;
@@ -697,6 +606,7 @@ textarea { min-height: 96px; }
 .grade-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .stat-card, a.grade-card, a.iq-card {
   background: var(--bg-elev);
+  background-image: var(--surface-wash);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   min-width: 0;
@@ -746,7 +656,7 @@ a.iq-card .iq-note { color: var(--muted); font-size: 0.82rem; font-weight: 650; 
 .blind-home-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .blind-home-item {
   display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 12px;
-  padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--card, #fff);
+  padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-elev);
 }
 .blind-home-name { font-weight: 800; color: var(--brand-strong); text-decoration: none; overflow-wrap: anywhere; }
 .blind-home-name:hover { text-decoration: underline; }
@@ -793,8 +703,8 @@ body.page-home {
   gap: clamp(8px, 1.4vh, 14px);
 }
 .page-home a.textbook-card {
-  --textbook-edge: #d2d8e4;
-  --textbook-shadow: rgb(15 23 42 / 11%);
+  --textbook-edge: #cfc5d6;
+  --textbook-shadow: rgb(62 50 73 / 13%);
   --textbook-sheen: rgb(255 255 255 / 70%);
   --textbook-rim: rgb(255 255 255 / 90%);
   display: grid;
@@ -815,6 +725,7 @@ body.page-home {
   color: var(--text);
   text-decoration: none;
 }
+.page-home a.textbook-card.is-primary { --textbook-edge: #b8c9d6; --textbook-sheen: rgb(255 255 255 / 25%); border-color: var(--node-primary); background-color: var(--node-primary-bg); }
 .page-home a.textbook-card.is-junior { --textbook-edge: #c5b9cd; --textbook-sheen: rgb(255 255 255 / 25%); border-color: var(--node-junior); background-color: var(--node-junior-bg); }
 .page-home a.textbook-card.is-senior { --textbook-edge: #d7c99e; --textbook-sheen: rgb(255 255 255 / 25%); border-color: var(--node-senior); background-color: var(--node-senior-bg); }
 .page-home a.textbook-card:hover, .page-home a.textbook-card:active { box-shadow: 0 3px 0 var(--textbook-edge), 0 10px 20px var(--textbook-shadow), inset 0 1px 0 var(--textbook-rim); }
@@ -835,7 +746,8 @@ body.page-home {
   .page-home #textbook-grid[data-motion-paused="true"] .textbook-card { animation-play-state: paused; }
 }
 @media (prefers-color-scheme: dark) {
-  .page-home a.textbook-card { --textbook-edge: #0d131e; --textbook-shadow: rgb(0 0 0 / 30%); --textbook-sheen: rgb(255 255 255 / 8%); --textbook-rim: rgb(255 255 255 / 12%); }
+  .page-home a.textbook-card { --textbook-edge: #1b1723; --textbook-shadow: rgb(13 11 19 / 32%); --textbook-sheen: rgb(255 255 255 / 8%); --textbook-rim: rgb(255 255 255 / 12%); }
+  .page-home a.textbook-card.is-primary { --textbook-edge: #252f3a; --textbook-sheen: rgb(255 255 255 / 5%); }
   .page-home a.textbook-card.is-junior { --textbook-edge: #292331; --textbook-sheen: rgb(255 255 255 / 5%); }
   .page-home a.textbook-card.is-senior { --textbook-edge: #2b261c; --textbook-sheen: rgb(255 255 255 / 5%); }
 }
@@ -975,6 +887,7 @@ a.site-about {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--bg-elev);
+  background-image: var(--surface-wash);
   color: var(--muted);
   font-size: 12px;
   line-height: 1.3;
@@ -982,7 +895,10 @@ a.site-about {
 }
 a.site-about:hover { color: var(--text); border-color: var(--brand); }
 a.site-about:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-@media print { a.site-about { display: none; } }
+@media print {
+  a.site-about { display: none; }
+  .page-home a.textbook-card { animation: none !important; transform: none !important; background-image: none; box-shadow: none; }
+}
 
 /* 先呈现教材首页，由用户决定是否接着上次的位置学习。 */
 .continue-learning-dialog {
@@ -993,11 +909,12 @@ a.site-about:focus-visible { outline: 2px solid var(--focus); outline-offset: 2p
   border: 1px solid var(--line);
   border-radius: 18px;
   background: var(--bg-elev);
+  background-image: var(--surface-wash);
   color: var(--text);
   box-shadow: var(--shadow);
   overflow: auto;
 }
-.continue-learning-dialog::backdrop { background: rgb(15 23 42 / 42%); }
+.continue-learning-dialog::backdrop { background: var(--overlay); }
 .continue-learning-dialog h2 { margin: 0 0 16px; font-size: 1.25rem; }
 .continue-learning-dialog p { margin: 0 0 10px; color: var(--muted); line-height: 1.6; overflow-wrap: anywhere; }
 .continue-learning-dialog #continue-learning-location { margin-bottom: 22px; color: var(--text); font-weight: 650; }

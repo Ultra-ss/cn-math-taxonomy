@@ -7,9 +7,9 @@ import os
 from PIL import Image, ImageDraw
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'icons')
-BRAND = (15, 110, 98)        # --brand  #0f6e62
-SHEET = (223, 243, 239)      # --logo-sheet #dff3ef
-WHITE = (255, 255, 255)
+BRAND = (120, 102, 133)      # --brand #786685
+SHEET = (236, 229, 239)      # --logo-sheet #ece5ef
+WHITE = (255, 252, 249)      # --logo-fold #fffcf9
 SS = 4                       # 超采样倍数
 
 
