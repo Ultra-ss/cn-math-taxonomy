@@ -86,6 +86,12 @@ jobs:
       - name: tests/test_graph_node_confirmation.js
         run: node tests/test_graph_node_confirmation.js
 
+      - name: tests/test_local_center.js
+        run: node tests/test_local_center.js
+
+      - name: tests/test_last_location.js
+        run: node tests/test_last_location.js
+
       - name: 课标映射严格模式（仅报告）
         continue-on-error: true
         env:

@@ -59,8 +59,8 @@
       ]
     },
     {
-      "name": "孩子档案",
-      "short_name": "档案",
+      "name": "本地个人中心",
+      "short_name": "个人中心",
       "url": "children/?source=pwa",
       "icons": [
         {

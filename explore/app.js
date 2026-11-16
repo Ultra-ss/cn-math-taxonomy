@@ -516,8 +516,14 @@
   }
 
   function withSubject(href) {
-    if (!href || href.indexOf('subject=') >= 0 || href.indexOf('http') === 0) return href;
-    return href + (href.indexOf('?') >= 0 ? '&' : '?') + 'subject=' + subject;
+    if (!href || href.indexOf('http') === 0 || href.charAt(0) === '#') return href;
+    var hashAt = href.indexOf('#');
+    var hash = hashAt < 0 ? '' : href.slice(hashAt);
+    var path = hashAt < 0 ? href : href.slice(0, hashAt);
+    var queryAt = path.indexOf('?');
+    var params = new URLSearchParams(queryAt < 0 ? '' : path.slice(queryAt + 1));
+    params.set('subject', subject);
+    return (queryAt < 0 ? path : path.slice(0, queryAt)) + '?' + params.toString() + hash;
   }
 
   function passFilter(topic) {
@@ -1110,6 +1116,7 @@
     selected = hit.id;
     if (switchedBook) syncBookQuery();
     currentAlias = source === 'user' ? null : hit.alias;
+    rememberLocation();
     if (source === 'user') {
       writeHash(selected);
       closeDrawerIfMobile();
@@ -1126,6 +1133,22 @@
       level: Math.max(cy.minZoom(), Math.min(cy.maxZoom(), cy.zoom() * factor)),
       renderedPosition: { x: rect.width / 2, y: rect.height / 2 }
     });
+  }
+
+  function rememberLocation() {
+    if (!selected || !byId.has(selected) || !window.CnmLastLocation) return;
+    window.CnmLastLocation.remember({ subject:subject, volume:volume, topicId:selected,
+      view:showWholeBook ? 'book' : 'local', depth:upDepth });
+  }
+  function restoreLocation(allTopics) {
+    var memory = window.CnmLastLocation;
+    if (!memory || !memory.shouldResume('explore', location)) return;
+    var record = memory.resolve(allTopics);
+    if (!record) return;
+    history.replaceState(null, '', memory.exploreURL(record, location.pathname));
+    subject = record.subject;
+    configureSubject();
+    applyQuery();
   }
 
   function showLoadError(message) {
@@ -1284,6 +1307,7 @@
     $('fGrade').addEventListener('change', function () { chooseBook($('fGrade').value); });
     $('book-view').addEventListener('click', function () {
       showWholeBook = !showWholeBook;
+      rememberLocation();
       syncBook();
       renderGraph();
     });
@@ -1300,6 +1324,7 @@
       if (!button) return;
       var value = button.getAttribute('data-depth');
       upDepth = value === 'all' ? 'all' : parseInt(value, 10);
+      rememberLocation();
       ancestorsOpen = false;
       try { sessionStorage.setItem('cnmExplore.depth', value); } catch (error) { /* 忽略 */ }
       syncDepthButtons();
@@ -1382,6 +1407,7 @@
       if (!response.ok) throw new Error(files[responseIndex] + ' HTTP ' + response.status);
     });
     var json = await Promise.all(responses.map(function (response) { return response.json(); }));
+    restoreLocation(json[0]);
     topics = json[0].filter(function (topic) { return topicSubject(topic) === subject; });
     var allow = {};
     topics.forEach(function (topic) { allow[topic.id] = true; });

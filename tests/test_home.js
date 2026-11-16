@@ -45,7 +45,7 @@ const questions = [
   { topicId: 'cnm_a' }, { topicId: 'cnp_a' }
 ];
 
-function load(search) {
+function load(search, options = {}) {
   const ids = {};
   ['n-topics', 'n-edges', 'n-questions', 'n-standards', 'load-error', 'textbook-grid', 'textbook-subject', 'textbook-title', 'textbook-description'].forEach(id => { ids[id] = element(); });
   ids['textbook-grid'].setAttribute('aria-busy', 'true');
@@ -57,7 +57,7 @@ function load(search) {
     return promise;
   }
   const context = {
-    window: {},
+    window: options.resume ? {__cnmHomeResume: options.resume} : {},
     location: { hash: '', search: search || '' },
     URLSearchParams,
     fetch,
@@ -94,6 +94,27 @@ function load(search) {
 }
 
 (async () => {
+  await test('等待首页位置恢复，成功跳转时不再加载首页数据', async () => {
+    let resolve;
+    const resume = new Promise(done => {resolve = done;});
+    const {calls} = load('', {resume});
+    assert.strictEqual(calls.length, 0);
+    resolve(true);
+    await flush();
+    assert.strictEqual(calls.length, 0);
+  });
+
+  await test('位置失效或恢复失败后仍正常加载教材首页', async () => {
+    let resolve;
+    const resume = new Promise(done => {resolve = done;});
+    const {calls, ids, baseMeta} = load('', {resume});
+    assert.strictEqual(calls.length, 0);
+    resolve(false);
+    await flush();
+    await baseMeta();
+    assert.strictEqual(ids['textbook-grid'].children.length, 9);
+  });
+
   await test('元数据到后可渲染，题库先显示 …', async () => {
     const { ids, baseMeta, respond } = load('?subject=science');
     await baseMeta();

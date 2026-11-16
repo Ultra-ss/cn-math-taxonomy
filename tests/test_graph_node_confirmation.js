@@ -43,7 +43,7 @@ const ctx = {
   window: {scrollX:0,scrollY:23,matchMedia:()=>({matches:mobile}),scrollTo(x,y){this.scrollX=x;this.scrollY=y;}},
   requestAnimationFrame: fn=>fn(),
   resolveId: id=>ctx.byId.has(id)?{id,alias:null}:null,
-  volumeOf:()=> '八下', highlight() {}, renderDetail() {}, writeHash() {}, closeDrawerIfMobile() {},
+  volumeOf:()=> '八下', highlight() {}, renderDetail() {}, writeHash() {}, closeDrawerIfMobile() {}, rememberLocation() {},
   rebuilds:0
 };
 ctx.renderGraph = () => {ctx.rebuilds++;ctx.explicitNodeSelection=null;};
