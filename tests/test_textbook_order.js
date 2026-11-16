@@ -4,6 +4,7 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
+const vm = require('vm');
 const E = require('../diagnose/engine.js');
 let passed = 0;
 function test(name, fn) {
@@ -170,5 +171,144 @@ for (const [subject, volume, count] of [['physics', '八上', 28], ['physics', '
     assert.ok(Object.values(s.status).every(st => st.src === 'direct'));
   });
 }
+
+// 单元挑战沿用严格教材模式，范围只取本单元的目标，不能把整册先修推断成通过。
+function unitIds(subject, volume, chapterNo) {
+  return real.topics.filter(t => {
+    const parsed = E.parseChapter(t.chapter);
+    return !t.external && t.subject === subject && parsed.volume === volume && parsed.chapterNo === chapterNo;
+  }).map(t => t.id);
+}
+function studyStore(entries = {}) {
+  const storage = new Map(Object.entries(entries));
+  const context = {
+    window: {dispatchEvent() {}}, Event: class Event {},
+    localStorage: {
+      getItem(key) { return storage.has(key) ? storage.get(key) : null; },
+      setItem(key, value) { storage.set(key, String(value)); },
+      removeItem(key) { storage.delete(key); }
+    }
+  };
+  vm.createContext(context);
+  for (const file of ['assets/progress.js', 'assets/children.js']) {
+    vm.runInContext(fs.readFileSync(path.join(root, file), 'utf8'), context, {filename:file});
+  }
+  return {progress:context.window.CnmProgress, children:context.window.CnmChildren, storage};
+}
+function finishUnit(session, outcomes = {}) {
+  let item;
+  while ((item = E.nextItem(real, session))) {
+    const previous = session.attempts[item.topicId] || [];
+    const result = (outcomes[item.topicId] || [])[previous.length] || 'correct';
+    session = E.applyAnswer(real, session, item.topicId, result);
+  }
+  return session;
+}
+function recordUnit(progress, owner, key, subject, session) {
+  assert.equal(progress.recordSession({childId:owner, key, subject, session, at:'2026-11-16T01:00:00.000Z'}), true);
+}
+for (const [subject, volume, chapterNo, expectedCount] of [
+  ['physics', '九全', '第十三章', 3],
+  ['physics', '八下', '第十一章', 4],
+  ['physics', '必修一', '第一章', 4],
+  ['science', '一上', '第1单元', 7]
+]) {
+  const ids = unitIds(subject, volume, chapterNo);
+  assert.equal(ids.length, expectedCount, '真实单元范围必须匹配教材数据');
+  test(subject + ' ' + volume + ' ' + chapterNo + ' 完整通关只为本单元逐点打钩并解锁', () => {
+    const initial = E.createSession(real, ids.slice().reverse(), {mode:'textbook', volume, limit:100, confirm:2, seed:'unit-pass'});
+    const completed = finishUnit(initial), {progress} = studyStore();
+    assert.deepStrictEqual(completed.targets, ids);
+    assert.deepStrictEqual(completed.order, ids);
+    assert.deepStrictEqual(completed.scope, ids);
+    assert.deepStrictEqual(Object.keys(completed.status).sort(), ids.slice().sort());
+    assert.ok(Object.values(completed.status).every(state=>state.s==='mastered' && state.src==='direct'));
+    assert.deepStrictEqual(completed.answers.map(answer=>answer.id), ids.flatMap(id=>[id,id]));
+    assert.ok(completed.answers.every(answer=>answer.qid.startsWith(answer.id+'_q')));
+    recordUnit(progress, 'unit-child', 'unit|'+volume+'|'+chapterNo, subject, completed);
+    const statuses = progress.statuses('unit-child',subject);
+    assert.deepStrictEqual(Object.keys(statuses).sort(), ids.slice().sort(), '章外知识点不打钩');
+    assert.ok(ids.every(id=>statuses[id].mark==='✓'));
+    const chapter = progress.chapters('unit-child', real.topics).find(row=>row.firstTopicId===ids[0]);
+    assert.ok(chapter);
+    assert.equal(chapter.total, ids.length);
+    assert.equal(chapter.completed, ids.length);
+    assert.equal(chapter.unlocked, true);
+    assert.equal(progress.achievements('unit-child').total, ids.length);
+    recordUnit(progress, 'unit-child', 'unit-repeat', subject, completed);
+    assert.equal(progress.achievements('unit-child').total, ids.length, '整单元重测不能重复获得积分');
+    assert.deepStrictEqual(Object.keys(progress.statuses('other-child',subject)), []);
+    assert.deepStrictEqual(Object.keys(progress.statuses(null,subject)), []);
+  });
+  test(subject + ' ' + volume + ' ' + chapterNo + ' 失败与不稳均不算单元通关，不能跨单元回溯', () => {
+    const initial = E.createSession(real, ids, {mode:'textbook', volume, limit:100, confirm:2, seed:'unit-mixed'});
+    const completed = finishUnit(initial, {[ids[0]]:['wrong','wrong'], [ids[1]]:['wrong','correct']});
+    assert.ok(completed.answers.every(answer=>ids.includes(answer.id)), '依赖本单元之外的先修也不能加入队列');
+    assert.deepStrictEqual(Object.keys(completed.status).sort(), ids.slice().sort());
+    assert.equal(E.statusOf(completed,ids[0]),'weak');
+    assert.equal(E.statusOf(completed,ids[1]),'shaky');
+    const summary = E.chapterSummary(real, completed);
+    assert.equal(summary.length,1);
+    assert.equal(summary[0].mastered,ids.length-2);
+    const {progress} = studyStore();
+    recordUnit(progress, 'unit-child', 'unit-mixed', subject, completed);
+    const statuses = progress.statuses('unit-child',subject);
+    assert.equal(statuses[ids[0]].mark,'×');
+    assert.equal(statuses[ids[1]].mark,'×');
+    const chapter = progress.chapters('unit-child',real.topics).find(row=>row.firstTopicId===ids[0]);
+    assert.equal(chapter.completed,ids.length-2);
+    assert.equal(chapter.unlocked,false);
+    assert.equal(progress.achievements('unit-child').total,ids.length-2);
+  });
+}
+
+test('单元轮次上限、刷新与加题始终保留精确单元，不将后续整册纳入目标', () => {
+  const ids = unitIds('physics','九全','第十三章');
+  let session = E.createSession(real, ids, {mode:'textbook',volume:'九全',limit:2,confirm:2,seed:'unit-round'});
+  session = finishUnit(session);
+  assert.equal(E.summarize(real,session).limitReached,true);
+  assert.deepStrictEqual(E.summarize(real,session).mastered,[ids[0]]);
+  const saved = JSON.parse(JSON.stringify(session));
+  const replay = E.replay(real,saved.targets,saved.answers,{mode:saved.mode,order:saved.orderKind,volume:saved.volume,
+    limit:saved.limit,confirm:saved.confirm,seed:saved.seed,avoid:saved.avoid});
+  assert.deepStrictEqual(replay,saved);
+  const continued = finishUnit(E.replay(real,saved.targets,saved.answers,{mode:saved.mode,volume:saved.volume,
+    limit:6,confirm:saved.confirm,seed:saved.seed,avoid:saved.avoid}));
+  assert.deepStrictEqual(continued.targets,ids);
+  assert.deepStrictEqual(continued.order,ids);
+  assert.deepStrictEqual(E.summarize(real,continued).mastered,ids);
+  assert.ok(continued.answers.every(answer=>ids.includes(answer.id)));
+  assert.equal(E.nextItem(real,continued),null);
+});
+
+test('单元检测备份恢复保留目标、归属、轮次进度与图谱钩，继续后不重复发星', () => {
+  const ids = unitIds('physics','九全','第十三章');
+  const profiles = {v:1,current:'unit-child',children:[{
+    id:'unit-child',name:'单元学习者',grade:'九年级',textbook:'人教版',createdAt:'2026-11-01T00:00:00.000Z'
+  }]};
+  const source = studyStore({'cnmChildren.v1':JSON.stringify(profiles)});
+  const partial = finishUnit(E.createSession(real,ids,{mode:'textbook',volume:'九全',limit:2,confirm:2,seed:'unit-backup'}));
+  const saved = {v:2,mode:'textbook',order:'book',volume:'九全',targets:ids,limit:2,confirm:2,
+    seed:partial.seed,avoid:partial.avoid,label:'九年级 第十三章 内能（单元挑战）',answers:partial.answers,
+    progressChildId:'unit-child',returnTo:'/explore/?subject=physics&volume=%E4%B9%9D%E5%85%A8#'+ids[0],savedAt:'2026-11-16T01:00:00.000Z'};
+  source.storage.set('cnpDiagnose.session.v2',JSON.stringify(saved));
+  recordUnit(source.progress,'unit-child','unit-backup','physics',partial);
+  const exported = source.children.exportBackup();
+  const target = studyStore();
+  const backup = target.children.parseBackup(JSON.stringify(exported));
+  const preview = target.children.previewImport(backup);
+  target.children.importBackup(backup,preview.token);
+  const restored = JSON.parse(target.storage.get('cnpDiagnose.session.v2'));
+  assert.deepStrictEqual(restored,saved);
+  assert.equal(target.progress.statuses('unit-child','physics')[ids[0]].mark,'✓');
+  assert.equal(target.progress.statuses(null,'physics')[ids[0]],undefined);
+  assert.equal(target.progress.achievements('unit-child').total,1);
+  const completed = finishUnit(E.replay(real,restored.targets,restored.answers,{mode:restored.mode,volume:restored.volume,
+    limit:6,confirm:restored.confirm,seed:restored.seed,avoid:restored.avoid}));
+  recordUnit(target.progress,restored.progressChildId,'unit-backup','physics',completed);
+  assert.equal(target.progress.achievements('unit-child').total,ids.length);
+  assert.ok(ids.every(id=>target.progress.statuses('unit-child','physics')[id].mark==='✓'));
+  assert.deepStrictEqual(Object.keys(target.progress.statuses('unit-child','physics')).sort(),ids.slice().sort());
+});
 
 console.log('test_textbook_order: ' + passed + ' passed');

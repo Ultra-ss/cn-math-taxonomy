@@ -31,6 +31,15 @@ label { font-weight: 700; }
 .challenge-card h1 { color: var(--brand-strong); }
 .challenge-card .challenge-intro { margin: 6px 0 14px; }
 .challenge-card > label { display: block; font-size: 0.9rem; }
+.challenge-scope { display: flex; gap: 8px; min-width: 0; margin: 12px 0; padding: 0; border: 0; }
+.challenge-scope legend { margin-bottom: 6px; font-size: 0.85rem; font-weight: 700; color: var(--muted); }
+.challenge-scope > label { display: flex; flex: 1; align-items: center; justify-content: center; gap: 7px; min-width: 0; min-height: 44px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-elev); font-size: 0.92rem; cursor: pointer; }
+.challenge-scope > label:has(input:checked) { background: var(--brand-soft); border-color: var(--brand); color: var(--brand-strong); }
+.challenge-scope input { flex: none; margin: 0; width: 16px; height: 16px; }
+.challenge-scope > label:focus-within { outline: 2px solid var(--focus); outline-offset: 2px; }
+.challenge-chapter-field > label { display: block; font-size: 0.9rem; }
+.challenge-chapter-field[hidden] { display: none; }
+.challenge-card #chapter-select { display: block; width: 100%; max-width: 100%; margin: 8px 0; }
 .challenge-card #grade-info { margin: 8px 0; }
 .challenge-card .challenge-owner { margin: 10px 0 12px; overflow-wrap: anywhere; }
 .challenge-actions #btn-grade-start { min-height: 48px; padding: 10px 22px; font-size: 1.05rem; }
@@ -44,11 +53,20 @@ label { font-weight: 700; }
 @media (max-width: 600px) {
   .testing-start .challenge-card { padding: 14px; }
   .challenge-card .challenge-intro { margin: 6px 0 10px; font-size: 0.88rem; }
-  .challenge-card #book-select { min-height: 44px; font-size: 16px; margin: 6px 0; }
+  .challenge-card #book-select, .challenge-card #chapter-select { min-height: 44px; font-size: 16px; margin: 6px 0; }
   .challenge-card #grade-info, .challenge-card .challenge-owner { font-size: 0.82rem; line-height: 1.5; }
   .challenge-card .challenge-owner { margin: 8px 0 10px; }
   .challenge-actions, .challenge-actions #btn-grade-start { width: 100%; }
   .testing-settings > summary { font-size: 1rem; }
+}
+@media (max-width: 600px) and (max-height: 640px) {
+  .challenge-card .challenge-intro { display: none; }
+  .challenge-card h1 { margin-bottom: 4px; }
+  .challenge-scope { margin: 8px 0; }
+  .challenge-scope legend { position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .challenge-card #book-select, .challenge-card #chapter-select { margin: 3px 0; }
+  .challenge-card .challenge-owner { margin: 6px 0; }
+  .challenge-card #grade-info { margin: 6px 0; }
 }
 
 .banner { background: var(--brand-soft); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 14px; }

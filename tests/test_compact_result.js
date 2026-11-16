@@ -23,8 +23,9 @@ function productionFunction(name) {
   const start = source.indexOf('  function ' + name + '(');
   assert.ok(start >= 0, name + ' must exist');
   const rest = source.slice(start + 2);
-  const next = /\n  (?:async )?function /.exec(rest);
-  return next ? rest.slice(0, next.index) : rest;
+  const end = /\n  \}/.exec(rest);
+  assert.ok(end, name + ' must have a closing brace');
+  return rest.slice(0, end.index + 4);
 }
 function context(pathname = '/diagnose/') {
   const state = {
@@ -109,9 +110,11 @@ test('子目录、多目标和旧存档回退仍定位最初目标，而非后�
 });
 
 function conclusion(session, label) {
-  const state = { E, session, sessionMeta: { label }, D: { graph } };
+  const state = { E, subject:'physics', session, sessionMeta: { label }, D: { graph } };
   vm.createContext(state);
-  vm.runInContext(productionFunction('nameOf') + '\n' + productionFunction('compactConclusion'), state);
+  vm.runInContext(productionFunction('buildTree') + '\n' + productionFunction('nameOf') + '\n' +
+    productionFunction('textbookScopeLabel') + '\n' + productionFunction('compactConclusion'), state);
+  state.D.tree = state.buildTree(topics);
   return state.compactConclusion(E.summarize(graph, session));
 }
 function applySequence(session, results) {
@@ -165,9 +168,37 @@ test('教材多点汇总按直接判定计数，薄弱与不稳都计入未通�
   assert.strictEqual(E.statusOf(session, 'cnp_071'), 'shaky');
   const card = conclusion(session, '第十七章');
   assert.strictEqual(card.title, '第十七章');
-  assert.strictEqual(card.label, '✓ 0 个通过 · × 2 个未通过');
+  assert.strictEqual(card.label, '× 所选范围挑战未通过');
   assert.strictEqual(card.tone, 'failed');
-  assert.ok(card.note.includes('已完成'));
+  assert.ok(card.note.includes('已通过 0 / 2'));
+});
+
+test('整单元全部直接通过才显示单元挑战通过，失败和未测不能冒充通关', () => {
+  const ids = ['cnp_053','cnp_054','cnp_055'];
+  const start = opts => E.createSession(graph, ids, {mode:'textbook',volume:'九全',confirm:2,...opts});
+  const good = applySequence(start(), Array(6).fill('correct'));
+  const success = conclusion(good, '第十三章 内能');
+  assert.strictEqual(success.label, '✓ 单元挑战通过');
+  assert.strictEqual(success.tone, 'passed');
+  assert.ok(success.note.includes('3 个知识点均已通过'));
+  const bad = applySequence(start(), ['wrong','wrong','correct','correct','correct','correct']);
+  const failed = conclusion(bad, '第十三章 内能');
+  assert.strictEqual(failed.label, '× 单元挑战未通过');
+  assert.strictEqual(failed.tone, 'failed');
+  assert.ok(failed.note.includes('已通过 2 / 3'));
+  const partial = applySequence(start({limit:2}), ['correct','correct']);
+  const pending = conclusion(partial, '第十三章 内能');
+  assert.strictEqual(pending.label, '单元挑战待完成');
+  assert.strictEqual(pending.tone, 'pending');
+  assert.ok(pending.note.includes('已通过 1 / 3'));
+});
+
+test('整册未测完显示待完成，全部逐点通过才显示整册挑战通过', () => {
+  const ids = E.gradeTargets(graph, '九全', 'physics').ids;
+  const partial = applySequence(E.createSession(graph,ids,{mode:'textbook',volume:'九全',confirm:2,limit:2}), ['correct','correct']);
+  assert.strictEqual(conclusion(partial,'九全').label,'整册挑战待完成');
+  const complete = applySequence(E.createSession(graph,ids,{mode:'textbook',volume:'九全',confirm:2,limit:ids.length*2}), Array(ids.length*2).fill('correct'));
+  assert.strictEqual(conclusion(complete,'九全').label,'✓ 整册挑战通过');
 });
 
 test('从结果继续真实答题后，下一次结果默认恢复三个折叠面板', () => {

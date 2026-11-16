@@ -42,6 +42,8 @@
   let subject = 'physics';
   let sessionLevel = 'normal'; // 专家挑战的题库与普通检测隔离。
   let bookSel = '';
+  let challengeScope = 'book';
+  let chapterSel = '';
   let startQuery = '';
   let startStage = '';
   let chapterOpen = false;
@@ -712,7 +714,7 @@
       h('label', null, '单点 / 整章题量上限（' + LIMIT_MIN + '–' + LIMIT_MAX + '）', limitInput),
       h('label', null, '一口气挑战每轮题量上限（' + SCREEN_MIN + '–' + SCREEN_MAX + '）', screenLimitInput),
       h('label', null, '每知识点确认题数', confirmSelect),
-      h('span', { class: 'muted small' }, '挑战达到本轮题量上限后，可继续下一轮，从当前知识点接着完成本册。'));
+      h('span', { class: 'muted small' }, '挑战达到本轮题量上限后，可继续下一轮，从当前知识点接着完成所选范围。'));
     const confirmHelp = '同一知识点连续答对 ' + st.confirm + ' 题才算掌握；题库不足时以实际题数为准。中途答错会追加确认题，确认答对为不稳，再次答错为薄弱。';
     const setup = h('details', { class: 'card testing-settings', id: 'testing-settings', open: settingsOpen },
       h('summary', { text: '每次检测题目数量修改' }),
@@ -761,34 +763,89 @@
     return gradeSel + (volSel ? volSel : '年级');
   }
 
+  function selectedChallenge() {
+    if (challengeScope === 'chapter') {
+      const chapter = ((D.tree[bookSel] || {}).chapters || []).find(function (ch) { return ch.key === chapterSel; });
+      return chapter && chapter.topics.length ? {
+        ids: chapter.topics.map(function (x) { return x.t.id; }), volume: chapter.volume,
+        chapter: chapter.key, label: chapter.volume + ' ' + chapter.label + '（单元挑战）'
+      } : null;
+    }
+    const book = E.gradeTargets(D.graph, bookSel, subject);
+    return book ? { ids: book.ids, volume: bookSel, label: book.label + '（整册挑战）' } : null;
+  }
+
+  function startChallenge(chapter) {
+    if (chapter) {
+      bookSel = chapter.volume; chapterSel = chapter.key; challengeScope = 'chapter';
+    }
+    const choice = selectedChallenge();
+    if (!choice || !choice.ids.length) { renderStart('这个范围没有可检测的知识点，请重新选择教材和单元。'); return; }
+    const params = new URLSearchParams(location.search);
+    ['target', 'chapter', 'grade', 'demo', 'step', 'resume', 'retry', 'level', 'seed', 'limit', 'confirm'].forEach(function (key) { params.delete(key); });
+    params.set('subject', subject); params.set('volume', choice.volume); params.set('order', 'book');
+    if (choice.chapter) params.set('chapter', choice.chapter);
+    history.replaceState(null, '', location.pathname + '?' + params.toString());
+    startSession(choice.ids, choice.label, null, 'textbook', choice.volume);
+  }
+
+  // 由保存的精确目标推导范围，不增加会话字段，旧备份仍可直接恢复。
+  function textbookScopeLabel() {
+    if (!session || session.mode !== 'textbook') return '';
+    const targets = new Set(session.targets);
+    const same = function (ids) { return ids.length === targets.size && ids.every(function (id) { return targets.has(id); }); };
+    const book = session.volume && E.gradeTargets(D.graph, session.volume, subject);
+    if (book && same(book.ids)) return '整册';
+    const chapters = ((D.tree[session.volume] || {}).chapters || []);
+    if (chapters.some(function (chapter) { return same(chapter.topics.map(function (x) { return x.t.id; })); })) return '单元';
+    return '所选范围';
+  }
+
   function gradeCard() {
     const choices = VOLUMES.filter(function (v) { return !!D.tree[v[0]]; });
     if (!choices.some(function (v) { return v[0] === bookSel; })) bookSel = choices.length ? choices[0][0] : '';
     const select = h('select', { id: 'book-select', 'aria-label': '选择教材册次' },
       choices.map(function (v) { return h('option', { value: v[0], selected: v[0] === bookSel }, v[1]); }));
+    const chapterSelect = h('select', { id: 'chapter-select', 'aria-label': '选择单元或章节' });
+    const chapterField = h('div', { class: 'challenge-chapter-field', id: 'chapter-select-field', hidden: challengeScope !== 'chapter' },
+      h('label', { for: 'chapter-select' }, '单元／章节'), chapterSelect);
     const info = h('p', { class: 'muted small', id: 'grade-info' });
+    const start = h('button', { class: 'primary', id: 'btn-grade-start', onclick: function () { startChallenge(); } });
     const updateInfo = function () {
-      const book = E.gradeTargets(D.graph, bookSel, subject);
-      info.textContent = book ? '本册 ' + book.ids.length + ' 个知识点，从第一个开始。' : '这个范围没有知识点。';
+      const choice = selectedChallenge();
+      chapterField.hidden = challengeScope !== 'chapter';
+      start.textContent = challengeScope === 'chapter' ? '开始单元挑战' : '开始整册挑战';
+      start.disabled = !choice;
+      info.textContent = choice ? (challengeScope === 'chapter' ? '本单元 ' : '本册 ') + choice.ids.length +
+        ' 个知识点，按顺序检测，通过即打钩。' : '这个范围没有可检测的知识点。';
     };
-    select.addEventListener('change', function () { bookSel = select.value; updateInfo(); });
+    const fillChapters = function () {
+      const chapters = ((D.tree[bookSel] || {}).chapters || []).filter(function (ch) { return ch.topics.length; });
+      if (!chapters.some(function (ch) { return ch.key === chapterSel; })) chapterSel = chapters.length ? chapters[0].key : '';
+      chapterSelect.replaceChildren();
+      chapters.forEach(function (ch) {
+        chapterSelect.append(h('option', { value: ch.key, selected: ch.key === chapterSel }, ch.label + '（' + ch.topics.length + ' 个知识点）'));
+      });
+      chapterSelect.disabled = !chapters.length;
+    };
+    select.addEventListener('change', function () { bookSel = select.value; fillChapters(); updateInfo(); });
+    chapterSelect.addEventListener('change', function () { chapterSel = chapterSelect.value; updateInfo(); });
+    const scope = h('fieldset', { class: 'challenge-scope', id: 'challenge-scope' }, h('legend', null, '选择挑战范围'));
+    [['book', '整本教材'], ['chapter', '单元／章节']].forEach(function (choice) {
+      const input = h('input', { type: 'radio', name: 'challenge-scope', id: 'scope-' + choice[0], value: choice[0] });
+      input.checked = challengeScope === choice[0];
+      input.addEventListener('change', function () { if (input.checked) { challengeScope = choice[0]; updateInfo(); } });
+      scope.append(h('label', { for: 'scope-' + choice[0] }, input, h('span', null, choice[1])));
+    });
+    fillChapters();
     updateInfo();
     const owner = CC.current();
     return h('div', { class: 'card challenge-card', id: 'grade-card' },
       h('h1', { text: '开启一口气挑战' }),
-      h('p', { class: 'muted challenge-intro' }, '选一册教材，按课本顺序逐点检测。'),
-      h('label', { for: 'book-select' }, '教材册次'), select, info,
+      h('p', { class: 'muted challenge-intro' }, '可以挑战整本教材，也可以只挑战一个单元。'), scope,
+      h('label', { for: 'book-select' }, '教材册次'), select, chapterField, info,
       h('p', { class: 'muted small challenge-owner' }, '记录归属：' + (owner ? childLabel(owner) : '本机访客') + '　', h('a', { href: '#child-bar', text: '更换' })),
-      h('div', { class: 'row challenge-actions' },
-        h('button', { class: 'primary', id: 'btn-grade-start', onclick: function () {
-          const book = E.gradeTargets(D.graph, bookSel, subject);
-          if (!book) return;
-          const params = new URLSearchParams(location.search);
-          ['target', 'chapter', 'grade', 'demo', 'step', 'resume'].forEach(function (key) { params.delete(key); });
-          params.set('subject', subject); params.set('volume', bookSel); params.set('order', 'book');
-          history.replaceState(null, '', location.pathname + '?' + params.toString());
-          startSession(book.ids, book.label + '（教材顺序）', null, 'textbook', bookSel);
-        } }, '开始挑战')));
+      h('div', { class: 'row challenge-actions' }, start));
   }
 
   function fillList(box) {
@@ -827,9 +884,9 @@
           h('div', { class: 'chap-head' },
             h('span', { class: 't', text: ch.label }),
             h('button', {
-              class: 'primary', title: '把本章全部 ' + ch.topics.length + ' 个知识点一起作为目标',
-              onclick: function () { startSession(ch.topics.map(function (x) { return x.t.id; }), ch.volume + ' ' + ch.label + '（整章）'); }
-            }, '以整章为目标')),
+              class: 'primary', title: '按教材顺序逐点挑战本单元全部 ' + ch.topics.length + ' 个知识点',
+              onclick: function () { startChallenge(ch); }
+            }, '挑战本单元')),
           c.rows.map(function (x) {
             return h('div', { class: 'topic-row', title: x.t.description },
               h('span', { class: 'nm', text: x.t.name }),
@@ -934,8 +991,9 @@
   function textbookProgress(id) {
     if (!session || session.mode !== 'textbook') return null;
     const completed = session.order.filter(function (key) { return !!session.status[key] && session.status[key].src === 'direct'; }).length;
+    const passed = session.order.filter(function (key) { return session.status[key] && session.status[key].src === 'direct' && session.status[key].s === 'mastered'; }).length;
     return h('div', { class: 'textbook-progress', id: 'textbook-progress' },
-      h('b', null, '教材顺序 · 已完成 ' + completed + ' / ' + session.order.length + ' 个知识点'),
+      h('b', null, textbookScopeLabel() + '挑战 · 已检测 ' + completed + ' / ' + session.order.length + ' 个知识点 · 通过 ' + passed + ' 个'),
       h('p', { class: 'muted small' }, '每个知识点实际作答，掌握后显示 ✓，薄弱或不稳显示 ×。继续时接着本轮进度，不重头开始。'),
       textbookLink(id));
   }
@@ -1213,6 +1271,26 @@
   }
 
   function compactConclusion(sum) {
+    if (session.mode === 'textbook') {
+      const scope = textbookScopeLabel();
+      const passed = session.targets.filter(function (id) {
+        return session.status[id] && session.status[id].src === 'direct' && session.status[id].s === 'mastered';
+      }).length;
+      const failed = session.targets.filter(function (id) {
+        const status = E.statusOf(session, id);
+        return status === 'weak' || status === 'shaky';
+      }).length;
+      const pending = session.targets.length - passed - failed;
+      const success = passed === session.targets.length;
+      return {
+        title: sessionMeta.label,
+        label: success ? '✓ ' + scope + '挑战通过' : pending ? scope + '挑战待完成' : '× ' + scope + '挑战未通过',
+        tone: success ? 'passed' : failed ? 'failed' : 'pending',
+        note: success ? '本' + (scope === '单元' ? '单元' : scope === '整册' ? '册教材' : '次范围') + '的 ' + passed + ' 个知识点均已通过，知识图谱已逐点打钩。'
+          : '已通过 ' + passed + ' / ' + session.targets.length + ' 个知识点' + (failed ? '，未通过 ' + failed + ' 个' : '') +
+            (pending ? '，待完成 ' + pending + ' 个。可在「更多操作」中继续下一轮。' : '。已通过的知识点已打钩，其余知识点需要再巩固。')
+      };
+    }
     if (session.targets.length === 1) {
       const id = session.targets[0];
       const status = E.statusOf(session, id);
@@ -1283,7 +1361,7 @@
     let headline;
     if (textbook) {
       const completed = session.order.filter(function (id) { return !!session.status[id]; }).length;
-      headline = '按教材顺序已完成 ' + completed + ' / ' + session.order.length + ' 个知识点；薄弱 ' + sum.weak.length + '、不稳 ' + sum.shaky.length + '、未测 ' + sum.untested.length + '。每个点都以实际作答为准。';
+      headline = '按教材顺序已检测 ' + completed + ' / ' + session.order.length + ' 个知识点；通过 ' + sum.mastered.length + '、薄弱 ' + sum.weak.length + '、不稳 ' + sum.shaky.length + '、未测 ' + sum.untested.length + '。每个点都以实际作答为准。';
     } else if (screen) {
       if (!sum.weak.length && !sum.shaky.length) headline = sum.untested.length
         ? '已测到的知识点没有发现薄弱点，另有 ' + sum.untested.length + ' 个没测到。'
@@ -1856,6 +1934,19 @@
 
   /* ------------------------------------------------------------ 启动 */
   function resolveTargets(params) {
+    const c = params.get('chapter');
+    if (params.has('chapter')) {
+      const hit = [];
+      VOLUMES.forEach(function (vv) {
+        ((D.tree[vv[0]] || {}).chapters || []).forEach(function (ch) { if (c && ch.key === c.trim()) hit.push(ch); });
+      });
+      if (!hit.length || !hit[0].topics.length) throw new Error('未找到可挑战的单元，请重新选择教材和单元。');
+      const selectedVolume = (params.get('volume') || '').trim();
+      if (selectedVolume && selectedVolume !== hit[0].volume) throw new Error('所选单元与教材不一致，请重新选择。');
+      bookSel = hit[0].volume; chapterSel = hit[0].key; challengeScope = 'chapter';
+      return { ids: hit[0].topics.map(function (x) { return x.t.id; }), label: hit[0].volume + ' ' + hit[0].label + '（单元挑战）',
+        mode: 'textbook', volume: hit[0].volume };
+    }
     const t = params.get('target');
     if (t) {
       const raw = t.split(',').map(function (x) { return x.trim(); }).filter(Boolean);
@@ -1869,16 +1960,6 @@
         if (ids.length <= 6) label += '：' + ids.map(nameOf).join('、');
       }
       return { ids: ids, label: label, mode: params.get('order') === 'book' ? 'textbook' : undefined };
-    }
-    const c = params.get('chapter');
-    if (c) {
-      const hit = [];
-      VOLUMES.forEach(function (vv) {
-        ((D.tree[vv[0]] || {}).chapters || []).forEach(function (ch) { if (ch.key === c.trim()) hit.push(ch); });
-      });
-      if (!hit.length) throw new Error('URL 参数 chapter 没有匹配的章节：' + c + '（格式如 “七上 第一章”）');
-      return { ids: hit[0].topics.map(function (x) { return x.t.id; }), label: hit[0].volume + ' ' + hit[0].label + '（整章）',
-        mode: params.get('order') === 'book' ? 'textbook' : undefined, volume: hit[0].volume };
     }
     const grade = (params.get('grade') || '').trim();
     const volume = (params.get('volume') || '').trim();
