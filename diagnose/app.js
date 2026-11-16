@@ -1906,6 +1906,16 @@
     return null;
   }
 
+  function consumeRetry(params) {
+    const retry = params.get('retry') === '1';
+    if (params.has('retry')) {
+      params.delete('retry');
+      const query = params.toString();
+      history.replaceState(null, '', location.pathname + (query ? '?' + query : '') + (location.hash || ''));
+    }
+    return retry;
+  }
+
   async function init() {
     subject = detectSubject();
     applySubjectChrome();
@@ -1917,6 +1927,7 @@
       return;
     }
     const params = new URLSearchParams(location.search);
+    const retryCompleted = consumeRetry(params);
     returnToParam = params.has('returnTo') ? safeReturnTo(params.get('returnTo')) : null;
     if (params.has('confirm')) confirmParam = E.clampConfirm(params.get('confirm'));
     let resolved = null;
@@ -1942,7 +1953,7 @@
       const saved = lsGet(sessionKey());
       const same = saved && JSON.stringify(saved.targets) === JSON.stringify(Array.from(new Set(resolved.ids))) &&
         (saved.mode || 'target') === (resolved.mode || 'target') && (seedParam == null || saved.seed === seedParam);
-      if (same && restoreSession(saved)) { render(); return; }
+      if (same && restoreSession(saved) && (!retryCompleted || E.nextItem(D.graph, session))) { render(); return; }
       startSession(resolved.ids, resolved.label, limit, resolved.mode, resolved.volume);
       return;
     }

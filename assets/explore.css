@@ -22,6 +22,8 @@ body.page-explore .site-footer { flex: none; }
   .explore.side-collapsed .side { display: none; }
 }
 .explore-mobile-bar { display: none; }
+.mobile-menu-toggle { display: none; }
+.graph-options { flex: none; min-width: 0; }
 
 .side, .detail, .graph-pane { min-width: 0; min-height: 0; }
 .side {
@@ -224,19 +226,69 @@ body.page-explore .site-footer { flex: none; }
 
 @media (max-width: 900px) {
   body.page-explore { height: auto; min-height: 100dvh; overflow: auto; }
+  body.page-explore .site-header {
+    position: relative;
+    z-index: 20;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    min-height: 56px;
+    padding: 4px 10px;
+  }
+  body.page-explore .brand { gap: 8px; min-height: 44px; }
+  body.page-explore .logo { width: 30px; height: 30px; }
+  body.page-explore .brand-name { font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  body.page-explore .brand-kicker { display: none; }
+  body.page-explore .mobile-menu-toggle { display: inline-flex; align-items: center; justify-content: center; min-width: 58px; min-height: 44px; padding: 6px 12px; font-size: 0.9rem; }
+  body.page-explore #main-nav {
+    display: none;
+    position: absolute;
+    z-index: 25;
+    top: calc(100% + 4px);
+    left: 10px;
+    right: 10px;
+    padding: 10px;
+    gap: 8px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--bg-elev);
+    box-shadow: var(--shadow);
+    max-height: min(70dvh, 440px);
+    overflow-y: auto;
+  }
+  body.page-explore .site-header.menu-open #main-nav { display: flex; }
+  body.page-explore #main-nav .page-links { flex-basis: 100%; }
+  body.page-explore #main-nav .nav-link { min-height: 44px; }
   .explore { display: flex; flex-direction: column; height: auto; }
-  .explore-mobile-bar { display: block; padding: 10px 12px 0; }
-  .list-toggle { width: 100%; }
+  .explore-mobile-bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    min-height: 53px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-elev);
+  }
+  #mobile-book-title { min-width: 0; margin: 0; font-size: 0.95rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .explore-mobile-bar button { min-width: 56px; min-height: 44px; padding: 6px 10px; font-size: 0.88rem; white-space: nowrap; }
+  .list-toggle { width: auto; }
+  .explore-mobile-bar button[aria-expanded="true"], .mobile-menu-toggle[aria-expanded="true"] { background: var(--brand-soft); color: var(--brand-strong); border-color: var(--brand); }
+  #graph-options { display: none; }
+  .explore.options-open #graph-options { display: block; }
   .side-collapse { display: none; }
   .side { display: none; border-right: none; }
-  .side.open { display: flex; max-height: 62vh; border-bottom: 1px solid var(--line); }
+  .side.open { display: flex; max-height: 62dvh; border-bottom: 1px solid var(--line); }
   .graph-stage { flex: none; min-height: 0; }
-  #cy { height: 420px; flex: none; }
+  #cy { height: clamp(280px, 72dvh, 760px); min-height: 0; flex: none; }
+  .graph-empty { min-height: clamp(280px, 72dvh, 760px); padding: 20px 16px; }
   .detail { border-left: none; border-top: 1px solid var(--line); }
   .graph-toolbar { padding: 8px; }
   .book-context { align-items: flex-start; flex-wrap: wrap; }
   .book-actions { width: 100%; justify-content: flex-start; }
   .book-context .btn { flex: 1; justify-content: center; text-align: center; }
+  .legend { gap: 6px 12px; padding-top: 10px; font-size: 0.78rem; }
+  .progress-note, .graph-meta { font-size: 0.78rem; }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -244,20 +296,17 @@ body.page-explore .site-footer { flex: none; }
   .test-failed { color: #ff9292; }
 }
 
-/* 手机宽度：层数和缩放并成一行，页面本身不横向溢出。放不下时可在工具条内横滑。 */
+/* 手机选项展开时允许工具换行，层数、缩放和适配按钮都能直接看见。 */
 @media (max-width: 640px) {
   .graph-toolbar {
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     justify-content: flex-start;
     gap: 6px;
     padding: 6px 8px;
     min-width: 0;
     max-width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
+    overflow: visible;
   }
-  .graph-toolbar::-webkit-scrollbar { height: 0; }
   .depth, .zoom-tools, .seg { flex: none; flex-wrap: nowrap; gap: 0; }
   .depth { gap: 6px; }
   .zoom-tools { gap: 4px; margin-left: auto; }
@@ -267,7 +316,8 @@ body.page-explore .site-footer { flex: none; }
   .seg { background: transparent; }
   .graph-toolbar .seg button {
     position: relative;
-    min-height: 40px;
+    min-height: 44px;
+    min-width: 44px;
     margin-left: -1px;
     padding: 0 9px;
     border: 1px solid var(--line);
@@ -290,10 +340,35 @@ body.page-explore .site-footer { flex: none; }
   .zoom-label { display: none; }
   .zoom-ico { display: block; width: 18px; height: 18px; }
   .graph-toolbar .zoom-tools button {
-    width: 40px;
-    min-width: 40px;
-    min-height: 40px;
+    width: 44px;
+    min-width: 44px;
+    min-height: 44px;
     padding: 0;
     border-radius: 999px;
   }
+}
+
+/* 第二次点选知识点时的确认框，使用原生 dialog 的焦点和顶层遮罩。 */
+.node-diagnose-dialog {
+  width: min(420px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  margin: auto;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--bg-elev);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  overflow: auto;
+}
+.node-diagnose-dialog::backdrop { background: rgb(15 23 42 / 42%); }
+.node-diagnose-dialog h2 { margin: 0 0 12px; font-size: 1.25rem; line-height: 1.4; overflow-wrap: anywhere; }
+.node-diagnose-dialog p { margin: 0 0 20px; color: var(--muted); line-height: 1.6; overflow-wrap: anywhere; }
+.node-diagnose-dialog .node-dialog-actions { display: flex; gap: 10px; }
+.node-diagnose-dialog #node-dialog-try,
+.node-diagnose-dialog #node-dialog-no { display: inline-flex; justify-content: center; align-items: center; flex: 1; min-height: 48px; min-width: 80px; padding: 10px 16px; font-weight: 750; }
+@media (max-height: 420px) and (max-width: 900px) {
+  .node-diagnose-dialog { padding: 18px; max-height: calc(100dvh - 24px); }
+  .node-diagnose-dialog h2 { font-size: 1.1rem; margin-bottom: 8px; }
+  .node-diagnose-dialog p { margin-bottom: 14px; }
 }

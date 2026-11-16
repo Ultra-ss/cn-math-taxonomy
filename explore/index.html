@@ -38,7 +38,8 @@
       <span class="brand-kicker">学习路径</span>
     </span>
   </a>
-  <nav class="site-nav" aria-label="主导航">
+  <button type="button" id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="main-nav">菜单</button>
+  <nav id="main-nav" class="site-nav" aria-label="主导航" hidden>
     <div class="subject-switch" role="group" aria-label="学科">
       <a class="nav-link subject-link" data-subject="science" href="./?subject=science">科学</a>
       <a class="nav-link subject-link on" data-subject="physics" href="./?subject=physics">物理</a>
@@ -54,8 +55,10 @@
   </nav>
 </header>
 <div class="explore">
-  <div class="explore-mobile-bar">
-    <button type="button" id="list-toggle" class="list-toggle" aria-expanded="false" aria-controls="side">知识点目录</button>
+  <div class="explore-mobile-bar" id="mobile-controls">
+    <strong id="mobile-book-title">物理知识图谱</strong>
+    <button type="button" id="list-toggle" class="list-toggle" aria-expanded="false" aria-controls="side" aria-label="展开知识点目录">目录</button>
+    <button type="button" id="mobile-options-toggle" aria-expanded="false" aria-controls="graph-options" aria-label="展开图谱选项">选项</button>
   </div>
   <aside id="side" class="side">
     <div class="side-tools">
@@ -81,6 +84,7 @@
     <div id="list" class="list"><p class="muted" style="padding:12px">正在加载知识点…</p></div>
   </aside>
   <section class="graph-pane" aria-label="教材知识图谱">
+    <div id="graph-options" class="graph-options" hidden>
     <div class="book-context" aria-label="当前教材与检测">
       <div>
         <p class="book-eyebrow" id="progress-owner">检测记录：本机访客</p>
@@ -110,8 +114,9 @@
       </div>
     </div>
     <p id="graph-fold" class="graph-fold" hidden></p>
+    </div>
     <div id="graph-stage" class="graph-stage">
-      <div id="cy" hidden role="img" aria-label="选中知识点的局部先修图"></div>
+      <div id="cy" hidden role="img" tabindex="0" aria-label="选中知识点的局部先修图"></div>
       <div id="graph-empty" class="graph-empty">
         <p>选一个知识点后，这里只画它附近的先修，以及后面一层会用到它的知识点。</p>
         <p class="muted">不会一次铺开全部知识点。点节点可以换选中项，滚轮或拖动可以缩放、平移。名称太长会省略，悬停或点按可看全名。</p>
@@ -134,6 +139,14 @@
   </section>
   <aside id="detail" class="detail"><p class="muted">正在加载…</p></aside>
 </div>
+<dialog id="node-diagnose-dialog" class="node-diagnose-dialog" aria-labelledby="node-dialog-title" aria-describedby="node-dialog-question">
+  <h2 id="node-dialog-title">检测这个知识点</h2>
+  <p id="node-dialog-question"></p>
+  <div class="node-dialog-actions">
+    <a class="btn btn-primary" id="node-dialog-try" href="../diagnose/">我要试试</a>
+    <button type="button" id="node-dialog-no" autofocus>不</button>
+  </div>
+</dialog>
 <footer class="site-footer">
   <p><a href="https://github.com/Ultra-ss/cn-math-taxonomy/issues/new/choose">提交 Issue</a></p>
 </footer>

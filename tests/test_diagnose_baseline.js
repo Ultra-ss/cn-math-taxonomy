@@ -144,4 +144,22 @@ for (const mode of ['start', 'question']) {
 }
 assert.ok(source.includes("append(morePanel, childBar('result'))"));
 assert.ok(!source.includes("page.append(childBar('result'))"));
+
+// “我要试试”的重测意图只消费一次，刷新仍可以恢复刚开始的新进度。
+const retryChanges = [];
+const retryContext = {
+  location: { pathname: '/diagnose/', hash: '#question' },
+  history: { replaceState(_state, _title, url) { retryChanges.push(url); } }
+};
+vm.createContext(retryContext);
+vm.runInContext(section('function consumeRetry(params)', 'async function init()'), retryContext);
+const retryParams = new URLSearchParams({ target: 'cnp_001', retry: '1', returnTo: '/explore/?volume=八上#cnp_001' });
+assert.strictEqual(retryContext.consumeRetry(retryParams), true);
+assert.strictEqual(retryParams.has('retry'), false);
+const refreshed = new URL(retryChanges[0], 'https://physicalmap.pages.dev');
+assert.strictEqual(refreshed.searchParams.get('target'), 'cnp_001');
+assert.strictEqual(refreshed.searchParams.get('returnTo'), '/explore/?volume=八上#cnp_001');
+assert.strictEqual(refreshed.hash, '#question');
+assert.strictEqual(retryContext.consumeRetry(refreshed.searchParams), false);
+assert.strictEqual(retryChanges.length, 1);
 console.log('test_diagnose_baseline: ok');

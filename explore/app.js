@@ -47,6 +47,9 @@
   var dagreReady = false;
   var FOLD_AT = 40;
   var questionsByTopic = new Map();
+  var explicitNodeSelection = null;
+  var nodeDialogId = null;
+  var nodeDialogScroll = null;
 
   function $(id) { return document.getElementById(id); }
 
@@ -227,6 +230,8 @@
     var action = $('book-diagnose');
     if (!title || !action) return;
     title.textContent = volume ? bookTitle(volume) : '选择一本教材';
+    var mobileTitle = $('mobile-book-title');
+    if (mobileTitle) mobileTitle.textContent = volume ? bookTitle(volume) : subject === 'physics' ? '物理知识图谱' : '科学知识图谱';
     $('book-note').textContent = volume ? '本册 ' + topics.filter(function (topic) { return volumeOf(topic) === volume; }).length + ' 个知识点，检测从教材第一个知识点开始。' : '在教材选择器中选择册次，或从首页进入。';
     action.hidden = !volume;
     action.href = volume ? bookHref() : '#';
@@ -241,6 +246,8 @@
     history.replaceState(null, '', graphReturnTo());
   }
   function chooseBook(key) {
+    explicitNodeSelection = null;
+    closeNodeDiagnosis();
     volume = bookSpec(key) ? key : '';
     grade = '';
     stage = '';
@@ -402,7 +409,89 @@
     $('side').classList.remove('open');
     var toggle = $('list-toggle');
     toggle.setAttribute('aria-expanded', 'false');
-    toggle.textContent = '知识点目录';
+    toggle.textContent = '目录';
+    toggle.setAttribute('aria-label', '展开知识点目录');
+  }
+
+  function syncMobileChrome() {
+    var mobile = window.matchMedia('(max-width: 900px)').matches;
+    var menuOpen = document.querySelector('.site-header').classList.contains('menu-open');
+    var optionsOpen = document.querySelector('.explore').classList.contains('options-open');
+    $('main-nav').hidden = mobile && !menuOpen;
+    $('graph-options').hidden = mobile && !optionsOpen;
+    $('mobile-menu-toggle').setAttribute('aria-expanded', menuOpen ? 'true' : 'false');
+    $('mobile-menu-toggle').textContent = menuOpen ? '收起菜单' : '菜单';
+    $('mobile-options-toggle').setAttribute('aria-expanded', optionsOpen ? 'true' : 'false');
+    $('mobile-options-toggle').textContent = optionsOpen ? '收起' : '选项';
+    $('mobile-options-toggle').setAttribute('aria-label', optionsOpen ? '收起图谱选项' : '展开图谱选项');
+    requestAnimationFrame(function () { if (cy) cy.resize(); });
+  }
+  function setMobileMenu(open) {
+    document.querySelector('.site-header').classList.toggle('menu-open', open);
+    syncMobileChrome();
+  }
+  function setMobileOptions(open) {
+    document.querySelector('.explore').classList.toggle('options-open', open);
+    syncMobileChrome();
+  }
+  function nodeDiagnosisHref(id) {
+    if (!byId.has(id)) return '';
+    return withReturn('../diagnose/?subject=' + subject + '&target=' + encodeURIComponent(id) + '&retry=1');
+  }
+  function closeNodeDiagnosis() {
+    var dialog = $('node-diagnose-dialog');
+    if (dialog && dialog.open) dialog.close();
+  }
+  function openNodeDiagnosis(id) {
+    if (id !== selected || !byId.has(id)) return false;
+    var dialog = $('node-diagnose-dialog');
+    if (!dialog || dialog.open) return false;
+    nodeDialogId = id;
+    nodeDialogScroll = { x: window.scrollX, y: window.scrollY };
+    $('node-dialog-question').textContent = '要进入“' + byId.get(id).name + '”的诊断吗？';
+    $('node-dialog-try').setAttribute('href', nodeDiagnosisHref(id));
+    dialog.showModal();
+    return true;
+  }
+  function activateGraphNode(id) {
+    if (!id || String(id).indexOf('grade-') === 0 || !byId.has(id)) return false;
+    // 自动预选和目录选择不算第一次真实点击；同点再次点击不重建图或改变视口。
+    if (explicitNodeSelection === id && selected === id) return openNodeDiagnosis(id);
+    if (id !== selected || currentAlias) select(id, 'user');
+    explicitNodeSelection = id;
+    return false;
+  }
+  function bindNodeConfirmation() {
+    var dialog = $('node-diagnose-dialog');
+    $('node-dialog-no').addEventListener('click', closeNodeDiagnosis);
+    dialog.addEventListener('cancel', function (event) { event.preventDefault(); closeNodeDiagnosis(); });
+    dialog.addEventListener('click', function (event) {
+      if (event.target !== dialog) return;
+      var box = dialog.getBoundingClientRect();
+      if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) closeNodeDiagnosis();
+    });
+    dialog.addEventListener('close', function () {
+      nodeDialogId = null;
+      var point = nodeDialogScroll;
+      nodeDialogScroll = null;
+      $('cy').focus({ preventScroll: true });
+      if (point) window.scrollTo(point.x, point.y);
+    });
+    $('node-dialog-try').addEventListener('click', function (event) {
+      if (!nodeDialogId || nodeDialogId !== selected || !byId.has(nodeDialogId)) {
+        event.preventDefault();
+        closeNodeDiagnosis();
+        return;
+      }
+      event.currentTarget.setAttribute('href', nodeDiagnosisHref(nodeDialogId));
+      closeNodeDiagnosis();
+    });
+    $('cy').addEventListener('keydown', function (event) {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      if (!selected) return;
+      event.preventDefault();
+      activateGraphNode(selected);
+    });
   }
 
   function recomputeAliasHits() {
@@ -844,6 +933,7 @@
   }
 
   function renderGraph() {
+    explicitNodeSelection = null;
     var token = ++graphToken;
     tipFromTap = false;
     hideTip();
@@ -949,11 +1039,10 @@
           var id = event.target.id();
           tipFromTap = true;
           showTip(event.target);
-          if (!id || String(id).indexOf('grade-') === 0 || id === selected) return;
-          select(id, 'user');
+          activateGraphNode(id);
         });
         cy.on('tap', function (event) {
-          if (event.target === cy) { tipFromTap = false; hideTip(); }
+          if (event.target === cy) { explicitNodeSelection = null; tipFromTap = false; hideTip(); }
         });
         var layout = cy.layout({
           name: 'dagre', rankDir: 'TB',
@@ -994,6 +1083,8 @@
   }
 
   function select(raw, source) {
+    explicitNodeSelection = null;
+    closeNodeDiagnosis();
     var hit = resolveId(raw);
     if (!hit) {
       if (source === 'hash') {
@@ -1149,6 +1240,30 @@
   }
 
   function bind() {
+    $('mobile-menu-toggle').addEventListener('click', function () {
+      var open = !document.querySelector('.site-header').classList.contains('menu-open');
+      if (open) { setMobileOptions(false); closeDrawerIfMobile(); }
+      setMobileMenu(open);
+    });
+    $('mobile-options-toggle').addEventListener('click', function () {
+      var open = !document.querySelector('.explore').classList.contains('options-open');
+      if (open) { setMobileMenu(false); closeDrawerIfMobile(); }
+      setMobileOptions(open);
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key !== 'Escape' || $('node-diagnose-dialog').open) return;
+      if (document.querySelector('.site-header').classList.contains('menu-open')) {
+        setMobileMenu(false);
+        $('mobile-menu-toggle').focus({ preventScroll: true });
+      } else if (document.querySelector('.explore').classList.contains('options-open')) {
+        setMobileOptions(false);
+        $('mobile-options-toggle').focus({ preventScroll: true });
+      }
+    });
+    var mobileChrome = window.matchMedia('(max-width: 900px)');
+    if (mobileChrome.addEventListener) mobileChrome.addEventListener('change', syncMobileChrome);
+    syncMobileChrome();
+    bindNodeConfirmation();
     $('q').addEventListener('input', function () {
       query = $('q').value.trim().toLowerCase();
       renderList();
@@ -1198,9 +1313,12 @@
       renderGraph();
     });
     $('list-toggle').addEventListener('click', function () {
+      setMobileMenu(false);
+      setMobileOptions(false);
       var open = $('side').classList.toggle('open');
       $('list-toggle').setAttribute('aria-expanded', open ? 'true' : 'false');
-      $('list-toggle').textContent = open ? '收起目录' : '知识点目录';
+      $('list-toggle').textContent = open ? '收起' : '目录';
+      $('list-toggle').setAttribute('aria-label', open ? '收起知识点目录' : '展开知识点目录');
     });
     $('btn-fit').addEventListener('click', fitGraph);
     $('side-collapse').addEventListener('click', function () {
