@@ -110,6 +110,12 @@ jobs:
       - name: tests/test_local_learning.js
         run: node tests/test_local_learning.js
 
+      - name: tests/test_book_selection.js
+        run: node tests/test_book_selection.js
+
+      - name: tests/test_explore_scope.js
+        run: node tests/test_explore_scope.js
+
       - name: 课标映射严格模式（仅报告）
         continue-on-error: true
         env:

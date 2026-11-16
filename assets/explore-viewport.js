@@ -12,6 +12,17 @@
   function object(value) { return !!value && typeof value === 'object' && !Array.isArray(value); }
   function own(value, key) { return Object.prototype.hasOwnProperty.call(value, key); }
   function numberIn(value, min, max) { return typeof value === 'number' && Number.isFinite(value) && value >= min && value <= max; }
+  function bookScope(subject, volume, values) {
+    if (values === undefined) return { volume:volume };
+    if (!Array.isArray(values) || !values.length || values.length > 24) return null;
+    for (var i = 0; i < values.length; i++) if (!own(values, i) || typeof values[i] !== 'string' ||
+        !(subject === 'physics' ? PHYSICS_BOOKS.indexOf(values[i]) >= 0 : /^[一二三四五六][上下]$/.test(values[i]))) return null;
+    var order = subject === 'physics' ? PHYSICS_BOOKS : [];
+    if (subject === 'science') ['一', '二', '三', '四', '五', '六'].forEach(function (grade) { order.push(grade + '上', grade + '下'); });
+    var selected = order.filter(function (value) { return values.indexOf(value) >= 0; });
+    if (!selected.length || (volume && (selected.length !== 1 || selected[0] !== volume))) return null;
+    return selected.length === 1 ? { volume:selected[0] } : { volume:'', volumes:selected };
+  }
   function context(value) {
     if (!object(value) || !['subject', 'volume', 'topicId', 'view', 'depth'].every(function (key) { return own(value, key); })) return null;
     var subject = value.subject, volume = value.volume, id = value.topicId;
@@ -21,8 +32,13 @@
         (volume !== '' && !(subject === 'physics' ? PHYSICS_BOOKS.indexOf(volume) >= 0 : /^[一二三四五六][上下]$/.test(volume))) ||
         ['book', 'local'].indexOf(value.view) < 0 || [1, 2, 3, 'all'].indexOf(value.depth) < 0) return null;
     var layout = value.layout === undefined ? '' : value.layout;
-    if (typeof layout !== 'string' || !/^[A-Za-z0-9:_|.-]{0,100}$/.test(layout)) return null;
-    return { subject:subject, volume:volume, topicId:id, view:value.view, depth:value.depth, layout:layout };
+    if (typeof layout !== 'string' || !/^[A-Za-z0-9:_|.-]{0,100}$/.test(layout) ||
+        (value.volumes !== undefined && !own(value, 'volumes'))) return null;
+    var scope = bookScope(subject, volume, value.volumes);
+    if (!scope) return null;
+    var normalized = { subject:subject, volume:scope.volume, topicId:id, view:value.view, depth:value.depth, layout:layout };
+    if (scope.volumes) normalized.volumes = scope.volumes;
+    return normalized;
   }
   function camera(value) {
     if (!object(value) || !['zoom', 'centerX', 'centerY', 'width', 'height'].every(function (key) { return own(value, key); }) ||

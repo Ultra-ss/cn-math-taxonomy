@@ -30,7 +30,7 @@ const list = element('div'), count = element('p');
 let states = {};
 const context = {
   topics: topics.filter(t => t.subject === 'physics'),
-  subject: 'physics', volume: '九全', stage: '', grade: '', domain: '', query: '', selected: 'cnp_053', aliasHitIds: new Set(),
+  subject: 'physics', volume: '九全', selectedVolumes:['九全'], stage: '', grade: '', domain: '', query: '', selected: 'cnp_053', aliasHitIds: new Set(),
   el: element, $: id => id === 'list' ? list : count,
   progressOf: id => states[id] || null,
   progressLabel: row => row ? row.status : '尚未完成检测', progressBadge: () => null,
@@ -39,7 +39,7 @@ const context = {
   recomputeAliasHits() {}, refreshDiagnosisLinks() {}
 };
 vm.createContext(context);
-vm.runInContext(section('function chapterOf(topic)', 'function readHash()') +
+vm.runInContext(section('function hasBookScope()', 'function scopeTitle()')+section('function chapterOf(topic)', 'function readHash()') +
   section('function passFilter(topic)', 'function sideVisible()'), context);
 const first = topics.find(t => t.id === 'cnp_053');
 const chapter = context.chapterOf(first);

@@ -6,31 +6,37 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 const source = fs.readFileSync(path.join(__dirname, '../assets/home.js'), 'utf8');
+const bookScope = require('../assets/book-selection.js');
 let passed = 0;
 async function test(name, fn) { await fn(); passed++; console.log('  ok   ' + name); }
 const flush = async () => { for (let i = 0; i < 6; i++) await new Promise(r => setImmediate(r)); };
-function element() {
+function element(tag = 'div') {
   const attrs = {};
   const listeners = new Map();
   const el = {
-    textContent: '', hidden: true, children: [], className: '', href: '',
-    classList: { toggle() {}, add() {}, remove() {} },
+    tagName:tag.toUpperCase(), textContent: '', hidden: true, children: [], className: '', href: '',
+    classList: { toggle(value, force) { const set=new Set(el.className.split(' ').filter(Boolean));const on=force===undefined?!set.has(value):force;if(on)set.add(value);else set.delete(value);el.className=[...set].join(' ');return on; }, add(value){this.toggle(value,true);},remove(value){this.toggle(value,false);},contains(value){return el.className.split(' ').includes(value);} },
     addEventListener(type, fn) { if (!listeners.has(type)) listeners.set(type, []); listeners.get(type).push(fn); },
-    fire(type, event) { (listeners.get(type) || []).forEach(fn => fn(event)); },
+    fire(type, event = {}) { const value={target:el,currentTarget:el,defaultPrevented:false,preventDefault(){this.defaultPrevented=true;},...event};(listeners.get(type) || []).forEach(fn => fn(value));return value; },
     setAttribute(k, v) { attrs[k] = String(v); },
     getAttribute(k) { return k in attrs ? attrs[k] : null; },
-    removeAttribute(k) { delete attrs[k]; },
+    removeAttribute(k) { delete attrs[k];if(k==='href')el.href=''; },
     hasAttribute(k) { return k in attrs; },
     replaceChildren() { el.children = []; },
-    append(...nodes) { el.children.push(...nodes); },
-    appendChild(node) { el.children.push(node); return node; }
+    append(...nodes) { nodes.forEach(node=>{node.parentElement=el;el.children.push(node);}); },
+    appendChild(node) { node.parentElement=el;el.children.push(node); return node; },
+    querySelector(selector) { const matches=node=>selector[0]==='.'?node.classList.contains(selector.slice(1)):node.tagName===selector.toUpperCase();for(const child of el.children){if(matches(child))return child;const nested=child.querySelector(selector);if(nested)return nested;}return null; },
+    closest(selector) { return selector[0]==='.'&&el.classList.contains(selector.slice(1))?el:el.parentElement?el.parentElement.closest(selector):null; },
+    focus(options) { el.focused=options || true; }
   };
+  Object.defineProperty(el,'firstElementChild',{get:()=>el.children[0] || null});
   return el;
 }
 const actual = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/topics.json'), 'utf8'));
 function load(search, options = {}) {
   const ids = {};
-  ['load-error', 'textbook-grid', 'textbook-subject', 'textbook-title', 'textbook-description', 'card-motion-toggle'].forEach(id => { ids[id] = element(); });
+  ['load-error', 'textbook-grid', 'textbook-subject', 'textbook-title', 'textbook-description', 'card-motion-toggle',
+    'book-multiselect-toggle','book-selection-cancel','book-selection-enter'].forEach(id => { ids[id] = element(); });
   ids['textbook-grid'].setAttribute('aria-busy', 'true');
   const calls = [];
   function fetch(url) {
@@ -41,10 +47,10 @@ function load(search, options = {}) {
   let motionChange;
   const motionPreference={matches:!!options.reducedMotion,addEventListener(type,fn){if(type==='change')motionChange=fn;}};
   vm.runInNewContext(source, {
-    window: {__cnmHomeResume: options.resume,matchMedia:()=>motionPreference},
+    window: {__cnmHomeResume: options.resume,matchMedia:()=>motionPreference,CnmBookSelection:bookScope},
     location: {hash:options.hash || '', search:search || ''}, URLSearchParams, fetch,
     document: { title:'', body:{classList:{toggle(){}}}, querySelectorAll(){return [];},
-      getElementById(id){return ids[id] || null;}, createElement(){return element();} }
+      getElementById(id){return ids[id] || null;}, createElement(tag){return element(tag);} }
   }, {filename:'assets/home.js'});
   function respond(data = actual, status = 200) {
     calls[0].resolve({ok:status>=200 && status<300,status,json:()=>Promise.resolve(data)});
@@ -59,6 +65,53 @@ function load(search, options = {}) {
     respond(); await flush();
     assert.equal(calls.length,1);
     assert.equal(ids['textbook-grid'].hasAttribute('aria-busy'), false);
+  });
+  await test('普通模式保留单册直达，多选模式使用可切换按钮且零选择不能进入',async()=>{
+    const {ids}=load('');const grid=ids['textbook-grid'],enter=ids['book-selection-enter'];
+    assert.ok(grid.children.every(card=>card.tagName==='A'&&card.href));
+    assert.equal(ids['book-multiselect-toggle'].hidden,false);
+    ids['book-multiselect-toggle'].fire('click');
+    assert.ok(grid.children.every(card=>card.tagName==='BUTTON'&&card.getAttribute('aria-pressed')==='false'));
+    assert.equal(grid.getAttribute('data-multi-select'),'true');assert.ok(grid.children[0].focused);
+    assert.equal(enter.hidden,false);assert.equal(enter.getAttribute('aria-disabled'),'true');
+    assert.equal(enter.href,'');assert.equal(enter.fire('click').defaultPrevented,true);
+  });
+  await test('点击切换多选状态，组合URL使用固定教材顺序，单册仍使用volume',async()=>{
+    const {ids}=load('');ids['book-multiselect-toggle'].fire('click');
+    const grid=ids['textbook-grid'],enter=ids['book-selection-enter'],first=grid.children[0];
+    grid.fire('click',{target:grid.children[8]});grid.fire('click',{target:first});
+    assert.equal(grid.children[0],first,'选点不重建卡片');assert.equal(first.getAttribute('aria-pressed'),'true');
+    assert.ok(first.classList.contains('is-selected'));assert.equal(ids['textbook-title'].textContent,'已选 2 本教材');
+    let url=new URL(enter.href,'https://physicalmap.pages.dev');
+    assert.equal(url.searchParams.get('volumes'),'八上,选必三');assert.equal(url.searchParams.has('volume'),false);
+    assert.equal(enter.getAttribute('aria-disabled'),'false');assert.equal(enter.fire('click').defaultPrevented,false);
+    grid.fire('click',{target:grid.children[8]});url=new URL(enter.href,'https://physicalmap.pages.dev');
+    assert.equal(url.searchParams.get('volume'),'八上');assert.equal(url.searchParams.has('volumes'),false);
+    grid.fire('click',{target:first});assert.equal(enter.href,'');assert.equal(enter.getAttribute('aria-disabled'),'true');
+  });
+  await test('计数请求返回只更新数字，保留早选状态、卡片实例与焦点',async()=>{
+    const {ids,respond}=load('');ids['book-multiselect-toggle'].fire('click');const grid=ids['textbook-grid'],card=grid.children[0];
+    grid.fire('click',{target:card});grid.fire('click',{target:grid.children[1]});card.focus();
+    respond();await flush();
+    assert.equal(grid.children[0],card);assert.equal(card.focused,true);assert.equal(card.getAttribute('aria-pressed'),'true');
+    assert.equal(card.querySelector('.textbook-count').textContent,'28 个知识点');
+    assert.equal(new URL(ids['book-selection-enter'].href,'https://physicalmap.pages.dev').searchParams.get('volumes'),'八上,八下');
+  });
+  await test('取消多选恢复单册入口与焦点，再次进入从空选择开始',async()=>{
+    const {ids}=load('');ids['book-multiselect-toggle'].fire('click');const grid=ids['textbook-grid'];
+    grid.fire('click',{target:grid.children[0]});ids['book-selection-cancel'].fire('click');
+    assert.equal(grid.getAttribute('data-multi-select'),'false');assert.ok(grid.children.every(card=>card.tagName==='A'&&card.href));
+    assert.equal(ids['book-selection-enter'].hidden,true);assert.equal(ids['book-selection-cancel'].hidden,true);
+    assert.ok(ids['book-multiselect-toggle'].focused);ids['book-multiselect-toggle'].fire('click');
+    assert.equal(ids['textbook-title'].textContent,'请选择教材');assert.equal(ids['book-selection-enter'].href,'');
+  });
+  await test('小学科学也可组合首尾教材，读取失败仍可保留选择进入',async()=>{
+    const {ids,calls}=load('?subject=science');ids['book-multiselect-toggle'].fire('click');const grid=ids['textbook-grid'];
+    grid.fire('click',{target:grid.children[11]});grid.fire('click',{target:grid.children[0]});
+    calls[0].reject(new Error('offline'));await flush();
+    const url=new URL(ids['book-selection-enter'].href,'https://physicalmap.pages.dev');
+    assert.equal(url.searchParams.get('subject'),'science');assert.equal(url.searchParams.get('volumes'),'一上,六下');
+    assert.equal(ids['load-error'].hidden,false);assert.equal(grid.children[11].getAttribute('aria-pressed'),'true');
   });
   await test('卡片动效可暂停和恢复，教材数据加载不重置暂停状态', async () => {
     const {ids,respond}=load('');const grid=ids['textbook-grid'],toggle=ids['card-motion-toggle'];

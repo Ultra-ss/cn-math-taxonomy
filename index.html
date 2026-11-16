@@ -74,10 +74,15 @@
     <div class="textbook-intro">
       <p class="eyebrow" id="textbook-subject">物理 · 人教版</p>
       <div class="textbook-heading">
-        <h1 id="textbook-title">从一本教材开始学习</h1>
-        <button type="button" id="card-motion-toggle" aria-controls="textbook-grid" hidden>暂停晃动</button>
+        <h1 id="textbook-title" aria-live="polite" aria-atomic="true">选择教材开始学习</h1>
+        <div class="textbook-controls">
+          <button type="button" id="book-multiselect-toggle" aria-controls="textbook-grid" aria-pressed="false" hidden>多选教材</button>
+          <button type="button" id="book-selection-cancel" hidden>取消</button>
+          <a class="btn btn-primary" id="book-selection-enter" aria-disabled="true" tabindex="-1" hidden>进入图谱</a>
+          <button type="button" id="card-motion-toggle" aria-controls="textbook-grid" hidden>暂停晃动</button>
+        </div>
       </div>
-      <p id="textbook-description">选择正在学的教材，按章节浏览知识点，理清知识之间的联系。</p>
+      <p id="textbook-description">点选一本教材直接进入，也可选择“多选教材”组合浏览知识图谱。</p>
     </div>
     <div class="textbook-grid" id="textbook-grid" aria-busy="true">
       <a class="textbook-card is-junior" data-volume="八上" href="explore/?subject=physics&amp;volume=%E5%85%AB%E4%B8%8A">
@@ -137,6 +142,7 @@
   </a>
   <p class="feedback-note">本网页仅用于个人学习，免费使用</p>
 </footer>
+<script src="assets/book-selection.js"></script>
 <script src="assets/last-location.js"></script>
 <script src="assets/home.js"></script>
 <script>window.__cnmHomeResume = window.CnmLastLocation ? window.CnmLastLocation.resumeHome() : Promise.resolve(false);</script>

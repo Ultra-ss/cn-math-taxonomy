@@ -27,7 +27,7 @@ const graph={zoom:()=>zoom,pan:()=>pan,minZoom:()=>0.05,maxZoom:()=>2.8,
 const ctx={
   window:{matchMedia:()=>({matches:mobile}),CnmExploreViewport:{save(context,camera){writes.push({context,camera});return true;}}},
   document:{querySelector:s=>s==='.site-header'?header:frame}, $:id=>ids[id],
-  subject:'physics',volume:'九全',selected:'cnp_053',showWholeBook:true,upDepth:2,labelLimit:()=>8,
+  subject:'physics',volume:'九全',selectedVolumes:['九全'],selected:'cnp_053',showWholeBook:true,upDepth:2,labelLimit:()=>8,
   mobileView:'graph',mobileFiltersOpen:false,mobileScroll:{directory:0,detail:0},graphNeedsRender:false,pendingGraphRestore:true,
   renderedCameraContext:null,renderedExpanded:false,liveCamera:null,changingCamera:false,viewportSaveTimer:null,cy:graph,
   byId:new Map([['cnp_053',{name:'热量 比热容'}]]),progressOf:()=>row,progressClass:r=>r?'test-passed':'',

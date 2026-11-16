@@ -26,6 +26,7 @@
   var stage = '';
   var grade = '';
   var volume = '';
+  var selectedVolumes = [];
   var showWholeBook = true;
   var domain = '';
   var query = '';
@@ -122,6 +123,36 @@
     return booksForSubject().find(function (book) { return book[0] === key; }) || null;
   }
   function bookTitle(key) { var book = bookSpec(key); return book ? book[1] : key; }
+  function setBookScope(keys) {
+    var input = Array.isArray(keys) ? keys : [];
+    selectedVolumes = window.CnmBookSelection
+      ? window.CnmBookSelection.normalize(subject, input)
+      : booksForSubject().map(function (book) { return book[0]; }).filter(function (key) { return input.indexOf(key) >= 0; });
+    volume = selectedVolumes.length === 1 ? selectedVolumes[0] : '';
+  }
+  function hasBookScope() { return selectedVolumes.length > 0; }
+  function inBookScope(topic) { return !hasBookScope() || selectedVolumes.indexOf(volumeOf(topic)) >= 0; }
+  function scopedNodeSet(neighborhood) {
+    if (!hasBookScope()) return neighborhood;
+    if (showWholeBook) return new Set(topics.filter(inBookScope).map(function (topic) { return topic.id; }));
+    return new Set(Array.from(neighborhood).filter(function (id) { return byId.has(id) && inBookScope(byId.get(id)); }));
+  }
+  function scopeTitle() { return selectedVolumes.length > 1 ? '已选 ' + selectedVolumes.length + ' 本教材' : volume ? bookTitle(volume) : '选择教材'; }
+  function writeBookScope(params) {
+    if (window.CnmBookSelection) return window.CnmBookSelection.writeParams(params, subject, selectedVolumes);
+    params.delete('volume'); params.delete('volumes');
+    if (selectedVolumes.length > 1) params.set('volumes', selectedVolumes.join(','));
+    else if (volume) params.set('volume', volume);
+    return params;
+  }
+  function firstScopedTopic() {
+    for (var i = 0; i < selectedVolumes.length; i++) {
+      var key = selectedVolumes[i];
+      var first = topics.find(function (topic) { return volumeOf(topic) === key && passFilter(topic); });
+      if (first) return first;
+    }
+    return topics.find(passFilter);
+  }
   function currentChild() {
     return window.CnmChildren && window.CnmChildren.current ? window.CnmChildren.current() : null;
   }
@@ -163,11 +194,11 @@
     params.delete('returnTo');
     params.set('subject', subject);
     params.delete('grade');
-    if (volume) params.set('volume', volume); else params.delete('volume');
+    writeBookScope(params);
     if (stage) params.set('stage', stage); else params.delete('stage');
     if (domain) params.set('domain', domain); else params.delete('domain');
     if (query) params.set('q', query); else params.delete('q');
-    if (volume) params.set('view', showWholeBook ? 'book' : 'local'); else params.delete('view');
+    if (hasBookScope()) params.set('view', showWholeBook ? 'book' : 'local'); else params.delete('view');
     params.set('depth', String(upDepth));
     var pathname = '/' + location.pathname.replace(/^\/+/, '');
     return pathname + '?' + params.toString() + (selected ? '#' + encodeURIComponent(selected) : '');
@@ -192,16 +223,22 @@
     var title = $('book-title');
     var action = $('book-diagnose');
     if (!title || !action) return;
-    title.textContent = volume ? bookTitle(volume) : '选择一本教材';
+    title.textContent = scopeTitle();
+    title.title = selectedVolumes.map(bookTitle).join('、');
     var mobileTitle = $('mobile-book-title');
-    if (mobileTitle) mobileTitle.textContent = volume ? bookTitle(volume) : subject === 'physics' ? '物理知识图谱' : '科学知识图谱';
-    $('book-note').textContent = volume ? '本册 ' + topics.filter(function (topic) { return volumeOf(topic) === volume; }).length + ' 个知识点，检测从教材第一个知识点开始。' : '在教材选择器中选择册次，或从首页进入。';
+    if (mobileTitle) {
+      mobileTitle.textContent = hasBookScope() ? scopeTitle() : subject === 'physics' ? '物理知识图谱' : '科学知识图谱';
+      mobileTitle.setAttribute('aria-label', hasBookScope() ? '所选教材：' + selectedVolumes.map(bookTitle).join('、') : mobileTitle.textContent);
+    }
+    var count = topics.filter(inBookScope).length;
+    $('book-note').textContent = selectedVolumes.length > 1 ? '共 ' + count + ' 个知识点，可在目录中浏览所选教材并逐点检测。'
+      : volume ? '本册 ' + count + ' 个知识点，检测从教材第一个知识点开始。' : '在教材选择器中选择册次，或从首页多选教材进入。';
     action.hidden = !volume;
     action.href = volume ? bookHref() : '#';
     if (volume) action.setAttribute('data-diagnose-return', '../diagnose/?subject=' + subject + '&volume=' + encodeURIComponent(volume) + '&order=book');
     else action.removeAttribute('data-diagnose-return');
-    $('book-view').hidden = !volume;
-    $('book-view').textContent = showWholeBook ? '查看局部先修' : '查看本册全图';
+    $('book-view').hidden = !hasBookScope();
+    $('book-view').textContent = showWholeBook ? '查看局部先修' : selectedVolumes.length > 1 ? '查看所选教材全图' : '查看本册全图';
     $('book-view').setAttribute('aria-pressed', showWholeBook ? 'true' : 'false');
     refreshDiagnosisLinks();
   }
@@ -209,9 +246,11 @@
     history.replaceState(null, '', graphReturnTo());
   }
   function chooseBook(key) {
+    if (key === '__selection__') return;
+    rememberViewport();
     explicitNodeSelection = null;
     closeNodeDiagnosis();
-    volume = bookSpec(key) ? key : '';
+    setBookScope(bookSpec(key) ? [key] : []);
     grade = '';
     stage = '';
     domain = '';
@@ -225,8 +264,8 @@
     syncBook();
     syncBookQuery();
     renderList();
-    var first = topics.find(passFilter);
-    if (first && volume) select(first.id, 'user');
+    var first = firstScopedTopic();
+    if (first && hasBookScope()) select(first.id, 'user');
     else { renderDetail(); renderGraph(); }
   }
 
@@ -335,7 +374,12 @@
       button.classList.toggle('on', on);
       button.setAttribute('aria-selected', on ? 'true' : 'false');
     });
-    $('fGrade').value = volume;
+    var bookSelect = $('fGrade'), scopeOption = $('selected-books-option');
+    if (scopeOption) scopeOption.remove();
+    if (selectedVolumes.length > 1) {
+      bookSelect.insertBefore(el('option', { id: 'selected-books-option', value: '__selection__', text: scopeTitle() }), bookSelect.options[1] || null);
+    }
+    bookSelect.value = selectedVolumes.length > 1 ? '__selection__' : volume;
     var domainSelect = $('fDomain');
     if (Array.prototype.some.call(domainSelect.options, function (option) { return option.value === domain; })) {
       domainSelect.value = domain;
@@ -383,8 +427,10 @@
       $('cy').clientWidth > 0 && $('cy').clientHeight > 0;
   }
   function cameraContext() {
-    return { subject: subject, volume: volume, topicId: selected,
+    var context = { subject: subject, volume: volume, topicId: selected,
       view: showWholeBook ? 'book' : 'local', depth: upDepth, layout: 'labels-' + labelLimit() };
+    if (selectedVolumes.length > 1) context.volumes = selectedVolumes.slice();
+    return context;
   }
   function captureViewport() {
     if (!cy || changingCamera || !renderedCameraContext || $('cy').dataset.ready !== '1' || !graphIsVisible()) return null;
@@ -640,7 +686,7 @@
       if (stage === 'j' && (topic.grade < 7 || topic.grade > 9)) return false;
       if (stage === 'h' && topic.grade < 10) return false;
     }
-    if (volume && volumeOf(topic) !== volume) return false;
+    if (!inBookScope(topic)) return false;
     if (grade && String(topic.grade) !== grade) return false;
     if (domain && topic.domain !== domain) return false;
     if (query) {
@@ -698,7 +744,7 @@
     var shown = 0;
     var box = $('list');
     box.replaceChildren();
-    var filtering = !!(query || volume || grade || stage || domain);
+    var filtering = !!(query || hasBookScope() || grade || stage || domain);
     volumes.forEach(function (volume) {
       var count = volume.chapters.reduce(function (sum, chapter) { return sum + chapter.topics.length; }, 0);
       shown += count;
@@ -1058,12 +1104,9 @@
     var upSet = upstream(selected, depth);
     var nodeSet = new Set(upSet);
     (post.get(selected) || []).forEach(function (edge) { nodeSet.add(edge.id); });
-    if (volume) {
-      if (showWholeBook) nodeSet = new Set(topics.filter(function (topic) { return volumeOf(topic) === volume; }).map(function (topic) { return topic.id; }));
-      else nodeSet = new Set(Array.from(nodeSet).filter(function (id) { return volumeOf(byId.get(id)) === volume; }));
-    }
+    nodeSet = scopedNodeSet(nodeSet);
     var total = nodeSet.size;
-    var folded = !volume && upDepth === 'all' && total > FOLD_AT && !ancestorsOpen;
+    var folded = !hasBookScope() && upDepth === 'all' && total > FOLD_AT && !ancestorsOpen;
     var edgeCount = 0;
     if (!folded) {
       deps.forEach(function (edge) {
@@ -1081,8 +1124,8 @@
     cyEl.dataset.mode = folded ? 'grade' : 'full';
     cyEl.dataset.total = String(total);
     var heavy = !folded && total > 80;
-    cyEl.dataset.view = volume && showWholeBook ? 'book' : 'local';
-    cyEl.setAttribute('aria-label', (volume && showWholeBook ? bookTitle(volume) + '完整知识图谱' : '选中知识点的局部先修图') + '；绿色勾表示检测通过，红色叉表示未通过，目录中也可查看检测状态。');
+    cyEl.dataset.view = hasBookScope() && showWholeBook ? 'book' : 'local';
+    cyEl.setAttribute('aria-label', (hasBookScope() && showWholeBook ? scopeTitle() + '完整知识图谱' : '选中知识点的局部先修图') + '；勾表示检测通过，叉表示未通过，目录中也可查看检测状态。');
     if (heavy) meta.textContent = '正在排列全部 ' + total + ' 个知识点…';
 
     var kick = heavy ? function (fn) { setTimeout(fn, 40); } : requestAnimationFrame;
@@ -1175,14 +1218,14 @@
             cy.resize();
             cy.fit(undefined, dense ? 24 : 28);
             var framed = false;
-            if ((heavy || (volume && showWholeBook)) && cy.zoom() < 0.65) {
+            if ((heavy || (hasBookScope() && showWholeBook)) && cy.zoom() < 0.65) {
               cy.zoom(0.75);
               var focus = cy.getElementById(selected);
               if (focus && !focus.empty()) cy.center(focus);
               framed = true;
             }
             if (!folded) {
-              meta.textContent = (volume && showWholeBook ? '本册全图 ' + total + ' 个知识点、' + edgeCount + ' 条先修。可拖动、缩放查看。' : '局部图 ' + total + ' 个知识点、' + edgeCount + ' 条先修。向上 ' + depthLabel + '，向下 1 层。')
+              meta.textContent = (hasBookScope() && showWholeBook ? (selectedVolumes.length > 1 ? '所选教材全图 ' : '本册全图 ') + total + ' 个知识点、' + edgeCount + ' 条先修。可拖动、缩放查看。' : '局部图 ' + total + ' 个知识点、' + edgeCount + ' 条先修。向上 ' + depthLabel + '，向下 1 层。')
                 + (framed ? '已对准当前知识点，可拖动查看其余节点。' : '')
                 + note;
             }
@@ -1212,9 +1255,9 @@
       return;
     }
     rememberViewport();
-    var switchedBook = volume && volumeOf(byId.get(hit.id)) !== volume;
+    var switchedBook = hasBookScope() && !inBookScope(byId.get(hit.id));
     if (switchedBook) {
-      volume = volumeOf(byId.get(hit.id));
+      setBookScope([volumeOf(byId.get(hit.id))]);
       grade = '';
       stage = '';
       domain = '';
@@ -1254,8 +1297,10 @@
 
   function rememberLocation() {
     if (!selected || !byId.has(selected) || !window.CnmLastLocation) return;
-    window.CnmLastLocation.remember({ subject:subject, volume:volume, topicId:selected,
-      view:showWholeBook ? 'book' : 'local', depth:upDepth });
+    var record = { subject:subject, volume:volume, topicId:selected,
+      view:showWholeBook ? 'book' : 'local', depth:upDepth };
+    if (selectedVolumes.length > 1) record.volumes = selectedVolumes.slice();
+    window.CnmLastLocation.remember(record);
   }
   function restoreLocation(allTopics) {
     var memory = window.CnmLastLocation;
@@ -1349,12 +1394,13 @@
 
   function applyQuery() {
     var params = new URLSearchParams(location.search);
-    var chosen = params.get('volume') || '';
-    if (bookSpec(chosen)) volume = chosen;
-    else {
+    var chosen = window.CnmBookSelection ? window.CnmBookSelection.fromParams(params, subject)
+      : (params.get('volumes') || params.get('volume') || '').split(',');
+    setBookScope(chosen);
+    if (!hasBookScope()) {
       var legacyGrade = Number(params.get('grade'));
       var legacy = booksForSubject().find(function (book) { return book[2] === legacyGrade; });
-      if (legacy) volume = legacy[0];
+      if (legacy) setBookScope([legacy[0]]);
     }
     var stageValue = params.get('stage') || '';
     var allowedStages = subject === 'physics' ? ['', 'j', 'h'] : ['', 'p'];
@@ -1370,9 +1416,9 @@
 
   function bootSelection() {
     var hash = readHash();
-    if (hash && resolveId(hash) && (!volume || volumeOf(byId.get(resolveId(hash).id)) === volume)) { select(hash, 'hash'); return; }
-    if (volume || grade) {
-      var first = topics.filter(passFilter)[0];
+    if (hash && resolveId(hash) && inBookScope(byId.get(resolveId(hash).id))) { select(hash, 'hash'); return; }
+    if (hasBookScope() || grade) {
+      var first = firstScopedTopic();
       if (first) { select(first.id, 'user'); return; }
     }
     renderDetail();
@@ -1434,7 +1480,7 @@
       if (!button || button.hidden) return;
       stage = button.getAttribute('data-stage');
       var current = bookSpec(volume);
-      if (current && ((stage === 'j' && current[2] >= 10) || (stage === 'h' && current[2] <= 9))) volume = '';
+      if (current && ((stage === 'j' && current[2] >= 10) || (stage === 'h' && current[2] <= 9))) setBookScope([]);
       syncControls();
       syncBook();
       syncBookQuery();
@@ -1446,6 +1492,7 @@
       showWholeBook = !showWholeBook;
       rememberLocation();
       syncBook();
+      syncBookQuery();
       renderGraph();
     });
     window.addEventListener('storage', function () { refreshProgress(); });
@@ -1467,6 +1514,7 @@
       ancestorsOpen = false;
       try { sessionStorage.setItem('cnmExplore.depth', value); } catch (error) { /* 忽略 */ }
       syncDepthButtons();
+      syncBookQuery();
       refreshDiagnosisLinks();
       renderGraph();
     });

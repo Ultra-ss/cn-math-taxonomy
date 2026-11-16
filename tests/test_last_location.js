@@ -60,13 +60,60 @@ function remember(api, fields = {}) {
   });
   await test('明确首页、学科、册次、年级、知识点与筛选链接始终优先',()=>{
     const {api}=load();
-    for (const search of ['?home=1','?subject=physics','?subject=science','?subject=','?volume=八上','?grade=8','?q=力','?stage=j','?domain=能量','?view=local','?depth=3','?target=cnp_001','?chapter=八上 第一章','?returnTo=/explore/']) {
+    for (const search of ['?home=1','?subject=physics','?subject=science','?subject=','?volume=八上','?volumes=八上,八下','?volumes=','?volumes=bad','?grade=8','?q=力','?stage=j','?domain=能量','?view=local','?depth=3','?target=cnp_001','?chapter=八上 第一章','?returnTo=/explore/']) {
       for (const mode of ['home','explore']) assert.equal(api.shouldResume(mode,{search,hash:''}),false,search);
     }
     assert.equal(api.shouldResume('home',{search:'',hash:'#cnp_001'}),false);
     assert.equal(api.shouldResume('explore',{search:'',hash:'#cns_p001'}),false);
     assert.equal(api.shouldResume('home',{search:'?source=pwa',hash:''}),true);
     assert.equal(api.shouldResume('explore',{search:'?source=pwa',hash:''}),true);
+  });
+  await test('多本范围规范排序去重，旧单本存储结构保持兼容',()=>{
+    const {api,store}=load();
+    const record=remember(api,{volume:'',volumes:['九全','八下','八上','八下']});
+    assert.equal(record.volume,'');assert.deepEqual(Array.from(record.volumes),['八上','八下','九全']);
+    assert.equal(api.resolve(topics).topicId,'cnp_030');
+    const url=new URL(api.exploreURL(record,'/school/explore/'),'https://physicalmap.pages.dev');
+    assert.equal(url.pathname,'/school/explore/');assert.equal(url.searchParams.get('volumes'),'八上,八下,九全');
+    assert.equal(url.searchParams.has('volume'),false);assert.equal(url.hash,'#cnp_030');
+    const next=load({entries:{[KEY]:store.get(KEY)}});assert.deepEqual(Array.from(next.api.read().volumes),['八上','八下','九全']);
+    const single=remember(api,{volume:'',volumes:['八下','八下']});
+    assert.equal(single.volume,'八下');assert.equal(Object.prototype.hasOwnProperty.call(single,'volumes'),false);
+    assert.equal(new URL(api.exploreURL(single),'https://physicalmap.pages.dev').searchParams.get('volume'),'八下');
+  });
+  await test('科学与高中多本可以恢复，知识点必须属于所选教材之一',()=>{
+    const {api,store}=load();
+    for(const fields of [
+      {volume:'',volumes:['必修二','八下'],topicId:'cnp_h028'},
+      {subject:'science',volume:'',volumes:['三下','二下','三上'],topicId:'cns_p086'}
+    ]) {remember(api,fields);assert.equal(api.resolve(topics).topicId,fields.topicId);}
+    remember(api,{volume:'',volumes:['八上','必修二'],topicId:'cnp_030'});
+    assert.equal(api.resolve(topics),null);assert.equal(store.has(KEY),false);
+  });
+  await test('多本存储拒绝空、稀疏、错科和矛盾范围，非法保存保留原位置',()=>{
+    const {api,store}=load();const valid=remember(api);const before=store.get(KEY);
+    for(const volumes of [[],null,'八上,八下',['八上','三下'],['八上','bad'],['八上',''],['八上',2],new Array(2)]){
+      assert.equal(api.remember({...valid,volume:'',volumes}),false,JSON.stringify(volumes));
+      assert.equal(store.get(KEY),before);
+      store.set(KEY,JSON.stringify({...valid,volume:'',volumes}));assert.equal(api.read(),null);store.set(KEY,before);
+    }
+    assert.equal(api.remember({...valid,volumes:['八上','八下']}),false,'多本不能同时带非空单册');
+    const inherited=Object.assign(Object.create({volumes:['八上','八下']}),valid,{volume:''});
+    assert.equal(api.remember(inherited),false);
+    const broken={...valid};Object.defineProperty(broken,'volumes',{get(){throw new Error('bad getter');}});
+    assert.equal(api.remember(broken),false);assert.equal(store.get(KEY),before);
+  });
+  await test('多本继续弹窗列出范围并恢复整组，旧候选不会清掉新窗口的新范围',async()=>{
+    const app=load();remember(app.api,{volume:'',volumes:['八下','八上']});
+    assert.equal(await app.api.resumeHome(),true);
+    assert.ok(app.nodes['continue-learning-location'].textContent.includes('八年级上册、八年级下册'));
+    app.nodes['continue-learning-yes'].click();
+    const url=new URL(app.redirects[0],'https://physicalmap.pages.dev');
+    assert.equal(url.searchParams.get('volumes'),'八上,八下');assert.equal(url.hash,'#cnp_030');
+    let respond;const deferred=load({fetch:()=>new Promise(done=>{respond=done;})});
+    remember(deferred.api,{volume:'',volumes:['八上','必修二']});const pending=deferred.api.resumeHome();
+    remember(deferred.api,{volume:'',volumes:['八下','九全']});respond({ok:true,json:()=>topics});await pending;
+    assert.deepEqual(Array.from(deferred.api.read().volumes),['八下','九全']);
   });
   await test('损坏数据和跨科、非法册次均不会形成恢复候选',()=>{
     const {api,store}=load();const valid=remember(api);

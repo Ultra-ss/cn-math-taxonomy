@@ -35,7 +35,8 @@ let mobile = true;
 const ctx = {
   URL, URLSearchParams,
   location: {origin:'https://physicalmap.pages.dev',href:'https://physicalmap.pages.dev/explore/?subject=physics&volume=八下',pathname:'/explore/',search:'?subject=physics&volume=八下'},
-  byId: new Map([['cnp_029',{name:'力'}],['cnp_030',{name:'弹力'}]]),
+  byId: new Map([['cnp_029',{name:'力',grade:8,semester:'下'}],['cnp_030',{name:'弹力',grade:8,semester:'下'}]]),
+  CN:['','一','二','三','四','五','六','七','八','九'],EN_BOOK:{},selectedVolumes:['八下'],
   selected:'cnp_029', explicitNodeSelection:null, currentAlias:null, volume:'八下', subject:'physics', stage:'', domain:'', query:'', showWholeBook:true, upDepth:2,
   ancestorsOpen:false, nodeDialogId:null, nodeDialogScroll:null, cy:null, mobileScroll:{detail:0}, graphNeedsRender:false,
   $: id => ids[id],
@@ -49,7 +50,7 @@ const ctx = {
 };
 ctx.renderGraph = () => {ctx.rebuilds++;ctx.explicitNodeSelection=null;};
 vm.createContext(ctx);
-vm.runInContext(section('function graphReturnTo()', 'function syncBook()')+
+vm.runInContext(section('function booksForSubject()', 'function currentChild()')+section('function graphReturnTo()', 'function syncBook()')+
   section('function syncMobileChrome()', 'function recomputeAliasHits()')+
   section('function select(raw, source)', 'function zoomBy('),ctx);
 ctx.bindNodeConfirmation();

@@ -5,6 +5,7 @@ const fs = require('fs');
 const vm = require('vm');
 const path = require('path');
 const root = path.resolve(__dirname, '..');
+const BookSelection = require('../assets/book-selection.js');
 const source = fs.readFileSync(path.join(root, 'explore/app.js'), 'utf8');
 const topics = JSON.parse(fs.readFileSync(path.join(root, 'data/topics.json')));
 function section(start, end) {
@@ -26,6 +27,7 @@ assert.equal(subject('', 'cnp_001'), 'physics');
 const context = {
   CN: ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'],
   EN_BOOK: {10:['必修一'],11:['必修二'],12:['必修三'],13:['选必一'],14:['选必二'],15:['选必三']},
+  window:{CnmBookSelection:BookSelection}, selectedVolumes:['八上'],
   subject: 'physics', volume: '八上', stage: '', grade: '', domain: '', query: '', aliasHitIds: new Set()
 };
 vm.createContext(context);
@@ -34,7 +36,7 @@ assert.equal(context.booksForSubject().length, 9);
 assert.deepEqual(Array.from(context.booksForSubject().slice(0, 3), x => x[0]), ['八上', '八下', '九全']);
 const physics = topics.filter(t => t.subject === 'physics');
 for (const [book, count, first] of [['八上',28,'cnp_001'], ['八下',24,'cnp_029'], ['九全',40,'cnp_053'], ['必修一',27,'cnp_h001']]) {
-  context.volume = book;
+  context.setBookScope([book]);
   const list = physics.filter(t => context.passFilter(t));
   assert.equal(list.length, count, book);
   assert.equal(list[0].id, first, book + ' 应从教材第一个知识点进入');
@@ -42,7 +44,7 @@ for (const [book, count, first] of [['八上',28,'cnp_001'], ['八下',24,'cnp_0
 }
 context.subject = 'science';
 assert.equal(context.booksForSubject().length, 12);
-context.volume = '一上';
+context.setBookScope(['一上']);
 assert.equal(topics.filter(t => t.subject === 'science' && context.passFilter(t)).length, 15);
 
 // 角标独立于名称、标签；传给 Cytoscape 的状态类不改变知识点内容。
@@ -62,6 +64,7 @@ assert.ok(source.includes("'background-position-y': '0%'"));
 // 从当前界面生成可恢复的同源返回目标，包含没有写进地址栏的筛选和视图状态。
 const returnContext = {
   URL, URLSearchParams,
+  CN:context.CN,EN_BOOK:context.EN_BOOK,window:{CnmBookSelection:BookSelection},selectedVolumes:['八下'],
   location: {
     origin: 'https://physicalmap.pages.dev',
     href: 'https://physicalmap.pages.dev/explore/?grade=8&returnTo=https%3A%2F%2Fevil.example%2F',
@@ -71,7 +74,7 @@ const returnContext = {
   showWholeBook: false, upDepth: 3, selected: 'cnp_029'
 };
 vm.createContext(returnContext);
-vm.runInContext(section('function graphReturnTo()', 'function syncBook()'), returnContext);
+vm.runInContext(section('function booksForSubject()', 'function currentChild()')+section('function graphReturnTo()', 'function syncBook()'), returnContext);
 const base = 'https://physicalmap.pages.dev';
 let bookLink = new URL(returnContext.bookHref(), base);
 assert.equal(bookLink.pathname, '/diagnose/');
@@ -106,6 +109,7 @@ for (const [subjectName, book, id, prefix] of [
   ['physics', '必修二', 'cnp_h028', ''], ['science', '三下', 'cns_p086', '/school']
 ]) {
   Object.assign(returnContext, {subject: subjectName, volume: book, selected: id, stage:'', domain:'', query:'', showWholeBook:true, upDepth:2});
+  returnContext.setBookScope([book]);
   Object.assign(returnContext.location, {pathname: prefix+'/explore/', href: base+prefix+'/explore/', search:''});
   const link = new URL(returnContext.bookHref(), base);
   const target = new URL(link.searchParams.get('returnTo'), base);

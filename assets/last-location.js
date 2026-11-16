@@ -23,13 +23,31 @@
     if (value === '') return true;
     return typeof value === 'string' && (subject === 'physics' ? PHYSICS_BOOKS.indexOf(value) >= 0 : /^[一二三四五六][上下]$/.test(value));
   }
+  function own(value, key) { return Object.prototype.hasOwnProperty.call(value, key); }
+  function bookScope(subject, volume, values) {
+    if (values === undefined) return { volume:volume };
+    if (!Array.isArray(values) || !values.length || values.length > 24) return null;
+    for (var i = 0; i < values.length; i++) if (!own(values, i) || values[i] === '' || !validVolume(values[i], subject)) return null;
+    var order = subject === 'physics' ? PHYSICS_BOOKS : [];
+    if (subject === 'science') CN.slice(1, 7).forEach(function (grade) { order.push(grade + '上', grade + '下'); });
+    var selected = order.filter(function (value) { return values.indexOf(value) >= 0; });
+    if (!selected.length || (volume && (selected.length !== 1 || selected[0] !== volume))) return null;
+    return selected.length === 1 ? { volume:selected[0] } : { volume:'', volumes:selected };
+  }
   function normalize(value) {
-    if (!value || typeof value !== 'object' || Array.isArray(value) || value.v !== 1 ||
-        ['physics', 'science'].indexOf(value.subject) < 0 || subjectOf(value.topicId) !== value.subject ||
-        !validVolume(value.volume, value.subject) || ['book', 'local'].indexOf(value.view) < 0 ||
-        [1, 2, 3, 'all'].indexOf(value.depth) < 0 ||
-        typeof value.at !== 'string' || !Number.isFinite(Date.parse(value.at))) return null;
-    return {v:1, subject:value.subject, volume:value.volume, topicId:value.topicId, view:value.view, depth:value.depth, at:value.at};
+    try {
+      if (!value || typeof value !== 'object' || Array.isArray(value) || value.v !== 1 ||
+          ['physics', 'science'].indexOf(value.subject) < 0 || subjectOf(value.topicId) !== value.subject ||
+          !validVolume(value.volume, value.subject) || ['book', 'local'].indexOf(value.view) < 0 ||
+          [1, 2, 3, 'all'].indexOf(value.depth) < 0 ||
+          typeof value.at !== 'string' || !Number.isFinite(Date.parse(value.at)) ||
+          (value.volumes !== undefined && !own(value, 'volumes'))) return null;
+      var scope = bookScope(value.subject, value.volume, value.volumes);
+      if (!scope) return null;
+      var record = {v:1, subject:value.subject, volume:scope.volume, topicId:value.topicId, view:value.view, depth:value.depth, at:value.at};
+      if (scope.volumes) record.volumes = scope.volumes;
+      return record;
+    } catch (error) { return null; }
   }
   function read() {
     try {
@@ -39,12 +57,16 @@
     } catch (error) { return null; }
   }
   function remember(payload) {
-    if (!payload) return false;
-    var record = normalize({v:1, subject:payload.subject, volume:payload.volume || '', topicId:payload.topicId,
-      view:payload.view === undefined ? 'book' : payload.view, depth:payload.depth === undefined ? 2 : payload.depth,
-      at:new Date().toISOString()});
-    if (!record) return false;
-    try { storage().setItem(KEY, JSON.stringify(record)); return true; } catch (error) { return false; }
+    try {
+      if (!payload || typeof payload !== 'object' || Array.isArray(payload) ||
+          (payload.volumes !== undefined && !own(payload, 'volumes'))) return false;
+      var record = normalize({v:1, subject:payload.subject, volume:payload.volume || '', volumes:payload.volumes, topicId:payload.topicId,
+        view:payload.view === undefined ? 'book' : payload.view, depth:payload.depth === undefined ? 2 : payload.depth,
+        at:new Date().toISOString()});
+      if (!record) return false;
+      storage().setItem(KEY, JSON.stringify(record));
+      return true;
+    } catch (error) { return false; }
   }
   function volumeOf(topic) {
     return HIGH_BOOKS[topic.grade] || (CN[topic.grade] ? CN[topic.grade] + topic.semester : '');
@@ -60,7 +82,8 @@
     var topic = topics.find(function (item) {
       return item && item.id === record.topicId && item.subject === record.subject && !item.external;
     });
-    if (!topic || (record.volume && record.volume !== volumeOf(topic))) {
+    if (!topic || (record.volume && record.volume !== volumeOf(topic)) ||
+        (record.volumes && record.volumes.indexOf(volumeOf(topic)) < 0)) {
       forgetIfSame(record);
       return null;
     }
@@ -71,7 +94,7 @@
     if (!loc || (mode !== 'home' && mode !== 'explore') || loc.hash) return false;
     var params = new URLSearchParams(loc.search || '');
     if (params.get('home') === '1') return false;
-    return !['subject', 'volume', 'grade', 'stage', 'domain', 'q', 'view', 'depth', 'target', 'chapter', 'returnTo'].some(function (name) {
+    return !['subject', 'volume', 'volumes', 'grade', 'stage', 'domain', 'q', 'view', 'depth', 'target', 'chapter', 'returnTo'].some(function (name) {
       return params.has(name);
     });
   }
@@ -87,7 +110,8 @@
     if (!record) return '';
     var params = new URLSearchParams();
     params.set('subject', record.subject);
-    if (record.volume) params.set('volume', record.volume);
+    if (record.volumes) params.set('volumes', record.volumes.join(','));
+    else if (record.volume) params.set('volume', record.volume);
     params.set('view', record.view);
     params.set('depth', String(record.depth));
     return siteBase(pathname === undefined && root.location ? root.location.pathname : pathname) + 'explore/?' + params.toString() + '#' + encodeURIComponent(record.topicId);
@@ -120,9 +144,12 @@
       var record = resolve(topics, candidate);
       if (!record) return false;
       var topic = topics.find(function (item) { return item.id === record.topicId; });
-      var title = record.volume;
-      if (/^[一二三四五六八][上下]$/.test(title)) title = title.charAt(0) + '年级' + title.charAt(1) + '册';
-      if (title === '九全') title = '九年级全一册';
+      function bookTitle(key) {
+        if (/^[一二三四五六八][上下]$/.test(key)) return key.charAt(0) + '年级' + key.charAt(1) + '册';
+        return key === '九全' ? '九年级全一册' : key;
+      }
+      var title = record.volumes ? record.volumes.slice(0, 2).map(bookTitle).join('、') +
+        (record.volumes.length > 2 ? '等 ' + record.volumes.length + ' 本教材' : '（2 本教材）') : bookTitle(record.volume);
       doc.getElementById('continue-learning-location').textContent =
         (record.subject === 'physics' ? '初高中物理' : '小学科学') +
         (title ? ' · ' + title : '') + ' · ' + topic.name;

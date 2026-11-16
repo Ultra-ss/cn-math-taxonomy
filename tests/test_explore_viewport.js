@@ -54,6 +54,36 @@ test('可选布局为空与省略等价，expanded省略默认为收起',()=>{
   const {api}=load();const noLayout={...scene};delete noLayout.layout;const noExpanded={...state};delete noExpanded.expanded;
   assert.equal(api.save(noLayout,noExpanded),true);assert.deepEqual(plain(api.read({...noLayout,layout:''})),state);
 });
+test('多本场景按集合匹配，点击顺序不同仍恢复同一画面',()=>{
+  const {api,entries}=load();
+  const group={...scene,volume:'',volumes:['九全','八下','八上','八下']};
+  assert.equal(api.save(group,state),true);
+  assert.deepEqual(JSON.parse(entries.get(KEY)).context.volumes,['八上','八下','九全']);
+  assert.deepEqual(plain(api.read({...group,volumes:['八下','九全','八上']})),state);
+  assert.equal(api.read({...group,volumes:['八上','八下']}),null,'同一知识点换一组教材不能套旧画面');
+  assert.equal(api.read({...scene,volume:''}),null,'没有范围不等于多本');
+  const single={...scene,volume:'',volumes:['八下','八下']};
+  assert.equal(api.save(single,state),true);assert.deepEqual(plain(api.read(scene)),state);
+  assert.equal(Object.prototype.hasOwnProperty.call(JSON.parse(entries.get(KEY)).context,'volumes'),false);
+});
+test('科学多本与明确全选范围可保存，全选不等于无范围',()=>{
+  const {api}=load();
+  const science={...scene,subject:'science',volume:'',topicId:'cns_p086',volumes:['三下','三上','一下']};
+  assert.equal(api.save(science,state),true);assert.deepEqual(plain(api.read({...science,volumes:['一下','三上','三下']})),state);
+  const all={...scene,volume:'',volumes:['八上','八下','九全','必修一','必修二','必修三','选必一','选必二','选必三']};
+  assert.equal(api.save(all,state),true);assert.equal(api.read({...scene,volume:''}),null);
+});
+test('非法或矛盾多本上下文不覆盖有效场景',()=>{
+  const {api,entries}=load();api.save(scene,state);const before=entries.get(KEY);
+  for(const volumes of [[],null,'八上,八下',['八上','三下'],['八上','bad'],['八上',''],['八上',2],new Array(2)]){
+    assert.equal(api.save({...scene,volume:'',volumes},state),false,JSON.stringify(volumes));
+    assert.equal(api.read({...scene,volume:'',volumes}),null);
+    assert.equal(entries.get(KEY),before);
+  }
+  assert.equal(api.save({...scene,volumes:['八上','八下']},state),false);
+  const inherited=Object.assign(Object.create({volumes:['八上','八下']}),scene,{volume:''});
+  assert.equal(api.save(inherited,state),false);assert.equal(entries.get(KEY),before);
+});
 test('拒绝未知学科、跨科节点、非法册次、非数值层数或任意URL',()=>{
   const {api,entries}=load();api.save(scene,state);const before=entries.get(KEY);
   for(const fields of [
