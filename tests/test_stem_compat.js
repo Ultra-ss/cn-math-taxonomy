@@ -127,7 +127,7 @@ test('盲区隐藏已移除学科，科学物理作答不会被旧语文题干�
     const id = subject === 'science' ? 'cns_p001' : 'cnp_001';
     const answers = [{ id, qid: id + '_q1', result: 'wrong' }];
     assert.equal(StemCompat.sessionEffect(answers).answers.length, 1);
-    assert.equal(api.noteResult({ subject, key: subject + '|run', label: '两科诊断', weak: [id], roots: [id], answers }), true);
+    assert.equal(api.noteResult({ subject, key: subject + '|run', label: '两科检测', weak: [id], roots: [id], answers }), true);
     const rows = api.list({ subject });
     assert.equal(rows.length, 1);
     assert.equal(rows[0].status, 'weak');

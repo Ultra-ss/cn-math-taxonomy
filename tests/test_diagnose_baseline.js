@@ -127,10 +127,11 @@ syncContext.demo = {};
 syncContext.syncProgress();
 assert.strictEqual(syncCalls.length, 2, '演示绝不写学习进度');
 
-// 三个视图都通过空值过滤 helper 插入可选档案条，原生 append(null) 会显示 "null"。
+// 空值过滤 helper 不会把可选内容渲染成 "null"；档案只在开始和结果页展示。
 const appendCode = section('function append(el, c)', 'function figureEl(svg)');
 const appended = [];
 const domContext = {
+  displayText(value) { return String(value); },
   document: { createTextNode(text) { return { nodeType: 3, text }; } }
 };
 vm.createContext(domContext);
@@ -138,10 +139,11 @@ vm.runInContext(appendCode, domContext);
 const node = { nodeType: 1 };
 domContext.append({ append(child) { appended.push(child); } }, [null, false, node]);
 assert.deepStrictEqual(appended, [node]);
-for (const mode of ['start', 'question']) {
+for (const mode of ['start']) {
   assert.ok(source.includes("append(page, childBar('" + mode + "'))"));
   assert.ok(!source.includes("page.append(childBar('" + mode + "'))"));
 }
+assert.ok(!source.includes("append(page, childBar('question'))"), '答题期间不展示档案条');
 assert.ok(source.includes("append(morePanel, childBar('result'))"));
 assert.ok(!source.includes("page.append(childBar('result'))"));
 

@@ -2,7 +2,7 @@
   "id": "./",
   "name": "全网路物理学习图谱",
   "short_name": "全网路物理学习图谱",
-  "description": "小学科学与初高中物理的知识图谱和自适应诊断，沿先修关系找到薄弱根因。",
+  "description": "小学科学与初高中物理的知识图谱和自适应检测，沿先修关系找到薄弱根因。",
   "lang": "zh-CN",
   "dir": "ltr",
   "start_url": "./?source=pwa",
@@ -35,8 +35,8 @@
   ],
   "shortcuts": [
     {
-      "name": "开始诊断",
-      "short_name": "诊断",
+      "name": "开始检测",
+      "short_name": "检测",
       "url": "diagnose/?source=pwa",
       "icons": [
         {

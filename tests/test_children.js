@@ -96,7 +96,7 @@ test('保留未选择当前孩子、未知扩展字段和超过 40 条的已存�
   assert.deepStrictEqual(backup.records, extraRecords);
 });
 
-test('有孩子但没有诊断记录时仍能备份资料', () => {
+test('有孩子但没有检测记录时仍能备份资料', () => {
   const backup = exported(load({ [PROFILE_KEY]: JSON.stringify(profiles) }).api);
   assert.deepStrictEqual(backup.profiles, profiles);
   assert.deepStrictEqual(backup.records, {});
@@ -274,7 +274,7 @@ test('合并保留 80 条历史，之后保存和移动记录也不会批量截�
   assert.equal(stored(storage, RECORD_KEY)['child-a'].length, 82);
 });
 
-test('普通档案新增诊断仍保持原有最近 40 条规则', () => {
+test('普通档案新增检测仍保持原有最近 40 条规则', () => {
   const { api, storage } = load({ [PROFILE_KEY]: JSON.stringify(profiles) });
   for (let i = 0; i < 41; i++) api.saveRecord('child-a', { key: 'run-' + i, subject: 'science' });
   assert.equal(stored(storage, RECORD_KEY)['child-a'].length, 40);
@@ -388,7 +388,7 @@ test('拒绝危险对象键与超大文件，支持 UTF-8 BOM', () => {
   assert.equal({}.polluted, undefined);
 });
 
-test('科学学科的诊断记录可以备份和恢复', () => {
+test('科学学科的检测记录可以备份和恢复', () => {
   const data = backup();
   data.records['child-b'] = data.records['child-b'].concat([{ key: 'science|seed|target', subject: 'science', mode: 'target', targets: ['cns_p001'], weak: [], savedAt: '2026-10-22T00:00:00.000Z' }]);
   const { api, storage } = load();
@@ -417,7 +417,7 @@ function wrong(topic = 'cns_p001', ts = 1762000000000, count = 2) {
 }
 function blind(id = 'cns_p001', status = 'weak', lastAt = '2026-11-14T00:00:00.000Z', wrongs = 3) {
   return { id, subject: id.startsWith('cns_') ? 'science' : 'physics', status, root: status === 'weak',
-    hits: 2, wrongs, lastAt, lastLabel: '测试诊断', lastKey: 'science|run-a|cns_p001' };
+    hits: 2, wrongs, lastAt, lastLabel: '测试检测', lastKey: 'science|run-a|cns_p001' };
 }
 function progressRun(key = 'science|run-a|cns_p001', status = 'mastered', at = '2026-11-15T00:00:00.000Z') {
   return { key, subject: 'science', at, states: { cns_p001: { status, at } } };
@@ -692,7 +692,7 @@ test('删除孩子同时删除其图谱进度，其他孩子和访客保留，�
   assert.equal(remaining.byChild.guest.runs.length,1);
 });
 
-test('教材诊断会话与记录可备份，包括教材顺序、册次和明确归属', () => {
+test('教材检测会话与记录可备份，包括教材顺序、册次和明确归属', () => {
   const data=learningBackup();
   data.learning.sessions.science={...data.learning.sessions.science,mode:'textbook',order:'book',volume:'一上',progressChildId:'child-a'};
   data.learning.sessions.physics={...data.learning.sessions.physics,mode:'textbook',order:'book',volume:'八上',progressChildId:null};

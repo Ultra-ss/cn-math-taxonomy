@@ -1,5 +1,5 @@
-/* 孩子档案：多个孩子、当前孩子、每个孩子的诊断记录。全部保存在本机 localStorage，不上传、不需要账号。
- * 诊断页和档案页共用。window.CnmChildren。 */
+/* 孩子档案：多个孩子、当前孩子、每个孩子的检测记录。全部保存在本机 localStorage，不上传、不需要账号。
+ * 检测页和档案页共用。window.CnmChildren。 */
 (function () {
   'use strict';
   var KEY = 'cnmChildren.v1';
@@ -111,7 +111,7 @@
       return rec && (rec.subject === 'science' || rec.subject === 'physics');
     }).sort(function (a, b) { return String(b.savedAt).localeCompare(String(a.savedAt)); }) : [];
   }
-  /* 按 rec.key 覆盖：同一次诊断反复打开结果页、更正答案，只会更新这一条 */
+  /* 按 rec.key 覆盖：同一次检测反复打开结果页、更正答案，只会更新这一条 */
   function saveRecord(childId, rec) {
     if (!childId || !rec || !rec.key || (rec.subject !== 'science' && rec.subject !== 'physics')) return false;
     var all = records();
@@ -236,25 +236,25 @@
     });
     if (profiles.current !== null && !ids.has(profiles.current)) throw new Error('当前孩子不在备份档案中。');
     Object.keys(history).forEach(function (id) {
-      if (!ids.has(id) || !Array.isArray(history[id])) throw new Error('诊断记录没有对应的孩子档案。');
+      if (!ids.has(id) || !Array.isArray(history[id])) throw new Error('检测记录没有对应的孩子档案。');
       var keys = new Set();
       history[id].forEach(function (r) {
         if (!isObject(r) || typeof r.key !== 'string' || !r.key || keys.has(r.key) ||
             ['science', 'physics'].indexOf(r.subject) < 0 || !validDate(r.savedAt) ||
-            (own(r, 'updatedAt') && !validDate(r.updatedAt))) throw new Error('诊断记录的标识、学科或时间不正确。');
+            (own(r, 'updatedAt') && !validDate(r.updatedAt))) throw new Error('检测记录的标识、学科或时间不正确。');
         keys.add(r.key);
         ['weak', 'roots', 'shaky', 'mastered', 'targets'].forEach(function (field) {
           if (!own(r, field) || (field === 'targets' && r[field] === null)) return;
           if (!Array.isArray(r[field]) || !r[field].every(function (topic) {
             return validId(topic) && subjectOfTopic(topic) === r.subject;
-          })) throw new Error('诊断记录的知识点列表不正确。');
+          })) throw new Error('检测记录的知识点列表不正确。');
         });
         if ((own(r, 'asked') && (!Number.isInteger(r.asked) || r.asked < 0)) ||
             (own(r, 'label') && typeof r.label !== 'string') ||
-            (own(r, 'mode') && ['target', 'screen', 'textbook'].indexOf(r.mode) < 0)) throw new Error('诊断记录的范围或题数不正确。');
+            (own(r, 'mode') && ['target', 'screen', 'textbook'].indexOf(r.mode) < 0)) throw new Error('检测记录的范围或题数不正确。');
         if (own(r, 'counts') && (!isObject(r.counts) || !Object.keys(r.counts).every(function (key) {
           return Number.isInteger(r.counts[key]) && r.counts[key] >= 0;
-        }))) throw new Error('诊断记录的统计不正确。');
+        }))) throw new Error('检测记录的统计不正确。');
       });
     });
     checkSafeKeys(profiles);
@@ -310,22 +310,22 @@
           // seenList 是全站共用，科学之后开启物理时自然包含科学题号。
           // 历史其他学科题号也仅用于排重，不能按本次活动学科限制。
           return shortText(qid, 160) && /^cn[a-z]_[A-Za-z0-9]+_q[1-9][0-9]*$/.test(qid);
-        })))) throw new Error('进行中诊断的范围、设置或时间不正确。');
+        })))) throw new Error('进行中检测的范围、设置或时间不正确。');
     if ((own(session, 'progressChildId') && session.progressChildId !== null && !validId(session.progressChildId)) ||
         (own(session, 'volume') && !shortText(session.volume, 100)) ||
         (own(session, 'order') && session.order !== 'book') ||
-        (own(session, 'returnTo') && !validReturnTo(session.returnTo))) throw new Error('进行中诊断的归属、教材或返回位置不正确。');
+        (own(session, 'returnTo') && !validReturnTo(session.returnTo))) throw new Error('进行中检测的归属、教材或返回位置不正确。');
     session.answers.forEach(function (answer) {
       if (!isObject(answer) || subjectOfTopic(answer.id) !== subject || !validQuestion(answer.qid, answer.id) ||
           ['correct', 'wrong', 'skip'].indexOf(answer.result) < 0 ||
           (own(answer, 'text') && !shortText(answer.text)) || (own(answer, 'prompt') && !shortText(answer.prompt))) {
-        throw new Error('进行中诊断的作答数据不正确。');
+        throw new Error('进行中检测的作答数据不正确。');
       }
     });
     if (own(session, 'excluded') && (!Array.isArray(session.excluded) || !session.excluded.every(function (answer) {
       return isObject(answer) && subjectOfTopic(answer.id) === subject && validQuestion(answer.qid, answer.id) &&
         ['correct', 'wrong', 'skip'].indexOf(answer.result) >= 0 && shortText(answer.prompt);
-    }))) throw new Error('进行中诊断的排除记录不正确。');
+    }))) throw new Error('进行中检测的排除记录不正确。');
   }
   function checkLearning(learning) {
     if (!isObject(learning) || !isObject(learning.wrongbook) || !isObject(learning.sessions) ||
@@ -350,11 +350,11 @@
       });
     });
     Object.keys(learning.sessions).forEach(function (subject) {
-      if (!own(SESSION_KEYS, subject)) throw new Error('进行中诊断含有不支持的学科。');
+      if (!own(SESSION_KEYS, subject)) throw new Error('进行中检测含有不支持的学科。');
       checkSession(learning.sessions[subject], subject);
     });
     learning.archivedSessions.forEach(function (entry) {
-      if (!isObject(entry) || !own(SESSION_KEYS, entry.subject)) throw new Error('诊断归档的学科不正确。');
+      if (!isObject(entry) || !own(SESSION_KEYS, entry.subject)) throw new Error('检测归档的学科不正确。');
       checkSession(entry.session, entry.subject);
     });
     Object.keys(learning.blindspots.byId).forEach(function (id) {
@@ -596,7 +596,7 @@
   function restoreArchivedSession(index, token) {
     var before = importSnapshot();
     if (before.token !== token) throw new Error('本机学习数据已发生变化，请刷新列表后重试。');
-    if (!natural(index) || !before.learning.archivedSessions[index]) throw new Error('找不到这份诊断进度。');
+    if (!natural(index) || !before.learning.archivedSessions[index]) throw new Error('找不到这份检测进度。');
     var learning = copy(before.learning);
     var selected = learning.archivedSessions.splice(index, 1)[0];
     var active = learning.sessions[selected.subject];

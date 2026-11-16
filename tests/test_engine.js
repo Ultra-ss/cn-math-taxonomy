@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* 诊断引擎测试：node tests/test_engine.js （无依赖，仅用 assert） */
+/* 检测引擎测试：node tests/test_engine.js （无依赖，仅用 assert） */
 'use strict';
 const assert = require('assert');
 const fs = require('fs');
@@ -853,7 +853,7 @@ test('真实数据：路径图布局——所有边方向一致，节点不丢',
   assert.ok(layer.cnp_h168 === lay.layers - 1);
 });
 
-test('真实数据：诊断题答案能被自己的判题器接受（判对率检查）', () => {
+test('真实数据：检测题答案能被自己的判题器接受（判对率检查）', () => {
   let bad = [];
   formal.forEach((t) => {
     const a = t.diagnostic_question.answer;
@@ -1162,7 +1162,7 @@ test('带题库的图：每个正式知识点可测、外部节点不可测；ha
   assert.ok(topics.filter((t) => t.external).every((t) => !E.isTestable(RGQ, t.id)));
 });
 
-console.log('带题库的真实诊断');
+console.log('带题库的真实检测');
 
 /** 学生：known 一次答对；flaky 第一题错第二题对；其余两题都错 */
 function simulateBank(targets, known, flaky, limit, seed, confirm) {
@@ -1297,7 +1297,7 @@ test('带题库：题量上限（8/16/30）按题计、永不突破；未复测�
   });
 });
 
-test('带题库：种子固定 => 整个诊断的出题序列确定；换种子序列会变；重放一致', () => {
+test('带题库：种子固定 => 整个检测的出题序列确定；换种子序列会变；重放一致', () => {
   const known = new Set(); // 什么都不会：两题都错，序列最长，选题的随机性最明显
   const a = simulateBank(['cnp_h168'], known, new Set(), 16, 'fixed');
   const b = simulateBank(['cnp_h168'], known, new Set(), 16, 'fixed');
@@ -1537,7 +1537,7 @@ test('筛查：路径图只画有问题的点（不把整个年级都画上）',
   assert.strictEqual(allOk.path.length, 0);
 });
 
-test('普通整章 / 单点诊断不受影响：不带 mode 的会话包含完整物理先修链', () => {
+test('普通整章 / 单点检测不受影响：不带 mode 的会话包含完整物理先修链', () => {
   const s = E.createSession(RGQ, ['cnp_h168'], { limit: 16 });
   assert.strictEqual(s.mode, 'target');
   assert.ok(s.order.length > 1);

@@ -1,4 +1,4 @@
-/* 盲区与历史页：汇总本机诊断薄弱 / 不稳知识点，按章一键再测；也列出孩子的诊断记录。 */
+/* 盲区与历史页：汇总本机检测薄弱 / 不稳知识点，按章一键再测；也列出孩子的检测记录。 */
 (function () {
   'use strict';
   var CC = window.CnmChildren;
@@ -70,7 +70,7 @@
     if (ch) meta.push(ch);
     if (info.wrongs) meta.push('答错 ' + info.wrongs + ' 次');
     else if (info.hits && info.hits > 1) meta.push('出现 ' + info.hits + ' 次');
-    if (info.at) meta.push(fmt(info.at) + ' 诊断');
+    if (info.at) meta.push(fmt(info.at) + ' 检测');
     li.appendChild(el('p', 'wk-meta', meta.join(' · ')));
     var re = el('a', 'wk-retest', '再测一次');
     re.href = retestHref([id], info.subject || subjectOfId(id));
@@ -83,7 +83,7 @@
     var ids = Object.keys(by).filter(function (id) {
       return subjectOfId(id) && (by[id].status === 'weak' || by[id].status === 'shaky');
     });
-    /* 没有孩子记录时，仍展示本机盲区账本（含未建档时的诊断）。 */
+    /* 没有孩子记录时，仍展示本机盲区账本（含未建档时的检测）。 */
     if (!ids.length && window.CnmBlind) {
       window.CnmBlind.list({ subject: subjectSel || null }).forEach(function (row) {
         if (!by[row.id]) {
@@ -100,14 +100,14 @@
     var weakN = ids.filter(function (id) { return by[id].status === 'weak'; }).length;
     sec.appendChild(el('h2', null, '盲区汇总（薄弱 / 不稳）'));
     if (!CC.recordsOf(child.id).length && !ids.length) {
-      sec.appendChild(el('p', 'kid-empty', '还没有诊断记录。做完一次诊断，薄弱点会汇总在这里，并可一键再测。'));
+      sec.appendChild(el('p', 'kid-empty', '还没有检测记录。做完一次检测，薄弱点会汇总在这里，并可一键再测。'));
       return sec;
     }
     if (!ids.length) {
-      sec.appendChild(el('p', 'kid-empty', '按最近的诊断结果，没有薄弱或不稳的知识点。'));
+      sec.appendChild(el('p', 'kid-empty', '按最近的检测结果，没有薄弱或不稳的知识点。'));
       return sec;
     }
-    sec.appendChild(el('p', 'muted small', '同一个知识点测过好几次，以最近一次为准。薄弱 ' + weakN + ' 个，不稳 ' + (ids.length - weakN) + ' 个。点名称进知识图谱；「再测」会按该点重新诊断。数据只留在本机。'));
+    sec.appendChild(el('p', 'muted small', '同一个知识点测过好几次，以最近一次为准。薄弱 ' + weakN + ' 个，不稳 ' + (ids.length - weakN) + ' 个。点名称进知识图谱；「再测」会按该点重新检测。数据只留在本机。'));
 
     var groups = {};
     var order = [];
@@ -139,7 +139,7 @@
     var sum = el('summary');
     var line1 = el('div', 'rec-top');
     line1.appendChild(tag('sub', SUBJECT_NAME[r.subject] || '科学'));
-    line1.appendChild(el('b', 'rec-label', r.label || '诊断'));
+    line1.appendChild(el('b', 'rec-label', String(r.label || '检测').replace(/\u8bca\u65ad/g, '检测')));
     sum.appendChild(line1);
     var c = r.counts || {};
     var line2 = el('div', 'rec-counts');
@@ -182,7 +182,7 @@
     var del = el('button', 'danger', '删除这条记录');
     del.type = 'button';
     del.addEventListener('click', function () {
-      if (!confirm('删除这条诊断记录？')) return;
+      if (!confirm('删除这条检测记录？')) return;
       CC.removeRecord(child.id, r.key);
       render();
     });
@@ -195,13 +195,13 @@
   function recordsSection(child) {
     var recs = CC.recordsOf(child.id).filter(function (r) { return !subjectSel || r.subject === subjectSel; });
     var sec = el('section', 'kid-section');
-    sec.appendChild(el('h2', null, '诊断记录（' + recs.length + '）'));
+    sec.appendChild(el('h2', null, '检测记录（' + recs.length + '）'));
     if (!recs.length) {
-      sec.appendChild(el('p', 'kid-empty', subjectSel ? '这个学科还没有记录。' : '还没有诊断记录。'));
+      sec.appendChild(el('p', 'kid-empty', subjectSel ? '这个学科还没有记录。' : '还没有检测记录。'));
     } else {
       recs.forEach(function (r) { sec.appendChild(recordCard(child, r)); });
     }
-    var go = el('a', 'btn btn-primary', '去做一次诊断');
+    var go = el('a', 'btn btn-primary', '去做一次检测');
     go.href = '../diagnose/?subject=' + (subjectSel === 'science' ? 'science' : 'physics');
     sec.appendChild(go);
     return sec;
@@ -253,7 +253,7 @@
     renderPicker(kids);
     content.textContent = '';
     if (!kids.length) {
-      content.appendChild(el('p', 'kid-empty', '还没有孩子档案。诊断结果仍会记入本机盲区；添加孩子后还能按人分开保存。'));
+      content.appendChild(el('p', 'kid-empty', '还没有孩子档案。检测结果仍会记入本机盲区；添加孩子后还能按人分开保存。'));
       var add = el('a', 'btn btn-primary', '去添加孩子');
       add.href = './';
       content.appendChild(add);

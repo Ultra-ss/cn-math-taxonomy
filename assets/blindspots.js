@@ -1,4 +1,4 @@
-/* 站内错题盲区汇总：把本机诊断结果里的薄弱 / 不稳按知识点聚合，供首页、诊断页、档案页一键再测。
+/* 站内错题盲区汇总：把本机检测结果里的薄弱 / 不稳按知识点聚合，供首页、检测页、档案页一键再测。
  * 只读写 localStorage，不上传、不需要账号。window.CnmBlind。 */
 (function () {
   'use strict';
@@ -59,7 +59,7 @@
 
   function compat() { return typeof window !== 'undefined' ? window.StemCompat : null; }
 
-  /* 诊断结果页调用：无论有没有孩子档案，都把本轮薄弱 / 不稳写入本机盲区账本。
+  /* 检测结果页调用：无论有没有孩子档案，都把本轮薄弱 / 不稳写入本机盲区账本。
    * 对不上现行题干的作答不累加错次。cnc_p124 只有带着现行戳才保持薄弱 / 不稳 / 掌握。 */
   function noteResult(payload) {
     if (!payload || payload.demo || (payload.subject !== 'science' && payload.subject !== 'physics')) return false;
@@ -186,7 +186,7 @@
     return out;
   }
 
-  /* 未结束的诊断会话：把答错过的知识点先标成待复测（不覆盖已有更明确的薄弱结论）。 */
+  /* 未结束的检测会话：把答错过的知识点先标成待复测（不覆盖已有更明确的薄弱结论）。 */
   function fromSessions(subject) {
     var out = {};
     SESSION_KEYS.forEach(function (item) {
@@ -210,7 +210,7 @@
           hits: 1,
           wrongs: wrongs[id],
           at: sess.savedAt || '',
-          label: sess.label || '未完成的诊断',
+          label: sess.label || '未完成的检测',
           source: 'session'
         };
       });
@@ -225,7 +225,7 @@
           hits: 0,
           wrongs: 0,
           at: sess.savedAt || '',
-          label: sess.label || '未完成的诊断',
+          label: sess.label || '未完成的检测',
           source: 'session'
         };
       });

@@ -1,4 +1,4 @@
-/* 错题本页。配色、字号来自 assets/site.css；卡片、徽标沿用档案页 / 诊断页的写法。 */
+/* 错题本页。配色、字号来自 assets/site.css；卡片、徽标沿用档案页 / 检测页的写法。 */
 
 main.wrong { width: min(760px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
 .wrong h1 { margin: 0 0 8px; font-size: 1.5rem; letter-spacing: -0.02em; }

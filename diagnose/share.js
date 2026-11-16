@@ -1,4 +1,4 @@
-/* 诊断结果分享图：canvas 竖图，系统字体，二维码用本地 qrcode-generator 绘制。 */
+/* 检测结果分享图：canvas 竖图，系统字体，二维码用本地 qrcode-generator 绘制。 */
 (function (global) {
   'use strict';
   var SHARE_URL = 'https://physicalmap.pages.dev/?from=share';
@@ -144,11 +144,11 @@
 
     drawLogo(ctx, 64, 56, 84);
     text(ctx, m.siteName || '全网路物理学习图谱', 168, 64, 800, 40, '#ffffff', 820);
-    text(ctx, '诊断结果', 168, 114, 500, 26, 'rgba(255,255,255,0.86)', 820);
+    text(ctx, '检测结果', 168, 114, 500, 26, 'rgba(255,255,255,0.86)', 820);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = font(800, 56);
-    var headline = (m.scope || '本次诊断') + '  ' + (m.subject || '');
+    var headline = (m.scope || '本次检测') + '  ' + (m.subject || '');
     var lines = wrap(ctx, headline.trim(), 940, 2);
     lines.forEach(function (line, i) { ctx.fillText(line, 64, 196 + i * 70); });
     text(ctx, '生成日期  ' + (m.date || ''), 64, 196 + lines.length * 70 + 18, 500, 28, 'rgba(255,255,255,0.9)', 900);

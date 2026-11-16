@@ -1,4 +1,4 @@
-/* 错题本页：按孩子查看诊断时答错 / 不会的题，可删除、清空，并打印成重做练习页。数据来自 assets/wrongbook.js（localStorage）。 */
+/* 错题本页：按孩子查看检测时答错 / 不会的题，可删除、清空，并打印成重做练习页。数据来自 assets/wrongbook.js（localStorage）。 */
 (function () {
   'use strict';
   var CC = window.CnmChildren;
@@ -175,8 +175,8 @@
       content.appendChild(el('p', 'kid-empty no-print', '未建孩子档案，按本机记录显示。'));
     }
     if (!all.length) {
-      content.appendChild(el('p', 'kid-empty no-print', '还没有错题，去做一次诊断，答错的题会自动收进来。'));
-      var go = el('a', 'btn btn-primary no-print', '去做诊断');
+      content.appendChild(el('p', 'kid-empty no-print', '还没有错题，去做一次检测，答错的题会自动收进来。'));
+      var go = el('a', 'btn btn-primary no-print', '去做检测');
       go.href = '../diagnose/';
       content.appendChild(go);
       return;

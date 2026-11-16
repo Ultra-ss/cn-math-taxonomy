@@ -81,7 +81,7 @@ test('重测中的未知状态保留先前有效结果；完成后取新结论',
   assert.equal(api.statuses('child-a','science').cns_a.mark,'×');
 });
 
-test('同次诊断撤销已结束结论时回落前次有效结果；全新点撤销后标记消失', () => {
+test('同次检测撤销已结束结论时回落前次有效结果；全新点撤销后标记消失', () => {
   const { api } = load();
   record(api,'old',run('cns_a',['correct','correct','correct']));
   record(api,'new',run('cns_a',['wrong','wrong']),t2);

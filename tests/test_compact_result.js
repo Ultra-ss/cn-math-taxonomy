@@ -82,7 +82,7 @@ test('已保存的合法返回上下文优先，失效上下文回退到原目�
   assert.strictEqual(fallback.hash, '#cnp_071');
 });
 
-test('直接访问、教材诊断和科学诊断都有准确的默认返回册次', () => {
+test('直接访问、教材检测和科学检测都有准确的默认返回册次', () => {
   const state = context();
   for (const spec of [
     { subject: 'physics', id: 'cnp_001', volume: '八上' },

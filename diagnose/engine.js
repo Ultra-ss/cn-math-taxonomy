@@ -1,4 +1,4 @@
-/* 诊断引擎：纯函数、无 DOM、无依赖。浏览器中暴露为 window.DiagEngine，Node 中 require() 即可。
+/* 检测引擎：纯函数、无 DOM、无依赖。浏览器中暴露为 window.DiagEngine，Node 中 require() 即可。
  *
  * 数据流：buildGraph(topics, deps, questions?) -> graph      （questions 缺失时用 topics 的 diagnostic_question）
  *         createSession(graph, targets, {limit, seed, avoid}) -> session   （会话是可 JSON 序列化的纯数据）
@@ -433,7 +433,7 @@
         pendingPrereqs: testableUnk.filter(function (p) { return inScope(p.id); }).map(function (p) { return p.id; }),
         // 筛查模式下范围之外的先修（不在本次范围内，没有检查）
         outOfScopePrereqs: testableUnk.filter(function (p) { return !inScope(p.id); }).map(function (p) { return p.id; }),
-        // 小学外部节点（无诊断题，不测）
+        // 小学外部节点（无检测题，不测）
         externalPrereqs: unk.filter(function (p) { return !isTestable(graph, p.id); }).map(function (p) { return p.id; })
       };
     });

@@ -1,4 +1,4 @@
-/* 诊断小工具界面。核心逻辑全部在 engine.js，这里只负责数据加载、渲染与本地存储。 */
+/* 检测小工具界面。核心逻辑全部在 engine.js，这里只负责数据加载、渲染与本地存储。 */
 (function () {
   'use strict';
   const E = window.DiagEngine;
@@ -31,7 +31,7 @@
   const RESULT_LABEL = { correct: '对', wrong: '错', skip: '不会' };
   const STATUS_LABEL = { mastered: '已掌握', shaky: '不稳', weak: '薄弱', unknown: '未测' };
   const DIFF_LABEL = { basic: '基础', standard: '提高', challenge: '拓展', advanced: '拓展' };
-  const TYPE_LABEL = { numeric: '数值题', choice: '选择题', short: '短答题', self: '开放题', legacy: '诊断题' };
+  const TYPE_LABEL = { numeric: '数值题', choice: '选择题', short: '短答题', self: '开放题', legacy: '检测题' };
 
   const root = document.getElementById('root');
   let D = null;            // 数据：{topics, deps, stdById, graph, tree}
@@ -44,7 +44,7 @@
   let startQuery = '';
   let startStage = '';
   let chapterOpen = false;
-  let gradeSel = '一';     // 开始页「按年级整体诊断」：年级
+  let gradeSel = '一';     // 开始页「按年级整体检测」：年级
   let volSel = '';         // '' 整年级 / '上' / '下'
   let seedParam = null;    // URL 参数 seed：固定选题的随机种子
   let confirmParam = null; // URL 参数 confirm：本次确认题数，不在演示模式写入本机设置
@@ -59,6 +59,9 @@
   let shareToken = 0;
 
   /* ------------------------------------------------------------ 小工具 */
+  function displayText(value) {
+    return typeof value === 'string' ? value.replace(/\u8bca\u65ad/g, '检测') : value;
+  }
   function h(tag, attrs) {
     const el = document.createElement(tag);
     const a = attrs || {};
@@ -66,7 +69,7 @@
       const v = a[k];
       if (v == null || v === false) return;
       if (k === 'class') el.className = v;
-      else if (k === 'text') el.textContent = v;
+      else if (k === 'text') el.textContent = displayText(v);
       else if (k.slice(0, 2) === 'on') el.addEventListener(k.slice(2), v);
       else if (k === 'open' || k === 'disabled' || k === 'selected' || k === 'value') el[k] = v === true ? true : v;
       else el.setAttribute(k, v === true ? '' : v);
@@ -77,7 +80,7 @@
   function append(el, c) {
     if (c == null || c === false) return;
     if (Array.isArray(c)) { c.forEach(function (x) { append(el, x); }); return; }
-    el.append(c.nodeType ? c : document.createTextNode(String(c)));
+    el.append(c.nodeType ? c : document.createTextNode(displayText(String(c))));
   }
   function figureEl(svg) {
     if (typeof svg !== 'string' || svg.indexOf('<svg') !== 0) return null;
@@ -170,48 +173,48 @@
       else link.removeAttribute('aria-current');
     });
     if (subject === 'english') {
-      document.title = '诊断 · 英语';
+      document.title = '检测 · 英语';
       var juniorOk = '三四五六七八九'.indexOf(gradeSel) >= 0;
       var seniorOk = gradeSel.indexOf('必修') === 0 || gradeSel.indexOf('选必') === 0;
       if (!juniorOk && !seniorOk) gradeSel = '四';
     }
     if (subject === 'physics') {
-      document.title = '诊断 · 物理';
+      document.title = '检测 · 物理';
       if (gradeSel !== '八' && gradeSel !== '九' && !/^(必修[一二三]|选必[一二三])$/.test(gradeSel)) gradeSel = '八';
       if (gradeSel === '九') volSel = '全';
     }
     if (subject === 'science') {
-      document.title = '诊断 · 小学科学';
+      document.title = '检测 · 小学科学';
       if ('一二三四五六'.indexOf(gradeSel) < 0) gradeSel = '一';
       if (volSel === '全') volSel = '';
     }
     if (subject === 'morality') {
-      document.title = '诊断 · 道德与法治';
+      document.title = '检测 · 道德与法治';
       if ('一二三四五六七八九'.indexOf(gradeSel) < 0) gradeSel = '一';
       if (volSel === '全') volSel = '';
     }
     if (subject === 'history') {
-      document.title = '诊断 · 初中历史';
+      document.title = '检测 · 初中历史';
       if ('七八九'.indexOf(gradeSel) < 0) gradeSel = '七';
       if (volSel === '全') volSel = '';
     }
     if (subject === 'geography') {
-      document.title = '诊断 · 初中地理';
+      document.title = '检测 · 初中地理';
       if ('七八'.indexOf(gradeSel) < 0) gradeSel = '七';
       if (volSel === '全') volSel = '';
     }
     if (subject === 'biology') {
-      document.title = '诊断 · 初中生物';
+      document.title = '检测 · 初中生物';
       if ('七八'.indexOf(gradeSel) < 0) gradeSel = '七';
       if (volSel === '全') volSel = '';
     }
     if (subject === 'chemistry') {
-      document.title = '诊断 · 化学';
+      document.title = '检测 · 化学';
       if (gradeSel !== '九' && !/^(必修[一二]|选必[一二三]|选择性必修第[一二三]册)$/.test(gradeSel)) gradeSel = '九';
       if (volSel === '全') volSel = '';
     }
     if (subject === 'chinese') {
-      document.title = '诊断 · 语文';
+      document.title = '检测 · 语文';
       if ('一二三四五六七八九'.indexOf(gradeSel) < 0) gradeSel = '一';
       // 全站初始值是七年级。语文原先从一年级进入，这里仍改回一年级；点选七年级之后不会再进这段。
       else if (gradeSel === '七') gradeSel = '一';
@@ -258,7 +261,11 @@
     pathTipLock = false;
     if (pathCy) { pathCy.destroy(); pathCy = null; window.__pathCy = null; }
   }
-  function show(node, keepScroll) { teardownPath(); closeShare(); clearRoot(); root.append(node); if (!keepScroll) window.scrollTo(0, 0); }
+  function show(node, keepScroll) {
+    teardownPath(); closeShare(); clearRoot(); root.append(node);
+    document.body.classList.toggle('testing-active', node.classList.contains('testing-page'));
+    if (!keepScroll) window.scrollTo(0, 0);
+  }
   function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
   function theme() {
     return {
@@ -344,18 +351,18 @@
       return h('div', { class: 'banner child-bar no-print', id: 'child-bar' },
         h('b', null, '本轮记录归属：' + label),
         h('p', { class: 'muted small', style: 'margin:6px 0' }, ownerId === undefined
-          ? '这份旧记录没有孩子归属，本轮不会自动写入任何孩子的图谱学习标记。为当前孩子记录，请回开始页新建诊断。'
-          : '本轮固定保存在这里。更换孩子时，请先回开始页选择孩子，再新建诊断。'),
+          ? '这份旧记录没有孩子归属，本轮不会自动写入任何孩子的图谱学习标记。为当前孩子记录，请回开始页新建检测。'
+          : '本轮固定保存在这里。更换孩子时，请先回开始页选择孩子，再新建检测。'),
         h('div', { class: 'row' },
           h('button', { id: 'btn-new-child-session', onclick: function () {
-            if (confirm('结束当前答题过程并回到开始页？已保存的学习记录会保留，下一次诊断使用开始页所选孩子。')) restart();
-          } }, '回开始页新建诊断'),
+            if (confirm('结束当前答题过程并回到开始页？已保存的学习记录会保留，下一次检测使用开始页所选孩子。')) restart();
+          } }, '回开始页新建检测'),
           owner ? h('a', { class: 'btn', href: childrenHref('history.html?child=' + encodeURIComponent(owner.id)), text: '本轮孩子的历史' }) : null));
     }
     if (!kids.length) {
       return h('div', { class: 'banner child-bar no-print', id: 'child-bar' },
         h('b', { text: '还没有孩子档案。' }),
-        '添加后，诊断结果会按孩子保存，之后能回看每次的记录和薄弱知识点。', ' ',
+        '添加后，检测结果会按孩子保存，之后能回看每次的记录和薄弱知识点。', ' ',
         h('a', { class: 'btn btn-primary', href: childrenHref(fromQuery()), text: '添加孩子' }));
     }
     return h('div', { class: 'card child-bar no-print', id: 'child-bar' },
@@ -366,7 +373,7 @@
         cur ? h('a', { class: 'btn', href: childrenHref('history.html?child=' + encodeURIComponent(cur.id)), text: '盲区与历史' }) : null,
         h('a', { class: 'btn', href: childrenHref(fromQuery()), text: '孩子档案' })),
       h('p', { class: 'muted small', style: 'margin:8px 0 0' },
-        cur ? '诊断做完，结果会保存到「' + cur.name + '」的档案里。' : '未选择孩子时，图谱检测标记保存在本机访客记录，不计入孩子档案。'));
+        cur ? '检测做完，结果会保存到「' + cur.name + '」的档案里。' : '未选择孩子时，图谱检测标记保存在本机访客记录，不计入孩子档案。'));
   }
   function recordKey() { return [subject, session.seed, session.targets.join(',')].join('|'); }
   function saveToChild(sum) {
@@ -419,7 +426,7 @@
     const more = window.CnmBlind.historyHref(cur && cur.id, '../children/');
     return h('div', { class: 'card', id: 'blind-start' },
       h('h2', { text: '本机盲区（最近薄弱点）' }),
-      h('p', { class: 'muted small' }, '根据本机诊断记录汇总，数据只留在这台浏览器。点「再测」会按该知识点重新诊断。'),
+      h('p', { class: 'muted small' }, '根据本机检测记录汇总，数据只留在这台浏览器。点「再测」会按该知识点重新检测。'),
       h('ul', { class: 'blind-list' }, rows.map(function (row) {
         return h('li', { class: 'blind-item' },
           h('span', { class: 'blind-name', text: nameOf(row.id) }),
@@ -631,7 +638,7 @@
     const saved = lsGet(sessionKey());
     if (saved && saved.targets && D.graph.byId[saved.targets[0]]) {
       page.append(h('div', { class: 'banner' },
-        h('b', { text: '有一份未清除的诊断：' }), saved.label || saved.targets.map(nameOf).join('、'),
+        h('b', { text: '有一份未清除的检测：' }), saved.label || saved.targets.map(nameOf).join('、'),
         '（已答 ' + (saved.answers || []).length + ' 题）　',
         h('button', { class: 'primary', onclick: function () { if (restoreSession(saved)) render(); else { lsDel(sessionKey()); renderStart('存档无法恢复，已清除。'); } } }, '继续'),
         ' ', h('button', { onclick: function () { lsDel(sessionKey()); renderStart(); } }, '放弃存档')));
@@ -667,7 +674,7 @@
     browser.addEventListener('toggle', function () { chapterOpen = browser.open; });
     const confirmHelp = '同一知识点连续答对 ' + st.confirm + ' 题（可在下方改成 2 / 3 / 4；题库更少时以题库为准）才算掌握；答错会再出一道同级或更容易的题——确认题也错才算薄弱并回溯先修，确认题答对则标为「不稳」。';
     page.append(h('div', { class: 'card' },
-      h('h1', { text: '选择诊断目标' }),
+      h('h1', { text: '选择检测目标' }),
       h('p', { class: 'muted' }, subject === 'physics'
         ? '选一个想学会或想检查的物理知识点。' + confirmHelp
         : subject === 'english'
@@ -711,7 +718,7 @@
     page.append(gradeCard());
     page.append(h('div', { class: 'card' }, browser));
     page.append(h('p', { class: 'muted small' },
-      '可以诊断的知识点：' + D.topics.length + ' 个。进度和出过的题只保存在这台浏览器里。'));
+      '可以检测的知识点：' + D.topics.length + ' 个。进度和出过的题只保存在这台浏览器里。'));
     show(page);
     fillList(listBox);
     if (startQuery) { const el = document.getElementById('search'); if (el) el.focus(); }
@@ -742,7 +749,7 @@
     updateInfo();
     const limitInput = h('input', {
       type: 'number', min: SCREEN_MIN, max: SCREEN_MAX, step: 1, value: String(getSettings().screenLimit),
-      id: 'screen-limit-input', 'aria-label': '每轮教材诊断题量上限'
+      id: 'screen-limit-input', 'aria-label': '每轮教材检测题量上限'
     });
     limitInput.addEventListener('change', function () {
       const value = Math.max(SCREEN_MIN, Math.min(SCREEN_MAX, parseInt(limitInput.value, 10) || E.SCREEN_LIMIT));
@@ -859,7 +866,7 @@
       const p = D.graph.prereqs[a.id].find(function (x) { return x.id === id; });
       if (p && E.statusOf(session, a.id) === 'weak') return '因为「' + nameOf(a.id) + '」确认后仍没通过，现在检查它的' + (p.strength === 'hard' ? '硬' : '软') + '先修知识点。';
     }
-    if (session.mode === 'screen') return '整体诊断：先测本年级知识点（离章末近的先测）。先出提高题，答对再出拓展题确认；答错先补基础题。';
+    if (session.mode === 'screen') return '整体检测：先测本年级知识点（离章末近的先测）。先出提高题，答对再出拓展题确认；答错先补基础题。';
     if (session.targets.length > 1) return '这是所选章节的知识点（离章末最近的先测，连续答对会连带跳过它的先修）。';
     return session.targets.indexOf(id) >= 0 ? '这是你选择的目标知识点，先从它开始测（连续答对 ' + need + ' 题才算掌握）。' : '检查目标的先修知识点。';
   }
@@ -921,39 +928,41 @@
     const id = item.topicId;
     const q = item.question;
     const t = D.graph.byId[id];
+    const promptLength = String(q.prompt || '').length;
+    const longestChoice = (q.choices || []).reduce(function (max, choice) { return Math.max(max, String(choice.text || '').length); }, 0);
+    const denseQuestion = q.type === 'choice' && (promptLength > 140 || (q.figure && promptLength + longestChoice > 110));
     const key = id + '#' + item.attempt;
     const isNewQuestion = ui.key !== key;
     if (isNewQuestion) ui = { key: key, phase: 'ask', answer: '', verdict: null, picked: null };
     const n = session.answers.length;
-    const card = h('div', { class: 'card' });
-    append(card, textbookProgress(id));
-    card.append(
-      h('div', { class: 'row' },
-        h('span', { class: 'muted' }, '目标：' + sessionMeta.label),
-        h('span', { class: 'grow' }),
-        h('span', { class: 'muted' }, '第 ' + (n + 1) + ' 题 / 上限 ' + session.limit)),
-      h('div', { class: 'progress' }, h('i', { style: 'width:' + Math.round(n / session.limit * 100) + '%' })),
-      h('h2', { class: 'q-title' }, t.name, ' ', h('span', { class: 'tag', text: t.chapter })),
-      h('div', { class: 'row small', style: 'margin:2px 0' },
-        isPrereqKnowledge(id) ? h('span', { class: 'tag ext', text: '前置知识' }) : null,
-        h('span', { class: 'tag diff-' + q.difficulty, text: DIFF_LABEL[q.difficulty] || q.difficulty }),
-        h('span', { class: 'tag', text: TYPE_LABEL[q.type] || q.type }),
-        h('span', { class: 'tag', text: '本知识点第 ' + item.attempt + ' / ' + E.needConfirm(D.graph, session, id) + ' 题' })),
-      h('div', { class: 'reason', text: reasonFor(item) }),
+    const tools = h('details', { class: 'question-tools' },
+      h('summary', { 'aria-label': '更多答题操作' }, '更多'),
+      h('div', { class: 'question-tools-content' },
+        h('a', { id: 'btn-test-back', class: 'btn', href: returnPath(), onclick: selectSessionOwner }, '返回知识图谱'),
+        n > 0 ? h('button', { id: 'btn-test-undo', onclick: function () { rebuild(session.answers.slice(0, -1)); } }, '撤销上一题') : null,
+        h('button', { id: 'btn-test-restart', onclick: function () { if (confirm('确定放弃当前检测并回到开始页吗？')) restart(); } }, '重新开始')));
+    const card = h('div', { class: 'card question-card' + (denseQuestion ? ' question-dense' : '') },
+      h('div', { class: 'test-statusbar' },
+        h('span', { class: 'test-step' }, (demo ? '演示 · ' : '') + '第 ' + (n + 1) + ' 题'),
+        tools),
+      h('div', { class: 'progress', 'aria-label': '本轮已完成 ' + n + ' 题' },
+        h('i', { style: 'width:' + Math.round(n / session.limit * 100) + '%' })),
+      h('h2', { class: 'q-title' }, t.name));
+    const stem = h('div', { class: 'question-stem' },
       h('div', { class: 'q-text', id: 'q-text', text: q.prompt }));
-    const stemFig = figureEl(q.figure);
-    if (stemFig) {
-      const qt = card.querySelector('#q-text');
-      if (qt) qt.insertAdjacentElement('afterend', stemFig);
+    append(stem, figureEl(q.figure));
+    const response = h('div', { class: 'question-response' });
+    const actions = h('div', { class: 'row actions-sticky test-actions' });
+    function explanation(open, extra) {
+      return h('details', { class: 'question-explanation', id: 'question-explanation', open: !!open },
+        h('summary', null, '查看答案与解析'), feedbackBlock(q), extra || null);
     }
-
-    const resultStart = card.children.length;
     if (ui.phase === 'ask') {
       if (q.type === 'choice') {
-        card.append(h('div', { class: 'choices' + (q.hideChoiceText ? ' fig-icons' : ''), id: 'choices' }, (q.choices || []).map(function (c) {
+        response.append(h('div', { class: 'choices' + (q.hideChoiceText ? ' fig-icons' : ''), id: 'choices' }, (q.choices || []).map(function (c) {
           const hideName = !!(q.hideChoiceText && c.figure);
           const kids = [h('b', { class: 'choice-key', text: hideName ? c.key : (c.key + '.') })];
-          if (!hideName) kids.push(document.createTextNode(' ' + c.text));
+          if (!hideName) kids.push(document.createTextNode(displayText(' ' + c.text)));
           const fig = c.figure ? figureEl(c.figure) : null;
           if (fig) kids.push(fig);
           return h('button', {
@@ -968,67 +977,53 @@
           }, kids);
         })));
       } else if (q.type === 'self') {
-        card.append(h('textarea', {
-          class: 'ans-input', id: 'ans', rows: 3, placeholder: '开放题：可以写下自己的思路（不会自动判分），再点「看参考答案并自评」', value: ui.answer,
+        response.append(h('textarea', {
+          class: 'ans-input', id: 'ans', rows: 3, placeholder: '写下你的思路，再查看参考答案', value: ui.answer,
           oninput: function (e) { ui.answer = e.target.value; }
         }));
       } else {
-        card.append(h('input', {
-          type: 'text', class: 'ans-input', id: 'ans', autocomplete: 'off', placeholder: '在这里输入答案（数字、分数、多个答案用逗号或“和”分开）', value: ui.answer,
+        response.append(h('input', {
+          type: 'text', class: 'ans-input', id: 'ans', autocomplete: 'off', placeholder: '在这里输入答案', value: ui.answer,
+          'aria-label': '你的答案',
           oninput: function (e) { ui.answer = e.target.value; },
           onkeydown: function (e) { if (e.key === 'Enter' && !e.isComposing) judgeAndGo(item); }
         }));
       }
-      card.append(h('div', { class: 'row actions-sticky', style: 'margin-top:10px' },
+      append(actions, [
         q.type === 'self' ? null : h('button', { class: 'primary', id: 'btn-submit', onclick: function () { judgeAndGo(item); } }, '提交答案'),
-        q.type === 'choice' ? null : h('button', { id: 'btn-peek', onclick: function () { ui.phase = 'self'; ui.verdict = null; renderQuestion(item); } }, '看参考答案并自评'),
-        h('button', { id: 'btn-skip', onclick: function () { ui.phase = 'skip'; renderQuestion(item); } }, '不会')));
+        q.type === 'self' ? h('button', { id: 'btn-peek', class: 'primary', onclick: function () { ui.phase = 'self'; ui.verdict = null; renderQuestion(item); } }, '查看答案并自评') : null,
+        h('button', { id: 'btn-skip', onclick: function () { ui.phase = 'skip'; renderQuestion(item); } }, '不会')]);
     } else if (ui.phase === 'auto') {
       const ok = ui.verdict.verdict === 'correct';
-      card.append(
-        h('div', { class: 'muted' }, '你的答案：' + (q.type === 'choice' ? answerOfKey(q, ui.answer) : ui.answer)),
-        h('div', { class: 'verdict ' + (ok ? 'ok' : 'no') }, ok ? '自动判定：正确' : '自动判定：不正确'),
-        feedbackBlock(q),
-        h('div', { class: 'row actions-sticky' },
-          h('button', { class: 'primary', id: 'btn-next', onclick: function () { commit(ok ? 'correct' : 'wrong'); } }, '下一题'),
-          h('button', { id: 'btn-flip', onclick: function () { commit(ok ? 'wrong' : 'correct'); } }, ok ? '判错了，我其实没做对' : '判错了，我其实做对了'),
-          h('button', { onclick: function () { ui.phase = 'ask'; renderQuestion(item); } }, '重新作答')));
+      response.append(
+        h('p', { class: 'answer-echo' }, '你的答案：' + (q.type === 'choice' ? answerOfKey(q, ui.answer) : ui.answer)),
+        h('div', { class: 'verdict ' + (ok ? 'ok' : 'no'), role: 'status' }, ok ? '回答正确' : '回答不正确'),
+        explanation(false, h('div', { class: 'row question-corrections' },
+          h('button', { id: 'btn-flip', onclick: function () { commit(ok ? 'wrong' : 'correct'); } }, '更正本题判定'),
+          h('button', { id: 'btn-retry-answer', onclick: function () { ui.phase = 'ask'; renderQuestion(item); } }, '重新作答'))));
+      actions.append(h('button', { class: 'primary', id: 'btn-next', onclick: function () { commit(ok ? 'correct' : 'wrong'); } }, '下一题'));
     } else if (ui.phase === 'skip') {
-      card.append(
-        h('div', { class: 'muted' }, '你选择了「不会」。看一下答案和解析再继续：'),
-        feedbackBlock(q),
-        h('div', { class: 'row actions-sticky' }, h('button', { class: 'primary', id: 'btn-next', onclick: function () { commit('skip'); } }, '下一题')));
+      response.append(h('div', { class: 'verdict no', role: 'status' }, '本题暂不会'), explanation(false));
+      actions.append(h('button', { class: 'primary', id: 'btn-next', onclick: function () { commit('skip'); } }, '下一题'));
     } else {
-      card.append(
-        ui.answer ? h('div', { class: 'muted' }, '你的答案：' + ui.answer) : '',
-        q.type === 'self' ? h('div', { class: 'muted' }, '开放题：请对照参考答案自己判断。')
-          : (ui.verdict ? h('div', { class: 'muted' }, '这道题的答案无法被自动可靠地判定，请对照参考答案自己判断。') : ''),
-        feedbackBlock(q),
-        h('div', { class: 'row actions-sticky' },
-          h('button', { class: 'good', id: 'btn-right', onclick: function () { commit('correct'); } }, '对（我做对了）'),
-          h('button', { class: 'bad', id: 'btn-wrong', onclick: function () { commit('wrong'); } }, '不对'),
-          h('button', { id: 'btn-skip2', onclick: function () { commit('skip'); } }, '不会')));
+      append(response, [
+        ui.answer ? h('p', { class: 'answer-echo' }, '你的答案：' + ui.answer) : null,
+        h('p', { class: 'muted' }, '请对照参考答案判断本题。'),
+        explanation(true)]);
+      actions.append(
+        h('button', { class: 'good', id: 'btn-right', onclick: function () { commit('correct'); } }, '我做对了'),
+        h('button', { class: 'bad', id: 'btn-wrong', onclick: function () { commit('wrong'); } }, '没有做对'),
+        h('button', { id: 'btn-skip2', onclick: function () { commit('skip'); } }, '不会'));
     }
-
-    card.append(h('div', { class: 'notice' }, '提示：自动判题只是近似的（数字、分数、多个答案会做规范化后比较），一切以参考答案为准；判错了可以手动更正。'));
-    card.append(h('div', { class: 'row no-print', style: 'margin-top:12px' },
-      n > 0 ? h('button', { class: 'small', onclick: function () { rebuild(session.answers.slice(0, -1)); } }, '撤销上一题') : null,
-      h('button', { class: 'small', onclick: function () { if (confirm('确定放弃当前诊断并回到开始页吗？')) restart(); } }, '重新开始')));
-    const page = h('div');
-    if (demo) page.append(demoBanner());
-    append(page, childBar('question'));
-    page.append(card);
+    card.append(h('div', { class: 'question-content' }, stem, response), actions);
+    const page = h('div', { class: 'testing-page' }, card);
     show(page, !isNewQuestion);
+    // 手机不主动聚焦输入框，避免进题时弹出键盘并挤走题干。
     const inp = document.getElementById('ans');
-    const focusOpts = { preventScroll: !isNewQuestion };
-    if (inp && inp.setSelectionRange && inp.tagName === 'INPUT') { inp.focus(focusOpts); inp.setSelectionRange(inp.value.length, inp.value.length); }
-    else if (inp) inp.focus(focusOpts);
-    const resultEl = ui.phase === 'ask' ? null : card.children[resultStart];
-    if (resultEl && !isNewQuestion) {
-      const header = document.querySelector('.site-header');
-      resultEl.style.scrollMarginTop = ((header ? header.offsetHeight : 0) + 12) + 'px';
-      const calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      resultEl.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
+    const finePointer = window.matchMedia && window.matchMedia('(pointer: fine) and (min-width: 701px)').matches;
+    if (inp && finePointer) {
+      inp.focus({ preventScroll: true });
+      if (inp.setSelectionRange && inp.tagName === 'INPUT') inp.setSelectionRange(inp.value.length, inp.value.length);
     }
   }
 
@@ -1053,10 +1048,10 @@
     if (shareBlobUrl) { URL.revokeObjectURL(shareBlobUrl); shareBlobUrl = null; }
   }
   function shareScopeText() {
-    var raw = sessionMeta && sessionMeta.label ? String(sessionMeta.label) : '本次诊断';
+    var raw = sessionMeta && sessionMeta.label ? String(sessionMeta.label) : '本次检测';
     raw = raw.replace(/（整体筛查）/g, '').replace(/（整章）/g, '').replace(/（旧编号已对应到小学知识点）/g, '');
     raw = raw.replace(/\s+/g, ' ').trim();
-    return raw || '本次诊断';
+    return displayText(raw || '本次检测');
   }
   function buildShareModel(sum, chapters) {
     var subjectName = subject === 'physics' ? '物理' : '科学';
@@ -1102,7 +1097,7 @@
   function mountShareModal(url) {
     var old = document.getElementById('share-modal');
     if (old) old.remove();
-    var img = h('img', { id: 'share-preview', alt: '诊断分享图', src: url });
+    var img = h('img', { id: 'share-preview', alt: '检测分享图', src: url });
     var modal = h('div', {
       id: 'share-modal', class: 'share-modal no-print', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'share-title',
       onclick: function (e) { if (e.target === modal) closeShare(); }
@@ -1113,7 +1108,7 @@
       h('p', { id: 'share-hint', class: 'share-hint', text: '长按图片保存' }),
       h('div', { class: 'share-scroll' }, img),
       h('div', { class: 'share-actions' },
-        h('a', { id: 'share-download', class: 'btn btn-primary', href: url, download: '知识图谱诊断分享.png' }, '下载图片'))));
+        h('a', { id: 'share-download', class: 'btn btn-primary', href: url, download: '知识图谱检测分享.png' }, '下载图片'))));
     document.body.classList.add('share-open');
     document.body.append(modal);
     document.addEventListener('keydown', onShareKey);
@@ -1171,7 +1166,7 @@
   function topicBody(id, extra) {
     const t = D.graph.byId[id];
     const body = h('div', { class: 'body' });
-    body.append(h('div', { class: 'muted' }, (t.external ? '小学先修知识点（无诊断题）' : t.chapter) + (t.domain ? ' · ' + t.domain : '')));
+    body.append(h('div', { class: 'muted' }, (t.external ? '小学先修知识点（无检测题）' : t.chapter) + (t.domain ? ' · ' + t.domain : '')));
     body.append(h('div', { text: t.description }));
     if (t.mastery_criteria && t.mastery_criteria.length) {
       body.append(h('div', null, h('b', null, '掌握标准：'), h('ul', null, t.mastery_criteria.map(function (m) { return h('li', { text: m }); }))));
@@ -1320,7 +1315,7 @@
         const notes = h('div');
         if (r.pendingPrereqs.length) notes.append(h('div', { class: 'notice', text: '它的先修「' + r.pendingPrereqs.map(nameOf).join('」「') + '」没来得及测（题量用完），真正的根因可能更靠前。' }));
         if (r.outOfScopePrereqs.length) notes.append(h('div', { class: 'notice', text: '它的前置知识「' + r.outOfScopePrereqs.map(nameOf).join('」「') + '」不在所选范围内，没有检查。' }));
-        if (r.externalPrereqs.length) notes.append(h('div', { class: 'muted small', text: '小学先修（无诊断题，未测）：' + r.externalPrereqs.map(nameOf).join('、') }));
+        if (r.externalPrereqs.length) notes.append(h('div', { class: 'muted small', text: '小学先修（无检测题，未测）：' + r.externalPrereqs.map(nameOf).join('、') }));
         return topicItem(r.id, statusTags(r.id, rootSet, targetSet), notes);
       }) : h('p', { text: targetsMastered ? '没有。' : '暂未发现。' })));
 
@@ -1398,7 +1393,7 @@
         ? '按教材章节顺序汇总实际作答结果；点开查看具体知识点。色条从左到右：掌握、不稳、薄弱、未测。'
         : '每章的知识点掌握情况，薄弱多的章排在前面；点开看具体是哪几个知识点。色条从左到右：掌握、不稳、薄弱、未测。'),
       outOfScope.length ? h('p', { class: 'notice', id: 'out-of-scope' }, '部分薄弱点的前置知识在所选年级之外，未检查（涉及 ' + outOfScope.length + ' 个薄弱点，如「' +
-        outOfScope.slice(0, 3).map(function (r) { return nameOf(r.id); }).join('」「') + '」）。可对这些知识点单独做诊断，沿先修继续往前查。') : null,
+        outOfScope.slice(0, 3).map(function (r) { return nameOf(r.id); }).join('」「') + '」）。可对这些知识点单独做检测，沿先修继续往前查。') : null,
       chapters.map(function (c) {
         return h('details', { class: 'topic chap-sum', open: c.weak > 0 || c.shaky > 0 },
           h('summary', null,
@@ -1484,7 +1479,7 @@
     });
     return h('div', { class: 'card', id: 'log' },
       h('h2', { text: '答题记录（可更正）' }),
-      h('p', { class: 'muted small' }, '自动判题可能判错。在这里改某一题的结果会重新计算整份诊断（后续是否还需要追问也会随之变化）。'),
+      h('p', { class: 'muted small' }, '自动判题可能判错。在这里改某一题的结果会重新计算整份检测（后续是否还需要追问也会随之变化）。'),
       session.answers.length ? h('table', { class: 'log' },
         h('thead', null, h('tr', null, h('th', { text: '#' }), h('th', { text: '知识点 / 题目' }), h('th', { text: '你的答案' }), h('th', { text: '结果' }), h('th', { text: '参考答案' }))),
         h('tbody', null, rows)) : h('p', { class: 'muted', text: '还没有答题。' }));

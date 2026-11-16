@@ -100,7 +100,7 @@ assert.equal(dialog.open,true,'点弹窗自身内部空白不关闭');
 dialog.fire('click',{clientX:0,clientY:0});
 assert.equal(dialog.open,false,'点弹窗外侧关闭');
 
-// 列表/自动选择清除armed；grade折叠节点不参与诊断。
+// 列表/自动选择清除armed；grade折叠节点不参与检测。
 ctx.select('cnp_029','user');
 assert.equal(ctx.explicitNodeSelection,null);
 assert.equal(ctx.activateGraphNode('grade-8'),false);

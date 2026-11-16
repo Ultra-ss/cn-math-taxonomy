@@ -47,14 +47,15 @@ let passed = 0;
 function test(name, fn) { fn(); passed++; console.log('  ok   ' + name); }
 const topic = topics.find(item => item.id === 'cnp_053');
 assert.ok(topic && topic.description && topic.mastery_criteria.length && topic.standards.length);
-test('右侧元数据仅保留年级册次和章节，诊断入口与返回上下文仍在', () => {
+test('右侧元数据仅保留年级册次和章节，检测入口与返回上下文仍在', () => {
   const {detail} = load(topic);
   assert.deepEqual(tag(detail, 'dt').map(node => node.textContent), ['年级册次', '章节']);
   assert.deepEqual(tag(detail, 'dd').map(node => node.textContent), ['九年级全一册', topic.chapter]);
   const button = klass(detail, 'diag-btn')[0];
-  assert.equal(button.getAttribute('data-diagnose-return'), '../diagnose/?subject=physics&target=cnp_053');
+  assert.equal(button.getAttribute('data-diagnose-return'), '../diagnose/?subject=physics&target=cnp_053&retry=1');
   const link = new URL(button.getAttribute('href'), 'https://physicalmap.pages.dev/explore/');
   assert.equal(link.searchParams.get('target'), topic.id);
+  assert.equal(link.searchParams.get('retry'), '1', '已完成后点击重新检测直接开始新题，进行中仍可续答');
   assert.equal(new URL(link.searchParams.get('returnTo'), link.origin).hash, '#' + topic.id);
 });
 test('章节之后依次展示学习目标、掌握标准和折叠课标，目标与标准原文完整保留', () => {
@@ -86,7 +87,7 @@ test('删除样题、答案和前后依赖详情，不从这些数据生成额�
   assert.ok(!detail.textContent.includes(topic.diagnostic_question.question));
   assert.ok(!tag(detail, 'h2').some(node => ['样题', '先修', '被哪些知识点依赖'].includes(node.textContent)));
 });
-test('诊断通过和未通过状态继续显示，仍可重新检测', () => {
+test('检测通过和未通过状态继续显示，仍可重新检测', () => {
   for (const status of ['mastered', 'weak', 'shaky']) {
     const {detail} = load(topic, {status});
     const state = klass(detail, 'detail-test-state')[0];

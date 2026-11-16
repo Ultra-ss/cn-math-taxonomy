@@ -43,7 +43,7 @@
     var back = document.getElementById('back');
     var sub = params.get('subject');
     var href = '../diagnose/?subject=' + (sub === 'science' ? 'science' : 'physics');
-    var a = el('a', null, '← 回到诊断');
+    var a = el('a', null, '← 回到检测');
     a.href = href;
     back.appendChild(a);
     back.hidden = false;
@@ -92,8 +92,8 @@
     art.appendChild(head);
     art.appendChild(el('p', 'kid-meta', c.grade + ' · ' + c.textbook));
     art.appendChild(el('p', 'kid-stat', st.runs
-      ? '已诊断 ' + st.runs + ' 次，目前有 ' + st.weak + ' 个薄弱知识点'
-      : '还没有诊断记录'));
+      ? '已检测 ' + st.runs + ' 次，目前有 ' + st.weak + ' 个薄弱知识点'
+      : '还没有检测记录'));
     var row = el('div', 'kid-actions');
     if (!isCurrent) {
       var use = el('button', 'primary', '设为当前');
@@ -111,7 +111,7 @@
     var del = el('button', 'danger', '删除');
     del.type = 'button';
     del.addEventListener('click', function () {
-      if (!confirm('删除「' + c.name + '」的档案和全部诊断记录？删除后无法恢复。')) return;
+      if (!confirm('删除「' + c.name + '」的档案和全部检测记录？删除后无法恢复。')) return;
       CC.remove(c.id);
       if (editing === c.id) resetForm();
       render();
@@ -152,7 +152,7 @@
       archive.items.forEach(function (entry) {
         var row = el('li');
         var subjectName = entry.subject === 'physics' ? '物理' : '科学';
-        row.appendChild(el('span', null, subjectName + ' · ' + entry.label + ' · 已答 ' + entry.answered + ' 题 · ' +
+        row.appendChild(el('span', null, subjectName + ' · ' + String(entry.label).replace(/\u8bca\u65ad/g, '检测') + ' · 已答 ' + entry.answered + ' 题 · ' +
           new Date(entry.savedAt).toLocaleString('zh-CN') + ' '));
         var restore = el('button', null, '恢复这份进度');
         restore.type = 'button';
@@ -162,7 +162,7 @@
             renderArchivedSessions();
             status.className = 'small';
             status.textContent = '进度已恢复。';
-            var link = el('a', null, '打开' + subjectName + '诊断');
+            var link = el('a', null, '打开' + subjectName + '检测');
             link.href = '../diagnose/?subject=' + subject;
             status.appendChild(link);
             section.hidden = false;
@@ -179,7 +179,7 @@
     } catch (error) {
       section.hidden = false;
       status.className = 'small err';
-      status.textContent = error.message || '无法读取诊断进度。';
+      status.textContent = error.message || '无法读取检测进度。';
       status.hidden = false;
     }
   }
@@ -218,9 +218,9 @@
       '新增 ' + preview.addedRecords + ' 条记录，更新 ' + preview.updatedRecords + ' 条记录；' +
       '新增错题 ' + preview.addedWrongs + ' 道、更新 ' + preview.updatedWrongs + ' 道；' +
       '新增盲区 ' + preview.addedBlindspots + ' 个、更新 ' + preview.updatedBlindspots + ' 个；' +
-      '恢复诊断进度 ' + preview.restoredSessions + ' 份、归档 ' + preview.archivedSessions + ' 份。' +
+      '恢复检测进度 ' + preview.restoredSessions + ' 份、归档 ' + preview.archivedSessions + ' 份。' +
       '图谱检测记录新增 ' + preview.addedProgress + ' 份、更新 ' + preview.updatedProgress + ' 份。' +
-      (preview.legacy ? '这是旧版档案备份，不包含错题、进行中诊断和盲区台账。' : '');
+      (preview.legacy ? '这是旧版档案备份，不包含错题、进行中检测和盲区台账。' : '');
     var children = document.getElementById('import-children');
     children.textContent = '';
     preview.children.forEach(function (c) {

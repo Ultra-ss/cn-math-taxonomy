@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* 教材顺序诊断：每个知识点都真实作答，不因先修推断而跳过。 */
+/* 教材顺序检测：每个知识点都真实作答，不因先修推断而跳过。 */
 'use strict';
 const assert = require('assert');
 const fs = require('fs');

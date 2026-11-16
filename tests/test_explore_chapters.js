@@ -51,14 +51,14 @@ function counter() {
   assert.ok(entry, chapter);
   return find(entry, node => (node.attrs.class || '').split(' ').includes('chapter-progress'))[0];
 }
-assert.equal(counter().textContent, '0/3', '未诊断章从0开始，使用真实九全三个知识点');
+assert.equal(counter().textContent, '0/3', '未检测章从0开始，使用真实九全三个知识点');
 states = { cnp_053: {status:'mastered'} };
 assert.equal(counter().textContent, '1/3');
 states.cnp_054 = {status:'weak'};
 states.cnp_055 = {status:'shaky'};
-assert.equal(counter().textContent, '3/3', '通过、薄弱、不稳均属于已完成诊断');
+assert.equal(counter().textContent, '3/3', '通过、薄弱、不稳均属于已完成检测');
 assert.ok(counter().attrs.class.includes('is-complete'));
-assert.equal(counter().attrs['aria-label'], '已完成诊断 3 个，共 3 个知识点');
+assert.equal(counter().attrs['aria-label'], '已完成检测 3 个，共 3 个知识点');
 context.query = 'cnp_053';
 assert.equal(counter().textContent, '3/3', '搜索只剩一个可见知识点时，仍按整章统计');
 assert.equal(find(list, node => (node.attrs.class || '').split(' ').includes('topic-item')).length, 1);

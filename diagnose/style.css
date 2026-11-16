@@ -1,4 +1,4 @@
-/* 诊断页布局。配色、字号和导航来自 assets/site.css。 */
+/* 检测页布局。配色、字号和导航来自 assets/site.css。 */
 
 main#root { width: min(840px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
 .card {
@@ -252,3 +252,82 @@ table.log select { min-height: 44px; }
 .blind-name { font-weight: 700; }
 .blind-retest { font-weight: 700; white-space: nowrap; }
 .report-link { text-align: right; font-size: .85rem; margin: -4px 0 10px; }
+
+/* 作答期间只呈现当前题目与作答操作，其他信息在结果页查看。 */
+body.testing-active { min-height: 100dvh; }
+body.testing-active > .site-header,
+body.testing-active > .site-about,
+body.testing-active .pwa-bar { display: none !important; }
+body.testing-active main#root { width: min(840px, 100%); padding: 12px; }
+.testing-page { min-height: calc(100dvh - 24px); display: flex; }
+.question-card { width: 100%; min-height: 100%; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.test-statusbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; }
+.test-step { color: var(--muted); font-size: 0.85rem; font-weight: 650; }
+.question-card .progress { height: 4px; margin: 0; flex: none; }
+.question-card .q-title { font-size: 1.08rem; margin: 0; line-height: 1.3; }
+.question-content { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.question-stem, .question-response { min-width: 0; }
+.question-card .q-text { font-size: 1.04rem; line-height: 1.45; padding: 10px 12px; margin: 0; }
+.question-card .q-figure { margin: 6px 0 0; }
+.question-card .q-figure svg { width: 100%; max-width: 100%; max-height: 160px; height: auto; margin: 0 auto; }
+.question-card .choices { gap: 6px; margin: 0; }
+.question-card button.choice { min-height: 44px; padding: 8px 10px; font-size: 0.98rem; line-height: 1.35; }
+.question-card .ans-input { min-height: 46px; font-size: 1rem; margin: 0; }
+.question-card .test-actions { margin-top: auto; margin-bottom: -18px; gap: 8px; }
+.question-card .test-actions button { min-height: 46px; flex: 1; }
+.question-tools { position: relative; flex: none; }
+.question-tools > summary { cursor: pointer; min-height: 32px; padding: 5px 8px; color: var(--muted); font-size: 0.85rem; border-radius: 8px; }
+.question-tools > summary:focus-visible, .question-explanation > summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.question-tools-content { position: absolute; z-index: 15; right: 0; top: calc(100% + 5px); display: flex; flex-direction: column; gap: 6px; padding: 10px; width: 200px; max-width: calc(100vw - 40px); border: 1px solid var(--line); border-radius: 12px; background: var(--bg-elev); box-shadow: var(--shadow); }
+.question-tools-content > * { width: 100%; min-height: 44px; text-align: center; }
+.question-card .verdict { margin: 6px 0; padding: 8px 10px; }
+.question-card .answer-echo { margin: 0 0 6px; color: var(--muted); font-size: 0.9rem; overflow-wrap: anywhere; }
+.question-explanation { margin-top: 8px; }
+.question-explanation > summary { cursor: pointer; min-height: 36px; padding: 6px 0; color: var(--brand-strong); font-weight: 650; }
+.question-explanation .feedback { margin-top: 8px; }
+.question-corrections { margin: 8px 0; }
+.question-corrections button { font-size: 0.85rem; }
+@media (max-width: 640px) {
+  body.testing-active main#root { padding: 8px; }
+  .testing-page { min-height: calc(100dvh - 16px); }
+  .question-card { padding: 10px 10px 12px; gap: 7px; border-radius: 12px; }
+  .question-card .q-title { font-size: 1rem; }
+  .question-card .q-text { padding: 9px 10px; font-size: 1rem; line-height: 1.4; }
+  .question-card .q-figure svg { max-height: min(25dvh, 136px); }
+  .question-card button.choice { padding: 7px 9px; font-size: 0.94rem; }
+  .question-card .test-actions { margin: auto -10px -12px; padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (min-width: 641px) and (max-height: 520px) {
+  body.testing-active main#root { width: min(1024px, 100%); padding: 8px; }
+  .testing-page { min-height: calc(100dvh - 16px); }
+  .question-card { padding: 10px 12px 12px; gap: 5px; }
+  .question-content { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; align-items: start; }
+  .question-card .q-title { font-size: 1rem; }
+  .question-card .q-text { padding: 8px 10px; font-size: 0.96rem; line-height: 1.35; }
+  .question-card .q-figure svg { max-height: 116px; }
+  .question-card .choices { gap: 5px; }
+  .question-card button.choice { min-height: 40px; padding: 6px 9px; font-size: 0.9rem; line-height: 1.3; }
+  .question-card .test-actions { margin: auto -12px -12px; padding: 7px 12px calc(7px + env(safe-area-inset-bottom, 0px)); }
+  .question-card .test-actions button { min-height: 40px; }
+}
+@media (max-width: 640px) and (max-height: 640px) {
+  .question-card { gap: 6px; }
+  .test-statusbar { min-height: 28px; }
+  .question-card .q-text { padding: 8px 10px; font-size: 0.96rem; line-height: 1.35; }
+  .question-card .q-figure svg { max-height: 96px; }
+}
+@media (max-width: 360px) and (max-height: 640px) {
+  .question-card.question-dense { padding: 8px; gap: 4px; }
+  .question-dense .test-statusbar { min-height: 24px; }
+  .question-dense .question-tools > summary { min-height: 24px; padding: 3px 6px; }
+  .question-card.question-dense .q-title { font-size: 0.94rem; line-height: 1.2; }
+  .question-card.question-dense .q-text { padding: 6px 8px; font-size: 0.875rem; line-height: 1.3; }
+  .question-dense .question-content { gap: 5px; }
+  .question-card.question-dense .choices { gap: 4px; }
+  .question-card.question-dense button.choice { min-height: 44px; padding: 5px 8px; font-size: 0.875rem; line-height: 1.25; }
+  .question-card.question-dense .q-figure { margin-top: 4px; }
+  .question-card.question-dense .test-actions { margin: auto -8px -8px; padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (max-width: 280px), (max-height: 360px), (max-width: 600px) and (max-height: 420px) {
+  .question-card .test-actions { position: static; margin-top: 8px; }
+}

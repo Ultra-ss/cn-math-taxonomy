@@ -79,7 +79,7 @@ test('所有关系、题目和课标引用都指向保留数据', () => {
   }
 });
 
-test('图谱与诊断默认物理，显式科学与旧知识点链接仍可使用', () => {
+test('图谱与检测默认物理，显式科学与旧知识点链接仍可使用', () => {
   const exploreSource = read('explore/app.js');
   const exploreFn = extractFunction(exploreSource, 'readSubject', 'configureSubject');
   function exploreSubject(search, hash) {
@@ -118,7 +118,7 @@ test('图谱与诊断默认物理，显式科学与旧知识点链接仍可使�
   assert.equal(diagnoseSubject('?target=cnp_071'), 'physics');
 });
 
-test('整册诊断按学科取数，默认科学', () => {
+test('整册检测按学科取数，默认科学', () => {
   const engine = require('../diagnose/engine.js');
   const graph = engine.buildGraph(topics, deps, questions);
   const science = engine.gradeTargets(graph, '一上');
@@ -144,6 +144,21 @@ test('所有 HTML 导航只含两科，公开地址指向 physicalmap', () => {
   assert.ok(!read('index.html').includes('id="stats"'));
   assert.ok(read('diagnose/share.js').includes('https://physicalmap.pages.dev/?from=share'));
   assert.ok(read('assets/pwa.js').includes('physicalmap.pages.dev'));
+});
+
+test('用户界面统一使用检测，保留原有链接与学习数据标识', () => {
+  const retiredWord = '\u8bca\u65ad';
+  for (const dir of ['assets', 'children', 'diagnose', 'explore', 'wrongbook']) {
+    for (const file of fs.readdirSync(path.join(ROOT, dir))) {
+      if (!/\.(?:js|html|css)$/.test(file)) continue;
+      assert.ok(!read(dir + '/' + file).includes(retiredWord), dir + '/' + file);
+    }
+  }
+  for (const file of ['index.html', 'manifest.webmanifest']) assert.ok(!read(file).includes(retiredWord), file);
+  const manifest = JSON.parse(read('manifest.webmanifest'));
+  assert.equal(manifest.shortcuts[0].name, '开始检测');
+  assert.ok(read('diagnose/app.js').includes('cnpDiagnose.session.v2'), '旧进度存储键保持兼容');
+  assert.ok(read('data/topics.json').includes('diagnostic_question'), '英文数据字段不随显示文案更名');
 });
 
 test('本机盲区不接受旧学科，再测链接带正确学科', () => {

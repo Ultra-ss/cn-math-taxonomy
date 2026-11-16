@@ -114,7 +114,7 @@ let chrome, source, target, browser;
     const kids=CnmChildren.list(); CnmChildren.setCurrent(kids[1].id);
     ['science','physics'].forEach((subject,i) => {
       const id=['cns_p001','cnp_001'][i];
-      CnmChildren.saveRecord(kids[0].id,{key:subject+'|seed|'+id,subject,label:'测试诊断 '+i,mode:'target',asked:8,targets:[id],
+      CnmChildren.saveRecord(kids[0].id,{key:subject+'|seed|'+id,subject,label:'测试检测 '+i,mode:'target',asked:8,targets:[id],
         counts:{weak:1,shaky:0,mastered:0,untested:0},weak:[id],roots:[id],shaky:[],mastered:[]});
     });
     const answers=[1,2,3].map(n=>({id:'cns_p001',qid:'cns_p001_q'+n,result:'correct'}));

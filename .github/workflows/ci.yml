@@ -98,6 +98,9 @@ jobs:
       - name: tests/test_explore_detail.js
         run: node tests/test_explore_detail.js
 
+      - name: tests/test_focused_testing.js
+        run: node tests/test_focused_testing.js
+
       - name: 课标映射严格模式（仅报告）
         continue-on-error: true
         env:

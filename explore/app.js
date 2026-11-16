@@ -402,7 +402,7 @@
     if (!dialog || dialog.open) return false;
     nodeDialogId = id;
     nodeDialogScroll = { x: window.scrollX, y: window.scrollY };
-    $('node-dialog-question').textContent = '要进入“' + byId.get(id).name + '”的诊断吗？';
+    $('node-dialog-question').textContent = '要进入“' + byId.get(id).name + '”的检测吗？';
     $('node-dialog-try').setAttribute('href', nodeDiagnosisHref(id));
     dialog.showModal();
     return true;
@@ -569,8 +569,8 @@
             el('span', {
               class: 'chapter-progress' + (completed.completed === completed.total ? ' is-complete' : ''),
               text: completed.completed + '/' + completed.total,
-              'aria-label': '已完成诊断 ' + completed.completed + ' 个，共 ' + completed.total + ' 个知识点',
-              title: '已完成诊断 / 本章知识点'
+              'aria-label': '已完成检测 ' + completed.completed + ' 个，共 ' + completed.total + ' 个知识点',
+              title: '已完成检测 / 本章知识点'
             }))));
         chapter.topics.forEach(function (topic) {
           chapterDetails.append(el('button', {
@@ -630,17 +630,18 @@
     if (currentAlias) {
       parts.push(el('div', { class: 'alias-note' },
         '旧编号 ', el('code', { text: currentAlias.id }),
-        '（' + (currentAlias.name || '未命名') + '）已对应到这个知识点。用该旧编号开始诊断时，会包含映射中的全部 ' + currentAlias.targets.length + ' 个小学知识点。 ',
+        '（' + (currentAlias.name || '未命名') + '）已对应到这个知识点。用该旧编号开始检测时，会包含映射中的全部 ' + currentAlias.targets.length + ' 个小学知识点。 ',
         el('a', {
           href: withReturn('../diagnose/?subject=' + subject + '&target=' + encodeURIComponent(currentAlias.id)),
           'data-diagnose-return': '../diagnose/?subject=' + subject + '&target=' + encodeURIComponent(currentAlias.id)
-        }, '按旧编号诊断')));
+        }, '按旧编号检测')));
     }
     parts.push(el('h1', { class: 'detail-title', text: topic.name }));
     var tested = progressOf(topic.id);
     parts.push(el('p', { class: 'detail-test-state ' + progressClass(tested), text: (tested ? (tested.status === 'mastered' ? '✓ ' : '× ') : '') + progressLabel(tested) }));
     var diagHref = '../diagnose/?target=' + encodeURIComponent(topic.id);
     if (subject !== 'math') diagHref = '../diagnose/?subject=' + subject + '&target=' + encodeURIComponent(topic.id);
+    diagHref += '&retry=1';
     parts.push(el('a', {
       class: 'btn btn-primary btn-lg diag-btn',
       href: withReturn(diagHref),
