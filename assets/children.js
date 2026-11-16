@@ -7,6 +7,11 @@
   var MAX_CHILDREN = 8;
   var MAX_RECORDS = 40;
   var MAX_BACKUP_BYTES = 10 * 1024 * 1024;
+  var WRONG_KEY = 'cnmWrong.v1';
+  var BLIND_KEY = 'cnmBlind.local.v1';
+  var ARCHIVE_KEY = 'cnmDiagnose.archived.v1';
+  var SESSION_KEYS = { science: 'cnsDiagnose.session.v1', physics: 'cnpDiagnose.session.v2' };
+  var BACKUP_KEYS = [KEY, REC_KEY, WRONG_KEY, BLIND_KEY, SESSION_KEYS.science, SESSION_KEYS.physics, ARCHIVE_KEY];
   var GRADES = ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三'];
   var TEXTBOOKS = ['教科版', '人教版', '其他'];
 
@@ -163,32 +168,24 @@
     return by;
   }
 
-  /* 备份保留完整档案与记录，不经过页面的筛选、排序或最近 40 条截取。
-   * 不能用 read() 的兜底值：读取失败时导出空数据会让用户误以为备份成功。 */
+  /* v2 备份同时保留两科学习数据；仅使用明确列出的存储键，不带入访问统计。
+   * 严格读取，避免把损坏或无法读取的数据当作空备份。 */
   function exportBackup() {
-    var profiles, history;
-    try {
-      var rawProfiles = localStorage.getItem(KEY);
-      var rawRecords = localStorage.getItem(REC_KEY);
-      profiles = rawProfiles === null ? { v: 1, current: null, children: [] } : JSON.parse(rawProfiles);
-      history = rawRecords === null ? {} : JSON.parse(rawRecords);
-    } catch (e) {
-      throw new Error('无法读取档案数据，未生成备份。请检查浏览器是否允许访问本机存储，以及数据是否完整。');
-    }
-    if (!profiles || !Array.isArray(profiles.children) ||
-        !profiles.children.every(function (c) { return c && typeof c.id === 'string' && c.id; }) ||
-        !history || typeof history !== 'object' || Array.isArray(history) ||
-        !Object.keys(history).every(function (id) { return Array.isArray(history[id]); })) {
-      throw new Error('档案数据格式异常，未生成备份。');
-    }
-    if (!profiles.children.length) throw new Error('还没有可导出的孩子档案。');
-    return {
+    var snapshot = importSnapshot();
+    if (!snapshot.profiles.children.length && !Object.keys(snapshot.learning.wrongbook).some(function (id) {
+      return snapshot.learning.wrongbook[id].length;
+    }) && !Object.keys(snapshot.learning.blindspots.byId).length && !Object.keys(snapshot.learning.sessions).length &&
+        !snapshot.learning.archivedSessions.length) throw new Error('还没有可导出的档案或学习数据。');
+    var backup = {
       format: 'cn-math-taxonomy.children',
-      version: 1,
+      version: 2,
       exportedAt: new Date().toISOString(),
-      profiles: profiles,
-      records: history
+      profiles: snapshot.profiles,
+      records: snapshot.records,
+      learning: snapshot.learning
     };
+    checkBackup(backup);
+    return backup;
   }
 
   function isObject(value) { return value !== null && typeof value === 'object' && !Array.isArray(value); }
@@ -199,11 +196,13 @@
     return typeof value === 'string' && /^[A-Za-z0-9_-]{1,128}$/.test(value) &&
       ['__proto__', 'constructor', 'prototype'].indexOf(value) < 0;
   }
-  function checkSafeKeys(value) {
+  function checkSafeKeys(value, depth) {
     if (!value || typeof value !== 'object') return;
+    depth = depth || 0;
+    if (depth > 40) throw new Error('备份数据层级过深。');
     Object.keys(value).forEach(function (key) {
       if (['__proto__', 'constructor', 'prototype'].indexOf(key) >= 0) throw new Error('备份含有不允许的数据字段。');
-      checkSafeKeys(value[key]);
+      checkSafeKeys(value[key], depth + 1);
     });
   }
   function checkArchive(profiles, history, allowEmpty) {
@@ -231,7 +230,9 @@
         keys.add(r.key);
         ['weak', 'roots', 'shaky', 'mastered', 'targets'].forEach(function (field) {
           if (!own(r, field) || (field === 'targets' && r[field] === null)) return;
-          if (!Array.isArray(r[field]) || !r[field].every(validId)) throw new Error('诊断记录的知识点列表不正确。');
+          if (!Array.isArray(r[field]) || !r[field].every(function (topic) {
+            return validId(topic) && subjectOfTopic(topic) === r.subject;
+          })) throw new Error('诊断记录的知识点列表不正确。');
         });
         if ((own(r, 'asked') && (!Number.isInteger(r.asked) || r.asked < 0)) ||
             (own(r, 'label') && typeof r.label !== 'string') ||
@@ -246,13 +247,102 @@
   }
   function checkBackup(backup) {
     if (!isObject(backup) || backup.format !== 'cn-math-taxonomy.children') throw new Error('请选择本站导出的档案备份文件。');
-    if (backup.version !== 1) throw new Error('暂不支持这个备份版本。');
+    if (backup.version !== 1 && backup.version !== 2) throw new Error('暂不支持这个备份版本。');
     if (!validDate(backup.exportedAt)) throw new Error('备份导出时间不正确。');
-    checkArchive(backup.profiles, backup.records, false);
     checkSafeKeys(backup);
+    checkSize(JSON.stringify(backup));
+    checkArchive(backup.profiles, backup.records, backup.version === 2);
+    if (backup.version === 2) checkLearning(backup.learning);
+  }
+  function checkSize(text) {
+    // 文件限制按 UTF-8 字节计算；中文不能按 JS 字符数误算。
+    var bytes = 0;
+    for (var i = 0; i < text.length; i++) {
+      var c = text.charCodeAt(i);
+      if (c < 128) bytes++;
+      else if (c < 2048) bytes += 2;
+      else if (c >= 0xD800 && c <= 0xDBFF && i + 1 < text.length &&
+               text.charCodeAt(i + 1) >= 0xDC00 && text.charCodeAt(i + 1) <= 0xDFFF) { bytes += 4; i++; }
+      else bytes += 3;
+      if (bytes > MAX_BACKUP_BYTES) throw new Error('备份文件不能超过 10 MB。');
+    }
+  }
+  function subjectOfTopic(id) {
+    if (typeof id !== 'string') return '';
+    if (/^cns_[A-Za-z0-9]+$/.test(id)) return 'science';
+    if (/^cnp_[A-Za-z0-9]+$/.test(id)) return 'physics';
+    return '';
+  }
+  function validQuestion(qid, topic) {
+    return typeof qid === 'string' && new RegExp('^' + topic + '_q[1-9][0-9]*$').test(qid);
+  }
+  function shortText(value, max) { return typeof value === 'string' && value.length <= (max || 4000); }
+  function natural(value) { return Number.isSafeInteger(value) && value >= 0; }
+  function emptyLearning() { return { wrongbook: {}, sessions: {}, blindspots: { v: 1, byId: {} }, archivedSessions: [] }; }
+  function checkSession(session, subject) {
+    function topics(ids) { return Array.isArray(ids) && ids.every(function (id) { return subjectOfTopic(id) === subject; }); }
+    if (!isObject(session) || session.v !== 2 || ['target', 'screen'].indexOf(session.mode) < 0 ||
+        !topics(session.targets) || !session.targets.length || !natural(session.limit) || session.limit < 1 || session.limit > 1000 ||
+        !natural(session.confirm) || session.confirm < 1 || session.confirm > 10 || !shortText(session.seed, 256) ||
+        !shortText(session.label) || !validDate(session.savedAt) || !Array.isArray(session.answers) ||
+        (own(session, 'avoid') && (!Array.isArray(session.avoid) || !session.avoid.every(function (qid) {
+          // seenList 是全站共用，科学之后开启物理时自然包含科学题号。
+          // 历史其他学科题号也仅用于排重，不能按本次活动学科限制。
+          return shortText(qid, 160) && /^cn[a-z]_[A-Za-z0-9]+_q[1-9][0-9]*$/.test(qid);
+        })))) throw new Error('进行中诊断的范围、设置或时间不正确。');
+    session.answers.forEach(function (answer) {
+      if (!isObject(answer) || subjectOfTopic(answer.id) !== subject || !validQuestion(answer.qid, answer.id) ||
+          ['correct', 'wrong', 'skip'].indexOf(answer.result) < 0 ||
+          (own(answer, 'text') && !shortText(answer.text)) || (own(answer, 'prompt') && !shortText(answer.prompt))) {
+        throw new Error('进行中诊断的作答数据不正确。');
+      }
+    });
+    if (own(session, 'excluded') && (!Array.isArray(session.excluded) || !session.excluded.every(function (answer) {
+      return isObject(answer) && subjectOfTopic(answer.id) === subject && validQuestion(answer.qid, answer.id) &&
+        ['correct', 'wrong', 'skip'].indexOf(answer.result) >= 0 && shortText(answer.prompt);
+    }))) throw new Error('进行中诊断的排除记录不正确。');
+  }
+  function checkLearning(learning) {
+    if (!isObject(learning) || !isObject(learning.wrongbook) || !isObject(learning.sessions) ||
+        !isObject(learning.blindspots) || learning.blindspots.v !== 1 || !isObject(learning.blindspots.byId) ||
+        !Array.isArray(learning.archivedSessions) || Object.keys(learning).some(function (key) {
+          return ['wrongbook', 'sessions', 'blindspots', 'archivedSessions'].indexOf(key) < 0;
+        })) throw new Error('学习备份数据格式不正确。');
+    Object.keys(learning.wrongbook).forEach(function (bucket) {
+      if (!validId(bucket) || !Array.isArray(learning.wrongbook[bucket])) throw new Error('错题本分组不正确。');
+      var seen = new Set();
+      learning.wrongbook[bucket].forEach(function (row) {
+        if (!isObject(row) || !subjectOfTopic(row.topicId) || subjectOfTopic(row.topicId) !== row.subject ||
+            !validQuestion(row.qid, row.topicId) || seen.has(row.qid) || !shortText(row.topic) || !shortText(row.prompt) ||
+            !shortText(row.answer) || !shortText(row.chosen) || !shortText(row.explanation) ||
+            ['wrong', 'skip'].indexOf(row.kind) < 0 || !natural(row.ts) || !row.ts || !natural(row.count) || !row.count ||
+            (row.choices !== null && (!Array.isArray(row.choices) || !row.choices.every(function (c) {
+              return isObject(c) && shortText(c.key) && shortText(c.text);
+            })))) throw new Error('错题的题号、内容、学科或时间不正确。');
+        seen.add(row.qid);
+      });
+    });
+    Object.keys(learning.sessions).forEach(function (subject) {
+      if (!own(SESSION_KEYS, subject)) throw new Error('进行中诊断含有不支持的学科。');
+      checkSession(learning.sessions[subject], subject);
+    });
+    learning.archivedSessions.forEach(function (entry) {
+      if (!isObject(entry) || !own(SESSION_KEYS, entry.subject)) throw new Error('诊断归档的学科不正确。');
+      checkSession(entry.session, entry.subject);
+    });
+    Object.keys(learning.blindspots.byId).forEach(function (id) {
+      var row = learning.blindspots.byId[id];
+      if (!isObject(row) || !subjectOfTopic(id) || row.id !== id || row.subject !== subjectOfTopic(id) ||
+          ['mastered', 'weak', 'shaky', 'retest'].indexOf(row.status) < 0 || !validDate(row.lastAt) ||
+          !natural(row.hits) || !natural(row.wrongs) || typeof row.root !== 'boolean' ||
+          (own(row, 'lastLabel') && !shortText(row.lastLabel)) || (own(row, 'lastKey') && !shortText(row.lastKey))) {
+        throw new Error('盲区台账的知识点、状态或时间不正确。');
+      }
+    });
   }
   function parseBackup(text) {
-    if (typeof text !== 'string' || text.length > MAX_BACKUP_BYTES) throw new Error('备份文件不能超过 10 MB。');
+    if (typeof text !== 'string') throw new Error('备份文件不是文本。');
+    checkSize(text);
     var backup;
     try { backup = JSON.parse(text.replace(/^\uFEFF/, '')); }
     catch (e) { throw new Error('文件不是有效的 JSON，档案未改变。'); }
@@ -260,17 +350,83 @@
     return backup;
   }
   function importSnapshot() {
-    var rawProfiles, rawRecords, profiles, history;
+    var raw = {}, profiles, history, learning = emptyLearning();
     try {
-      rawProfiles = localStorage.getItem(KEY);
-      rawRecords = localStorage.getItem(REC_KEY);
-      profiles = rawProfiles === null ? { v: 1, current: null, children: [] } : JSON.parse(rawProfiles);
-      history = rawRecords === null ? {} : JSON.parse(rawRecords);
-    } catch (e) { throw new Error('无法读取本机档案，导入已停止。请先检查本机数据。'); }
+      BACKUP_KEYS.forEach(function (key) { raw[key] = localStorage.getItem(key); });
+      profiles = raw[KEY] === null ? { v: 1, current: null, children: [] } : JSON.parse(raw[KEY]);
+      history = raw[REC_KEY] === null ? {} : JSON.parse(raw[REC_KEY]);
+      if (raw[WRONG_KEY] !== null) learning.wrongbook = JSON.parse(raw[WRONG_KEY]);
+      if (raw[BLIND_KEY] !== null) learning.blindspots = JSON.parse(raw[BLIND_KEY]);
+      if (raw[ARCHIVE_KEY] !== null) learning.archivedSessions = JSON.parse(raw[ARCHIVE_KEY]);
+      Object.keys(SESSION_KEYS).forEach(function (subject) {
+        if (raw[SESSION_KEYS[subject]] !== null) learning.sessions[subject] = JSON.parse(raw[SESSION_KEYS[subject]]);
+      });
+    } catch (e) { throw new Error('无法读取本机档案或学习数据，操作已停止。请先检查本机数据。'); }
+    checkSafeKeys(profiles); checkSafeKeys(history); checkSafeKeys(learning);
     checkArchive(profiles, history, true);
-    return { profiles: profiles, records: history, rawRecords: rawRecords, token: JSON.stringify([rawProfiles, rawRecords]) };
+    checkLearning(learning);
+    return { profiles: profiles, records: history, learning: learning, raw: raw, token: JSON.stringify(raw) };
   }
   function recordTime(r) { return Math.max(Date.parse(r.savedAt), Date.parse(r.updatedAt || r.savedAt)); }
+  function stableJSON(value) {
+    if (Array.isArray(value)) return '[' + value.map(stableJSON).join(',') + ']';
+    if (isObject(value)) return '{' + Object.keys(value).sort().map(function (key) {
+      return JSON.stringify(key) + ':' + stableJSON(value[key]);
+    }).join(',') + '}';
+    return JSON.stringify(value);
+  }
+  function sessionSignature(subject, session) {
+    var content = copy(session);
+    delete content.savedAt;
+    return subject + '|' + stableJSON(content);
+  }
+  function archiveSession(learning, subject, session) {
+    var signature = sessionSignature(subject, session);
+    if (learning.sessions[subject] && sessionSignature(subject, learning.sessions[subject]) === signature) return false;
+    var found = learning.archivedSessions.some(function (entry) {
+      return sessionSignature(entry.subject, entry.session) === signature;
+    });
+    if (!found) learning.archivedSessions.push({ subject: subject, session: copy(session) });
+    return !found;
+  }
+  function mergeLearning(local, incoming, summary) {
+    var merged = copy(local);
+    Object.keys(incoming.wrongbook).forEach(function (bucket) {
+      var rows = new Map();
+      (merged.wrongbook[bucket] || []).forEach(function (row) { rows.set(row.qid, row); });
+      incoming.wrongbook[bucket].forEach(function (row) {
+        var old = rows.get(row.qid);
+        if (!old) { rows.set(row.qid, copy(row)); summary.addedWrongs++; }
+        else {
+          var next = copy(row.ts > old.ts ? row : old);
+          next.count = Math.max(old.count, row.count);
+          if (stableJSON(next) !== stableJSON(old)) summary.updatedWrongs++;
+          rows.set(row.qid, next);
+        }
+      });
+      merged.wrongbook[bucket] = Array.from(rows.values());
+    });
+    Object.keys(incoming.blindspots.byId).forEach(function (id) {
+      var row = incoming.blindspots.byId[id], old = merged.blindspots.byId[id];
+      if (!old) { merged.blindspots.byId[id] = copy(row); summary.addedBlindspots++; }
+      else {
+        var next = copy(Date.parse(row.lastAt) > Date.parse(old.lastAt) ? row : old);
+        next.hits = Math.max(old.hits, row.hits);
+        next.wrongs = Math.max(old.wrongs, row.wrongs);
+        if (stableJSON(next) !== stableJSON(old)) summary.updatedBlindspots++;
+        merged.blindspots.byId[id] = next;
+      }
+    });
+    Object.keys(incoming.sessions).forEach(function (subject) {
+      var session = incoming.sessions[subject];
+      if (!merged.sessions[subject]) { merged.sessions[subject] = copy(session); summary.restoredSessions++; }
+      else if (archiveSession(merged, subject, session)) summary.archivedSessions++;
+    });
+    incoming.archivedSessions.forEach(function (entry) {
+      if (archiveSession(merged, entry.subject, entry.session)) summary.archivedSessions++;
+    });
+    return merged;
+  }
   function prepareImport(backup) {
     checkBackup(backup);
     var before = importSnapshot();
@@ -283,7 +439,9 @@
     if (profiles.children.length + additions > MAX_CHILDREN) throw new Error('合并后会超过 ' + MAX_CHILDREN + ' 个孩子，请先整理现有档案。');
     // 先保留所有不冲突的原名，再为同名的新档案分配名称，重复导入仍按 ID 合并。
     backup.profiles.children.forEach(function (c) { if (!byId.has(c.id)) names.add(c.name); });
-    var summary = { addedChildren: 0, matchedChildren: 0, renamedChildren: 0, addedRecords: 0, updatedRecords: 0, keptRecords: 0, children: [], token: before.token };
+    var summary = { addedChildren: 0, matchedChildren: 0, renamedChildren: 0, addedRecords: 0, updatedRecords: 0, keptRecords: 0,
+      addedWrongs: 0, updatedWrongs: 0, addedBlindspots: 0, updatedBlindspots: 0, restoredSessions: 0, archivedSessions: 0,
+      children: [], token: before.token, legacy: backup.version === 1 };
     var usedNames = new Set(profiles.children.map(function (c) { return c.name; }));
     backup.profiles.children.forEach(function (source) {
       var child = byId.get(source.id);
@@ -318,27 +476,72 @@
     });
     if (!before.profiles.children.length) profiles.current = backup.profiles.current;
     Object.keys(backup.profiles).forEach(function (key) { if (!own(profiles, key)) profiles[key] = copy(backup.profiles[key]); });
-    return { before: before, profiles: profiles, records: history, summary: summary };
+    var learning = mergeLearning(before.learning, backup.version === 2 ? backup.learning : emptyLearning(), summary);
+    return { before: before, profiles: profiles, records: history, learning: learning, summary: summary };
   }
   function previewImport(backup) { return prepareImport(backup).summary; }
+  function writeSnapshot(before, profiles, history, learning) {
+    var next = {};
+    next[REC_KEY] = JSON.stringify(history);
+    next[KEY] = JSON.stringify(profiles);
+    next[WRONG_KEY] = JSON.stringify(learning.wrongbook);
+    next[BLIND_KEY] = JSON.stringify(learning.blindspots);
+    Object.keys(SESSION_KEYS).forEach(function (subject) {
+      next[SESSION_KEYS[subject]] = learning.sessions[subject] ? JSON.stringify(learning.sessions[subject]) : null;
+    });
+    next[ARCHIVE_KEY] = JSON.stringify(learning.archivedSessions);
+    var written = [];
+    try {
+      Object.keys(next).forEach(function (key) {
+        // 不创建无内容的辅助键，也避免重复导入造成无意义写入。
+        if (next[key] === before.raw[key] || (before.raw[key] === null &&
+            (next[key] === '{}' || next[key] === '[]' || next[key] === '{"v":1,"byId":{}}'))) return;
+        if (next[key] === null) localStorage.removeItem(key);
+        else localStorage.setItem(key, next[key]);
+        written.push(key);
+      });
+    } catch (e) {
+      var rollbackFailed = false;
+      written.reverse().forEach(function (key) {
+        try {
+          if (before.raw[key] === null) localStorage.removeItem(key);
+          else localStorage.setItem(key, before.raw[key]);
+        } catch (rollbackError) { rollbackFailed = true; }
+      });
+      if (rollbackFailed) throw new Error('操作未完成，原数据恢复失败。请保留备份文件并检查浏览器存储。');
+      throw new Error('浏览器无法保存数据，原有档案和学习数据未改变。可能是存储空间不足。');
+    }
+  }
   function importBackup(backup, token) {
     var plan = prepareImport(backup);
-    if (token !== plan.before.token) throw new Error('本机档案已发生变化，请重新预览后再导入。');
-    var recordsWritten = false;
-    try {
-      localStorage.setItem(REC_KEY, JSON.stringify(plan.records));
-      recordsWritten = true;
-      localStorage.setItem(KEY, JSON.stringify(plan.profiles));
-    } catch (e) {
-      if (recordsWritten) {
-        try {
-          if (plan.before.rawRecords === null) localStorage.removeItem(REC_KEY);
-          else localStorage.setItem(REC_KEY, plan.before.rawRecords);
-        } catch (rollbackError) { throw new Error('导入未完成，原记录恢复失败。请保留备份文件并检查浏览器存储。'); }
-      }
-      throw new Error('浏览器无法保存导入数据，原有档案和记录未改变。可能是存储空间不足。');
-    }
+    if (token !== plan.before.token) throw new Error('本机档案或学习数据已发生变化，请重新预览后再导入。');
+    writeSnapshot(plan.before, plan.profiles, plan.records, plan.learning);
     return plan.summary;
+  }
+  function archivedSessions() {
+    var snapshot = importSnapshot();
+    return { token: snapshot.token, items: snapshot.learning.archivedSessions.map(function (entry, index) {
+      return { index: index, subject: entry.subject, label: entry.session.label,
+        savedAt: entry.session.savedAt, answered: entry.session.answers.length };
+    }) };
+  }
+  function restoreArchivedSession(index, token) {
+    var before = importSnapshot();
+    if (before.token !== token) throw new Error('本机学习数据已发生变化，请刷新列表后重试。');
+    if (!natural(index) || !before.learning.archivedSessions[index]) throw new Error('找不到这份诊断进度。');
+    var learning = copy(before.learning);
+    var selected = learning.archivedSessions.splice(index, 1)[0];
+    var active = learning.sessions[selected.subject];
+    delete learning.sessions[selected.subject];
+    if (active) archiveSession(learning, selected.subject, active);
+    learning.sessions[selected.subject] = selected.session;
+    // 如本机已有同一进度的归档，仅保留现在激活的一份。
+    var signature = sessionSignature(selected.subject, selected.session);
+    learning.archivedSessions = learning.archivedSessions.filter(function (entry) {
+      return sessionSignature(entry.subject, entry.session) !== signature;
+    });
+    writeSnapshot(before, before.profiles, before.records, learning);
+    return selected.subject;
   }
 
   window.CnmChildren = {
@@ -347,6 +550,7 @@
     add: add, update: update, remove: remove,
     recordsOf: recordsOf, saveRecord: saveRecord, hasRecord: hasRecord, moveRecord: moveRecord, removeRecord: removeRecord,
     presentRecord: presentRecord, latestStatus: latestStatus, exportBackup: exportBackup,
-    MAX_BACKUP_BYTES: MAX_BACKUP_BYTES, parseBackup: parseBackup, previewImport: previewImport, importBackup: importBackup
+    MAX_BACKUP_BYTES: MAX_BACKUP_BYTES, parseBackup: parseBackup, previewImport: previewImport, importBackup: importBackup,
+    archivedSessions: archivedSessions, restoreArchivedSession: restoreArchivedSession
   };
 })();

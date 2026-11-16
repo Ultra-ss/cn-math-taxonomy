@@ -7,7 +7,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const WORKFLOW = path.join(ROOT, '.github/workflows/ci.yml');
-const VERIFY_RUN = 'python3 scripts/verify_questions.py --report /tmp/cn-math-taxonomy-verification-report.json';
+const VERIFY_RUN = 'python3 scripts/verify_questions.py --report /tmp/physicalmap-verification-report.json';
 let passed = 0;
 
 function test(name, fn) {

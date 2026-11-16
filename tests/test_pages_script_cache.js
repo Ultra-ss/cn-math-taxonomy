@@ -26,6 +26,7 @@ const REQUIRED = [
   './explore',
   './diagnose',
   './children',
+  './wrongbook',
   './data/topics.json',
   './data/dependencies.json',
   './data/cn-curriculum-standards.json',
@@ -186,6 +187,18 @@ test('正常路径：假发布退出 0，脚本退出 0，缓存目录可写', (
   } finally {
     cleanupRun(run);
   }
+});
+
+test('仅使用当前项目，缺少账号时在上传前退出', () => {
+  const src = fs.readFileSync(SCRIPT, 'utf8');
+  assert.doesNotMatch(src, /6799c67ce94928e7fc4136842327a18f|math\.pansgo\.com|ROOT\}\/goods/);
+  assert.match(src, /--project-name physicalmap/);
+  const run = runScript({ CLOUDFLARE_ACCOUNT_ID: '' });
+  try {
+    assert.notEqual(run.result.status, 0);
+    assert.equal(run.logText, '', '缺少账号时不得执行上传');
+    assert.equal(run.leftover.length, 0);
+  } finally { cleanupRun(run); }
 });
 
 test('失败退出码原样返回（2），不当成成功', () => {

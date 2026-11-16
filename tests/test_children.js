@@ -42,52 +42,36 @@ function exported(api) { return JSON.parse(JSON.stringify(api.exportBackup())); 
 const profiles = {
   v: 1, current: 'child-b', children: [
     { id: 'child-a', name: '小满', grade: '三年级', textbook: '人教版', createdAt: '2026-10-01T00:00:00.000Z' },
-    { id: 'child-b', name: '小禾', grade: '五年级', textbook: '沪教版', createdAt: '2026-10-02T00:00:00.000Z' }
+    { id: 'child-b', name: '小禾', grade: '五年级', textbook: '教科版', createdAt: '2026-10-02T00:00:00.000Z' }
   ]
 };
 const records = {
-  'child-a': ['math', 'chinese', 'english', 'physics'].map((subject, i) => ({
+  'child-a': ['science', 'physics'].map((subject, i) => ({
     key: subject + '|seed|target', subject, label: '测试范围 ' + i, mode: 'target', asked: 8,
-    targets: ['topic-' + i], counts: { weak: 1, shaky: 1, mastered: 1, untested: 2 },
-    weak: ['weak-' + i], roots: ['weak-' + i], shaky: ['shaky-' + i], mastered: ['mastered-' + i],
+    targets: [(subject === 'science' ? 'cns_' : 'cnp_') + 't' + i], counts: { weak: 1, shaky: 1, mastered: 1, untested: 2 },
+    weak: [(subject === 'science' ? 'cns_' : 'cnp_') + 'w' + i], roots: [(subject === 'science' ? 'cns_' : 'cnp_') + 'w' + i], shaky: [(subject === 'science' ? 'cns_' : 'cnp_') + 's' + i], mastered: [(subject === 'science' ? 'cns_' : 'cnp_') + 'm' + i],
     savedAt: '2026-10-20T00:00:00.000Z', updatedAt: '2026-10-21T00:00:00.000Z'
   })),
-  'child-b': [{ key: 'screen|seed|targets', subject: 'math', mode: 'screen', targets: null, weak: [], savedAt: '2026-10-20T00:00:00.000Z' }]
+  'child-b': [{ key: 'screen|seed|targets', subject: 'science', mode: 'screen', targets: null, weak: [], savedAt: '2026-10-20T00:00:00.000Z' }]
 };
 function fixture() {
   return { [PROFILE_KEY]: JSON.stringify(profiles), [RECORD_KEY]: JSON.stringify(records) };
 }
 
-test('语文档案同时保留小学 cnc_p 和初中 cnc_j，且不混进数学', () => {
-  const entries = fixture();
-  const recs = JSON.parse(entries[RECORD_KEY]);
-  recs['child-a'].push({
-    key: 'chinese|junior|cnc_j001', subject: 'chinese', label: '七年级上册', mode: 'target', asked: 4,
-    targets: ['cnc_j001'], counts: { weak: 1, shaky: 0, mastered: 1, untested: 0 },
-    weak: ['cnc_j001'], roots: ['cnc_j001'], shaky: [], mastered: ['cnc_p001'],
-    savedAt: '2026-11-06T00:00:00.000Z', updatedAt: '2026-11-06T00:00:00.000Z'
-  });
-  entries[RECORD_KEY] = JSON.stringify(recs);
-  const { api } = load(entries);
-  const status = api.latestStatus('child-a', 'chinese');
-  assert.equal(status.cnc_j001.status, 'weak');
-  assert.equal(status.cnc_j001.subject, 'chinese');
-  assert.equal(status.cnc_p001.status, 'mastered');
-  assert.equal(status.cnc_p001.subject, 'chinese');
-  assert.equal(api.latestStatus('child-a', 'math').cnc_j001, undefined);
-  const backup = exported(api);
-  const saved = backup.records['child-a'].find((r) => r.key === 'chinese|junior|cnc_j001');
-  assert.equal(saved.subject, 'chinese');
-  assert.deepStrictEqual(saved.targets, ['cnc_j001']);
-  assert.deepStrictEqual(saved.mastered, ['cnc_p001']);
+test('档案仅显示科学物理，已移除学科不能写入记录', () => {
+  const { api, storage } = load(fixture());
+  assert.equal(api.saveRecord('child-a', { key: 'legacy', subject: 'chinese' }), false);
+  assert.equal(api.recordsOf('child-a').length, 2);
+  assert.equal(api.latestStatus('child-a', 'science')['cns_w0'].status, 'weak');
+  assert.equal(api.latestStatus('child-a', 'physics')['cns_w0'], undefined);
 });
 
-test('导出包含全部孩子、当前孩子和四学科完整历史，并带备份版本和时间', () => {
+test('导出包含全部孩子、当前孩子和科学和物理完整历史，并带备份版本和时间', () => {
   const { api } = load(fixture());
   const before = Date.now();
   const backup = exported(api);
   assert.equal(backup.format, 'cn-math-taxonomy.children');
-  assert.equal(backup.version, 1);
+  assert.equal(backup.version, 2);
   assert.ok(Date.parse(backup.exportedAt) >= before && Date.parse(backup.exportedAt) <= Date.now());
   assert.deepStrictEqual(backup.profiles, profiles);
   assert.deepStrictEqual(backup.records, records);
@@ -104,7 +88,7 @@ test('导出不改写存储、当前孩子或记录时间', () => {
 test('保留未选择当前孩子、未知扩展字段和超过 40 条的已存历史', () => {
   const entries = fixture();
   const extraProfiles = { ...profiles, current: null, futureMetadata: { note: '保留' } };
-  const extraRecords = { 'child-a': Array.from({ length: 45 }, (_, i) => ({ key: 'record-' + i, extra: i })) };
+  const extraRecords = { 'child-a': Array.from({ length: 45 }, (_, i) => ({ ...records['child-a'][0], key: 'record-' + i, extra: i })) };
   entries[PROFILE_KEY] = JSON.stringify(extraProfiles);
   entries[RECORD_KEY] = JSON.stringify(extraRecords);
   const backup = exported(load(entries).api);
@@ -118,10 +102,10 @@ test('有孩子但没有诊断记录时仍能备份资料', () => {
   assert.deepStrictEqual(backup.records, {});
 });
 
-test('只导出档案和历史，不混入会话、统计或其他站点存储', () => {
+test('导出两科学习数据，不混入旧学科会话、统计或其他站点存储', () => {
   const entries = { ...fixture(), unrelated: 'private', 'cnmDiagnose.session.v2': '{"seed":"x"}', 'cnmStats.v1': '{}' };
   const backup = exported(load(entries).api);
-  assert.deepStrictEqual(Object.keys(backup).sort(), ['exportedAt', 'format', 'profiles', 'records', 'version']);
+  assert.deepStrictEqual(Object.keys(backup).sort(), ['exportedAt', 'format', 'learning', 'profiles', 'records', 'version']);
   assert.ok(!JSON.stringify(backup).includes('private'));
 });
 
@@ -145,23 +129,23 @@ test('没有孩子时不生成无意义的空备份', () => {
 test('读取任一存储键失败时报告错误，不使用空数据兜底', () => {
   for (const key of [PROFILE_KEY, RECORD_KEY]) {
     const { api, writes } = load(fixture(), key);
-    assert.throws(() => api.exportBackup(), /无法读取档案数据/);
+    assert.throws(() => api.exportBackup(), /无法读取本机档案或学习数据/);
     assert.deepStrictEqual(writes, []);
   }
 });
 
 test('任一 JSON 损坏时拒绝生成部分备份', () => {
   for (const key of [PROFILE_KEY, RECORD_KEY]) {
-    assert.throws(() => load({ ...fixture(), [key]: '{broken' }).api.exportBackup(), /无法读取档案数据/);
+    assert.throws(() => load({ ...fixture(), [key]: '{broken' }).api.exportBackup(), /无法读取本机档案或学习数据/);
   }
 });
 
 test('拒绝异常结构，避免静默丢失档案或历史', () => {
   for (const value of [null, [], {}, { children: [null] }, { children: [{ id: '' }] }]) {
-    assert.throws(() => load({ ...fixture(), [PROFILE_KEY]: JSON.stringify(value) }).api.exportBackup(), /格式异常/);
+    assert.throws(() => load({ ...fixture(), [PROFILE_KEY]: JSON.stringify(value) }).api.exportBackup(), /数据格式|资料不完整|没有对应/);
   }
   for (const value of [null, [], 'bad', { 'child-a': {} }]) {
-    assert.throws(() => load({ ...fixture(), [RECORD_KEY]: JSON.stringify(value) }).api.exportBackup(), /格式异常/);
+    assert.throws(() => load({ ...fixture(), [RECORD_KEY]: JSON.stringify(value) }).api.exportBackup(), /数据格式|资料不完整|没有对应/);
   }
 });
 
@@ -169,17 +153,17 @@ function backup() { return exported(load(fixture()).api); }
 function importInto(api, data) { return api.importBackup(data, api.previewImport(data).token); }
 function stored(storage, key) { return JSON.parse(storage.get(key)); }
 
-test('新浏览器完整恢复多孩子、当前孩子与四学科历史，弱点汇总仍可用', () => {
+test('新浏览器完整恢复多孩子、当前孩子与科学和物理历史，弱点汇总仍可用', () => {
   const data = backup();
   const { api, storage } = load();
   const result = importInto(api, api.parseBackup(JSON.stringify(data)));
   assert.equal(result.addedChildren, 2);
-  assert.equal(result.addedRecords, 5);
+  assert.equal(result.addedRecords, 3);
   assert.deepStrictEqual(stored(storage, PROFILE_KEY), profiles);
   assert.deepStrictEqual(stored(storage, RECORD_KEY), records);
   assert.equal(api.current().id, 'child-b');
-  assert.equal(api.latestStatus('child-a', 'math')['weak-0'].status, 'weak');
-  assert.equal(api.latestStatus('child-a', 'math')['weak-0'].root, true);
+  assert.equal(api.latestStatus('child-a', 'science')['cns_w0'].status, 'weak');
+  assert.equal(api.latestStatus('child-a', 'science')['cns_w0'].root, true);
 });
 
 test('预览和取消前不写入本机存储', () => {
@@ -213,7 +197,7 @@ test('合并保留本机资料和当前选择，旧记录保留，新记录加�
   const outRecords = stored(storage, RECORD_KEY);
   assert.equal(outProfiles.current, 'child-a');
   assert.equal(outProfiles.children[0].grade, '六年级');
-  assert.equal(outRecords['child-a'].length, 5);
+  assert.equal(outRecords['child-a'].length, 3);
   assert.equal(outRecords['child-a'].find(r => r.key === records['child-a'][0].key).label, '本机较新');
   assert.equal(outRecords['child-a'].find(r => r.key === records['child-a'][1].key).label, records['child-a'][1].label);
   assert.ok(outRecords['child-a'].find(r => r.key === 'local-only'));
@@ -284,7 +268,7 @@ test('合并保留 80 条历史，之后保存和移动记录也不会批量截�
   const { api, storage } = load(entries);
   importInto(api, data);
   assert.equal(stored(storage, RECORD_KEY)['child-a'].length, 80);
-  api.saveRecord('child-a', { key: 'new-run', subject: 'math' });
+  api.saveRecord('child-a', { key: 'new-run', subject: 'science' });
   assert.equal(stored(storage, RECORD_KEY)['child-a'].length, 81);
   api.moveRecord(records['child-b'][0].key, 'child-b', 'child-a');
   assert.equal(stored(storage, RECORD_KEY)['child-a'].length, 82);
@@ -292,7 +276,7 @@ test('合并保留 80 条历史，之后保存和移动记录也不会批量截�
 
 test('普通档案新增诊断仍保持原有最近 40 条规则', () => {
   const { api, storage } = load({ [PROFILE_KEY]: JSON.stringify(profiles) });
-  for (let i = 0; i < 41; i++) api.saveRecord('child-a', { key: 'run-' + i, subject: 'math' });
+  for (let i = 0; i < 41; i++) api.saveRecord('child-a', { key: 'run-' + i, subject: 'science' });
   assert.equal(stored(storage, RECORD_KEY)['child-a'].length, 40);
 });
 
@@ -340,36 +324,39 @@ test('本机存储读取失败或已损坏时不把它当成空浏览器', () =>
 
 test('第一步写入失败时原档案和记录不变', () => {
   const entries = fixture();
+  entries[RECORD_KEY] = JSON.stringify(records, null, 2);
   const { api, storage } = load(entries, null, { failWrite: key => key === RECORD_KEY });
-  assert.throws(() => importInto(api, backup()), /原有档案和记录未改变/);
+  assert.throws(() => importInto(api, backup()), /原有档案和学习数据未改变/);
   assert.deepStrictEqual(Object.fromEntries(storage), entries);
 });
 
 test('第二步写入失败时回滚原记录，保留原始存储字节', () => {
   const entries = fixture();
   entries[RECORD_KEY] = JSON.stringify(records, null, 2);
+  entries[PROFILE_KEY] = JSON.stringify(profiles, null, 2);
   const { api, storage } = load(entries, null, { failWrite: key => key === PROFILE_KEY });
   const data = backup(); data.records['child-a'][0].updatedAt = '2026-10-28T00:00:00.000Z';
-  assert.throws(() => importInto(api, data), /原有档案和记录未改变/);
+  assert.throws(() => importInto(api, data), /原有档案和学习数据未改变/);
   assert.deepStrictEqual(Object.fromEntries(storage), entries);
 });
 
 test('空浏览器写入失败时回滚到没有存储键的状态', () => {
   const { api, storage } = load({}, null, { failWrite: key => key === PROFILE_KEY });
-  assert.throws(() => importInto(api, backup()), /原有档案和记录未改变/);
+  assert.throws(() => importInto(api, backup()), /原有档案和学习数据未改变/);
   assert.equal(storage.size, 0);
 });
 
 test('回滚也失败时明确提示恢复失败，不报告成功或数据未改变', () => {
   let calls = 0;
-  const { api } = load(fixture(), null, { failWrite: () => ++calls > 1 });
-  assert.throws(() => importInto(api, backup()), /原记录恢复失败/);
+  const entries = { [PROFILE_KEY]: JSON.stringify(profiles, null, 2), [RECORD_KEY]: JSON.stringify(records, null, 2) };
+  const { api } = load(entries, null, { failWrite: () => ++calls > 1 });
+  assert.throws(() => importInto(api, backup()), /原数据恢复失败/);
 });
 
 test('拒绝错误文件、未知版本、重复 ID 和无归属记录', () => {
   const cases = [
     data => { data.format = 'diagnosis'; },
-    data => { data.version = 2; },
+    data => { data.version = 3; },
     data => { data.profiles.v = 2; },
     data => { data.exportedAt = 'bad'; },
     data => { data.profiles.children[1].id = data.profiles.children[0].id; },
@@ -409,44 +396,243 @@ test('科学学科的诊断记录可以备份和恢复', () => {
   assert.ok(stored(storage, RECORD_KEY)['child-b'].some((r) => r.subject === 'science'));
 });
 
-test('道德与法治学科的诊断记录可以备份和恢复', () => {
-  const data = backup();
-  data.records['child-b'] = data.records['child-b'].concat([{ key: 'morality|seed|target', subject: 'morality', mode: 'target', targets: ['cnd_p001'], weak: [], savedAt: '2026-10-29T00:00:00.000Z' }]);
+const WRONG_KEY = 'cnmWrong.v1';
+const BLIND_KEY = 'cnmBlind.local.v1';
+const ARCHIVE_KEY = 'cnmDiagnose.archived.v1';
+const SCI_SESSION = 'cnsDiagnose.session.v1';
+const PHY_SESSION = 'cnpDiagnose.session.v2';
+function session(subject = 'science', seed = 'run-a') {
+  const topic = subject === 'science' ? 'cns_p001' : 'cnp_001';
+  return {
+    v: 2, mode: 'target', targets: [topic], limit: 20, confirm: 3, label: '测试进度', seed,
+    answers: [{ id: topic, qid: topic + '_q1', result: 'wrong', prompt: '测试题干', text: 'B' }],
+    excluded: [], avoid: [], savedAt: '2026-11-15T00:00:00.000Z'
+  };
+}
+function wrong(topic = 'cns_p001', ts = 1762000000000, count = 2) {
+  return { qid: topic + '_q1', topicId: topic, subject: topic.startsWith('cns_') ? 'science' : 'physics',
+    topic: '测试知识点', prompt: '测试题干', answer: 'A', choices: [{ key: 'A', text: '正确答案' }],
+    chosen: 'B', explanation: '解析', kind: 'wrong', ts, count };
+}
+function blind(id = 'cns_p001', status = 'weak', lastAt = '2026-11-14T00:00:00.000Z', wrongs = 3) {
+  return { id, subject: id.startsWith('cns_') ? 'science' : 'physics', status, root: status === 'weak',
+    hits: 2, wrongs, lastAt, lastLabel: '测试诊断', lastKey: 'science|run-a|cns_p001' };
+}
+function learningFixture(withProfiles = true) {
+  return { ...(withProfiles ? fixture() : {}),
+    [WRONG_KEY]: JSON.stringify({ guest: [wrong()], 'child-a': [wrong('cnp_001')] }),
+    [BLIND_KEY]: JSON.stringify({ v: 1, byId: { cns_p001: blind() } }),
+    [SCI_SESSION]: JSON.stringify(session()), [PHY_SESSION]: JSON.stringify(session('physics')),
+    [ARCHIVE_KEY]: JSON.stringify([{ subject: 'science', session: session('science', 'earlier-run') }])
+  };
+}
+function learningBackup(withProfiles = true) { return exported(load(learningFixture(withProfiles)).api); }
+
+test('真实串行作答存储：科学完成后物理排重包含科学题号，仍可完整迁移', () => {
+  const entries = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/two_subject_learning_storage.json'), 'utf8'));
+  const data = exported(load(entries).api);
+  const physics = data.learning.sessions.physics;
+  assert.deepStrictEqual(physics.avoid, ['cns_p001_q3', 'cns_p001_q1']);
+  assert.equal(physics.answers[0].id, 'cnp_071');
+  assert.equal(data.learning.sessions.science.answers.length, 2);
+  assert.ok(!JSON.stringify(data).includes('cnmStats'));
   const { api, storage } = load();
   importInto(api, api.parseBackup(JSON.stringify(data)));
-  assert.ok(stored(storage, RECORD_KEY)['child-b'].some((r) => r.subject === 'morality'));
+  for (const key of [PROFILE_KEY, RECORD_KEY, WRONG_KEY, BLIND_KEY, SCI_SESSION, PHY_SESSION]) {
+    assert.deepStrictEqual(stored(storage, key), JSON.parse(entries[key]));
+  }
+  assert.deepStrictEqual(exported(api).learning, data.learning);
 });
 
-test('历史学科的诊断记录可以备份和恢复', () => {
-  const data = backup();
-  data.records['child-b'] = data.records['child-b'].concat([{ key: 'history|seed|target', subject: 'history', mode: 'target', targets: ['cnh_j001'], weak: [], savedAt: '2026-10-30T00:00:00.000Z' }]);
+test('进行中会话排重兼容全局历史各学科题号，但不接受损坏题号', () => {
+  const data = learningBackup();
+  data.learning.sessions.physics.avoid = ['cns_p001_q1', 'cnm_p001_q2', 'cnc_j001_q1', 'cne_p001_q4', 'cnk_j001_q1'];
   const { api, storage } = load();
-  importInto(api, api.parseBackup(JSON.stringify(data)));
-  assert.ok(stored(storage, RECORD_KEY)['child-b'].some((r) => r.subject === 'history'));
+  importInto(api, data);
+  assert.deepStrictEqual(stored(storage, PHY_SESSION).avoid, data.learning.sessions.physics.avoid);
+  for (const invalid of ['cns_p001', 'cns_p001_q0', 'https://example.com/q1', {}, null]) {
+    data.learning.sessions.physics.avoid = [invalid];
+    assert.throws(() => api.previewImport(data), /范围、设置或时间不正确/);
+  }
 });
 
-test('地理学科的诊断记录可以备份和恢复', () => {
-  const data = backup();
-  data.records['child-b'] = data.records['child-b'].concat([{ key: 'geography|seed|target', subject: 'geography', mode: 'target', targets: ['cng_j001'], weak: [], savedAt: '2026-10-31T00:00:00.000Z' }]);
+test('v2完整恢复错题、访客错题、两科进行中会话、盲区和会话归档', () => {
+  const entries = learningFixture();
+  const data = learningBackup();
   const { api, storage } = load();
-  importInto(api, api.parseBackup(JSON.stringify(data)));
-  assert.ok(stored(storage, RECORD_KEY)['child-b'].some((r) => r.subject === 'geography'));
+  const preview = api.previewImport(data);
+  assert.equal(preview.addedWrongs, 2);
+  assert.equal(preview.addedBlindspots, 1);
+  assert.equal(preview.restoredSessions, 2);
+  assert.equal(preview.archivedSessions, 1);
+  api.importBackup(data, preview.token);
+  for (const [key, value] of Object.entries(entries)) assert.deepStrictEqual(stored(storage, key), JSON.parse(value));
+  const first = Object.fromEntries(storage);
+  importInto(api, data);
+  assert.deepStrictEqual(Object.fromEntries(storage), first);
 });
 
-test('生物学科的诊断记录可以备份和恢复', () => {
-  const data = backup();
-  data.records['child-b'] = data.records['child-b'].concat([{ key: 'biology|seed|target', subject: 'biology', mode: 'target', targets: ['cnb_j001'], weak: [], savedAt: '2026-11-03T00:00:00.000Z' }]);
+test('没有孩子档案也能导出并恢复访客学习记录', () => {
+  const data = learningBackup(false);
+  assert.equal(data.profiles.children.length, 0);
   const { api, storage } = load();
-  importInto(api, api.parseBackup(JSON.stringify(data)));
-  assert.ok(stored(storage, RECORD_KEY)['child-b'].some((r) => r.subject === 'biology'));
+  importInto(api, data);
+  assert.equal(api.current(), null);
+  assert.equal(stored(storage, WRONG_KEY).guest.length, 1);
+  assert.equal(stored(storage, SCI_SESSION).seed, 'run-a');
 });
 
-test('化学学科的诊断记录可以备份和恢复', () => {
-  const data = backup();
-  data.records['child-b'] = data.records['child-b'].concat([{ key: 'chemistry|seed|target', subject: 'chemistry', mode: 'target', targets: ['cnk_j001'], weak: [], savedAt: '2026-11-04T00:00:00.000Z' }]);
-  const { api, storage } = load();
+test('旧版v1备份兼容导入，已有错题、会话和盲区保持不变', () => {
+  const data = backup(); data.version = 1; delete data.learning;
+  const entries = learningFixture(false);
+  const { api, storage } = load(entries);
+  assert.equal(api.previewImport(data).legacy, true);
   importInto(api, api.parseBackup(JSON.stringify(data)));
-  assert.ok(stored(storage, RECORD_KEY)['child-b'].some((r) => r.subject === 'chemistry'));
+  for (const [key, value] of Object.entries(entries)) assert.equal(storage.get(key), value);
+  assert.equal(api.list().length, 2);
 });
+
+test('错题与盲区联合保留，冲突取较新状态，计数取max且重复导入不累加', () => {
+  const data = learningBackup();
+  data.learning.wrongbook.guest.push(wrong('cns_p002'));
+  data.learning.wrongbook.guest[0] = { ...wrong(), ts: 1763000000000, count: 3, chosen: 'C' };
+  data.learning.blindspots.byId.cns_p001 = blind('cns_p001', 'mastered', '2026-11-16T00:00:00.000Z', 1);
+  data.learning.blindspots.byId.cns_p002 = blind('cns_p002');
+  const entries = learningFixture();
+  const initialWrongs = JSON.parse(entries[WRONG_KEY]); initialWrongs.guest[0].count = 5;
+  entries[WRONG_KEY] = JSON.stringify(initialWrongs);
+  const { api, storage } = load(entries);
+  const result = importInto(api, data);
+  assert.equal(result.addedWrongs, 1);
+  const updatedWrong = stored(storage, WRONG_KEY).guest.find(w => w.qid === 'cns_p001_q1');
+  assert.equal(updatedWrong.count, 5); assert.equal(updatedWrong.chosen, 'C');
+  const updatedBlind = stored(storage, BLIND_KEY).byId.cns_p001;
+  assert.equal(updatedBlind.status, 'mastered'); assert.equal(updatedBlind.wrongs, 3);
+  assert.equal(Object.keys(stored(storage, BLIND_KEY).byId).length, 2);
+  const first = Object.fromEntries(storage); importInto(api, data);
+  assert.deepStrictEqual(Object.fromEntries(storage), first);
+});
+
+test('同学科冲突保留本机活动会话，导入会话归档且恢复时交换保留双方', () => {
+  const data = learningBackup();
+  data.learning.archivedSessions = [];
+  data.learning.sessions.science = session('science', 'import-run');
+  const entries = learningFixture();
+  const { api, storage } = load(entries);
+  const result = importInto(api, data);
+  assert.equal(result.archivedSessions, 1);
+  assert.equal(stored(storage, SCI_SESSION).seed, 'run-a');
+  const list = api.archivedSessions();
+  assert.equal(list.items.length, 2);
+  api.restoreArchivedSession(1, list.token);
+  assert.equal(stored(storage, SCI_SESSION).seed, 'import-run');
+  assert.ok(stored(storage, ARCHIVE_KEY).some(e => e.session.seed === 'run-a'));
+  assert.ok(stored(storage, ARCHIVE_KEY).some(e => e.session.seed === 'earlier-run'));
+  assert.equal(stored(storage, PHY_SESSION).seed, 'run-a');
+  const again = api.archivedSessions();
+  const index = stored(storage, ARCHIVE_KEY).findIndex(e => e.session.seed === 'run-a');
+  api.restoreArchivedSession(index, again.token);
+  assert.equal(stored(storage, SCI_SESSION).seed, 'run-a');
+  assert.ok(stored(storage, ARCHIVE_KEY).some(e => e.session.seed === 'import-run'));
+});
+
+test('相同进度仅保存时间不同不重复归档，对象字段顺序也不影响去重', () => {
+  const data = learningBackup();
+  const original = data.learning.sessions.science;
+  data.learning.sessions.science = Object.fromEntries(Object.entries(original).reverse());
+  data.learning.sessions.science.savedAt = '2026-11-16T00:00:00.000Z';
+  const { api, storage } = load(learningFixture());
+  assert.equal(importInto(api, data).archivedSessions, 0);
+  assert.equal(stored(storage, ARCHIVE_KEY).length, 1);
+});
+
+test('归档恢复在活动会话不存在时直接恢复；旧token和非法索引拒绝写入', () => {
+  const entries = learningFixture(false); delete entries[SCI_SESSION];
+  const { api, storage } = load(entries);
+  const list = api.archivedSessions();
+  assert.throws(() => api.restoreArchivedSession(-1, list.token), /找不到/);
+  assert.throws(() => api.restoreArchivedSession(0, 'stale'), /已发生变化/);
+  assert.equal(api.restoreArchivedSession(0, list.token), 'science');
+  assert.equal(stored(storage, SCI_SESSION).seed, 'earlier-run');
+  assert.deepStrictEqual(stored(storage, ARCHIVE_KEY), []);
+});
+
+test('预览后任一学习存储键改变，导入停止且不会写入', () => {
+  for (const key of [WRONG_KEY, BLIND_KEY, SCI_SESSION, PHY_SESSION, ARCHIVE_KEY]) {
+    const { api, storage, writes } = load(learningFixture());
+    const data = learningBackup(), preview = api.previewImport(data);
+    storage.set(key, storage.get(key) + ' ');
+    assert.throws(() => api.importBackup(data, preview.token), /已发生变化/);
+    assert.deepStrictEqual(writes, []);
+  }
+});
+
+test('每个学习键读取失败或JSON损坏都停止导出，避免部分备份', () => {
+  for (const key of [WRONG_KEY, BLIND_KEY, SCI_SESSION, PHY_SESSION, ARCHIVE_KEY]) {
+    const { api, writes } = load(learningFixture(), key);
+    assert.throws(() => api.exportBackup(), /无法读取/);
+    assert.deepStrictEqual(writes, []);
+    assert.throws(() => load({ ...learningFixture(), [key]: '{broken' }).api.exportBackup(), /无法读取/);
+  }
+});
+
+test('任一学习键写入失败，所有已写入键回滚到导入前原字节', () => {
+  const data = learningBackup();
+  for (const fail of [WRONG_KEY, BLIND_KEY, SCI_SESSION, PHY_SESSION, ARCHIVE_KEY]) {
+    const entries = { [PROFILE_KEY]: JSON.stringify({ ...profiles, current: null }, null, 2), [RECORD_KEY]: '{}' };
+    const { api, storage } = load(entries, null, { failWrite: key => key === fail });
+    assert.throws(() => importInto(api, data), /原有档案和学习数据未改变/);
+    assert.deepStrictEqual(Object.fromEntries(storage), entries);
+  }
+});
+
+test('归档恢复存储失败时保留原活动会话和全部归档', () => {
+  const entries = learningFixture();
+  const { api, storage } = load(entries, null, { failWrite: key => key === ARCHIVE_KEY });
+  const archive = api.archivedSessions();
+  assert.throws(() => api.restoreArchivedSession(0, archive.token), /未改变/);
+  assert.deepStrictEqual(Object.fromEntries(storage), entries);
+});
+
+test('拒绝不匹配学科、非法题号、错误状态、危险键和错误学习结构', () => {
+  const cases = [
+    d => { d.learning = {}; },
+    d => { d.learning.sessions.math = session(); },
+    d => { d.learning.sessions.science.targets = ['cnp_001']; },
+    d => { d.learning.sessions.science.answers[0].qid = 'cns_p002_q1'; },
+    d => { d.learning.sessions.science.answers[0].result = 'unknown'; },
+    d => { d.learning.sessions.science.savedAt = 'bad'; },
+    d => { d.learning.sessions.science.limit = -1; },
+    d => { d.learning.wrongbook.guest[0].subject = 'physics'; },
+    d => { d.learning.wrongbook.guest[0].ts = -1; },
+    d => { d.learning.wrongbook.guest[0].choices = {}; },
+    d => { d.learning.wrongbook.guest.push(d.learning.wrongbook.guest[0]); },
+    d => { d.learning.blindspots.byId.cns_p001.id = 'cns_other'; },
+    d => { d.learning.blindspots.byId.cns_p001.status = 'anything'; },
+    d => { d.learning.blindspots.byId.cns_p001.wrongs = -1; },
+    d => { d.learning.archivedSessions[0].subject = 'chinese'; },
+    d => { d.records['child-a'][0].weak = ['cnp_001']; }
+  ];
+  for (const mutate of cases) {
+    const data = learningBackup(); mutate(data);
+    const { api, storage, writes } = load(fixture());
+    assert.throws(() => api.parseBackup(JSON.stringify(data)));
+    assert.throws(() => api.previewImport(data));
+    assert.deepStrictEqual(Object.fromEntries(storage), fixture()); assert.deepStrictEqual(writes, []);
+  }
+  const json = JSON.stringify(learningBackup());
+  assert.throws(() => load().api.parseBackup(json.replace('"learning":{', '"learning":{"constructor":{},')), /不允许/);
+});
+
+test('10MB限制按UTF-8字节计算，导出和直接导入对象也不能绕过', () => {
+  const { api } = load();
+  assert.throws(() => api.parseBackup('中'.repeat(Math.floor(api.MAX_BACKUP_BYTES / 3) + 1)), /10 MB/);
+  const data = learningBackup(); data.profiles.extra = '中'.repeat(Math.floor(api.MAX_BACKUP_BYTES / 3));
+  assert.throws(() => api.previewImport(data), /10 MB/);
+  const entries = fixture(); const p = JSON.parse(entries[PROFILE_KEY]); p.extra = data.profiles.extra;
+  entries[PROFILE_KEY] = JSON.stringify(p);
+  assert.throws(() => load(entries).api.exportBackup(), /10 MB/);
+});
+
 
 console.log('\n' + passed + ' passed, 0 failed');

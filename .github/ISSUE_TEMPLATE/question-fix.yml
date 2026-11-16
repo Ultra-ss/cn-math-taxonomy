@@ -7,8 +7,8 @@ body:
     id: question_id
     attributes:
       label: 题目 ID
-      description: 格式是「知识点 id + _q + 题号」，如 cnm_221_q3、cnm_p001_q1。只知道知识点时可以填 cnm_221。
-      placeholder: cnm_xxx_qN
+      description: 格式是「知识点 id + _q + 题号」，如 cnp_001_q3、cns_p001_q1。只知道知识点时可以填 cnp_001。
+      placeholder: cnp_xxx_qN / cns_pxxx_qN
     validations:
       required: true
   - type: textarea

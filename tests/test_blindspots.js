@@ -39,117 +39,99 @@ test('空库时 list 为空', () => {
 test('noteResult 写入薄弱 / 不稳，并累计答错次数', () => {
   const { api, storage } = load();
   api.noteResult({
-    subject: 'math', key: 'math|s1|t', label: '配方法',
-    weak: ['cnm_221'], shaky: ['cnm_100'], mastered: ['cnm_050'],
-    roots: ['cnm_221'],
+    subject: 'science', key: 'science|s1|t', label: '观察物体',
+    weak: ['cns_p221'], shaky: ['cns_p100'], mastered: ['cns_p050'],
+    roots: ['cns_p221'],
     answers: [
-      { id: 'cnm_221', result: 'wrong' },
-      { id: 'cnm_221', result: 'wrong' },
-      { id: 'cnm_100', result: 'wrong' },
-      { id: 'cnm_100', result: 'correct' },
-      { id: 'cnm_050', result: 'correct' }
+      { id: 'cns_p221', result: 'wrong' },
+      { id: 'cns_p221', result: 'wrong' },
+      { id: 'cns_p100', result: 'wrong' },
+      { id: 'cns_p100', result: 'correct' },
+      { id: 'cns_p050', result: 'correct' }
     ]
   });
   const rows = api.list();
   assert.equal(rows.length, 2);
-  assert.equal(rows[0].id, 'cnm_221');
+  assert.equal(rows[0].id, 'cns_p221');
   assert.equal(rows[0].status, 'weak');
   assert.equal(rows[0].root, true);
   assert.equal(rows[0].wrongs, 2);
-  assert.equal(rows[1].id, 'cnm_100');
+  assert.equal(rows[1].id, 'cns_p100');
   assert.equal(rows[1].status, 'shaky');
   assert.equal(rows[1].wrongs, 1);
   const raw = JSON.parse(storage.get(KEY));
-  assert.equal(raw.byId.cnm_050.status, 'mastered');
-  assert.ok(!rows.some(r => r.id === 'cnm_050'));
+  assert.equal(raw.byId.cns_p050.status, 'mastered');
+  assert.ok(!rows.some(r => r.id === 'cns_p050'));
 });
 
 test('再次掌握后从盲区列表消失（以最近一次为准）', () => {
   const { api } = load();
   api.noteResult({
-    subject: 'math', key: 'a', label: '一', weak: ['cnm_221'], shaky: [], mastered: [], roots: ['cnm_221'],
-    answers: [{ id: 'cnm_221', result: 'wrong' }]
+    subject: 'science', key: 'a', label: '一', weak: ['cns_p221'], shaky: [], mastered: [], roots: ['cns_p221'],
+    answers: [{ id: 'cns_p221', result: 'wrong' }]
   });
   assert.equal(api.count(), 1);
   api.noteResult({
-    subject: 'math', key: 'b', label: '二', weak: [], shaky: [], mastered: ['cnm_221'], roots: [],
-    answers: [{ id: 'cnm_221', result: 'correct' }]
+    subject: 'science', key: 'b', label: '二', weak: [], shaky: [], mastered: ['cns_p221'], roots: [],
+    answers: [{ id: 'cns_p221', result: 'correct' }]
   });
   assert.equal(api.count(), 0);
 });
 
-test('diagnoseHref 带学科参数', () => {
+test('diagnoseHref 根据科学物理知识点生成链接，拒绝旧学科', () => {
   const { api } = load();
-  assert.equal(api.diagnoseHref(['cne_p001'], 'english', '../diagnose/'),
-    '../diagnose/?subject=english&target=cne_p001');
-  assert.equal(api.diagnoseHref(['cnm_221'], 'math', './'), './?target=cnm_221');
-  assert.equal(api.diagnoseHref(['cnd_p001', 'cnd_p002']),
-    'diagnose/?subject=morality&target=cnd_p001,cnd_p002');
-  assert.equal(api.diagnoseHref(['cnh_j001']),
-    'diagnose/?subject=history&target=cnh_j001');
-  assert.equal(api.diagnoseHref(['cng_j001']),
-    'diagnose/?subject=geography&target=cng_j001');
-  assert.equal(api.diagnoseHref(['cnb_j001']),
-    'diagnose/?subject=biology&target=cnb_j001');
-  assert.equal(api.diagnoseHref(['cnk_j001']),
-    'diagnose/?subject=chemistry&target=cnk_j001');
-  assert.equal(api.diagnoseHref(['cnc_j001']),
-    'diagnose/?subject=chinese&target=cnc_j001');
-  assert.equal(api.diagnoseHref(['cnc_p001', 'cnc_j002']),
-    'diagnose/?subject=chinese&target=cnc_p001,cnc_j002');
-  assert.equal(api.subjectOfId('cnc_j001'), 'chinese');
-  assert.equal(api.subjectOfId('cnc_p001'), 'chinese');
+  assert.equal(api.diagnoseHref(['cns_p001'], 'science', '../diagnose/'),
+    '../diagnose/?subject=science&target=cns_p001');
+  assert.equal(api.diagnoseHref(['cnp_001'], 'physics', './'), './?subject=physics&target=cnp_001');
+  assert.equal(api.diagnoseHref(['cnp_001', 'cnp_h001']),
+    'diagnose/?subject=physics&target=cnp_001,cnp_h001');
+  assert.equal(api.diagnoseHref(['cnm_001']), 'diagnose/?subject=science');
+  assert.equal(api.diagnoseHref(['cns_p001'], 'physics'), 'diagnose/?subject=physics');
+  assert.equal(api.subjectOfId('cns_p001'), 'science');
+  assert.equal(api.subjectOfId('cnp_h001'), 'physics');
+  assert.equal(api.subjectOfId('cnm_001'), '');
 });
 
-test('初中语文未完成会话仍归语文，并与小学会话共用 cncDiagnose.session.v2', () => {
-  const { api } = load({
-    'cncDiagnose.session.v2': JSON.stringify({
-      label: '七上 春', savedAt: '2026-11-06T01:00:00.000Z',
-      answers: [
-        { id: 'cnc_j001', result: 'wrong' },
-        { id: 'cnc_p001', result: 'wrong' },
-        { id: 'cnc_j002', result: 'correct' }
-      ]
-    })
+test('旧学科会话与账本保持原存储且不进入两科盲区', () => {
+  const legacy = JSON.stringify({ v: 1, byId: {
+    cnm_001: { id: 'cnm_001', subject: 'math', status: 'weak' }
+  } });
+  const { api, storage } = load({
+    [KEY]: legacy,
+    'cncDiagnose.session.v2': JSON.stringify({ answers: [{ id: 'cnc_j001', result: 'wrong' }] })
   });
-  const rows = api.list({ subject: 'chinese' });
-  const ids = [];
-  rows.forEach((r) => ids.push(String(r.id)));
-  ids.sort();
-  assert.deepStrictEqual(ids, ['cnc_j001', 'cnc_p001']);
-  rows.forEach((r) => {
-    assert.equal(r.subject, 'chinese');
-    assert.equal(r.source, 'session');
-  });
+  assert.equal(api.count(), 0);
+  assert.equal(api.noteResult({ subject: 'math', weak: ['cnm_001'] }), false);
+  assert.equal(storage.get(KEY), legacy);
 });
 
 test('subject 过滤与未完成会话答错合并', () => {
   const { api } = load({
-    'cneDiagnose.session.v2': JSON.stringify({
-      label: '四上 Unit1', savedAt: '2026-10-30T01:00:00.000Z',
+    'cnpDiagnose.session.v2': JSON.stringify({
+      label: '八上 机械运动', savedAt: '2026-10-30T01:00:00.000Z',
       answers: [
-        { id: 'cne_p010', result: 'wrong' },
-        { id: 'cne_p011', result: 'correct' }
+        { id: 'cnp_010', result: 'wrong' },
+        { id: 'cnp_011', result: 'correct' }
       ]
     })
   });
   api.noteResult({
-    subject: 'math', key: 'm', label: '数学', weak: ['cnm_221'], shaky: [], mastered: [], roots: ['cnm_221'],
-    answers: [{ id: 'cnm_221', result: 'wrong' }]
+    subject: 'science', key: 'm', label: '数学', weak: ['cns_p221'], shaky: [], mastered: [], roots: ['cns_p221'],
+    answers: [{ id: 'cns_p221', result: 'wrong' }]
   });
-  const en = api.list({ subject: 'english' });
+  const en = api.list({ subject: 'physics' });
   assert.equal(en.length, 1);
-  assert.equal(en[0].id, 'cne_p010');
+  assert.equal(en[0].id, 'cnp_010');
   assert.equal(en[0].source, 'session');
   assert.equal(en[0].wrongs, 1);
-  assert.equal(api.list({ subject: 'math' }).length, 1);
+  assert.equal(api.list({ subject: 'science' }).length, 1);
 });
 
 test('demo 标记不写入', () => {
   const { api } = load();
   api.noteResult({
-    demo: true, subject: 'math', weak: ['cnm_221'], shaky: [], mastered: [], roots: ['cnm_221'],
-    answers: [{ id: 'cnm_221', result: 'wrong' }]
+    demo: true, subject: 'science', weak: ['cns_p221'], shaky: [], mastered: [], roots: ['cns_p221'],
+    answers: [{ id: 'cns_p221', result: 'wrong' }]
   });
   assert.equal(api.count(), 0);
 });
@@ -160,8 +142,8 @@ test('孩子档案 latestStatus 可并入列表', () => {
     current() { return { id: 'c1', name: '小禾' }; },
     latestStatus() {
       return {
-        cnm_300: { status: 'weak', root: true, at: '2026-10-30T08:00:00.000Z', label: '整体', subject: 'math' },
-        cnm_301: { status: 'mastered', at: '2026-10-30T08:00:00.000Z', subject: 'math' }
+        cns_p300: { status: 'weak', root: true, at: '2026-10-30T08:00:00.000Z', label: '整体', subject: 'science' },
+        cns_p301: { status: 'mastered', at: '2026-10-30T08:00:00.000Z', subject: 'science' }
       };
     }
   }};
@@ -176,10 +158,36 @@ test('孩子档案 latestStatus 可并入列表', () => {
     }
   };
   vm.runInNewContext(SOURCE, ctx, { filename: 'assets/blindspots.js' });
-  const rows = ctx.window.CnmBlind.list({ subject: 'math' });
+  const rows = ctx.window.CnmBlind.list({ subject: 'science' });
   assert.equal(rows.length, 1);
-  assert.equal(rows[0].id, 'cnm_300');
+  assert.equal(rows[0].id, 'cns_p300');
   assert.equal(rows[0].source, 'child');
+});
+
+test('未完成会话不会将其他学科知识点作为当前学科盲区', () => {
+  const { api } = load({ 'cnpDiagnose.session.v2': JSON.stringify({ answers: [
+    { id: 'cnm_001', result: 'wrong' }, { id: 'cns_p001', result: 'wrong' },
+    { id: 'cnp_001', result: 'wrong' }
+  ] }) });
+  assert.equal(api.count(), 1);
+  assert.equal(api.list()[0].id, 'cnp_001');
+});
+
+test('普通账本仍限制 200 点，合并导入的大账本新增后保留完整', () => {
+  const { api } = load();
+  for (let i = 1; i <= 205; i++) {
+    api.noteResult({ subject: 'science', weak: ['cns_p' + i], answers: [] });
+  }
+  assert.equal(api.count(), 200);
+  const byId = {};
+  for (let i = 1; i <= 205; i++) {
+    const id = 'cns_p' + i;
+    byId[id] = { id, subject: 'science', status: 'weak', lastAt: '2026-01-01', wrongs: 1 };
+  }
+  const imported = load({ [KEY]: JSON.stringify({ v: 1, byId }) });
+  imported.api.noteResult({ subject: 'science', weak: ['cns_p999'], answers: [] });
+  assert.equal(imported.api.count(), 206);
+  assert.ok(imported.api.list().some(row => row.id === 'cns_p1'));
 });
 
 console.log('\n' + passed + ' passed');

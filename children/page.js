@@ -42,7 +42,7 @@
   if (params.get('from') === 'diagnose') {
     var back = document.getElementById('back');
     var sub = params.get('subject');
-    var href = '../diagnose/' + (sub === 'english' || sub === 'physics' || sub === 'chinese' || sub === 'science' || sub === 'morality' || sub === 'history' || sub === 'geography' || sub === 'biology' || sub === 'chemistry' ? '?subject=' + sub : '');
+    var href = '../diagnose/?subject=' + (sub === 'physics' ? 'physics' : 'science');
     var a = el('a', null, '← 回到诊断');
     a.href = href;
     back.appendChild(a);
@@ -124,7 +124,7 @@
   function render() {
     var kids = CC.list();
     var cur = CC.current();
-    exportBtn.disabled = !kids.length;
+    exportBtn.disabled = false;
     exportStatus.hidden = true;
     listBox.textContent = '';
     if (!kids.length) {
@@ -137,6 +137,50 @@
     if (full) {
       var note = el('p', 'muted small', '已经建满 ' + CC.MAX_CHILDREN + ' 个孩子。要添加新的，先删除不用的档案。');
       listBox.appendChild(note);
+    }
+    renderArchivedSessions();
+  }
+
+  function renderArchivedSessions() {
+    var section = document.getElementById('session-archive');
+    var box = document.getElementById('archived-sessions');
+    var status = document.getElementById('archive-status');
+    box.textContent = '';
+    try {
+      var archive = CC.archivedSessions();
+      section.hidden = !archive.items.length;
+      archive.items.forEach(function (entry) {
+        var row = el('li');
+        var subjectName = entry.subject === 'physics' ? '物理' : '科学';
+        row.appendChild(el('span', null, subjectName + ' · ' + entry.label + ' · 已答 ' + entry.answered + ' 题 · ' +
+          new Date(entry.savedAt).toLocaleString('zh-CN') + ' '));
+        var restore = el('button', null, '恢复这份进度');
+        restore.type = 'button';
+        restore.addEventListener('click', function () {
+          try {
+            var subject = CC.restoreArchivedSession(entry.index, archive.token);
+            renderArchivedSessions();
+            status.className = 'small';
+            status.textContent = '进度已恢复。';
+            var link = el('a', null, '打开' + subjectName + '诊断');
+            link.href = '../diagnose/?subject=' + subject;
+            status.appendChild(link);
+            section.hidden = false;
+          } catch (error) {
+            renderArchivedSessions();
+            status.className = 'small err';
+            status.textContent = error.message || '恢复失败，请重试。';
+          }
+          status.hidden = false;
+        });
+        row.appendChild(restore);
+        box.appendChild(row);
+      });
+    } catch (error) {
+      section.hidden = false;
+      status.className = 'small err';
+      status.textContent = error.message || '无法读取诊断进度。';
+      status.hidden = false;
     }
   }
 
@@ -171,7 +215,11 @@
     pendingPreview = preview;
     document.getElementById('import-summary').textContent =
       '新增 ' + preview.addedChildren + ' 个孩子，合并 ' + preview.matchedChildren + ' 个已有档案；' +
-      '新增 ' + preview.addedRecords + ' 条记录，更新 ' + preview.updatedRecords + ' 条记录。';
+      '新增 ' + preview.addedRecords + ' 条记录，更新 ' + preview.updatedRecords + ' 条记录；' +
+      '新增错题 ' + preview.addedWrongs + ' 道、更新 ' + preview.updatedWrongs + ' 道；' +
+      '新增盲区 ' + preview.addedBlindspots + ' 个、更新 ' + preview.updatedBlindspots + ' 个；' +
+      '恢复诊断进度 ' + preview.restoredSessions + ' 份、归档 ' + preview.archivedSessions + ' 份。' +
+      (preview.legacy ? '这是旧版档案备份，不包含错题、进行中诊断和盲区台账。' : '');
     var children = document.getElementById('import-children');
     children.textContent = '';
     preview.children.forEach(function (c) {
@@ -211,7 +259,8 @@
       resetForm();
       render();
       importStatus.textContent = '导入完成：新增 ' + result.addedChildren + ' 个孩子，合并 ' + result.matchedChildren +
-        ' 个已有档案，新增 ' + result.addedRecords + ' 条记录，更新 ' + result.updatedRecords + ' 条记录。';
+        ' 个已有档案；新增记录 ' + result.addedRecords + ' 条、错题 ' + result.addedWrongs + ' 道、盲区 ' +
+        result.addedBlindspots + ' 个；恢复进度 ' + result.restoredSessions + ' 份，归档进度 ' + result.archivedSessions + ' 份。';
       importStatus.hidden = false;
     } catch (error) {
       // 失败后重新计算预览，防止其他页面的修改让旧预览失效。
@@ -226,11 +275,11 @@
     var link = null;
     try {
       var backup = CC.exportBackup();
-      var blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json;charset=utf-8' });
+      var blob = new Blob([JSON.stringify(backup)], { type: 'application/json;charset=utf-8' });
       url = URL.createObjectURL(blob);
       link = el('a');
       link.href = url;
-      link.download = 'children-backup-' + backup.exportedAt.replace(/[:.]/g, '-') + '.json';
+      link.download = 'learning-backup-' + backup.exportedAt.replace(/[:.]/g, '-') + '.json';
       document.body.appendChild(link);
       link.click();
       exportStatus.className = 'small';

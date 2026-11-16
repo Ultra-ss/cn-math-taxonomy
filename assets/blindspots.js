@@ -64,6 +64,7 @@
   function noteResult(payload) {
     if (!payload || payload.demo || (payload.subject !== 'science' && payload.subject !== 'physics')) return false;
     var s = store();
+    var keepImportedHistory = Object.keys(s.byId).length > MAX_TOPICS;
     var now = new Date().toISOString();
     var SC = compat();
     var effect = SC && SC.sessionEffect ? SC.sessionEffect(payload.answers) : { answers: payload.answers, retestTopicIds: [] };
@@ -113,7 +114,7 @@
     put(payload.mastered, 'mastered');
     put(payload.shaky, 'shaky');
     put(payload.weak, 'weak');
-    s.byId = prune(s.byId);
+    if (!keepImportedHistory) s.byId = prune(s.byId);
     return write(KEY, s);
   }
 
@@ -196,6 +197,7 @@
       var effect = SC && SC.sessionEffect ? SC.sessionEffect(sess.answers) : { answers: sess.answers, retestTopicIds: [] };
       var wrongs = tallyWrongs(effect.answers);
       Object.keys(wrongs).forEach(function (id) {
+        if (subjectOfId(id) !== item.subject) return;
         if (out[id] && out[id].status === 'weak') {
           out[id].wrongs += wrongs[id];
           return;
@@ -213,7 +215,7 @@
         };
       });
       (effect.retestTopicIds || []).forEach(function (id) {
-        if (out[id]) return;
+        if (subjectOfId(id) !== item.subject || out[id]) return;
         out[id] = {
           id: id,
           subject: item.subject,

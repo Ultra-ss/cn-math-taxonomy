@@ -44,16 +44,16 @@ test('每道题的 id 都是知识点 id 加 _q 和题号', () => {
 test('纠错模板说明真实 ID 格式，不再使用 q_cnm_', () => {
   assert.match(template, /^name:\s*题目纠错\s*$/m);
   assert.match(template, /id:\s*question_id\s*$/m);
-  assert.match(template, /cnm_221_q3/);
-  assert.match(template, /cnm_p001_q1/);
-  assert.match(template, /placeholder:\s*cnm_xxx_qN\s*$/m);
+  assert.match(template, /cnp_001_q3/);
+  assert.match(template, /cns_p001_q1/);
+  assert.match(template, /placeholder:\s*cnp_xxx_qN \/ cns_pxxx_qN\s*$/m);
   assert.doesNotMatch(template, /q_cnm_/);
 });
 
 test('模板里举例的题目在题库中', () => {
   const ids = new Set(questions.filter((q) => q && typeof q.id === 'string').map((q) => q.id));
-  assert.ok(ids.has('cnm_221_q3'));
-  assert.ok(ids.has('cnm_p001_q1'));
+  assert.ok(ids.has('cnp_001_q3'));
+  assert.ok(ids.has('cns_p001_q1'));
 });
 
 test('纠错模板的题目 ID 栏不收集作答或档案', () => {

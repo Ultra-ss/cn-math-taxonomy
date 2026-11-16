@@ -107,13 +107,13 @@ let chrome, source, target, browser;
     assert.ok(await target.eval('!document.getElementById("import-status").hidden && document.getElementById("import-status").textContent.includes("导入完成")'));
   }
   await page(source);
-  assert.equal(await source.eval('document.getElementById("export-backup").disabled'), true);
+  assert.equal(await source.eval('document.getElementById("export-backup").disabled'), false);
   await source.eval(`(() => {
     CnmChildren.add({name:'小满',grade:'三年级',textbook:'人教版'});
-    CnmChildren.add({name:'小禾',grade:'五年级',textbook:'沪教版'});
+    CnmChildren.add({name:'小禾',grade:'五年级',textbook:'教科版'});
     const kids=CnmChildren.list(); CnmChildren.setCurrent(kids[1].id);
-    ['math','chinese','english','physics'].forEach((subject,i) => {
-      const id=['cnm_p001','cnc_p001','cne_p001','cnp_001'][i];
+    ['science','physics'].forEach((subject,i) => {
+      const id=['cns_p001','cnp_001'][i];
       CnmChildren.saveRecord(kids[0].id,{key:subject+'|seed|'+id,subject,label:'测试诊断 '+i,mode:'target',asked:8,targets:[id],
         counts:{weak:1,shaky:0,mastered:0,untested:0},weak:[id],roots:[id],shaky:[],mastered:[]});
     });
@@ -121,7 +121,7 @@ let chrome, source, target, browser;
   await page(source);
   const original = await snapshot(source);
   await source.eval('document.getElementById("export-backup").click()');
-  const filename = await until(() => fs.readdirSync(out).find(f => /^children-backup-.*\.json$/.test(f)), 'actual export download');
+  const filename = await until(() => fs.readdirSync(out).find(f => /^learning-backup-.*\.json$/.test(f)), 'actual export download');
   const file = path.join(out, filename);
   const backup = JSON.parse(fs.readFileSync(file, 'utf8'));
   assert.deepStrictEqual(backup.profiles, JSON.parse(original.profiles));
@@ -140,8 +140,8 @@ let chrome, source, target, browser;
   assert.deepStrictEqual(JSON.parse(restored.profiles),backup.profiles);
   assert.deepStrictEqual(JSON.parse(restored.records),backup.records);
   await page(target,'/children/history.html?child='+backup.profiles.children[0].id);
-  await until(() => target.eval('document.querySelectorAll(".rec").length === 4'), 'four subjects in restored history');
-  assert.equal(await target.eval('document.querySelectorAll(".wk-name").length'),4);
+  await until(() => target.eval('document.querySelectorAll(".rec").length === 2'), 'two subjects in restored history');
+  assert.equal(await target.eval('document.querySelectorAll(".wk-name").length'),2);
   await page(target);
   await preview(file); await confirm();
   assert.deepStrictEqual(await snapshot(target),restored);
@@ -153,7 +153,7 @@ let chrome, source, target, browser;
     const first=p.children[0]; p.children=[{...first,grade:'六年级'}];
     localStorage.setItem('cnmChildren.v1',JSON.stringify({...p,current:first.id}));
     r[first.id]=[
-      {...r[first.id][0],updatedAt:'2026-10-30T00:00:00.000Z',label:'保留本机较新结果'},
+      {...r[first.id][0],updatedAt:'2099-10-30T00:00:00.000Z',label:'保留本机较新结果'},
       {...r[first.id][1],savedAt:'2026-10-01T00:00:00.000Z',updatedAt:'2026-10-01T00:00:00.000Z',label:'本机旧结果'},
       {...r[first.id][0],key:'local-only',label:'本机独有记录'}
     ];
@@ -170,12 +170,12 @@ let chrome, source, target, browser;
   assert.ok(await target.eval('document.getElementById("import-error").textContent.includes("重新预览")'));
   assert.deepStrictEqual(await snapshot(target),changed);
   await confirm();
-  const merged=await snapshot(target);
+  let merged=await snapshot(target);
   const mp=JSON.parse(merged.profiles), mr=JSON.parse(merged.records);
   assert.equal(mp.children.length,3); assert.equal(mp.current,JSON.parse(changed.profiles).current);
   assert.equal(mp.children[0].grade,'六年级');
   assert.equal(mp.children.find(c=>c.id===backup.profiles.children[1].id).name,'小禾（导入）');
-  assert.equal(mr[backup.profiles.children[0].id].length,5);
+  assert.equal(mr[backup.profiles.children[0].id].length,3);
   assert.equal(mr[backup.profiles.children[0].id][0].label,'保留本机较新结果');
   await preview(file); await confirm(); assert.deepStrictEqual(await snapshot(target),merged);
   console.log('PASS: preserve local profiles/current selection, rename same-name children, newest-record merge, stale preview, repeat merge');
@@ -189,17 +189,36 @@ let chrome, source, target, browser;
   await target.send('Emulation.setDeviceMetricsOverride',{width:1280,height:1100,deviceScaleFactor:1,mobile:false});
   await target.send('Emulation.setEmulatedMedia',{features:[{name:'prefers-color-scheme',value:'light'}]});
   fs.writeFileSync(path.join(out, 'backup-desktop.png'),Buffer.from((await target.send('Page.captureScreenshot',{format:'png'})).data,'base64'));
+  await target.eval(`localStorage.setItem('cnmChildren.v1',JSON.stringify(JSON.parse(localStorage.getItem('cnmChildren.v1')),null,2))`);
+  merged=await snapshot(target);
+  await target.eval('document.getElementById("cancel-import").click()');
+  await preview(file);
   await target.eval(`window.__originalSet=Storage.prototype.setItem; Storage.prototype.setItem=function(k,v){
     if(k==='cnmChildren.v1')throw new DOMException('Quota','QuotaExceededError'); return window.__originalSet.call(this,k,v);
   };document.getElementById('confirm-import').click();`);
-  assert.ok(await target.eval('document.getElementById("import-error").textContent.includes("原有档案和记录未改变")'));
+  assert.ok(await target.eval('document.getElementById("import-error").textContent.includes("原有档案和学习数据未改变")'));
   assert.deepStrictEqual(await snapshot(target),merged);
   await target.eval('Storage.prototype.setItem=window.__originalSet');
-  for(const [name,text] of [['broken.json','{broken'],['version.json',JSON.stringify({...backup,version:2})],['large.json',' '.repeat(10*1024*1024+1)]]){
+  for(const [name,text] of [['broken.json','{broken'],['version.json',JSON.stringify({...backup,version:3})],['large.json',' '.repeat(10*1024*1024+1)]]){
     const bad=path.join(out,name); fs.writeFileSync(bad,text); await choose(target,bad);
     await until(()=>target.eval('!document.getElementById("import-error").hidden'),'invalid file error');
     assert.deepStrictEqual(await snapshot(target),merged);
   }
+  await target.eval(`(() => {
+    const active={v:2,mode:'target',targets:['cns_p001'],limit:20,confirm:3,label:'本机进度',seed:'local-run',answers:[],excluded:[],avoid:[],savedAt:'2026-11-15T00:00:00.000Z'};
+    localStorage.setItem('cnsDiagnose.session.v1',JSON.stringify(active));
+    localStorage.setItem('cnmDiagnose.archived.v1',JSON.stringify([{subject:'science',session:{...active,label:'导入进度',seed:'import-run'}}]));
+  })()`);
+  await page(target);
+  assert.equal(await target.eval('document.getElementById("session-archive").hidden'),false);
+  await target.eval('document.querySelector("#archived-sessions button").click()');
+  assert.equal(await target.eval('JSON.parse(localStorage.getItem("cnsDiagnose.session.v1")).seed'),'import-run');
+  assert.equal(await target.eval('JSON.parse(localStorage.getItem("cnmDiagnose.archived.v1"))[0].session.seed'),'local-run');
+  assert.ok(await target.eval('document.querySelector("#archive-status a").href.endsWith("/diagnose/?subject=science")'));
+  await target.eval('document.querySelector("#archived-sessions button").click()');
+  assert.equal(await target.eval('JSON.parse(localStorage.getItem("cnsDiagnose.session.v1")).seed'),'local-run');
+  assert.equal(await target.eval('JSON.parse(localStorage.getItem("cnmDiagnose.archived.v1"))[0].session.seed'),'import-run');
+  console.log('PASS: archived-session UI restores imported progress, links to diagnosis, and preserves both sessions when switching back');
   assert.deepStrictEqual(errors,[]);
   console.log('PASS: quota-failure rollback, malformed/unknown-version/oversized files, 375px layout and light/dark themes; no page exceptions');
   console.log('Downloads and fixtures: '+out);

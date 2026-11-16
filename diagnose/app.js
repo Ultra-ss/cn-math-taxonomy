@@ -46,6 +46,7 @@
   let gradeSel = '一';     // 开始页「按年级整体诊断」：年级
   let volSel = '';         // '' 整年级 / '上' / '下'
   let seedParam = null;    // URL 参数 seed：固定选题的随机种子
+  let confirmParam = null; // URL 参数 confirm：本次确认题数，不在演示模式写入本机设置
   let pathCy = null;
   let pathToken = 0;
   let pathTipLock = false;
@@ -198,10 +199,15 @@
     if (!(limit >= LIMIT_MIN && limit <= LIMIT_MAX)) limit = E.DEFAULT_LIMIT;
     let screenLimit = parseInt(st.screenLimit, 10);
     if (!(screenLimit >= SCREEN_MIN && screenLimit <= SCREEN_MAX)) screenLimit = E.SCREEN_LIMIT;
-    const confirm = E.clampConfirm(st.confirm);
+    const confirm = E.clampConfirm(confirmParam == null ? st.confirm : confirmParam);
     return { limit: limit, screenLimit: screenLimit, confirm: confirm };
   }
-  function setSetting(k, v) { const o = getSettings(); o[k] = v; lsSet(LS_SETTINGS, o); }
+  function setSetting(k, v) {
+    const o = getSettings();
+    if (k === 'confirm') confirmParam = null;
+    o[k] = v;
+    lsSet(LS_SETTINGS, o);
+  }
   function seenList() {
     const v = lsGet(LS_SEEN);
     if (!Array.isArray(v)) return [];
@@ -453,7 +459,9 @@
         ? window.StemCompat.restoreParts(saved)
         : { answers: saved.answers, excluded: [], avoid: saved.avoid || [] };
       session = E.replay(D.graph, saved.targets, parts.answers, {
-        mode: saved.mode, limit: saved.limit, confirm: saved.confirm, seed: saved.seed, avoid: parts.avoid
+        mode: saved.mode, limit: saved.limit,
+        confirm: E.clampConfirm(confirmParam == null ? saved.confirm : confirmParam),
+        seed: saved.seed, avoid: parts.avoid
       });
       sessionMeta = {
         label: saved.label || saved.targets.map(nameOf).join('、'),
@@ -584,7 +592,7 @@
         ' ', h('button', { onclick: function () { lsDel(sessionKey()); renderStart(); } }, '放弃存档')));
     }
     if (errMsg) page.append(h('p', { class: 'err', text: errMsg }));
-    page.append(childBar('start'));
+    append(page, childBar('start'));
     const startBlind = blindStartCard();
     if (startBlind) page.append(startBlind);
 
@@ -612,7 +620,7 @@
       h('p', { class: 'muted small', text: '列表按年级、册、章折叠。想直接开始，用上面的搜索更快。' }),
       listBox);
     browser.addEventListener('toggle', function () { chapterOpen = browser.open; });
-    const confirmHelp = '同一知识点连续答对 ' + st.confirm + ' 题（可在下方改成 2 / 3 / 5；题库更少时以题库为准）才算掌握；答错会再出一道同级或更容易的题——确认题也错才算薄弱并回溯先修，确认题答对则标为「不稳」。';
+    const confirmHelp = '同一知识点连续答对 ' + st.confirm + ' 题（可在下方改成 2 / 3 / 4；题库更少时以题库为准）才算掌握；答错会再出一道同级或更容易的题——确认题也错才算薄弱并回溯先修，确认题答对则标为「不稳」。';
     page.append(h('div', { class: 'card' },
       h('h1', { text: '选择诊断目标' }),
       h('p', { class: 'muted' }, subject === 'physics'
@@ -878,7 +886,7 @@
     return q.answer;
   }
 
-  const ISSUE_NEW_URL = 'https://github.com/xiaoyang111222/cn-math-taxonomy/issues/new';
+  const ISSUE_NEW_URL = 'https://github.com/Ultra-ss/cn-math-taxonomy/issues/new';
 
   function reportUrl(q) {
     return ISSUE_NEW_URL + '?template=question-fix.yml&title=' + encodeURIComponent('[题目] ' + q.id) +
@@ -991,7 +999,7 @@
       h('button', { class: 'small', onclick: function () { if (confirm('确定放弃当前诊断并回到开始页吗？')) restart(); } }, '重新开始')));
     const page = h('div');
     if (demo) page.append(demoBanner());
-    page.append(childBar('question'));
+    append(page, childBar('question'));
     page.append(card);
     show(page, !isNewQuestion);
     const inp = document.getElementById('ans');
@@ -1184,7 +1192,7 @@
     if (demo) page.append(demoBanner());
     saveToChild(sum);
     noteBlind(sum);
-    page.append(childBar('result'));
+    append(page, childBar('result'));
     const dropped = excludedNote();
     if (dropped) page.append(dropped);
 
@@ -1793,6 +1801,7 @@
       return;
     }
     const params = new URLSearchParams(location.search);
+    if (params.has('confirm')) confirmParam = E.clampConfirm(params.get('confirm'));
     let resolved = null;
     try { resolved = resolveTargets(params); } catch (e) { renderStart(e.message); return; }
     if (params.get('seed')) seedParam = params.get('seed');

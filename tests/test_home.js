@@ -33,16 +33,16 @@ function element() {
 }
 
 const topics = [
-  { id: 'cnm_a', grade: 1, semester: '上' },
-  { id: 'cnm_b', grade: 7, semester: '下' },
-  { id: 'cne_a', grade: 3, semester: '上' },
-  { id: 'cnp_a', grade: 8, semester: '上' }
+  { id: 'cns_p001', subject: 'science', grade: 1, semester: '上' },
+  { id: 'cns_p002', subject: 'science', grade: 2, semester: '下' },
+  { id: 'cnm_a', subject: 'math', grade: 3, semester: '上' },
+  { id: 'cnp_a', subject: 'physics', grade: 8, semester: '上' }
 ];
-const deps = [{ topicId: 'cnm_b', prerequisiteId: 'cnm_a' }];
-const standards = { items: [{ id: 'cms-1' }, { id: 'ces-1' }, { id: 'cps-1' }] };
+const deps = [{ topicId: 'cns_p002', prerequisiteId: 'cns_p001' }];
+const standards = { items: [{ id: 'css-1' }, { id: 'cms-1' }, { id: 'cps-1' }] };
 const questions = [
-  { topicId: 'cnm_a' }, { topicId: 'cnm_b' }, { topicId: 'cnm_a' },
-  { topicId: 'cne_a' }, { topicId: 'cnp_a' }
+  { topicId: 'cns_p001' }, { topicId: 'cns_p002' }, { topicId: 'cns_p001' },
+  { topicId: 'cnm_a' }, { topicId: 'cnp_a' }
 ];
 
 function load(search) {
@@ -150,8 +150,8 @@ function load(search) {
     assert.strictEqual(ids['load-error'].hidden, false);
   });
 
-  await test('英语学科计数过滤', async () => {
-    const { ids, baseMeta, respond } = load('?subject=english');
+  await test('物理学科计数过滤', async () => {
+    const { ids, baseMeta, respond } = load('?subject=physics');
     await baseMeta();
     respond('data/questions.json', questions);
     await flush();

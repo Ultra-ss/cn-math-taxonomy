@@ -274,8 +274,8 @@ def check_mapping_entry(m, where):
         if k not in MAPPING_ENTRY_FIELDS:
             err("%s 有未知字段 %s（允许：%s）" % (where, k, "、".join(sorted(MAPPING_ENTRY_FIELDS))))
     g = m.get("grade")
-    if not (isinstance(g, int) and not isinstance(g, bool) and g in GRADES):
-        err("%s grade 必须是 1–14 的整数" % where)
+    if not (isinstance(g, int) and not isinstance(g, bool) and g in range(1, 16)):
+        err("%s grade 必须是 1–15 的整数" % where)
     if m.get("term") not in MAPPING_TERMS:
         err("%s term 必须是 上/下/全" % where)
     for k in ("unit", "chapter", "note"):
@@ -332,8 +332,11 @@ def check_mapping_files(ids):
             continue
         if status == "example" and len(entries) > 10:
             err("%s 示例文件至多 10 条，现有 %d 条" % (where, len(entries)))
-        expected_subject = "english" if isinstance(edition, str) and edition.endswith("_english") else "math"
-        subject_label = "英语" if expected_subject == "english" else "数学"
+        expected_subject = next((sub for sub in ("science", "physics")
+                                 if isinstance(edition, str) and edition.endswith("_" + sub)), None)
+        if expected_subject is None:
+            err("%s edition 必须以 _science 或 _physics 结尾" % where)
+        subject_label = {"science": "科学", "physics": "物理"}.get(expected_subject, "科学或物理")
         seen = set()
         for i, e in enumerate(entries):
             ew = "%s entries[%d]" % (where, i)
@@ -389,6 +392,8 @@ def check_topics(topics):
                 err("%s 字段 %s 为空或类型错误" % (where, f))
         subj = topic_subject(tid)
         marked = t.get("subject")
+        if subj not in ("science", "physics"):
+            err("%s 仅支持科学或物理知识点" % where)
         if subj == "english":
             if marked != "english":
                 err("%s 英语知识点的 subject 必须是 english" % where)
@@ -696,149 +701,18 @@ def check_graph(ids, prereqs, dependents):
 
 def report(ids, prereqs, dependents, n_hard, n_soft, n_en_hard, n_en_soft):
     core = [t for t in ids.values() if not t.get("external")]
-    ext = [t for t in ids.values() if t.get("external")]
-    math_core = [t for t in core if topic_subject(t.get("id")) == "math"]
-    en_core = [t for t in core if is_english_id(t.get("id"))]
-    phy_core = [t for t in core if is_physics_id(t.get("id"))]
-    zh_core = [t for t in core if is_chinese_id(t.get("id"))]
-    sci_core = [t for t in core if is_science_id(t.get("id"))]
-    mor_core = [t for t in core if is_morality_id(t.get("id"))]
-    his_core = [t for t in core if is_history_id(t.get("id"))]
-    geo_core = [t for t in core if is_geography_id(t.get("id"))]
-    bio_core = [t for t in core if is_biology_id(t.get("id"))]
-    chem_core = [t for t in core if is_chemistry_id(t.get("id"))]
-    print("知识点总数：%d（正式 %d，小学外部 %d）" % (len(ids), len(core), len(ext)))
-    print("其中数学 %d，语文 %d，英语 %d，物理 %d，科学 %d，道德与法治 %d，历史 %d，地理 %d，生物 %d，化学 %d" % (
-        len(math_core), len(zh_core), len(en_core), len(phy_core), len(sci_core), len(mor_core), len(his_core), len(geo_core), len(bio_core), len(chem_core)))
-    print("\n按 domain（数学正式知识点）：")
-    for k, v in sorted(Counter(t["domain"] for t in math_core).items(), key=lambda x: -x[1]):
-        print("  %-8s %d" % (k, v))
-    print("\n按 grade+semester（数学正式知识点）：")
-    zh = {1: "一", 2: "二", 3: "三", 4: "四", 5: "五", 6: "六", 7: "七", 8: "八", 9: "九"}
-
-    def vol_label(t):
-        if is_physics_senior_id(t.get("id")):
-            return {10: "物必一", 11: "物必二", 12: "物必三", 13: "物选必一", 14: "物选必二", 15: "物选必三"}.get(t["grade"], str(t["grade"]))
-        if is_chemistry_senior_id(t.get("id")):
-            return {10: "必修一", 11: "必修二", 12: "选必一", 13: "选必二", 14: "选必三"}.get(t["grade"], str(t["grade"]))
-        if is_english_id(t.get("id")) and isinstance(t.get("grade"), int) and t["grade"] >= 10:
-            return {10: "必修一", 11: "必修二", 12: "必修三", 13: "选必一", 14: "选必二", 15: "选必三", 16: "选必四"}.get(t["grade"], str(t["grade"]))
-        if t["grade"] == 10:
-            return "高一必修一"
-        if t["grade"] == 11:
-            return "高二必修二"
-        if t["grade"] == 12:
-            return "选必一"
-        if t["grade"] == 13:
-            return "选必二"
-        if t["grade"] == 14:
-            return "选必三"
-        return "%s%s" % (zh.get(t["grade"], t["grade"]), t["semester"])
-
-    c = Counter(vol_label(t) for t in math_core)
-    order = ["一上", "一下", "二上", "二下", "三上", "三下", "四上", "四下", "五上", "五下", "六上", "六下",
-             "七上", "七下", "八上", "八下", "九上", "九下", "高一必修一", "高二必修二", "选必一", "选必二", "选必三"]
-    for k in order:
-        if c.get(k, 0) or k[0] in "七八九" or k.startswith("高") or k.startswith("选必"):
-            print("  %-8s %d" % (k, c.get(k, 0)))
-    n_pri = sum(1 for t in math_core if isinstance(t.get("grade"), int) and t["grade"] <= 6)
-    n_jun = sum(1 for t in math_core if isinstance(t.get("grade"), int) and 7 <= t["grade"] <= 9)
-    n_req = sum(1 for t in math_core if t.get("grade") in (10, 11))
-    n_sel = sum(1 for t in math_core if isinstance(t.get("grade"), int) and t["grade"] >= 12)
-    print("其中小学（1–6 年级）%d，初中（7–9 年级）%d，高中必修（10–11）%d，选择性必修（12–14）%d" % (
-        n_pri, n_jun, n_req, n_sel))
-    if zh_core:
-        print("\n语文按 domain：")
-        for k, v in sorted(Counter(t["domain"] for t in zh_core).items(), key=lambda x: -x[1]):
-            print("  %-8s %d" % (k, v))
-        print("语文按册：")
-        zc = Counter(vol_label(t) for t in zh_core)
-        for k in ["一上", "一下", "二上", "二下", "三上", "三下", "四上", "四下", "五上", "五下", "六上", "六下",
-                  "七上", "七下", "八上", "八下", "九上", "九下"]:
-            print("  %-8s %d" % (k, zc.get(k, 0)))
-    if sci_core:
-        print("\n科学按 domain：")
-        for k, v in sorted(Counter(t["domain"] for t in sci_core).items(), key=lambda x: -x[1]):
-            print("  %-8s %d" % (k, v))
-        print("科学按册：")
-        scc = Counter(vol_label(t) for t in sci_core)
-        for k in ["一上", "一下", "二上", "二下", "三上", "三下", "四上", "四下", "五上", "五下", "六上", "六下"]:
-            print("  %-8s %d" % (k, scc.get(k, 0)))
-    if mor_core:
-        print("\n道德与法治按 domain：")
-        for k, v in sorted(Counter(t["domain"] for t in mor_core).items(), key=lambda x: -x[1]):
-            print("  %-8s %d" % (k, v))
-        print("道德与法治按册：")
-        mc = Counter(vol_label(t) for t in mor_core)
-        for k in ["一上", "一下", "二上", "二下", "三上", "三下", "四上", "四下", "五上", "五下", "六上", "六下"]:
-            print("  %-8s %d" % (k, mc.get(k, 0)))
-    if his_core:
-        print("\n历史按 domain：")
-        for k, v in sorted(Counter(t["domain"] for t in his_core).items(), key=lambda x: -x[1]):
-            print("  %-8s %d" % (k, v))
-        print("历史按册：")
-        hc = Counter(vol_label(t) for t in his_core)
-        for k in ["七上", "七下", "八上", "八下", "九上", "九下"]:
-            print("  %-8s %d" % (k, hc.get(k, 0)))
-        print("历史先修边 %d 条" % N_HIS_EDGES)
-    if geo_core:
-        print("\n地理按 domain：")
-        for k, v in sorted(Counter(t["domain"] for t in geo_core).items(), key=lambda x: -x[1]):
-            print("  %-8s %d" % (k, v))
-        print("地理按册：")
-        gc = Counter(vol_label(t) for t in geo_core)
-        for k in ["七上", "七下", "八上", "八下"]:
-            print("  %-8s %d" % (k, gc.get(k, 0)))
-        print("地理先修边 %d 条" % N_GEO_EDGES)
-    if bio_core:
-        print("\n生物按 domain：")
-        for k, v in sorted(Counter(t["domain"] for t in bio_core).items(), key=lambda x: -x[1]):
-            print("  %-8s %d" % (k, v))
-        print("生物按册：")
-        bc = Counter(vol_label(t) for t in bio_core)
-        for k in ["七上", "七下", "八上", "八下"]:
-            print("  %-8s %d" % (k, bc.get(k, 0)))
-        print("生物先修边 %d 条" % N_BIO_EDGES)
-    if chem_core:
-        print("\n化学按 domain：")
-        for k, v in sorted(Counter(t["domain"] for t in chem_core).items(), key=lambda x: -x[1]):
-            print("  %-8s %d" % (k, v))
-        print("化学按册：")
-        cc = Counter(vol_label(t) for t in chem_core)
-        for k in ["九上", "九下", "必修一", "必修二", "选必一", "选必二", "选必三"]:
-            if cc.get(k, 0) or k in ("九上", "九下", "必修一", "必修二", "选必一", "选必二", "选必三"):
-                print("  %-8s %d" % (k, cc.get(k, 0)))
-        print("化学先修边 %d 条" % N_CHEM_EDGES)
-    if en_core:
-        print("\n英语按 domain：")
-        for k, v in sorted(Counter(t["domain"] for t in en_core).items(), key=lambda x: -x[1]):
-            print("  %-8s %d" % (k, v))
-        print("英语按册：")
-        ec = Counter(vol_label(t) for t in en_core)
-        for k in ["三上", "三下", "四上", "四下", "五上", "五下", "六上", "六下", "七上", "七下", "八上", "八下", "九上", "九全",
-                  "必修一", "必修二", "必修三", "选必一", "选必二", "选必三", "选必四"]:
-            if ec.get(k, 0) or k in ("必修一", "必修二", "必修三", "选必一", "选必二", "选必三", "选必四"):
-                print("  %-8s %d" % (k, ec.get(k, 0)))
-    if phy_core:
-        print("\n物理按 domain：")
-        for k, v in sorted(Counter(t["domain"] for t in phy_core).items(), key=lambda x: -x[1]):
-            print("  %-8s %d" % (k, v))
-        pc = Counter(vol_label(t) for t in phy_core)
-        print("物理按册：" + "，".join("%s %d" % (k, pc.get(k, 0)) for k in (
-            "八上", "八下", "九全", "物必一", "物必二", "物必三", "物选必一", "物选必二", "物选必三")))
-    print("\n按 type（正式知识点）：")
-    for k, v in sorted(Counter(t["type"] for t in core).items(), key=lambda x: -x[1]):
-        print("  %-12s %d" % (k, v))
-    total = n_hard + n_soft
-    print("\n先修边：%d 条（hard %d，soft %d）" % (total, n_hard, n_soft))
-    if en_core:
-        print("其中英语 %d 条（hard %d，soft %d），物理 %d 条，数学 %d 条" % (
-            n_en_hard + n_en_soft, n_en_hard, n_en_soft, N_PHY_EDGES, total - n_en_hard - n_en_soft - N_PHY_EDGES))
-    roots = [t["id"] for t in core if not prereqs.get(t["id"])]
-    leaves = [t["id"] for t in core if not dependents.get(t["id"])]
-    print("带 root_reason 的根节点：%d；未被任何知识点依赖的末端节点：%d" % (len(roots), len(leaves)))
-    if core:
-        print("正式知识点平均先修数：%.2f" % (sum(len(prereqs.get(t["id"], [])) for t in core) / len(core)))
+    print("知识点总数：%d（正式 %d）" % (len(ids), len(core)))
+    for subject, label in (("science", "科学"), ("physics", "物理")):
+        selected = [t for t in core if topic_subject(t.get("id")) == subject]
+        print("\n%s：%d 个知识点" % (label, len(selected)))
+        for domain, count in sorted(Counter(t["domain"] for t in selected).items()):
+            print("  %s %d" % (domain, count))
+        for volume, count in sorted(Counter((t["grade"], t["semester"]) for t in selected).items()):
+            print("  grade %d / %s %d" % (*volume, count))
+    print("\n先修边：%d 条（hard %d，soft %d）" % (n_hard + n_soft, n_hard, n_soft))
+    print("带 root_reason 的根节点：%d；末端节点：%d" % (
+        sum(not prereqs.get(t["id"]) for t in core),
+        sum(not dependents.get(t["id"]) for t in core)))
 
 
 def check_standards_file(std):
@@ -887,6 +761,8 @@ def check_standards_file(std):
         if sid in items_by_id:
             err("课标条目 id 重复：%s" % sid)
         items_by_id[sid] = it
+        if not (SCI_STD_ID_RE.match(sid) or PHY_STD_ID_RE.match(sid) or PHY_HS_STD_ID_RE.match(sid)):
+            err("%s 仅支持科学、初中物理和高中物理课标" % where)
         m = STD_ID_RE.match(sid)
         hm = HS_STD_ID_RE.match(sid)
         em = EN_STD_ID_RE.match(sid)

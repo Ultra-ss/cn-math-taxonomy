@@ -41,8 +41,8 @@
   <p id="back" class="quiet-link" hidden></p>
   <section class="kid-backup" aria-labelledby="backup-title">
     <h2 id="backup-title">备份与恢复</h2>
-    <p>导出所有孩子的资料和科学、物理诊断记录，在其他浏览器中导入即可继续查看。</p>
-    <button type="button" id="export-backup">导出全部档案</button>
+    <p>备份所有孩子的资料，以及科学、物理的诊断记录、错题、进行中诊断和盲区。没有建立档案的学习进度也可以迁移。</p>
+    <button type="button" id="export-backup">导出全部学习数据</button>
     <p id="export-status" class="small" role="status" hidden></p>
     <div class="kid-import">
       <label for="import-backup">导入备份文件</label>
@@ -53,13 +53,20 @@
         <h3>导入预览</h3>
         <p id="import-summary"></p>
         <ul id="import-children"></ul>
-        <p class="muted small">相同档案保留本机资料；同一条诊断记录采用较新的结果，时间相同则保留本机结果。历史记录不会因合并被截断。</p>
+        <p class="muted small">相同档案保留本机资料；同一条记录、错题或盲区采用较新的状态，时间相同保留本机。累计错次取两份数据中的较大值，重复导入不累加。历史不会因合并被截断。</p>
+        <p class="muted small">本机已有同学科的诊断进度时会保留，导入的不同进度存入下方“其他诊断进度”，可以随时切换。</p>
         <div class="kid-actions">
           <button type="button" id="confirm-import" class="primary" disabled>确认合并导入</button>
           <button type="button" id="cancel-import">取消</button>
         </div>
       </div>
       <p id="import-status" class="small" role="status" hidden></p>
+    </div>
+    <div id="session-archive" hidden>
+      <h3>其他诊断进度</h3>
+      <p class="muted small">恢复后，到诊断页点击“继续”。当前同学科的进度会存入此列表，供之后切换。</p>
+      <ul id="archived-sessions"></ul>
+      <p id="archive-status" class="small" role="status" hidden></p>
     </div>
   </section>
   <div id="list" aria-live="polite"></div>

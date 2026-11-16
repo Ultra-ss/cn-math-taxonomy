@@ -1,111 +1,67 @@
-# App 第一期：PWA、孩子档案与统计钩子
+# 离线使用、本机数据与备份
 
-## PWA
+## 安装与缓存
 
-- `manifest.webmanifest`：名称、`display: standalone`、主题色 `#0f6e62`、图标和三个快捷入口（诊断、知识图谱、孩子档案）。路径都是相对写法，站点放在域名根目录或子目录都能用。`start_url` 带 `?source=pwa`。
-- 图标在 `assets/icons/`，由 `python3 scripts/make_pwa_icons.py` 用站点 logo 和配色（`#0f6e62`、`#dff3ef`）生成：`icon-192.png`、`icon-512.png`（带圆角）、`icon-maskable-512.png`（安全区内）、`apple-touch-icon.png`（180，不透明，给 iOS）。
-- `sw.js`（必须在站点根目录，才能管整个站点）：
-  - 安装时预缓存页面、脚本、样式、图标和 `data/*.json`（约 6 MB，其中题库 3.7 MB）。壳必须齐全才算安装成功，数据缓存失败不挡安装。
-  - 页面和脚本：网络优先（5 秒超时），断网用缓存，所以发布后在线用户直接拿到新版。
-  - 数据、图标、manifest：先用缓存，同时后台更新（下一次打开拿到新数据）。
-  - 改了缓存清单，或数据结构有不兼容的变化，把 `sw.js` 里的 `VERSION` 加一，旧缓存会在激活时删掉。
-  - 新增页面或脚本时，要把它加进 `sw.js` 的 `SHELL` 列表才会离线可用。
-- 每个页面的 `<head>` 有 manifest、apple-touch-icon、theme-color；页尾加载 `assets/stats-config.js`、`assets/stats.js`、`assets/pwa.js`。service worker 只在 https 或 localhost 下注册。
-- 部署：`scripts/deploy-cf.sh` 已把 `sw.js`、`manifest.webmanifest`、`children/` 打进部署包。
+`manifest.webmanifest` 和 `assets/pwa.js` 提供添加到桌面的入口。页面只在 HTTPS 或 localhost 注册 Service Worker；iOS 使用分享菜单的“添加到主屏幕”。
 
-### 添加到桌面的提示（`assets/pwa.js`）
+`sw.js` 缓存页面、脚本、样式、图标和五份图谱 JSON。页面与脚本网络优先（5 秒超时后读缓存）；数据和图标先读缓存、后台更新。首次访问需要网络。当前缓存版本为 `v31`；修改缓存清单或数据结构时升级版本，并验证已有缓存的用户。
 
-| 环境 | 行为 |
-|---|---|
-| 安卓 / 桌面 Chrome、Edge | 捕获 `beforeinstallprompt`，约 1 秒后在页面底部出现提示条，点「添加」调用系统安装框 |
-| iOS Safari（含 iPad） | 没有安装接口。提示条按钮是「怎么添加」，打开图文引导：分享 → 添加到主屏幕 → 添加。iOS 上的 Chrome、微信等内置浏览器不显示（它们的步骤不同） |
-| 已从桌面图标打开（`display-mode: standalone`、`navigator.standalone`） | 不显示任何提示 |
+## 本机数据
 
-点「暂不」、看完引导点「知道了」、或点过「添加」后，`localStorage` 的 `cnmPwa.dismissed.v1` 记下时间，之后不再自动弹出；页脚会有一个「添加到桌面」链接，想装的人仍能找到。收到 `appinstalled` 后写 `cnmPwa.installed.v1`，入口也不再显示。要重新看到提示，清掉这两个键。
+本站仅提供科学、物理，没有账号或自动跨设备同步。浏览器按站点保存数据；换域名、换浏览器或清理站点数据前，应导出学习备份。
 
-## 孩子档案
+| localStorage 键 | 内容 |
+| --- | --- |
+| `cnmChildren.v1` | 孩子资料和当前选择，最多 8 个孩子 |
+| `cnmChildren.records.v1` | 按孩子保存的诊断历史，通常保留最近 40 条 |
+| `cnmWrong.v1` | 按孩子或 guest 保存的错题，通常每桶 300 题 |
+| `cnmBlind.local.v1` | 本机知识点状态与错次台账，通常最多 200 点 |
+| `cnsDiagnose.session.v1` | 科学当前诊断会话 |
+| `cnpDiagnose.session.v2` | 物理当前诊断会话 |
+| `cnmDiagnose.archived.v1` | 导入时遇到冲突而保留的其他诊断进度 |
 
-- 数据都在本机 `localStorage`，不上传，没有账号和云同步。清除浏览器数据或换设备不会保留。
-- `cnmChildren.v1`：`{ current, children: [{ id, name, grade, textbook, createdAt }] }`，最多 8 个，昵称不能重名。
-- `cnmChildren.records.v1`：`{ [childId]: [记录] }`，普通档案保留最近 40 条；备份合并后超过 40 条的档案会保留完整历史，之后保存或移动记录也不会按 40 条截断。一条记录是一次诊断（`key = 学科|seed|目标`），含学科、范围名称、已答题数、薄弱 / 不稳 / 已掌握 / 未测数量、各自的知识点 id 和根因 id。同一次诊断反复打开结果页、更正答案，只更新这一条。
-- 教材版本是档案里的备注：图谱的知识点和章节按人教版编排，目前不按版本筛选内容。
-- 诊断页：开始页、答题页、结果页都有当前孩子切换（也可选「不保存到档案」）。结果页自动保存到当前孩子；换成另一个孩子，会把这条记录一并挪过去。演示模式（`demo=1`）不保存。
-- `children/history.html`：按学科筛选；「现在还薄弱的知识点」把某个孩子所有记录合起来，同一知识点以最近一次结果为准，根因排最前，每项链到知识图谱，并可「再测一次」；下面是逐条诊断记录，可展开、可删除。
+从备份合并产生的更大历史集合不会因合并或之后正常写入立即截断。教材版本目前是孩子资料的备注；科学内容按教科版、物理按人教版组织，不会随档案备注自动切换数据。
 
-### 档案备份与跨浏览器恢复
+## 导出与导入
 
-档案管理页的「导出全部档案」会下载一个带导出时间的 `children-backup-*.json` 文件，包含所有孩子的资料、当前孩子选择和各学科的全部已存诊断记录。没有档案时按钮不可用；读取或解析失败会显示错误，不会生成空备份。导出不修改本机数据，不发送档案数据到服务器。
-
-备份格式：
+档案页“导出全部学习数据”生成 `learning-backup-*.json`，版本为 2；没有建立孩子档案也能迁移本机学习进度。包含所有孩子资料、已存诊断记录、错题、当前两科诊断、薄弱台账及其他诊断进度。数据只在浏览器读取，不上传服务器。
 
 ```json
 {
   "format": "cn-math-taxonomy.children",
-  "version": 1,
-  "exportedAt": "2026-10-28T00:00:00.000Z",
-  "profiles": {
-    "v": 1,
-    "current": "child-id",
-    "children": [{ "id": "child-id", "name": "小满", "grade": "三年级", "textbook": "人教版", "createdAt": "2026-10-01T00:00:00.000Z" }]
-  },
-  "records": { "child-id": [] }
+  "version": 2,
+  "exportedAt": "2026-11-16T00:00:00.000Z",
+  "profiles": {"v": 1, "current": null, "children": []},
+  "records": {},
+  "learning": {
+    "wrongbook": {},
+    "sessions": {},
+    "blindspots": {"v": 1, "byId": {}},
+    "archivedSessions": []
+  }
 }
 ```
 
-`profiles` 和 `records` 分别保留 `cnmChildren.v1`、`cnmChildren.records.v1` 的完整内容，包括孩子 ID、创建时间、记录时间、学科、范围和掌握状态等字段。历史记录的知识点名称与薄弱点汇总可由知识点 ID 和记录重新计算，不另存一份。未完成的诊断会话、诊断设置、已见题目和访问统计不属于档案备份。
+- `sessions` 按 `science`、`physics` 存放完整会话；归档每项为 `{subject, session}`。
+- 仍支持版本 1 的科学、物理档案备份。它只含 `profiles` 和 `records`，导入不会清除本机的错题、进度和薄弱台账。
+- 备份不含显示偏好、诊断设置、独立的已见题目列表、PWA 安装提示状态或访问统计。历史摘要保留原本存储的字段，不会补造旧记录中不存在的作答内容。
+- 支持 UTF-8 BOM，文件上限 10 MB。读取失败、损坏数据、未知格式和版本会报错，不生成或导入空白替代数据。
 
-换浏览器时，在原浏览器点「导出全部档案」，到新浏览器的档案页选择「导入备份文件」。文件只在浏览器里读取，不上传；支持上述版本 1 的 JSON 备份，最大 10 MB（支持 UTF-8 BOM）。选择文件后显示预览，点击「确认合并导入」才会保存，取消不会写入任何数据。
+选择文件后先显示新增和更新数量，点击“确认合并导入”才写入。取消或预览不会更改本机数据。JSON 含孩子昵称和学习资料，应自行保管。
 
-合并规则：
+## 合并与冲突规则
 
-- 相同孩子 ID：合并诊断历史，保留本机昵称、年级、教材版本和创建时间；已有的当前孩子选择保持不变。空浏览器恢复备份中的当前孩子选择。
-- 同名但不同 ID：保留两份档案，导入档案改名为「昵称（导入）」等，仍保留原 ID。重复导入按 ID 匹配，不会新增副本。
-- 诊断记录按 `key` 去重，按 `savedAt` 与 `updatedAt` 中较晚的时间选择较新结果；时间相同保留本机记录。只存在于一边的记录全部保留，不因合并超过 40 条而截断。
-- 合并后超过 8 个孩子时停止导入，不删除现有档案。错误格式、未知版本、重复 ID/记录 key、无归属记录、非法字段和损坏的本机数据都不会被当成空数据导入。未知知识点 ID 保留，历史页可回退显示 ID。
-- 预览后本机档案有变化时，先重新预览再确认。确认时先写记录再写档案；第二步失败会恢复原始记录，恢复失败会单独提示，不报告成功。浏览器存储配额或权限不足时需要先处理存储问题。
+1. 同一孩子 ID：保留本机资料、合并历史。同名不同 ID：保留两份，导入昵称加“（导入）”。最多 8 个孩子，超过就停止，不删除已有档案。
+2. 诊断记录按 `key` 去重，以 `savedAt`、`updatedAt` 较晚的时间选择状态；错题按桶和 `qid`，薄弱台账按知识点 ID，采用较新状态。时间相同保留本机。错次计数取较大值，重复导入不会重复累加。
+3. 本机缺少某学科会话时直接恢复；已有不同会话时保留本机会话，把导入会话放入“其他诊断进度”。在档案页可恢复其中一份，原活动会话会存入列表，双方进度均保留。
+4. 预览后本机数据有变化，会要求重新预览。写入多份存储时如失败，回滚之前写入的键；回滚失败会明确提示，不能报告导入成功。存储空间不足时保留备份文件，先整理浏览器空间。
 
-JSON 文件包含昵称和学习记录，请自行保管。未完成诊断的进度和诊断设置仍不在备份范围内。
+## 访问统计
 
-备份恢复逻辑测试：`node tests/test_children.js`（无第三方依赖）。
+`assets/stats-config.js` 的 `cloudflareToken` 和 `endpoint` 默认留空，不加载外部统计信标，也不向外发送访问事件。本机仍可能记录访问天数、安装提示状态。
 
-浏览器迁移测试：`node tests/test_children_browser.js`（Node 22+、本机 Chrome/Chromium，可用 `CHROME` 指定路径）。使用隔离的浏览器存储实际下载并导入备份，验证恢复后的历史与薄弱点、重复导入、冲突合并、过期预览、配额失败回滚和移动端布局；不访问真实用户档案，测试文件和截图写入系统临时目录。
+如需统计，只填自己管理的 Cloudflare Web Analytics token 或 HTTPS 采集地址。`assets/stats.js` 的事件包含名称、来源、页面路径和时间，现有事件不含孩子昵称或作答内容。回调 `onEvent` 仅在显式配置时调用。
 
-## 统计
+## 验证
 
-**仓库里原来没有任何统计方案**（页面不加载统计脚本，也没有自建采集）。没有编造账号，这里只留出可配置的钩子，默认全空，页面不发任何统计请求。
-
-配置在 `assets/stats-config.js`：
-
-```js
-window.CNM_STATS = {
-  cloudflareToken: '',  // Cloudflare Web Analytics 的 token；填了才加载它的信标脚本
-  endpoint: '',         // 自建采集地址；填了就用 sendBeacon 把事件 POST 过去
-  onEvent: null         // 可选回调，每个事件调用一次
-};
-```
-
-`assets/stats.js` 提供 `window.cnmTrack(name, props)`，每个事件的内容是：
-
-```json
-{ "event": "pageview", "source": "pwa", "path": "/diagnose/", "ts": "2026-10-22T12:00:00.000Z" }
-```
-
-- `source`：`pwa` 表示从桌面图标打开（`display-mode: standalone` 或 iOS `navigator.standalone`），`web` 表示普通网页访问。`manifest.webmanifest` 的 `start_url` 另外带了 `?source=pwa`，用 URL 参数统计的也能区分入口。
-- 事件：`pageview`、`pwa_launch`（standalone 下一次会话的第一次打开）、`appinstalled`、`return_visit`（本机和上次不在同一天；带 `days_since_first`、`visit_days`）、`install_hint_shown`、`install_prompt_accepted` / `install_prompt_dismissed`、`ios_guide_opened`、`install_hint_closed`、`child_added`。
-- 不收集孩子昵称、年级、答题内容等任何个人信息；事件里只有事件名、来源、页面路径（不含查询参数）和时间。回访用本机 `localStorage` 的 `cnmStats.v1`（首次和最近一次访问日期）判断，没有用户标识。
-- 同一个 `window` 上还会派发 `cnm:track` 事件，可以不改代码、在别处监听。
-
-怎么接：
-1. **只要访问量**：在 Cloudflare 后台创建 Web Analytics 站点，把 token 填进 `cloudflareToken`。它只统计页面访问，不支持自定义事件，所以 `appinstalled` 等事件不会出现在里面。
-2. **要区分 PWA 和安装 / 回访**：自己起一个接收端（例如一个 Cloudflare Worker 写入 D1 / Analytics Engine），把地址填进 `endpoint`。请求体是上面那段 JSON（`text/plain`，避免 CORS 预检），接收端按 `event`、`source` 汇总即可。
-3. 用其他统计服务：在 `onEvent` 里转发，或监听 `cnm:track`。
-
-填了 `cloudflareToken` 之后，页面会请求 `static.cloudflareinsights.com`；`scripts/screenshot.js` 里「没有外网请求」的检查在那种配置下会失败，属预期。
-
-## 本地验证
-
-```bash
-python3 -m http.server 8000   # localhost 下 service worker 也能注册
-```
-
-打开 http://localhost:8000/ ，DevTools → Application 里看 Manifest 和 Service Workers；勾选 Offline 后刷新，知识图谱、诊断、档案都应能打开。安卓提示要在 https（或 localhost）并满足 Chrome 的可安装条件才会触发；iOS 的引导需要用 Safari 或 iPhone UA 查看。
+运行 `npm test` 检查档案、备份合并、重复导入、旧格式兼容、错误文件和写入失败回滚。浏览器检查使用 `CHROME=/usr/bin/chromium npm run test:browser`（或把 CHROME 指向自己的 Chrome/Chromium），覆盖导出下载、文件选择、导入预览、取消、冲突恢复和手机布局。浏览器检查单独执行，不要求默认测试环境安装浏览器。

@@ -39,16 +39,17 @@
   }
 
   /* entry.childId 决定写入哪个孩子的桶（没有则 guest），不会存进条目。
-   * 同一孩子同一 qid 已存在：更新 chosen / kind / ts，count + 1。每桶最多 300 条，超了丢最旧的。 */
+   * 同一孩子同一 qid 已存在：更新 chosen / kind / ts，count + 1。普通桶最多 300 条；从备份合并得到的更大集合保留完整历史。 */
   function record(entry) {
     if (!entry || !entry.qid) return false;
     var topicId = String(entry.topicId || '');
-    if ((entry.subject === 'science' && topicId.indexOf('cns_') !== 0) &&
+    if ((entry.subject === 'science' && topicId.indexOf('cns_') !== 0) ||
         (entry.subject === 'physics' && topicId.indexOf('cnp_') !== 0) ||
         (entry.subject !== 'science' && entry.subject !== 'physics')) return false;
     var s = store();
     var key = bucketKey(entry.childId);
     var rows = bucketOf(s, key);
+    var keepImportedHistory = rows.length > MAX_PER_BUCKET;
     var qid = String(entry.qid);
     var kind = entry.kind === 'skip' ? 'skip' : 'wrong';
     var ts = Number(entry.ts) > 0 ? Number(entry.ts) : Date.now();
@@ -76,7 +77,7 @@
       });
     }
     rows.sort(function (a, b) { return (a.ts || 0) - (b.ts || 0); });
-    if (rows.length > MAX_PER_BUCKET) rows = rows.slice(rows.length - MAX_PER_BUCKET);
+    if (!keepImportedHistory && rows.length > MAX_PER_BUCKET) rows = rows.slice(rows.length - MAX_PER_BUCKET);
     s[key] = rows;
     return write(KEY, s);
   }

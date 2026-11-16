@@ -27,10 +27,10 @@
 无需 Node.js 依赖或构建步骤。在项目根目录运行：
 
 ```bash
-python -m http.server 8000
+python -m http.server 8765
 ```
 
-然后打开 <http://localhost:8000/>。不要直接通过 `file://` 打开，否则浏览器会阻止 JSON 数据加载。
+然后打开 <http://localhost:8765/>。不要直接通过 `file://` 打开，否则浏览器会阻止 JSON 数据加载。
 
 主要文件：
 
@@ -48,7 +48,9 @@ data/cn-curriculum-standards.json 课标条目
 tests/                            两科范围与交互测试
 ```
 
-档案、诊断记录和错题只保存在当前浏览器的 `localStorage`，不会自动同步到其他设备；清除浏览器数据或更换设备前，请在档案页导出备份。
+档案、诊断记录和错题只保存在当前浏览器的 `localStorage`，不会自动同步到其他设备。清除浏览器数据或更换设备前，请在档案页“导出全部学习数据”；备份包含错题、两科诊断进度、薄弱台账及进度归档，支持旧版档案备份导入。遇到同学科进度冲突会保留双方，详见[备份规则](docs/pwa.md)。
+
+诊断确认题数为 2、3、4（默认 3），旧设置中的 5 题会兼容为 4。统计默认关闭，采集地址留空。课标来源和待核状态见[课标说明](docs/standards-mapping.md)，本轮没有新增逐页内容核验。
 
 ## 验证与部署
 
@@ -56,4 +58,10 @@ tests/                            两科范围与交互测试
 npm test
 ```
 
+可另行运行 `CHROME=/usr/bin/chromium npm run test:browser` 检查真实浏览器备份流程。
+
+默认测试与 `.github/workflows/ci.yml` 对齐，覆盖数据、175 道题目配图、答案格式、诊断引擎、档案备份、错题本及历史兼容。自动核验通过不等同于学科内容经教师审核。
+
 本项目可直接部署到 Cloudflare Pages：连接本仓库的 `main` 分支，框架选择「无」，构建命令使用 `exit 0`，输出目录使用 `/`。推送到 `main` 后，Cloudflare Pages 会自动构建并更新网站。
+
+建议先在独立分支检查修改与预览，再合并到正式分支。手动部署脚本 `scripts/deploy-cf.sh` 已指向 `physicalmap`，但必须显式配置自己的 `CLOUDFLARE_ACCOUNT_ID` 与 `CLOUDFLARE_API_TOKEN`；它会发布到正式站点，不应当作本地预览命令。

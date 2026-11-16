@@ -38,7 +38,7 @@ function load(entries, options = {}) {
 
 function entry(qid, extra) {
   return Object.assign({
-    childId: 'c1', qid, topicId: 'cnm_001', topic: '加法', subject: 'math',
+    childId: 'c1', qid, topicId: 'cnp_001', topic: '加法', subject: 'physics',
     prompt: '1+1=?', choices: null, answer: '2', explanation: '', chosen: '3', kind: 'wrong', ts: 1000
   }, extra || {});
 }
@@ -61,9 +61,9 @@ test('record 新增一条，字段完整且不把 childId 存进条目', () => {
   assert.equal(rows.length, 1);
   const e = rows[0];
   assert.equal(e.qid, 'q1');
-  assert.equal(e.topicId, 'cnm_001');
+  assert.equal(e.topicId, 'cnp_001');
   assert.equal(e.topic, '加法');
-  assert.equal(e.subject, 'math');
+  assert.equal(e.subject, 'physics');
   assert.equal(e.prompt, '1+1=?');
   assert.equal(e.choices.length, 2);
   assert.equal(e.choices[1].key, 'B');
@@ -185,6 +185,28 @@ test('localStorage 读写抛错时不抛错', () => {
   assert.equal(w.api.record(entry('q1')), false);
   assert.equal(w.api.count('c1'), 0);
   assert.doesNotThrow(() => w.api.clear('c1'));
+});
+
+test('不同学科的 topicId 不能混入，旧条目保持原样', () => {
+  const legacy = entry('old', { topicId: 'cnm_001', subject: 'math' });
+  const { api, storage } = load({ [KEY]: JSON.stringify({ c1: [legacy] }) });
+  assert.equal(api.record(entry('bad-science', { subject: 'science' })), false);
+  assert.equal(api.record(entry('bad-physics', { topicId: 'cns_p001' })), false);
+  assert.equal(api.count('c1'), 0);
+  assert.equal(api.record(entry('science', { topicId: 'cns_p001', subject: 'science' })), true);
+  assert.equal(api.count('c1'), 1);
+  assert.deepStrictEqual(saved(storage).c1.find(e => e.qid === 'old'), legacy);
+});
+
+test('合并导入的 300 条以上历史在新增和更新后完整保留', () => {
+  const imported = Array.from({ length: 305 }, (_, i) => ({ ...entry('q' + i), ts: i, count: 1 }));
+  const { api } = load({ [KEY]: JSON.stringify({ c1: imported }) });
+  api.record(entry('new', { ts: 999 }));
+  assert.equal(api.count('c1'), 306);
+  assert.ok(api.list('c1').some(e => e.qid === 'q0'));
+  api.record(entry('q0', { ts: 1000 }));
+  assert.equal(api.count('c1'), 306);
+  assert.equal(api.list('c1')[0].count, 2);
 });
 
 console.log('\n' + passed + ' passed');

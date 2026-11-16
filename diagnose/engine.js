@@ -15,7 +15,7 @@
  *         judgeQuestion(question, userText) -> {verdict:'correct'|'wrong'|'manual', reason}
  *         judgeAnswer(user, reference) -> 同上（只按参考答案文本判，旧接口）
  *
- * 每个知识点需连续答对 confirm 题才判掌握（默认 3，可选 2/3/5；题库更少时以题库为准）：
+ * 每个知识点需连续答对 confirm 题才判掌握（默认 3，界面可选 2/3/4；题库更少时以题库为准）：
  *   连续答对满额 -> 掌握（并推断祖先掌握）；中途错 / 不会 -> 再出一道更基础的题确认：
  *   确认题对 -> 不稳（shaky，不向先修回溯）；确认题也错 -> 薄弱（weak，向先修回溯，hard 先于 soft）。
  *   选题：第一题优先 standard（提高）；连续答对再出 challenge（拓展）确认掌握；答错先补 basic。
@@ -166,11 +166,12 @@
   const DEFAULT_LIMIT = 16;
   const SCREEN_LIMIT = 40;
   const DEFAULT_CONFIRM = 3;
-  const CONFIRM_CHOICES = [2, 3, 5];
+  const CONFIRM_CHOICES = [2, 3, 4];
 
-  /** 界面可选值：只接受 2 / 3 / 5，其它回退默认。 */
+  /** 界面可选值：2 / 3 / 4；旧设置 5 对应现有题库的最多 4 题，其它回退默认。 */
   function clampConfirm(n) {
     const v = Math.floor(Number(n));
+    if (v === 5) return 4;
     return CONFIRM_CHOICES.indexOf(v) >= 0 ? v : DEFAULT_CONFIRM;
   }
 

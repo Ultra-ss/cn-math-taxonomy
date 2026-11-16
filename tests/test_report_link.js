@@ -3,6 +3,7 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
+const vm = require('vm');
 const root = path.join(__dirname, '..');
 const appSrc = fs.readFileSync(path.join(root, 'diagnose/app.js'), 'utf8');
 const cssSrc = fs.readFileSync(path.join(root, 'diagnose/style.css'), 'utf8');
@@ -13,13 +14,13 @@ assert.ok(appSrc.includes('report-link no-print'));
 assert.ok(appSrc.includes("encodeURIComponent('[题目] ' + q.id)"));
 assert.ok(appSrc.includes('encodeURIComponent(q.id)'));
 assert.ok(appSrc.includes("q.id ? h('div', { class: 'report-link no-print' }"));
-function reportUrl(q) {
-  return 'https://github.com/xiaoyang111222/cn-math-taxonomy/issues/new?template=question-fix.yml&title=' +
-    encodeURIComponent('[题目] ' + q.id) + '&question_id=' + encodeURIComponent(q.id);
-}
+// 执行生产代码，避免测试中复制的旧仓库地址掩盖实际报错链接错误。
+const reportSource = appSrc.slice(appSrc.indexOf('const ISSUE_NEW_URL ='), appSrc.indexOf('function feedbackBlock'));
+const reportUrl = vm.runInNewContext(reportSource + '\nreportUrl;');
 const weird = 'cnm_1_q1 &x# y';
 const href = reportUrl({ id: weird });
 const u = new URL(href);
+assert.strictEqual(u.origin + u.pathname, 'https://github.com/Ultra-ss/cn-math-taxonomy/issues/new');
 assert.strictEqual(u.searchParams.get('template'), 'question-fix.yml');
 assert.strictEqual(u.searchParams.get('question_id'), weird);
 assert.strictEqual(u.searchParams.get('title'), '[题目] ' + weird);
