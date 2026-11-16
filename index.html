@@ -32,8 +32,6 @@
   }
 })();
 </script>
-<script src="assets/last-location.js"></script>
-<script>window.__cnmHomeResume = window.CnmLastLocation ? window.CnmLastLocation.resumeHome() : Promise.resolve(false);</script>
 <link rel="stylesheet" href="assets/site.css">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
@@ -59,7 +57,7 @@
     </div>
     <div class="page-links">
       <a class="nav-link active" href="./?home=1" aria-current="page">首页</a>
-      <a class="nav-link" href="explore/">知识图谱</a>
+      <a class="nav-link" href="explore/" data-resume-graph>知识图谱</a>
       <a class="nav-link" href="diagnose/">诊断</a>
       <a class="nav-link" href="children/">本地个人中心</a>
       <a class="nav-link" href="wrongbook/">错题本</a>
@@ -134,13 +132,24 @@
   </section>
 
 </main>
+<dialog id="continue-learning-dialog" class="continue-learning-dialog" aria-labelledby="continue-learning-title" aria-describedby="continue-learning-location">
+  <h2 id="continue-learning-title">是否继续学习</h2>
+  <p>上次浏览到：</p>
+  <p id="continue-learning-location"></p>
+  <div class="continue-learning-actions">
+    <button type="button" class="primary" id="continue-learning-yes" autofocus>继续学习</button>
+    <button type="button" id="continue-learning-no">暂不继续</button>
+  </div>
+</dialog>
 <footer class="site-footer">
   <p><a href="https://github.com/Ultra-ss/cn-math-taxonomy/issues/new/choose">提交 Issue</a></p>
 </footer>
 <script src="assets/stem-compat.js"></script>
 <script src="assets/children.js"></script>
 <script src="assets/blindspots.js"></script>
+<script src="assets/last-location.js"></script>
 <script src="assets/home.js"></script>
+<script>window.__cnmHomeResume = window.CnmLastLocation ? window.CnmLastLocation.resumeHome() : Promise.resolve(false);</script>
 <script src="assets/stats-config.js"></script>
 <script src="assets/stats.js"></script>
 <script src="assets/pwa.js"></script>

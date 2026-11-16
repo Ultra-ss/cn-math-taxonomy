@@ -831,3 +831,23 @@ a.site-about {
 a.site-about:hover { color: var(--text); border-color: var(--brand); }
 a.site-about:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 @media print { a.site-about { display: none; } }
+
+/* 先呈现教材首页，由用户决定是否接着上次的位置学习。 */
+.continue-learning-dialog {
+  width: min(420px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--bg-elev);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  overflow: auto;
+}
+.continue-learning-dialog::backdrop { background: rgb(15 23 42 / 42%); }
+.continue-learning-dialog h2 { margin: 0 0 16px; font-size: 1.25rem; }
+.continue-learning-dialog p { margin: 0 0 10px; color: var(--muted); line-height: 1.6; overflow-wrap: anywhere; }
+.continue-learning-dialog #continue-learning-location { margin-bottom: 22px; color: var(--text); font-weight: 650; }
+.continue-learning-actions { display: flex; gap: 10px; }
+.continue-learning-actions button { flex: 1; min-width: 0; min-height: 48px; }

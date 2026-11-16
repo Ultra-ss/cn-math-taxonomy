@@ -114,20 +114,26 @@
     var candidate = shouldResume('home') ? read() : null;
     if (!candidate || typeof root.fetch !== 'function') return Promise.resolve(false);
     var doc = root.document;
-    var style = doc && doc.documentElement && doc.documentElement.style;
-    var visibility = style ? style.visibility : '';
-    if (style) style.visibility = 'hidden';
-    var redirected = false;
+    var dialog = doc && doc.getElementById('continue-learning-dialog');
+    if (!dialog || typeof dialog.showModal !== 'function') return Promise.resolve(false);
     homePromise = loadHomeTopics(siteBase(root.location.pathname) + 'data/topics.json').then(function (topics) {
       var record = resolve(topics, candidate);
       if (!record) return false;
-      root.location.replace(exploreURL(record, root.location.pathname));
-      redirected = true;
+      var topic = topics.find(function (item) { return item.id === record.topicId; });
+      var title = record.volume;
+      if (/^[一二三四五六八][上下]$/.test(title)) title = title.charAt(0) + '年级' + title.charAt(1) + '册';
+      if (title === '九全') title = '九年级全一册';
+      doc.getElementById('continue-learning-location').textContent =
+        (record.subject === 'physics' ? '初高中物理' : '小学科学') +
+        (title ? ' · ' + title : '') + ' · ' + topic.name;
+      doc.getElementById('continue-learning-yes').addEventListener('click', function () {
+        dialog.close();
+        root.location.assign(exploreURL(record, root.location.pathname));
+      });
+      doc.getElementById('continue-learning-no').addEventListener('click', function () { dialog.close(); });
+      dialog.showModal();
       return true;
-    }).catch(function () { return false; }).then(function (result) {
-      if (!redirected && style) style.visibility = visibility;
-      return result;
-    });
+    }).catch(function () { return false; });
     return homePromise;
   }
   return {KEY:KEY, read:read, remember:remember, resolve:resolve, shouldResume:shouldResume, exploreURL:exploreURL, resumeHome:resumeHome};

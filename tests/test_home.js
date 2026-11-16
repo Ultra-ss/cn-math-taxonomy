@@ -94,21 +94,22 @@ function load(search, options = {}) {
 }
 
 (async () => {
-  await test('等待首页位置恢复，成功跳转时不再加载首页数据', async () => {
+  await test('上次位置仍在校验时，立即展示教材和加载首页数据', async () => {
     let resolve;
     const resume = new Promise(done => {resolve = done;});
-    const {calls} = load('', {resume});
-    assert.strictEqual(calls.length, 0);
+    const {calls, ids} = load('', {resume});
+    assert.strictEqual(calls.length, 3);
+    assert.strictEqual(ids['textbook-grid'].children.length, 9);
     resolve(true);
     await flush();
-    assert.strictEqual(calls.length, 0);
+    assert.strictEqual(calls.length, 3);
   });
 
-  await test('位置失效或恢复失败后仍正常加载教材首页', async () => {
+  await test('位置失效或用户暂不继续时，教材首页仍正常加载', async () => {
     let resolve;
     const resume = new Promise(done => {resolve = done;});
     const {calls, ids, baseMeta} = load('', {resume});
-    assert.strictEqual(calls.length, 0);
+    assert.strictEqual(calls.length, 3);
     resolve(false);
     await flush();
     await baseMeta();

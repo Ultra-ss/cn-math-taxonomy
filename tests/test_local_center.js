@@ -12,6 +12,13 @@ for (const file of pages) {
   assert.ok(nav, file + ': 主导航存在');
   assert.match(nav[0], />本地个人中心<\/a>/, file);
   assert.doesNotMatch(nav[0], />档案<\/a>|>关于<\/a>|site-about/, file);
+  const graph = nav[0].match(/<a\b[^>]*>知识图谱<\/a>/);
+  assert.ok(graph, file + ': 图谱入口存在');
+  assert.match(graph[0], /\sdata-resume-graph(?:\s|>)/, file + ': 导航图谱统一恢复上次位置');
+  const graphHref = graph[0].match(/href="([^"]+)"/)[1];
+  const graphURL = new URL(graphHref, 'https://physicalmap.pages.dev/' + file);
+  assert.strictEqual(graphURL.search, '', file + ': 不用学科或教材参数遮蔽本机位置');
+  assert.strictEqual(graphURL.hash, '', file + ': 不预选其他知识点');
   const about = source.match(/<a\b[^>]*class="site-about"[^>]*>关于<\/a>/g);
   assert.strictEqual(about && about.length, 1, file + ': 唯一角落说明入口');
   assert.match(about[0], /href="https:\/\/github.com\/Ultra-ss\/cn-math-taxonomy"/);
@@ -19,6 +26,10 @@ for (const file of pages) {
   assert.match(about[0], /rel="noopener noreferrer"/);
   assert.match(about[0], /aria-label="关于本项目/);
   assert.match(source, /issues\/new\/choose/, file + ': 保留提交 Issue');
+}
+for (const script of ['assets/home.js', 'explore/app.js', 'diagnose/app.js']) {
+  const source = fs.readFileSync(path.join(root, script), 'utf8');
+  assert.ok(source.includes('.site-nav a:not(.subject-link):not([data-resume-graph]), a.brand'), script + ': 学科注入跳过续看入口');
 }
 const center = fs.readFileSync(path.join(root, 'children/index.html'), 'utf8');
 assert.match(center, /<title>本地个人中心 ·/);

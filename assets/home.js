@@ -1,10 +1,9 @@
 /* 首页：按教材进入科学与物理，知识点数量与统计从当前数据计算。 */
-(async function () {
+(function () {
   'use strict';
   var raw = location.hash.replace(/^#/, '');
   try { raw = decodeURIComponent(raw); } catch (e) { /* 保持原样 */ }
   if (/^(?:cnp|cns)_[A-Za-z0-9]+$/.test(raw)) return;
-  if (window.__cnmHomeResume && await window.__cnmHomeResume) return;
 
   var CN = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
   var subject = new URLSearchParams(location.search).get('subject') === 'science' ? 'science' : 'physics';
@@ -22,7 +21,7 @@
     if (on) link.setAttribute('aria-current', 'true');
     else link.removeAttribute('aria-current');
   });
-  document.querySelectorAll('.site-nav a:not(.subject-link), a.brand').forEach(function (link) {
+  document.querySelectorAll('.site-nav a:not(.subject-link):not([data-resume-graph]), a.brand').forEach(function (link) {
     var href = link.getAttribute('href');
     var next = withSubject(href);
     if (next && next !== href) link.setAttribute('href', next);

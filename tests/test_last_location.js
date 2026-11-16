@@ -13,17 +13,24 @@ async function test(name, fn) { await fn();passed++;console.log('  ok   '+name);
 function load(options = {}) {
   const store = new Map(Object.entries(options.entries || {}));
   const redirects = [], calls = [];
-  const location = {pathname:'/', search:'', hash:'', replace(href){redirects.push(href);}, ...options.location};
+  const location = {pathname:'/', search:'', hash:'', replace(href){redirects.push(href);}, assign(href){redirects.push(href);}, ...options.location};
+  const nodes = {};
+  for (const id of ['continue-learning-location','continue-learning-yes','continue-learning-no']) {
+    nodes[id] = {textContent:'', handlers:{}, addEventListener(type, fn){this.handlers[type] = fn;}, click(){this.handlers.click();}};
+  }
+  const dialog = nodes['continue-learning-dialog'] = {
+    open:false, shown:0, showModal(){this.open=true;this.shown++;}, close(){this.open=false;}
+  };
   const root = {
     location,
-    document:{documentElement:{style:{visibility:'visible'}}},
+    document:{documentElement:{style:{visibility:'visible'}},getElementById:id=>nodes[id] || null},
     localStorage:{getItem:key=>store.has(key)?store.get(key):null,setItem:(key,value)=>store.set(key,value),removeItem:key=>store.delete(key)},
     fetch(url){calls.push(url);return options.fetch ? options.fetch(url) : Promise.resolve({ok:true,json:()=>Promise.resolve(topics)});}
   };
   if (options.denied) Object.defineProperty(root,'localStorage',{get(){throw new Error('Storage denied');}});
   const context = {window:root,module:{exports:{}},URLSearchParams,Promise,Date,setTimeout:options.timer || setTimeout,clearTimeout};
   vm.runInNewContext(source,context,{filename:'assets/last-location.js'});
-  return {api:context.module.exports,root,store,redirects,calls};
+  return {api:context.module.exports,root,store,redirects,calls,nodes,dialog};
 }
 function remember(api, fields = {}) {
   assert.equal(api.remember({subject:'physics',volume:'八下',topicId:'cnp_030',view:'local',depth:3,...fields}),true);
@@ -85,25 +92,36 @@ function remember(api, fields = {}) {
     assert.equal(api.remember({subject:'physics',volume:'八上',topicId:'cnp_001'}),false);
     assert.equal(await api.resumeHome(),false);assert.equal(root.document.documentElement.style.visibility,'visible');
   });
-  await test('首页和PWA入口验证数据后才恢复，并只发一次导航',async()=>{
-    const {api,root,calls,redirects}=load({location:{pathname:'/school/',search:'?source=pwa'}});remember(api);
-    const pending=api.resumeHome();assert.equal(root.document.documentElement.style.visibility,'hidden');
+  await test('首页和PWA入口验证数据后弹出继续提示，点击前不跳转且首页始终可见',async()=>{
+    const {api,root,calls,redirects,nodes,dialog}=load({location:{pathname:'/school/',search:'?source=pwa'}});remember(api);
+    const pending=api.resumeHome();assert.equal(root.document.documentElement.style.visibility,'visible');
     assert.equal(await pending,true);assert.equal(await api.resumeHome(),true);
-    assert.equal(calls.length,1);assert.equal(calls[0],'/school/data/topics.json');assert.equal(redirects.length,1);
+    assert.equal(calls.length,1);assert.equal(calls[0],'/school/data/topics.json');assert.equal(redirects.length,0);
+    assert.equal(dialog.open,true);assert.equal(dialog.shown,1);
+    assert.ok(nodes['continue-learning-location'].textContent.includes('初高中物理 · 八年级下册'));
+    assert.ok(nodes['continue-learning-location'].textContent.includes(topics.find(t=>t.id==='cnp_030').name));
+    nodes['continue-learning-yes'].click();assert.equal(redirects.length,1);assert.equal(dialog.open,false);
     assert.equal(new URL(redirects[0],'https://physicalmap.pages.dev').pathname,'/school/explore/');
+    assert.equal(new URL(redirects[0],'https://physicalmap.pages.dev').hash,'#cnp_030');
+  });
+  await test('暂不继续关闭提示并保留记录，下次重新打开仍可继续',async()=>{
+    const first=load();const record=remember(first.api);
+    assert.equal(await first.api.resumeHome(),true);first.nodes['continue-learning-no'].click();
+    assert.equal(first.dialog.open,false);assert.equal(first.redirects.length,0);assert.equal(first.api.read().topicId,record.topicId);
+    const next=load({entries:{[KEY]:first.store.get(KEY)}});assert.equal(await next.api.resumeHome(),true);assert.equal(next.dialog.open,true);
   });
   await test('首次或显式首页不隐藏页面，也不额外请求元数据',async()=>{
     const fresh=load();assert.equal(await fresh.api.resumeHome(),false);assert.equal(fresh.calls.length,0);
     const home=load({location:{search:'?home=1'}});remember(home.api);assert.equal(await home.api.resumeHome(),false);assert.equal(home.calls.length,0);assert.equal(home.root.document.documentElement.style.visibility,'visible');
   });
-  await test('网络失败、错误数据、过期ID和超时均还原首页可见性',async()=>{
+  await test('网络失败、错误数据、过期ID和超时不弹窗，首页始终可见',async()=>{
     for (const fetch of [()=>Promise.reject(new Error('network')),()=>Promise.resolve({ok:false}),()=>Promise.resolve({ok:true,json:()=>({bad:true})})]) {
-      const app=load({fetch});remember(app.api);assert.equal(await app.api.resumeHome(),false);assert.equal(app.redirects.length,0);assert.equal(app.root.document.documentElement.style.visibility,'visible');
+      const app=load({fetch});remember(app.api);assert.equal(await app.api.resumeHome(),false);assert.equal(app.redirects.length,0);assert.equal(app.dialog.open,false);assert.equal(app.root.document.documentElement.style.visibility,'visible');
     }
     const stale=load();remember(stale.api,{topicId:'cnp_999'});assert.equal(await stale.api.resumeHome(),false);assert.equal(stale.store.has(KEY),false);assert.equal(stale.root.document.documentElement.style.visibility,'visible');
     const timeout=load({fetch:()=>new Promise(()=>{}),timer:fn=>setTimeout(fn,0)});remember(timeout.api);assert.equal(await timeout.api.resumeHome(),false);assert.equal(timeout.root.document.documentElement.style.visibility,'visible');
   });
-  await test('全站品牌与首页链接显式home=1，恢复模块早于首页样式和app',()=>{
+  await test('全站品牌与首页链接显式home=1，首页先渲染再启动继续提示',()=>{
     for (const file of ['index.html','explore/index.html','diagnose/index.html','children/index.html','children/history.html','wrongbook/index.html']) {
       const html=fs.readFileSync(path.join(ROOT,file),'utf8');
       const brand=/<a class="brand" href="([^"]+)"/.exec(html);
@@ -112,8 +130,11 @@ function remember(api, fields = {}) {
       for (const match of [brand,home]) assert.equal(new URL(match[1].replace(/&amp;/g,'&'),'https://physicalmap.pages.dev/').searchParams.get('home'),'1',file);
     }
     const html=fs.readFileSync(path.join(ROOT,'index.html'),'utf8');
-    assert.ok(html.indexOf('assets/last-location.js')>html.indexOf("location.replace('explore/"));
-    assert.ok(html.indexOf('assets/last-location.js')<html.indexOf('assets/site.css'));
+    assert.match(html, /<dialog[^>]+id="continue-learning-dialog"[^>]+aria-labelledby="continue-learning-title"/);
+    assert.match(html, /id="continue-learning-yes" autofocus/);
+    assert.ok(html.indexOf('continue-learning-dialog')<html.indexOf('assets/last-location.js'));
+    assert.ok(html.indexOf('assets/last-location.js')<html.indexOf('assets/home.js'));
+    assert.ok(html.indexOf('assets/home.js')<html.indexOf('window.__cnmHomeResume'));
     const explore=fs.readFileSync(path.join(ROOT,'explore/index.html'),'utf8');
     assert.ok(explore.indexOf('assets/last-location.js')<explore.indexOf('src="app.js"'));
   });

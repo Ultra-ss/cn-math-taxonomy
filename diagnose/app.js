@@ -158,7 +158,7 @@
     document.body.classList.toggle('subject-geography', subject === 'geography');
     document.body.classList.toggle('subject-biology', subject === 'biology');
     document.body.classList.toggle('subject-chemistry', subject === 'chemistry');
-    document.querySelectorAll('.site-nav a:not(.subject-link), a.brand').forEach(function (link) {
+    document.querySelectorAll('.site-nav a:not(.subject-link):not([data-resume-graph]), a.brand').forEach(function (link) {
       const href = link.getAttribute('href');
       const next = withSubject(href);
       if (next && next !== href) link.setAttribute('href', next);
