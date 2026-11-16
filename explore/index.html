@@ -57,6 +57,7 @@
     <strong id="mobile-book-title">物理知识图谱</strong>
     <button type="button" id="list-toggle" class="list-toggle" aria-expanded="false" aria-controls="side" aria-label="展开知识点目录" hidden>目录</button>
     <button type="button" id="mobile-options-toggle" aria-expanded="false" aria-controls="graph-options" aria-label="展开图谱选项">选项</button>
+    <button type="button" id="mobile-filter-toggle" aria-expanded="false" aria-controls="directory-filters" aria-label="展开目录筛选">筛选</button>
   </div>
   <nav id="mobile-view-tabs" class="mobile-view-tabs" role="tablist" aria-label="学习视图">
     <button type="button" id="mobile-tab-directory" role="tab" data-mobile-view="directory" aria-controls="side" aria-selected="false">目录</button>
@@ -64,7 +65,7 @@
     <button type="button" id="mobile-tab-detail" role="tab" data-mobile-view="detail" aria-controls="detail" aria-selected="false">详情</button>
   </nav>
   <aside id="side" class="side" aria-label="章节目录">
-    <div class="side-tools">
+    <div class="side-tools" id="directory-filters">
       <input id="q" type="search" placeholder="搜索名称、章节或编号" autocomplete="off" aria-label="搜索知识点">
       <div class="stage-tabs" id="stage-tabs" role="tablist" aria-label="学段">
         <button type="button" class="stage-tab on" data-stage="" aria-selected="true">全部</button>

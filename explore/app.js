@@ -46,6 +46,7 @@
   var nodeDialogId = null;
   var nodeDialogScroll = null;
   var mobileView = 'graph';
+  var mobileFiltersOpen = false;
   var mobileScroll = { directory: 0, detail: 0 };
   var graphNeedsRender = false;
   var pendingGraphRestore = true;
@@ -500,8 +501,26 @@
     $('mobile-options-toggle').textContent = optionsOpen ? '收起' : '选项';
     $('mobile-options-toggle').setAttribute('aria-label', optionsOpen ? '收起图谱选项' : '展开图谱选项');
     syncMobilePanels();
+    syncDirectoryFilters();
     if (!mobile && graphNeedsRender) renderGraph(pendingGraphRestore);
     resizeGraphViewport();
+  }
+  function syncDirectoryFilters() {
+    var filters = $('directory-filters'), toggle = $('mobile-filter-toggle');
+    if (!filters || !toggle) return;
+    var mobile = window.matchMedia('(max-width: 900px)').matches;
+    var collapsed = mobile && !mobileFiltersOpen;
+    filters.hidden = collapsed;
+    filters.inert = collapsed;
+    document.querySelector('.explore').classList.toggle('directory-filters-open', mobileFiltersOpen);
+    toggle.setAttribute('aria-expanded', mobileFiltersOpen ? 'true' : 'false');
+    toggle.setAttribute('aria-label', mobileFiltersOpen ? '收起目录筛选' : '展开目录筛选');
+    toggle.textContent = mobileFiltersOpen ? '收起筛选' : '筛选';
+  }
+  function setDirectoryFilters(open, focusToggle) {
+    mobileFiltersOpen = !!open;
+    syncDirectoryFilters();
+    if (focusToggle && $('mobile-filter-toggle')) $('mobile-filter-toggle').focus({ preventScroll: true });
   }
   function setMobileMenu(open) {
     document.querySelector('.site-header').classList.toggle('menu-open', open);
@@ -1383,6 +1402,7 @@
       setMobileView(views[next], true);
     });
     $('mobile-show-detail').addEventListener('click', function () { setMobileView('detail', true); });
+    $('mobile-filter-toggle').addEventListener('click', function () { setDirectoryFilters(!mobileFiltersOpen); });
     document.addEventListener('keydown', function (event) {
       if (event.key !== 'Escape' || $('node-diagnose-dialog').open) return;
       if (document.querySelector('.site-header').classList.contains('menu-open')) {
@@ -1391,6 +1411,8 @@
       } else if (document.querySelector('.explore').classList.contains('options-open')) {
         setMobileOptions(false);
         $('mobile-options-toggle').focus({ preventScroll: true });
+      } else if (mobileView === 'directory' && mobileFiltersOpen && window.matchMedia('(max-width: 900px)').matches) {
+        setDirectoryFilters(false, true);
       }
     });
     var mobileChrome = window.matchMedia('(max-width: 900px)');

@@ -17,7 +17,8 @@ function element() {
     focus(options){this.focused=options;}};
 }
 const ids = Object.fromEntries(['cy','list','side','detail','graph-pane','main-nav','graph-options','mobile-menu-toggle','mobile-options-toggle','list-toggle',
-  'mobile-tab-directory','mobile-tab-graph','mobile-tab-detail','mobile-topic-summary','mobile-topic-name','mobile-topic-state','mobile-show-detail'].map(id=>[id,element()]));
+  'mobile-tab-directory','mobile-tab-graph','mobile-tab-detail','mobile-topic-summary','mobile-topic-name','mobile-topic-state','mobile-show-detail',
+  'directory-filters','mobile-filter-toggle'].map(id=>[id,element()]));
 const frame=element(),header=element(),writes=[];
 ids.cy.dataset.ready='1';
 let mobile=true,zoom=1.25,pan={x:-120,y:-280},resizes=0,renders=0,row=null;
@@ -27,7 +28,7 @@ const ctx={
   window:{matchMedia:()=>({matches:mobile}),CnmExploreViewport:{save(context,camera){writes.push({context,camera});return true;}}},
   document:{querySelector:s=>s==='.site-header'?header:frame}, $:id=>ids[id],
   subject:'physics',volume:'九全',selected:'cnp_053',showWholeBook:true,upDepth:2,labelLimit:()=>8,
-  mobileView:'graph',mobileScroll:{directory:0,detail:0},graphNeedsRender:false,pendingGraphRestore:true,
+  mobileView:'graph',mobileFiltersOpen:false,mobileScroll:{directory:0,detail:0},graphNeedsRender:false,pendingGraphRestore:true,
   renderedCameraContext:null,renderedExpanded:false,liveCamera:null,changingCamera:false,viewportSaveTimer:null,cy:graph,
   byId:new Map([['cnp_053',{name:'热量 比热容'}]]),progressOf:()=>row,progressClass:r=>r?'test-passed':'',
   requestAnimationFrame:fn=>fn(),setTimeout:fn=>{fn();return 1;},clearTimeout(){},
@@ -47,12 +48,20 @@ assert.equal(ids.side.inert,false);assert.equal(ids['graph-pane'].inert,true);as
 assert.equal(ids['mobile-tab-directory'].getAttribute('aria-selected'),'true');
 assert.equal(ids['mobile-tab-directory'].tabIndex,0);assert.equal(ids['mobile-tab-graph'].tabIndex,-1);
 assert.ok(ids['mobile-tab-directory'].focused);
+assert.equal(ids['directory-filters'].hidden,true);assert.equal(ids['directory-filters'].inert,true);
+assert.equal(ids['mobile-filter-toggle'].getAttribute('aria-expanded'),'false');
+ctx.setDirectoryFilters(true);
+assert.equal(ids['directory-filters'].hidden,false);assert.equal(ids['directory-filters'].inert,false);
+assert.equal(ids['mobile-filter-toggle'].getAttribute('aria-expanded'),'true');
 ids.list.scrollTop=230;
 ctx.setMobileView('detail',true);ids.detail.scrollTop=180;
 ctx.setMobileView('graph',true);
 assert.equal(ctx.cy,graph,'tab切换保留同一个图谱实例');assert.equal(renders,0);
 assert.equal(zoom,1.25);assert.deepEqual(pan,initialPan);
 ctx.setMobileView('directory');assert.equal(ids.list.scrollTop,230);
+assert.equal(ids['directory-filters'].hidden,false,'视图切换保留目录筛选展开状态');
+ctx.setDirectoryFilters(false,true);
+assert.equal(ids['directory-filters'].hidden,true);assert.ok(ids['mobile-filter-toggle'].focused);
 ctx.setMobileView('detail');assert.equal(ids.detail.scrollTop,180);
 ctx.closeDrawerIfMobile();assert.equal(ctx.mobileView,'graph');
 assert.ok(resizes>0);
@@ -74,6 +83,7 @@ assert.equal(ids['mobile-show-detail'].getAttribute('aria-label'),'查看“热�
 mobile=false;ctx.syncMobileChrome();
 for(const id of ['side','graph-pane','detail']){assert.equal(ids[id].inert,false);assert.equal(ids[id].getAttribute('aria-hidden'),undefined);}
 assert.equal(ids['main-nav'].hidden,false);assert.equal(ids['graph-options'].hidden,false);
+assert.equal(ids['directory-filters'].hidden,false);assert.equal(ids['directory-filters'].inert,false);
 ctx.graphNeedsRender=true;ctx.syncMobileChrome();
 assert.equal(renders,2,'切到桌面三栏时也要完成手机隐藏期间等待的布局');
 const html=fs.readFileSync(path.join(__dirname,'../explore/index.html'),'utf8');
