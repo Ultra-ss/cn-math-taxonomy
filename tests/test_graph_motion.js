@@ -155,12 +155,10 @@ const source=fs.readFileSync(path.join(__dirname,'../explore/app.js'),'utf8');
 test('实际节点只改通过边框颜色，选中轻微增大而普通/专家状态不改变几何和填充',()=>{
   assert.match(source,/'background-color': 'data\(bg\)'/);assert.match(source,/'border-width': 3/);
   assert.match(source,/selector: 'node.current', style: \{ width: boxW \* 1\.05, height: 42/);
-  for(const status of ['passed']){
+  for(const status of ['passed','expert']){
     const rule=source.match(new RegExp("selector: 'node\\.test-"+status+"', style: \\{([^}]+)\\}"));
     assert.ok(rule[1].includes("'border-color'"));assert.ok(!rule[1].includes("'background-color'"));assert.ok(!rule[1].includes("'border-width'"));
   }
-  const expertRule=source.match(/selector: 'node\.test-expert', style: \{([^}]+)\}/)[1];
-  assert.ok(!expertRule.includes("'border-color'"),'专家卡片保留原学段或当前节点边框，只用柔光表达成就');
   const capture=source.slice(source.indexOf('function captureViewport()'),source.indexOf('function saveLiveCamera()'));
   assert.ok(!capture.includes('graphMotion.stop'),'相机读取不永久终止持续漂浮');
   assert.ok(source.includes("layout: 'playful-v2-floating-labels-'"));
@@ -208,6 +206,7 @@ for(const resultGraph of [false,true])test((resultGraph?'检测结果路径':'�
     assert.equal(graph.$id('d').data('bg'),resultGraph?colors.badBg:colors.juniorBg);
     assert.equal(graph.$id('ab').data('color'),colors.edgeSoft);assert.equal(graph.$id('bc').data('color'),colors.edge);
     if(!resultGraph){
+      assert.equal(graph.$id('b').pstyle('border-color').strValue, 'rgb(' + [1,3,5].map(at=>parseInt(colors.expertBorder.slice(at,at+2),16)).join(',') + ')','专家通关在选中和柔光状态下也保留金色边框');
       assert.equal(graph.$id('b').pstyle('background-image').value[1],colors.expertBadge);
       assert.ok(decodeURIComponent(graph.$id('b').pstyle('background-image').value[0]).includes(colors.expertGlow));
       assert.equal(graph.$id('e').pstyle('background-image').value[1],colors.passedBadge);

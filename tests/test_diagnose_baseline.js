@@ -100,7 +100,14 @@ assert.strictEqual(ctx.resumeStoredSession(),'restored');
 assert.strictEqual(resumedOwner,'child-a');assert.strictEqual(ownerChanges,1);
 assert.strictEqual(ctx.session.answers.length,run.answers.length);
 assert.strictEqual(E.nextItem(graph,ctx.session).question.id,E.nextItem(graph,run).question.id);
-assert.strictEqual(ctx.sessionMeta.returnTo,savedReturn);
+assert.strictEqual(ctx.sessionMeta.returnTo, '/explore/?subject=physics&volume=%E4%B9%9D%E5%85%A8#cnp_071', '返回继续聚焦本轮最近实际作答的知识点');
+const correctReturn=ctx.sessionMeta.returnTo;
+ctx.sessionMeta.returnTo='/explore/?subject=science&volume=%E4%B8%89%E4%B8%8B#cns_p086';
+const coherentReturn=new URL(ctx.returnPath(),'https://physicalmap.pages.dev');
+assert.strictEqual(coherentReturn.searchParams.get('subject'),'physics');
+assert.strictEqual(coherentReturn.searchParams.get('volume'),'九全');
+assert.strictEqual(coherentReturn.hash,'#cnp_071');
+ctx.sessionMeta.returnTo=correctReturn;
 for(const patch of [{v:9},{seed:{}},{confirm:'3'},{progressChildId:{}},{progressChildId:'__proto__'},
   {limit:'16'},{targets:['cns_p001']},{answers:[{id:'cnp_071',qid:'cns_p001_q1',result:'correct'}]}]){
   const raw=JSON.stringify({...saved,...patch});entries.set('center-resume',raw);

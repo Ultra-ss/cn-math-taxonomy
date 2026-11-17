@@ -1,4 +1,4 @@
-/* 本机最后浏览位置。只保存学科、册次与知识点，不保存或信任任意跳转URL。
+/* 按本地账号保存最近学习和浏览位置。只保存学科、册次与知识点，不保存或信任任意跳转URL。
  * 恢复前必须对照当前知识点数据；显示偏好不属于学习备份。 */
 (function (root, factory) {
   var api = factory(root);
@@ -57,43 +57,113 @@
       return normalize(JSON.parse(raw));
     } catch (error) { return null; }
   }
-  function read(subject) {
-    var latest = readKey(KEY);
+  function owner(value) {
+    if (arguments.length) return value === null || value === '' || value === 'guest' ? 'guest' :
+      typeof value === 'string' && /^[A-Za-z0-9_-]{1,128}$/.test(value) && ['__proto__', 'constructor', 'prototype'].indexOf(value) < 0 ? value : '';
+    try {
+      var state = JSON.parse(storage().getItem('cnmChildren.v1'));
+      return state && Array.isArray(state.children) && state.children.some(function (item) { return item && item.id === state.current; })
+        ? owner(state.current) || 'guest' : 'guest';
+    } catch (error) { return 'guest'; }
+  }
+  function recordKey(learning, account) {
+    return learning ? KEY + '.learning.' + account : account === 'guest' ? KEY : KEY + '.account.' + account;
+  }
+  function readAt(subject, learning, account) {
+    var key = recordKey(learning, account), latest = readKey(key);
     if (subject === undefined) return latest;
     if (subject !== 'physics' && subject !== 'science') return null;
     if (latest && latest.subject === subject) return latest;
-    var saved = readKey(KEY + '.' + subject);
+    var saved = readKey(key + '.' + subject);
     return saved && saved.subject === subject ? saved : null;
   }
-  function remember(payload) {
+  function read(subject) {
+    var account = owner();
+    return readAt(subject, true, account) || readAt(subject, false, account);
+  }
+  function writeRecord(payload, learning, account, at) {
     try {
-      if (!payload || typeof payload !== 'object' || Array.isArray(payload) ||
+      if (!account || !payload || typeof payload !== 'object' || Array.isArray(payload) ||
           (payload.volumes !== undefined && !own(payload, 'volumes'))) return false;
       var record = normalize({v:1, subject:payload.subject, volume:payload.volume || '', volumes:payload.volumes, topicId:payload.topicId,
         view:payload.view === undefined ? 'book' : payload.view, depth:payload.depth === undefined ? 2 : payload.depth,
-        at:new Date().toISOString()});
+        at:at || new Date().toISOString()});
       if (!record) return false;
-      // 升级后的第一次跨科保存也保留旧版唯一的位置。
-      var previous = read();
+      var key = recordKey(learning, account), previous = readKey(key);
       if (previous) {
-        var previousKey = KEY + '.' + previous.subject, archived = readKey(previousKey);
+        var previousKey = key + '.' + previous.subject, archived = readKey(previousKey);
         if (!archived || archived.subject !== previous.subject || Date.parse(archived.at) < Date.parse(previous.at)) {
           try { storage().setItem(previousKey, JSON.stringify(previous)); } catch (error) { /* 仍尝试保存当前位置 */ }
         }
       }
-      storage().setItem(KEY, JSON.stringify(record));
-      try { storage().setItem(KEY + '.' + record.subject, JSON.stringify(record)); } catch (error) { /* 旧全局位置仍可使用 */ }
+      storage().setItem(key, JSON.stringify(record));
+      try { storage().setItem(key + '.' + record.subject, JSON.stringify(record)); } catch (error) { /* 主位置仍可使用 */ }
       return true;
     } catch (error) { return false; }
+  }
+  function remember(payload, account) { return writeRecord(payload, false, arguments.length > 1 ? owner(account) : owner()); }
+  function rememberLearning(payload, account) { return writeRecord(payload, true, arguments.length > 1 ? owner(account) : owner()); }
+  function json(key) {
+    try { var raw = storage().getItem(key); return raw && raw.length <= 12 * 1024 * 1024 ? JSON.parse(raw) : null; }
+    catch (error) { return null; }
+  }
+  // 只从归属明确的记录恢复；旧版未绑定账号的全局会话不能借给当前账号。
+  function previousStudy(subject, account) {
+    var best = null;
+    function add(id, at) {
+      if (!subjectOf(id) || (subject && subjectOf(id) !== subject) || typeof at !== 'string' || !Number.isFinite(Date.parse(at))) return;
+      if (!best || Date.parse(at) >= Date.parse(best.at)) best = {topicId:id, subject:subjectOf(id), at:at};
+    }
+    var progress = json('cnmProgress.v1'), box = progress && progress.byChild && own(progress.byChild, account) && progress.byChild[account];
+    if (box && Array.isArray(box.runs)) box.runs.forEach(function (run) {
+      if (run && run.states && typeof run.states === 'object') Object.keys(run.states).forEach(function (id) {
+        var state = run.states[id];
+        if (state && ['mastered', 'weak', 'shaky'].indexOf(state.status) >= 0) add(id, state.at);
+      });
+    });
+    ['cnpDiagnose.session.v2', 'cnsDiagnose.session.v1'].forEach(function (key) {
+      var saved = json(key);
+      if (!saved || !own(saved, 'progressChildId') || owner(saved.progressChildId) !== account || !Array.isArray(saved.answers)) return;
+      var last = saved.answers[saved.answers.length - 1];
+      if (last && ['correct', 'wrong', 'skip'].indexOf(last.result) >= 0) add(last.id, saved.savedAt);
+    });
+    // 历史摘要没有真实作答顺序，仅单目标且确实作答过时作为最终兜底。
+    if (!best) {
+      var records = json('cnmChildren.records.v1'), history = records && own(records, account) && records[account];
+      if (Array.isArray(history)) history.forEach(function (row) {
+        if (row && row.asked > 0 && Array.isArray(row.targets) && row.targets.length === 1) add(row.targets[0], row.savedAt);
+      });
+    }
+    return best;
+  }
+  function resume(topics, subject) {
+    var account = owner(), saved = readAt(subject, true, account);
+    // 一旦保存了新版学习点，它包含确切的题目顺序和图谱上下文，优先于旧汇总推断。
+    if (saved) { var valid = resolve(topics, saved); if (valid) return valid; }
+    var old = previousStudy(subject, account);
+    if (old && Array.isArray(topics)) {
+      var topic = topics.find(function (item) { return item && item.id === old.topicId && item.subject === old.subject && !item.external; });
+      if (topic) {
+        var prior = readAt(old.subject, false, account), book = volumeOf(topic);
+        var sameScope = prior && (prior.volumes ? prior.volumes.indexOf(book) >= 0 : prior.volume === book);
+        var record = sameScope ? Object.assign({}, prior, {topicId:old.topicId, at:old.at}) :
+          {v:1, subject:old.subject, volume:book, topicId:old.topicId, view:'book', depth:2, at:old.at};
+        writeRecord(record, true, account, old.at);
+        return resolve(topics, record);
+      }
+    }
+    return resolve(topics, readAt(subject, false, account));
   }
   function volumeOf(topic) {
     return HIGH_BOOKS[topic.grade] || (CN[topic.grade] ? CN[topic.grade] + topic.semester : '');
   }
   function forgetIfSame(record) {
     try {
-      if (JSON.stringify(read()) === JSON.stringify(record)) storage().removeItem(KEY);
-      var key = KEY + '.' + record.subject;
-      if (JSON.stringify(readKey(key)) === JSON.stringify(record)) storage().removeItem(key);
+      [recordKey(false, owner()), recordKey(true, owner())].forEach(function (key) {
+        [key, key + '.' + record.subject].forEach(function (item) {
+          if (JSON.stringify(readKey(item)) === JSON.stringify(record)) storage().removeItem(item);
+        });
+      });
     } catch (error) { /* 存储不可用时仍可浏览 */ }
   }
   function resolve(topics, candidate) {
@@ -192,13 +262,14 @@
   }
   function resumeHome() {
     if (homePromise) return homePromise;
-    var candidate = shouldResume('home') ? read() : null;
-    if (!candidate || typeof root.fetch !== 'function') return Promise.resolve(false);
+    if (!shouldResume('home') || typeof root.fetch !== 'function') return Promise.resolve(false);
+    var candidate = read();
+    if (!candidate && !previousStudy(undefined, owner())) return Promise.resolve(false);
     var doc = root.document;
     var dialog = doc && doc.getElementById('continue-learning-dialog');
     if (!dialog || typeof dialog.showModal !== 'function') return Promise.resolve(false);
     homePromise = loadHomeTopics(siteBase(root.location.pathname) + 'data/topics.json').then(function (topics) {
-      var record = resolve(topics, candidate);
+      var record = resume(topics);
       if (!record) return false;
       var topic = topics.find(function (item) { return item.id === record.topicId; });
       function bookTitle(key) {
@@ -221,6 +292,6 @@
     return homePromise;
   }
   if (root.document && typeof root.document.querySelectorAll === 'function') syncNavigation();
-  return {KEY:KEY, SUBJECT_KEY:SUBJECT_KEY, read:read, remember:remember, resolve:resolve, shouldResume:shouldResume,
+  return {KEY:KEY, SUBJECT_KEY:SUBJECT_KEY, read:read, remember:remember, rememberLearning:rememberLearning, owner:owner, resume:resume, resolve:resolve, shouldResume:shouldResume,
     currentSubject:currentSubject, syncNavigation:syncNavigation, exploreURL:exploreURL, resumeHome:resumeHome};
 });

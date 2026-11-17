@@ -16,6 +16,7 @@ function load(options={}) {
     removeItem(key) { if (options.failClear) throw new Error('clear denied'); entries.delete(key); }
   }};
   if (options.denied) Object.defineProperty(root, 'sessionStorage', {get(){throw new Error('storage denied');}});
+  if(options.owner) root.CnmLastLocation={owner:()=>options.owner.value};
   const ctx={window:root,module:{exports:{}}};
   vm.runInNewContext(source, ctx, {filename:'assets/explore-viewport.js'});
   return {api:ctx.module.exports,entries};
@@ -73,6 +74,14 @@ test('旁路相机仍严格验证学科和场景，主键损坏可读取有效�
   const science={...scene,subject:'science',volume:'三下',topicId:'cns_p086'};
   entries.set(KEY+'.science',JSON.stringify(saved));assert.equal(api.read(science),null,'错科旁路不能恢复');
   entries.set(KEY+'.physics',JSON.stringify({...saved,camera:{...state,zoom:0}}));assert.equal(api.read(scene),null);
+});
+test('账号相机与访客隔离，切账号不能套用另一人的同节点视角',()=>{
+  const owner={value:'guest'}, app=load({owner});app.api.save(scene,state);
+  owner.value='a';assert.equal(app.api.read(scene),null);app.api.save(scene,{...state,zoom:1.1});
+  owner.value='b';assert.equal(app.api.read(scene),null);app.api.save(scene,{...state,zoom:1.4});
+  owner.value='a';assert.equal(app.api.read(scene).zoom,1.1);app.api.clear();assert.equal(app.api.read(scene),null);
+  owner.value='b';assert.equal(app.api.read(scene).zoom,1.4);
+  owner.value='guest';assert.equal(app.api.read(scene).zoom,state.zoom);
 });
 test('可选布局为空与省略等价，expanded省略默认为收起',()=>{
   const {api}=load();const noLayout={...scene};delete noLayout.layout;const noExpanded={...state};delete noExpanded.expanded;

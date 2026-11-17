@@ -265,6 +265,44 @@ function remember(api, fields = {}) {
     const stale=load();remember(stale.api,{topicId:'cnp_999'});assert.equal(await stale.api.resumeHome(),false);assert.equal(stale.store.has(KEY),false);assert.equal(stale.root.document.documentElement.style.visibility,'visible');
     const timeout=load({fetch:()=>new Promise(()=>{}),timer:fn=>setTimeout(fn,0)});remember(timeout.api);assert.equal(await timeout.api.resumeHome(),false);assert.equal(timeout.root.document.documentElement.style.visibility,'visible');
   });
+  await test('账号与访客最近做题各自保留，泛浏览不覆盖学习点，未做题账号不借用旧全局位置',()=>{
+    const app=load();const profiles={v:1,current:'a',children:[{id:'a'},{id:'b'}]};
+    remember(app.api,{topicId:'cnp_030'});
+    app.store.set('cnmChildren.v1',JSON.stringify(profiles));assert.equal(app.api.owner(),'a');assert.equal(app.api.read(),null);
+    remember(app.api,{topicId:'cnp_031'});
+    assert.equal(app.api.rememberLearning({subject:'physics',volume:'八下',topicId:'cnp_032',view:'book',depth:2}),true);
+    remember(app.api,{topicId:'cnp_033'});assert.equal(app.api.read('physics').topicId,'cnp_032');
+    assert.equal(app.api.resume(topics,'physics').topicId,'cnp_032');
+    profiles.current='b';app.store.set('cnmChildren.v1',JSON.stringify(profiles));assert.equal(app.api.resume(topics,'physics'),null);
+    app.api.rememberLearning({subject:'physics',volume:'九全',topicId:'cnp_071',view:'book',depth:2});
+    app.api.rememberLearning({subject:'physics',volume:'八下',topicId:'cnp_034',view:'local',depth:3},'a');
+    assert.equal(app.api.read('physics').topicId,'cnp_071','旧A检测继续时只更新A，当前B不被改变');
+    profiles.current='a';app.store.set('cnmChildren.v1',JSON.stringify(profiles));assert.equal(app.api.read('physics').topicId,'cnp_034');
+    profiles.current=null;app.store.set('cnmChildren.v1',JSON.stringify(profiles));assert.equal(app.api.read('physics').topicId,'cnp_030');
+    assert.equal(app.api.rememberLearning({subject:'physics',volume:'八下',topicId:'cnp_035'},'__proto__'),false);
+  });
+  await test('新版学习点跨学科独立恢复，多册上下文保留，主页无children模块也识别账号',async()=>{
+    const app=load({entries:{'cnmChildren.v1':JSON.stringify({current:'a',children:[{id:'a'}]})}});
+    app.api.rememberLearning({subject:'physics',volume:'',volumes:['八下','九全'],topicId:'cnp_030',view:'book',depth:3});
+    app.api.rememberLearning({subject:'science',volume:'三下',topicId:'cns_p086',view:'local',depth:2});
+    assert.equal(app.api.read('physics').topicId,'cnp_030');assert.equal(app.api.read('science').topicId,'cns_p086');
+    assert.deepEqual(Array.from(app.api.resume(topics,'physics').volumes),['八下','九全']);
+    assert.equal(await app.api.resumeHome(),true);assert.ok(app.nodes['continue-learning-location'].textContent.includes('小学科学'));
+    const next=load({entries:Object.fromEntries(app.store)});assert.equal(next.api.owner(),'a');assert.equal(next.api.read('physics').topicId,'cnp_030');
+  });
+  await test('已有账号从归属明确的最近答题记录恢复，不会认领别人的会话或全局浏览',()=>{
+    const profile=JSON.stringify({current:'a',children:[{id:'a'},{id:'b'}]});
+    const app=load({entries:{'cnmChildren.v1':profile,
+      'cnmProgress.v1':JSON.stringify({v:1,byChild:{a:{runs:[{subject:'physics',at:'2026-11-16T09:00:00Z',states:{cnp_071:{status:'mastered',at:'2026-11-16T09:00:00Z'}}}]},b:{runs:[{states:{cnp_030:{at:'2026-11-17T12:00:00Z'}}}]}}}),
+      'cnpDiagnose.session.v2':JSON.stringify({progressChildId:'b',savedAt:'2026-11-17T12:00:00Z',answers:[{id:'cnp_030',result:'correct'}]}),
+      'cnmChildren.records.v1':JSON.stringify({a:[{savedAt:'2026-11-18T12:00:00Z',updatedAt:'2026-11-18T12:00:00Z',asked:1,targets:['cnp_031','cnp_032']}]})}});
+    app.api.rememberLearning({subject:'physics',volume:'九全',topicId:'cnp_999'});
+    const rec=app.api.resume(topics,'physics');assert.equal(rec.topicId,'cnp_071');assert.equal(rec.volume,'九全');assert.equal(app.api.read('physics').topicId,'cnp_071');
+    const old=load({entries:{'cnmChildren.v1':profile,'cnpDiagnose.session.v2':JSON.stringify({progressChildId:'a',savedAt:'2026-11-17T12:00:00Z',answers:[{id:'cnp_030',result:'correct'},{id:'cnp_031',result:'wrong'}]})}});
+    assert.equal(old.api.resume(topics,'physics').topicId,'cnp_031');
+    const unknown=load({entries:{'cnmChildren.v1':profile,'cnpDiagnose.session.v2':JSON.stringify({savedAt:'2026-11-17T12:00:00Z',answers:[{id:'cnp_030',result:'correct'}]})}});
+    assert.equal(unknown.api.resume(topics,'physics'),null,'未归属旧全局检测不自动写给当前账号');
+  });
   await test('全站品牌与首页链接显式home=1，首页先渲染再启动继续提示',()=>{
     for (const file of ['index.html','explore/index.html','diagnose/index.html','children/index.html','children/history.html','wrongbook/index.html']) {
       const html=fs.readFileSync(path.join(ROOT,file),'utf8');

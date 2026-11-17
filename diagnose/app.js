@@ -127,13 +127,36 @@
   }
   function returnPath() {
     const explicit = safeReturnTo(sessionMeta && sessionMeta.returnTo);
-    if (explicit) return explicit;
-    const id = session && session.targets && session.targets[0];
+    const last = session && session.answers && session.answers[session.answers.length - 1];
+    const active = sessionMeta && sessionMeta.currentTopicId || last && last.id;
+    const id = active || session && session.targets && session.targets[0];
     const topic = id && D && D.graph.byId[id];
-    const volume = session && session.volume || (topic ? E.parseChapter(topic.chapter).volume : '');
+    const volume = topic ? E.parseChapter(topic.chapter).volume : session && session.volume || '';
+    if (explicit) {
+      if (!active || !topic) return explicit;
+      const url = new URL(explicit, location.origin);
+      url.searchParams.set('subject', subject);
+      url.hash = encodeURIComponent(id);
+      const books = (url.searchParams.get('volumes') || url.searchParams.get('volume') || '').split(',').filter(Boolean);
+      if (books.length && books.indexOf(volume) < 0) {
+        url.searchParams.delete('volumes'); url.searchParams.set('volume', volume);
+      }
+      return url.pathname + url.search + url.hash;
+    }
     const params = new URLSearchParams({ subject: subject });
     if (volume) params.set('volume', volume);
     return explorePath() + '?' + params.toString() + (id ? '#' + encodeURIComponent(id) : '');
+  }
+  function rememberStudyLocation(id) {
+    if (demo || !session || !sessionMeta || sessionMeta.progressChildId === undefined ||
+        !window.CnmLastLocation || !window.CnmLastLocation.rememberLearning || !D.graph.byId[id]) return;
+    sessionMeta.currentTopicId = id;
+    const url = new URL(returnPath(), location.origin), params = url.searchParams;
+    const record = { subject:subject, topicId:id, volume:params.get('volume') || '',
+      view:params.get('view') === 'local' ? 'local' : 'book',
+      depth:params.get('depth') === 'all' ? 'all' : [1,2,3].indexOf(Number(params.get('depth'))) >= 0 ? Number(params.get('depth')) : 2 };
+    if (params.get('volumes')) record.volumes = params.get('volumes').split(',');
+    window.CnmLastLocation.rememberLearning(record, sessionMeta.progressChildId);
   }
   function selectSessionOwner() {
     if (sessionMeta && sessionMeta.progressChildId !== undefined) CC.setCurrent(sessionMeta.progressChildId);
@@ -417,6 +440,8 @@
   }
   function save() {
     if (demo || !session) return;
+    const lastAnswer = session.answers[session.answers.length - 1];
+    if (lastAnswer) rememberStudyLocation(lastAnswer.id);
     lsSet(sessionKey(), {
       v: 2, mode: session.mode, targets: session.targets, limit: session.limit, confirm: session.confirm,
       order: session.orderKind || undefined, volume: session.volume || undefined,
@@ -960,9 +985,37 @@
       textbookLink(id));
   }
 
+  function questionProgress(item) {
+    // limit 是本轮安全上限；按当前路线继续答对，才能估计实际会出的题数。
+    // 引擎返回新会话，预览不保存答案、消耗题目或改动真实会话。
+    let projected = session;
+    let steps = 0;
+    const result = ui.phase === 'auto' && ui.verdict
+      ? ui.verdict.verdict === 'correct' ? 'correct' : 'wrong'
+      : ui.phase === 'skip' ? 'skip' : null;
+    if (result) {
+      projected = E.applyAnswer(D.graph, projected, item.topicId, result);
+      steps++;
+    }
+    const completed = projected.answers.length;
+    let next = E.nextItem(D.graph, projected);
+    const exact = !next;
+    while (next && steps < 60) {
+      projected = E.applyAnswer(D.graph, projected, next.topicId, 'correct');
+      steps++;
+      next = E.nextItem(D.graph, projected);
+    }
+    // 旧存档可能超过界面 60 题的上限；此时明确展示上限，避免过度预演。
+    const capped = !!next;
+    const total = Math.max(1, capped ? session.limit : projected.answers.length);
+    return { completed: completed, total: total, exact: exact, capped: capped,
+      percent: Math.min(100, Math.round(completed / total * 100)) };
+  }
+
   function renderQuestion(item) {
     resultPanelState = { analysis: false, log: false, more: false };
     const id = item.topicId;
+    rememberStudyLocation(id);
     const q = item.question;
     const t = D.graph.byId[id];
     const promptLength = String(q.prompt || '').length;
@@ -972,6 +1025,8 @@
     const isNewQuestion = ui.key !== key;
     if (isNewQuestion) ui = { key: key, phase: 'ask', answer: '', verdict: null, picked: null };
     const n = session.answers.length;
+    const progress = questionProgress(item);
+    const countLabel = (progress.capped ? '本轮最多 ' : progress.exact ? '共 ' : '预计共 ') + progress.total + ' 题';
     const tools = h('details', { class: 'question-tools' },
       h('summary', { 'aria-label': '更多答题操作' }, '更多'),
       h('div', { class: 'question-tools-content' },
@@ -980,10 +1035,13 @@
         h('button', { id: 'btn-test-restart', onclick: function () { if (confirm('确定放弃当前检测并回到开始页吗？')) restart(); } }, '重新开始')));
     const card = h('div', { class: 'card question-card' + (denseQuestion ? ' question-dense' : '') },
       h('div', { class: 'test-statusbar' },
-        h('span', { class: 'test-step' }, (demo ? '演示 · ' : sessionMeta && sessionMeta.level === 'pro' ? '专家挑战 · ' : '') + '第 ' + (n + 1) + ' 题'),
+        h('span', { class: 'test-step' }, (demo ? '演示 · ' : sessionMeta && sessionMeta.level === 'pro' ? '专家挑战 · ' : '') + '第 ' + (n + 1) + ' 题 · ' + countLabel),
         tools),
-      h('div', { class: 'progress', 'aria-label': '本轮已完成 ' + n + ' 题' },
-        h('i', { style: 'width:' + Math.round(n / session.limit * 100) + '%' })),
+      h('div', { class: 'progress', role: 'progressbar', 'aria-label': '本轮答题进度',
+        'aria-valuemin': 0, 'aria-valuemax': progress.total, 'aria-valuenow': progress.completed,
+        'aria-valuetext': '已完成 ' + progress.completed + ' / ' + progress.total + ' 题' +
+          (progress.capped ? '，总数为本轮题量上限' : progress.exact ? '' : '，预计题数会随作答调整') },
+        h('i', { style: 'width:' + progress.percent + '%' })),
       h('h2', { class: 'q-title' }, t.name));
     const stem = h('div', { class: 'question-stem' },
       h('div', { class: 'q-text', id: 'q-text', text: q.prompt }));

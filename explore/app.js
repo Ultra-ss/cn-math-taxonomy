@@ -256,7 +256,7 @@
     if (volume) action.setAttribute('data-diagnose-return', '../diagnose/?subject=' + subject + '&volume=' + encodeURIComponent(volume) + '&order=book');
     else action.removeAttribute('data-diagnose-return');
     $('book-view').hidden = !hasBookScope();
-    $('book-view').textContent = showWholeBook ? '查看局部先修' : selectedVolumes.length > 1 ? '查看所选教材全图' : '查看本册全图';
+    $('book-view').textContent = showWholeBook ? '本章节图谱' : '全网路图谱';
     $('book-view').setAttribute('aria-pressed', showWholeBook ? 'true' : 'false');
     refreshDiagnosisLinks();
   }
@@ -489,6 +489,7 @@
       width: width, height: height, expanded: renderedExpanded };
   }
   function saveLiveCamera() {
+    if (window.CnmLastLocation && window.CnmLastLocation.owner && window.CnmLastLocation.owner() !== locationOwner) return;
     if (liveCamera && window.CnmExploreViewport) window.CnmExploreViewport.save(liveCamera.context, liveCamera.camera);
   }
   function rememberViewport() {
@@ -1131,7 +1132,7 @@
       } },
       { selector: 'node.test-passed', style: { 'background-image': colors.passedBadge, 'border-color': colors.passedBorder } },
       { selector: 'node.test-failed', style: { 'background-image': colors.failedBadge } },
-      { selector: 'node.test-expert', style: { 'background-image': colors.expertBadge } },
+      { selector: 'node.test-expert', style: { 'background-image': colors.expertBadge, 'border-color': colors.expertBorder } },
       { selector: 'node.expert-unlocked', style: expertGlowStyle(colors, boxW, 40, colors.passedBadge) },
       { selector: 'node.expert-unlocked.test-expert', style: expertGlowStyle(colors, boxW, 40, colors.expertBadge) },
       { selector: 'node.expert-unlocked.current', style: expertGlowStyle(colors, boxW * 1.05, 42, colors.passedBadge) },
@@ -1398,7 +1399,9 @@
     });
   }
 
+  var locationOwner = window.CnmLastLocation && window.CnmLastLocation.owner ? window.CnmLastLocation.owner() : 'guest';
   function rememberLocation() {
+    if (window.CnmLastLocation && window.CnmLastLocation.owner && window.CnmLastLocation.owner() !== locationOwner) return;
     if (!selected || !byId.has(selected) || !window.CnmLastLocation) return;
     var record = { subject:subject, volume:volume, topicId:selected,
       view:showWholeBook ? 'book' : 'local', depth:upDepth };
@@ -1408,7 +1411,7 @@
   function restoreLocation(allTopics) {
     var memory = window.CnmLastLocation;
     if (!memory || !memory.shouldResume('explore', location)) return;
-    var record = memory.resolve(allTopics, memory.read(subject));
+    var record = memory.resume ? memory.resume(allTopics, subject) : memory.resolve(allTopics, memory.read(subject));
     if (!record) return;
     history.replaceState(null, '', memory.exploreURL(record, location.pathname));
     subject = record.subject;

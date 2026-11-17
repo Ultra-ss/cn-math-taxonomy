@@ -1,5 +1,5 @@
 /* 图谱相机属于当前标签页的显示偏好，跨页面返回时恢复。
- * 每个学科各保留最近的有效场景，不读写孩子资料、检测结果或学习备份。 */
+ * 每个账号、每个学科各保留最近的有效场景，不修改账号资料、检测结果或学习备份。 */
 (function (root, factory) {
   var api = factory(root);
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
@@ -57,8 +57,12 @@
       return savedContext && savedCamera ? { v:1, context:savedContext, camera:savedCamera } : null;
     } catch (error) { return null; }
   }
-  function keepSubject(record) {
-    try { root.sessionStorage.setItem(KEY + '.' + record.context.subject, JSON.stringify(record)); }
+  function accountKey() {
+    var owner = root.CnmLastLocation && root.CnmLastLocation.owner ? root.CnmLastLocation.owner() : 'guest';
+    return !owner || owner === 'guest' ? KEY : KEY + '.account.' + owner;
+  }
+  function keepSubject(record, key) {
+    try { root.sessionStorage.setItem((key || accountKey()) + '.' + record.context.subject, JSON.stringify(record)); }
     catch (error) { /* 当前场景仍由兼容旧版的主键保存。 */ }
   }
   function save(scene, state) {
@@ -66,11 +70,11 @@
       var validContext = context(scene), validCamera = camera(state);
       if (!validContext || !validCamera) return false;
       // 第一次跨科时也保留旧版只存于主键的画面。
-      var previous = readRecord(KEY);
-      if (previous && previous.context.subject !== validContext.subject) keepSubject(previous);
+      var key = accountKey(), previous = readRecord(key);
+      if (previous && previous.context.subject !== validContext.subject) keepSubject(previous, key);
       var record = { v:1, context:validContext, camera:validCamera };
-      root.sessionStorage.setItem(KEY, JSON.stringify(record));
-      keepSubject(record);
+      root.sessionStorage.setItem(key, JSON.stringify(record));
+      keepSubject(record, key);
       return true;
     } catch (error) { return false; }
   }
@@ -78,16 +82,17 @@
     try {
       var wanted = context(scene);
       if (!wanted) return null;
-      var latest = readRecord(KEY);
+      var key = accountKey(), latest = readRecord(key);
       // 同科以主键的最近场景为准，避免旧页面新保存后又套用更早的同科画面。
-      var saved = latest && latest.context.subject === wanted.subject ? latest : readRecord(KEY + '.' + wanted.subject);
+      var saved = latest && latest.context.subject === wanted.subject ? latest : readRecord(key + '.' + wanted.subject);
       if (!saved || saved.context.subject !== wanted.subject || JSON.stringify(saved.context) !== JSON.stringify(wanted)) return null;
       return saved.camera;
     } catch (error) { return null; }
   }
   function clear() {
     var cleared = true;
-    [KEY, KEY + '.physics', KEY + '.science'].forEach(function (key) {
+    var key = accountKey();
+    [key, key + '.physics', key + '.science'].forEach(function (key) {
       try { root.sessionStorage.removeItem(key); } catch (error) { cleared = false; }
     });
     return cleared;

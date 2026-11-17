@@ -206,6 +206,7 @@ test('从结果继续真实答题后，下一次结果默认恢复三个折叠�
   const state = {
     resultPanelState: { analysis: true, log: true, more: true },
     D: { graph: { byId } }, session: { answers: [] }, ui: { key: null },
+    rememberStudyLocation() {}, questionProgress() { return {completed:0,total:4,percent:0}; },
     h() { throw stopped; }
   };
   vm.createContext(state);
