@@ -59,6 +59,8 @@
   var viewportSaveTimer = null;
   var graphMotion = null;
   var graphHalo = null;
+  var graphCamera = null;
+  var pendingCameraTransition = null;
   var graphStyleContext = null;
   var graphSprings = null;
   var graphMotionPaused = false;
@@ -454,6 +456,7 @@
 
   function fitGraph() {
     if (!cy) return;
+    if (graphCamera) graphCamera.cancel();
     if (graphSprings) graphSprings.stop();
     if (graphMotion) graphMotion.stop();
     cy.resize();
@@ -522,6 +525,7 @@
     var current = cy;
     requestAnimationFrame(function () {
       if (cy !== current || !graphIsVisible()) return;
+      if (graphCamera && graphCamera.active()) { cy.resize(); return; }
       if (liveCamera && liveCamera.context === renderedCameraContext) applyViewport(liveCamera.camera);
       else cy.resize();
       rememberViewport();
@@ -570,13 +574,14 @@
     syncMobileChrome();
     if (mobile && view === 'directory') $('list').scrollTop = mobileScroll.directory;
     if (mobile && view === 'detail') $('detail').scrollTop = mobileScroll.detail;
-    if (view === 'graph' && graphNeedsRender && !deferRender) renderGraph(pendingGraphRestore);
+    if (view === 'graph' && graphNeedsRender && !deferRender) renderGraph(pendingGraphRestore, pendingCameraTransition);
     if (view === 'graph') resizeGraphViewport();
     if (focusTab && $('mobile-tab-' + view)) $('mobile-tab-' + view).focus({ preventScroll: true });
   }
   function syncMobileChrome() {
     var mobile = window.matchMedia('(max-width: 900px)').matches;
     if (mobile && mobileView !== 'graph') {
+      if (typeof graphCamera !== 'undefined' && graphCamera) graphCamera.cancel();
       if (typeof graphSprings !== 'undefined' && graphSprings) graphSprings.stop();
       if (typeof graphMotion !== 'undefined' && graphMotion) graphMotion.hold('view');
       if (typeof graphHalo !== 'undefined' && graphHalo) graphHalo.hold('view');
@@ -594,7 +599,7 @@
     syncDirectoryFilters();
     if (typeof graphMotion !== 'undefined' && graphMotion && (!mobile || mobileView === 'graph')) graphMotion.release('view');
     if (typeof graphHalo !== 'undefined' && graphHalo && (!mobile || mobileView === 'graph')) graphHalo.release('view');
-    if (!mobile && graphNeedsRender) renderGraph(pendingGraphRestore);
+    if (!mobile && graphNeedsRender) renderGraph(pendingGraphRestore, pendingCameraTransition);
     resizeGraphViewport();
   }
   function syncDirectoryFilters() {
@@ -615,10 +620,12 @@
     if (focusToggle && $('mobile-filter-toggle')) $('mobile-filter-toggle').focus({ preventScroll: true });
   }
   function setMobileMenu(open) {
+    if (graphCamera) graphCamera.cancel();
     document.querySelector('.site-header').classList.toggle('menu-open', open);
     syncMobileChrome();
   }
   function setMobileOptions(open) {
+    if (graphCamera) graphCamera.cancel();
     rememberViewport();
     document.querySelector('.explore').classList.toggle('options-open', open);
     syncMobileChrome();
@@ -640,6 +647,7 @@
     if (id !== selected || !byId.has(id)) return false;
     var dialog = $('node-diagnose-dialog');
     if (!dialog || dialog.open) return false;
+    if (typeof graphCamera !== 'undefined' && graphCamera) graphCamera.cancel();
     nodeDialogId = id;
     nodeDialogScroll = { x: window.scrollX, y: window.scrollY };
     var expert = canChallengeExpert(id);
@@ -1164,26 +1172,115 @@
     });
   }
 
-  function renderGraph(restoreSavedCamera) {
+  function mountGraphCamera() {
+    if (!window.CnmGraphCamera) return;
+    var graph = cy;
+    graphCamera = window.CnmGraphCamera.create({ cy: graph, container: $('cy'), duration: 560,
+      onStart: function () {
+        if (cy !== graph) return;
+        if (graphMotion) graphMotion.hold('camera');
+        if (graphHalo) graphHalo.hold('camera');
+      },
+      onFinish: function (reason) {
+        if (cy !== graph) return;
+        if (graphMotion) graphMotion.release('camera');
+        if (graphHalo) graphHalo.release('camera');
+        if (reason !== 'destroy') rememberViewport();
+      }
+    });
+  }
+
+  function prepareCameraTransition(id) {
+    if (id === selected) return null;
+    if (graphCamera) graphCamera.cancel();
+    if (!window.CnmGraphCamera || !cy || cy.destroyed() || !selected ||
+        ($('cy').dataset.ready !== '1' && !pendingCameraTransition)) return null;
+    var previous = liveCamera && liveCamera.camera;
+    var width = $('cy').clientWidth || previous && previous.width;
+    var height = $('cy').clientHeight || previous && previous.height;
+    if (!(width > 0 && height > 0)) return null;
+    if (graphSprings) graphSprings.stop();
+    if (graphMotion) graphMotion.hold('camera');
+    if (graphHalo) graphHalo.hold('camera');
+    var anchors = [];
+    [id, selected, liveCamera && liveCamera.context.topicId].forEach(function (key) {
+      if (!key || anchors.some(function (item) { return item.id === key; })) return;
+      var node = cy.getElementById(key);
+      if (node.empty()) return;
+      var point = node.renderedPosition();
+      anchors.push({ id: key, x: point.x / width, y: point.y / height });
+    });
+    return { zoom: cy.zoom(), anchors: anchors };
+  }
+
+  function centeredCamera(zoom) {
+    var point = cy.getElementById(selected).position();
+    return { zoom: zoom, pan: { x: $('cy').clientWidth / 2 - point.x * zoom,
+      y: $('cy').clientHeight / 2 - point.y * zoom } };
+  }
+
+  function focusExistingBook(transition) {
+    if (!transition || !graphCamera || !cy || cy.destroyed() || graphNeedsRender || !graphIsVisible() ||
+        !hasBookScope() || !showWholeBook || !renderedCameraContext || $('cy').dataset.ready !== '1' || cy.getElementById(selected).empty()) return false;
+    var before = Object.assign({}, renderedCameraContext), after = cameraContext();
+    delete before.topicId;
+    var scene = Object.assign({}, after); delete scene.topicId;
+    if (JSON.stringify(before) !== JSON.stringify(scene)) return false;
+    var colors = theme();
+    cy.batch(function () {
+      cy.nodes('.current').forEach(function (node) {
+        var tone = node.hasClass('primary') ? { bg: colors.primaryBg, border: colors.primary }
+          : node.hasClass('junior') ? { bg: colors.juniorBg, border: colors.junior } : { bg: colors.seniorBg, border: colors.senior };
+        node.removeClass('current'); node.data({ bg: tone.bg, border: tone.border });
+      });
+      var focus = cy.getElementById(selected);
+      focus.addClass('current'); focus.data({ bg: colors.currentBg, border: colors.currentBorder });
+    });
+    renderedCameraContext = after;
+    renderedExpanded = ancestorsOpen;
+    rememberViewport();
+    graphCamera.move(centeredCamera(cy.zoom()));
+    return true;
+  }
+
+  function startSelectionCamera(transition, destination) {
+    if (!graphCamera || !transition) return;
+    var zoom = Math.max(cy.minZoom(), Math.min(cy.maxZoom(), transition.zoom));
+    var anchor = transition.anchors.find(function (item) { return !cy.getElementById(item.id).empty(); });
+    var node = cy.getElementById(anchor ? anchor.id : selected), point = node.position();
+    // 跨图没有共同节点时，只作一小段过渡，避免镜头飞过大片空白。
+    var x = anchor ? Math.max(-0.25, Math.min(1.25, anchor.x)) : 0.3;
+    var y = anchor ? Math.max(-0.25, Math.min(1.25, anchor.y)) : 0.5;
+    cy.viewport({ zoom: zoom, pan: { x: $('cy').clientWidth * x - point.x * zoom,
+      y: $('cy').clientHeight * y - point.y * zoom } });
+    rememberViewport();
+    graphCamera.move(destination);
+  }
+
+  function renderGraph(restoreSavedCamera, transition) {
     if (window.matchMedia('(max-width: 900px)').matches && mobileView !== 'graph') {
       graphNeedsRender = true;
       pendingGraphRestore = restoreSavedCamera !== false;
+      pendingCameraTransition = transition || null;
       return;
     }
+    if (graphCamera) { graphCamera.destroy(); graphCamera = null; }
     rememberViewport();
     if (graphHalo) { graphHalo.destroy(); graphHalo = null; }
     if (graphSprings) { graphSprings.destroy(); graphSprings = null; }
     if (graphMotion) { graphMotion.destroy(); graphMotion = null; }
     graphNeedsRender = false;
     var nextContext = cameraContext();
-    var savedCamera = restoreSavedCamera !== false && window.CnmExploreViewport ? window.CnmExploreViewport.read(nextContext) : null;
+    var savedCamera = !transition && restoreSavedCamera !== false && window.CnmExploreViewport ? window.CnmExploreViewport.read(nextContext) : null;
     if (savedCamera) ancestorsOpen = savedCamera.expanded;
     explicitNodeSelection = null;
     var token = ++graphToken;
     tipFromTap = false;
     hideTip();
-    if (cy) { cy.destroy(); cy = null; window.__cy = null; }
+    var reuseScene = !!(transition && cy && !cy.destroyed());
+    if (cy && !reuseScene) { cy.destroy(); cy = null; window.__cy = null; }
     renderedCameraContext = null;
+    pendingCameraTransition = transition || null;
     var cyEl = $('cy');
     var emptyEl = $('graph-empty');
     var meta = $('graph-meta');
@@ -1232,6 +1329,7 @@
       if (!graphIsVisible()) {
         graphNeedsRender = true;
         pendingGraphRestore = restoreSavedCamera !== false;
+        pendingCameraTransition = transition || null;
         return;
       }
       try {
@@ -1254,12 +1352,19 @@
           userZoomingEnabled: true
         };
         cyOptions.style = graphStyles(colors, narrow, dense);
-        cy = window.cytoscape(cyOptions);
+        if (reuseScene) {
+          cy.batch(function () {
+            cy.elements().remove(); cy.add(elements);
+            cy.style().fromJson(cyOptions.style).update();
+          });
+          cy.minZoom(cyOptions.minZoom);
+        } else cy = window.cytoscape(cyOptions);
         graphStyleContext = { narrow: narrow, dense: dense };
         cy.nodes().ungrabify();
         window.__cy = cy;
         renderedCameraContext = nextContext;
         renderedExpanded = ancestorsOpen;
+        if (!reuseScene) {
         cy.on('pan zoom', queueViewportSave);
         cy.on('mouseover', 'node', function (event) { if (!graphSprings || !graphSprings.dragging()) showTip(event.target); });
         cy.on('mouseout', 'node', function () { if (!tipFromTap) hideTip(); });
@@ -1273,22 +1378,24 @@
         cy.on('tap', function (event) {
           if (event.target === cy) { explicitNodeSelection = null; tipFromTap = false; hideTip(); }
         });
+        }
         var layout = cy.layout({
           name: 'dagre', rankDir: 'TB',
           rankSep: dense ? 48 : 64,
           nodeSep: dense ? 18 : 26,
           edgeSep: dense ? 8 : 12,
           ranker: dense ? 'longest-path' : 'network-simplex',
-          padding: 16, animate: false, fit: true,
+          padding: 16, animate: false, fit: !transition,
           nodeDimensionsIncludeLabels: false, spacingFactor: dense ? 1.02 : 1.05
         });
         layout.one('layoutstop', function () {
           if (token !== graphToken) return;
-          requestAnimationFrame(function () {
+          var finishLayout = function () {
             if (token !== graphToken || !cy) return;
             if (!graphIsVisible()) {
               graphNeedsRender = true;
               pendingGraphRestore = restoreSavedCamera !== false;
+              pendingCameraTransition = transition || null;
               return;
             }
             cy.resize();
@@ -1306,8 +1413,9 @@
                 + note;
             }
             if (savedCamera) applyViewport(savedCamera);
+            var destination = transition ? centeredCamera(cy.zoom()) : null;
             cyEl.dataset.ready = '1';
-            rememberViewport();
+            if (!transition) rememberViewport();
             syncGraphMotionButton();
             if (window.CnmGraphMotion) {
               graphMotion = window.CnmGraphMotion.create({ container: cyEl, paused: graphMotionPaused });
@@ -1337,7 +1445,11 @@
               if ($('node-diagnose-dialog') && $('node-diagnose-dialog').open) graphHalo.hold('dialog');
             }
             if (graphSprings) cy.nodes().not('.grade').grabify();
-          });
+            mountGraphCamera();
+            if (transition) startSelectionCamera(transition, destination);
+            pendingCameraTransition = null;
+          };
+          if (transition) finishLayout(); else requestAnimationFrame(finishLayout);
         });
         layout.run();
       } catch (error) {
@@ -1359,6 +1471,7 @@
       }
       return;
     }
+    var transition = prepareCameraTransition(hit.id);
     rememberViewport();
     var switchedBook = hasBookScope() && !inBookScope(byId.get(hit.id));
     if (switchedBook) {
@@ -1387,11 +1500,14 @@
     }
     highlight(true);
     renderDetail();
-    if (!same || graphNeedsRender) renderGraph();
+    if (!same || graphNeedsRender) {
+      if (!focusExistingBook(transition)) renderGraph(undefined, transition);
+    }
   }
 
   function zoomBy(factor) {
     if (!cy) return;
+    if (graphCamera) graphCamera.cancel();
     var rect = cy.container().getBoundingClientRect();
     cy.zoom({
       level: Math.max(cy.minZoom(), Math.min(cy.maxZoom(), cy.zoom() * factor)),

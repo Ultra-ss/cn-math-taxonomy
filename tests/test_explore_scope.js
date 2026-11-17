@@ -32,6 +32,7 @@ const ctx = {
   mobileScroll:{detail:0},graphNeedsRender:false,labelLimit:()=>8,
   readHash:()=>ctx.hashValue || '',resolveId:id=>ctx.byId.has(id)?{id,alias:null}:null,
   closeNodeDiagnosis(){},rememberViewport(){},renderList(){},renderDetail(){},syncMobileTopic(){},
+  graphCamera:null,
   syncControls(){},highlight(){},closeDrawerIfMobile(){},writeHash(id){ctx.lastHash=id;},renderGraph(){ctx.rendered=(ctx.rendered||0)+1;},
   history:{replaceState(_a,_b,url){changes.push(url);const parsed=new URL(url,ctx.location.origin);ctx.location.search=parsed.search;ctx.location.href=parsed.href;}}
 };

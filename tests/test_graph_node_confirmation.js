@@ -47,6 +47,7 @@ const ctx = {
   resolveId: id=>ctx.byId.has(id)?{id,alias:null}:null,
   volumeOf:()=> '八下', highlight() {}, renderDetail() {}, writeHash() {}, closeDrawerIfMobile() {}, rememberLocation() {},
   rememberViewport() {}, syncMobileTopic() {}, syncMobilePanels() {}, resizeGraphViewport() {},
+  prepareCameraTransition(){return null;},focusExistingBook(){return false;},graphCamera:null,pendingCameraTransition:null,
   rebuilds:0
 };
 ctx.renderGraph = () => {ctx.rebuilds++;ctx.explicitNodeSelection=null;};
