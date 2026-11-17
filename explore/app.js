@@ -360,46 +360,13 @@
     return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10" fill="' + color + '" stroke="' + ink + '" stroke-width="2"/><path d="' + path + '" fill="none" stroke="' + ink + '" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
   }
   function expertGlowStyle(colors, width, height, badge) {
-    var pad = 20, w = width + pad * 2, h = height + pad * 2, radius = 12;
-    var horizontal = width - radius * 2, vertical = height - radius * 2, arc = Math.PI * radius / 2;
-    // 沿整圈圆角边框等距布点，混合外法线与中心放射方向，四角自然形成斜向光芒。
-    var segments = [
-      { length: horizontal, x: radius, y: 0, tx: 1, ty: 0, nx: 0, ny: -1 },
-      { length: arc, cx: width - radius, cy: radius, angle: -Math.PI / 2 },
-      { length: vertical, x: width, y: radius, tx: 0, ty: 1, nx: 1, ny: 0 },
-      { length: arc, cx: width - radius, cy: height - radius, angle: 0 },
-      { length: horizontal, x: width - radius, y: height, tx: -1, ty: 0, nx: 0, ny: 1 },
-      { length: arc, cx: radius, cy: height - radius, angle: Math.PI / 2 },
-      { length: vertical, x: 0, y: height - radius, tx: 0, ty: -1, nx: -1, ny: 0 },
-      { length: arc, cx: radius, cy: radius, angle: Math.PI }
-    ];
-    var perimeter = horizontal * 2 + vertical * 2 + arc * 4;
-    var count = Math.max(24, Math.round(perimeter / 26) * 2), rays = [];
-    for (var i = 0; i < count; i++) {
-      var distance = (horizontal / 2 + i * perimeter / count) % perimeter, segment = segments[0];
-      for (var j = 0; j < segments.length; j++) {
-        segment = segments[j];
-        if (distance <= segment.length) break;
-        distance -= segment.length;
-      }
-      var x, y, nx, ny;
-      if (segment.angle !== undefined) {
-        var angle = segment.angle + distance / radius;
-        nx = Math.cos(angle); ny = Math.sin(angle);
-        x = segment.cx + radius * nx; y = segment.cy + radius * ny;
-      } else {
-        nx = segment.nx; ny = segment.ny;
-        x = segment.x + segment.tx * distance; y = segment.y + segment.ty * distance;
-      }
-      var rx = x - width / 2, ry = y - height / 2, radial = Math.hypot(rx, ry);
-      var dx = nx * 0.5 + rx / radial * 0.5, dy = ny * 0.5 + ry / radial * 0.5;
-      var direction = Math.hypot(dx, dy), length = i % (count / 2) % 2 === 0 ? 11 : 8;
-      if (Math.abs(nx) > 0.92) length = Math.min(length, 6.5);
-      var sx = pad + x + nx * 5, sy = pad + y + ny * 5;
-      rays.push('M' + sx.toFixed(2) + ' ' + sy.toFixed(2) + 'L' + (sx + dx / direction * length).toFixed(2) + ' ' + (sy + dy / direction * length).toFixed(2));
-    }
+    var pad = 16, w = width + pad * 2, h = height + pad * 2;
+    // 扩大柔和光晕，再遮掉卡片与边框；黄色只出现在卡片四周。
     var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">'
-      + '<path d="' + rays.join(' ') + '" fill="none" stroke="' + colors.expertGlow + '" stroke-width="3.4" stroke-linecap="round"/></svg>';
+      + '<defs><filter id="glow" x="-50%" y="-100%" width="200%" height="300%"><feGaussianBlur stdDeviation="4"/></filter>'
+      + '<mask id="outside" maskUnits="userSpaceOnUse" x="0" y="0" width="' + w + '" height="' + h + '"><rect width="' + w + '" height="' + h + '" fill="white"/>'
+      + '<rect x="14" y="14" width="' + (width + 4) + '" height="' + (height + 4) + '" rx="14" fill="black"/></mask></defs>'
+      + '<g mask="url(#outside)"><rect x="16" y="16" width="' + width + '" height="' + height + '" rx="12" fill="none" stroke="' + colors.expertGlow + '" stroke-width="7" opacity="0.85" filter="url(#glow)"/></g></svg>';
     return {
       'background-image': ['data:image/svg+xml,' + encodeURIComponent(svg), badge],
       'background-width': [w, 22], 'background-height': [h, 22],
@@ -763,17 +730,6 @@
     if (id.indexOf('cnp_') === 0) return 'physics';
     if (id.indexOf('cns_') === 0) return 'science';
     return '';
-  }
-
-  function withSubject(href) {
-    if (!href || href.indexOf('http') === 0 || href.charAt(0) === '#') return href;
-    var hashAt = href.indexOf('#');
-    var hash = hashAt < 0 ? '' : href.slice(hashAt);
-    var path = hashAt < 0 ? href : href.slice(0, hashAt);
-    var queryAt = path.indexOf('?');
-    var params = new URLSearchParams(queryAt < 0 ? '' : path.slice(queryAt + 1));
-    params.set('subject', subject);
-    return (queryAt < 0 ? path : path.slice(0, queryAt)) + '?' + params.toString() + hash;
   }
 
   function passFilter(topic) {
@@ -1441,7 +1397,7 @@
   function restoreLocation(allTopics) {
     var memory = window.CnmLastLocation;
     if (!memory || !memory.shouldResume('explore', location)) return;
-    var record = memory.resolve(allTopics);
+    var record = memory.resolve(allTopics, memory.read(subject));
     if (!record) return;
     history.replaceState(null, '', memory.exploreURL(record, location.pathname));
     subject = record.subject;
@@ -1501,19 +1457,18 @@
       history.replaceState(null, '', location.pathname + '?' + params.toString() + '#' + hash);
       return 'science';
     }
+    var memory = typeof window !== 'undefined' && window.CnmLastLocation;
+    if (memory && memory.shouldResume('explore', location)) return memory.currentSubject();
     return 'physics';
   }
 
   function configureSubject() {
     document.body.classList.toggle('subject-physics', subject === 'physics');
     document.body.classList.toggle('subject-science', subject === 'science');
-    document.querySelectorAll('.site-nav a:not(.subject-link):not([data-resume-graph]), a.brand').forEach(function (link) {
-      var href = link.getAttribute('href');
-      var next = withSubject(href);
-      if (next && next !== href) link.setAttribute('href', next);
-    });
+    if (window.CnmLastLocation) window.CnmLastLocation.syncNavigation(subject);
     document.querySelectorAll('.subject-link').forEach(function (link) {
-      var on = link.getAttribute('data-subject') === subject;
+      var target = link.getAttribute('data-subject'), on = target === subject;
+      if (target === 'physics' || target === 'science') link.setAttribute('href', './?subject=' + target + '&resume=1');
       link.classList.toggle('on', on);
       if (on) link.setAttribute('aria-current', 'true'); else link.removeAttribute('aria-current');
     });

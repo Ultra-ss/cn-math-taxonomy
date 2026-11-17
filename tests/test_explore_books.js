@@ -13,8 +13,10 @@ function section(start, end) {
   assert.ok(a >= 0 && b > a);
   return source.slice(a, b);
 }
-function subject(search, hash = '') {
-  const ctx = { URLSearchParams, location: { search, pathname: '/explore/' }, history: { replaceState() {} }, readHash: () => hash };
+function subject(search, hash = '', rememberedSubject) {
+  const memory=require('../assets/last-location.js');
+  const ctx = { URLSearchParams, location: { search, hash:hash?'#'+hash:'', pathname: '/explore/' }, history: { replaceState() {} }, readHash: () => hash,
+    window:rememberedSubject?{CnmLastLocation:{shouldResume:memory.shouldResume,currentSubject:()=>rememberedSubject}}:{}};
   vm.runInNewContext(section('function readSubject()', 'function configureSubject()') + ';this.value=readSubject();', ctx);
   return ctx.value;
 }
@@ -23,6 +25,10 @@ assert.equal(subject('?subject=invalid'), 'physics');
 assert.equal(subject('?subject=science'), 'science');
 assert.equal(subject('', 'cns_p001'), 'science');
 assert.equal(subject('', 'cnp_001'), 'physics');
+assert.equal(subject('', '', 'science'), 'science', '裸图谱继承当前标签页学科');
+assert.equal(subject('?subject=physics', '', 'science'), 'physics', '显式学科覆盖标签页偏好');
+assert.equal(subject('?volume=八下', '', 'science'), 'physics', '显式旧物理教材链接保持原含义');
+assert.equal(subject('', 'cnp_001', 'science'), 'physics', '物理分享知识点不被科学偏好覆盖');
 
 const context = {
   CN: ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'],

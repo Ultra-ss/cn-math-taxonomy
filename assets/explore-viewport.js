@@ -1,5 +1,5 @@
 /* 图谱相机属于当前标签页的显示偏好，跨页面返回时恢复。
- * 只保存一个有效场景，不读写孩子资料、检测结果或学习备份。 */
+ * 每个学科各保留最近的有效场景，不读写孩子资料、检测结果或学习备份。 */
 (function (root, factory) {
   var api = factory(root);
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
@@ -47,11 +47,30 @@
         !numberIn(value.height, 1, 20000) || (value.expanded !== undefined && typeof value.expanded !== 'boolean')) return null;
     return { zoom:value.zoom, centerX:value.centerX, centerY:value.centerY, width:value.width, height:value.height, expanded:value.expanded === true };
   }
+  function readRecord(key) {
+    try {
+      var raw = root.sessionStorage.getItem(key);
+      if (typeof raw !== 'string' || !raw || raw.length > 4096) return null;
+      var value = JSON.parse(raw);
+      if (!object(value) || value.v !== 1) return null;
+      var savedContext = context(value.context), savedCamera = camera(value.camera);
+      return savedContext && savedCamera ? { v:1, context:savedContext, camera:savedCamera } : null;
+    } catch (error) { return null; }
+  }
+  function keepSubject(record) {
+    try { root.sessionStorage.setItem(KEY + '.' + record.context.subject, JSON.stringify(record)); }
+    catch (error) { /* 当前场景仍由兼容旧版的主键保存。 */ }
+  }
   function save(scene, state) {
     try {
       var validContext = context(scene), validCamera = camera(state);
       if (!validContext || !validCamera) return false;
-      root.sessionStorage.setItem(KEY, JSON.stringify({ v:1, context:validContext, camera:validCamera }));
+      // 第一次跨科时也保留旧版只存于主键的画面。
+      var previous = readRecord(KEY);
+      if (previous && previous.context.subject !== validContext.subject) keepSubject(previous);
+      var record = { v:1, context:validContext, camera:validCamera };
+      root.sessionStorage.setItem(KEY, JSON.stringify(record));
+      keepSubject(record);
       return true;
     } catch (error) { return false; }
   }
@@ -59,17 +78,19 @@
     try {
       var wanted = context(scene);
       if (!wanted) return null;
-      var raw = root.sessionStorage.getItem(KEY);
-      if (typeof raw !== 'string' || !raw || raw.length > 4096) return null;
-      var value = JSON.parse(raw);
-      if (!object(value) || value.v !== 1) return null;
-      var savedContext = context(value.context), savedCamera = camera(value.camera);
-      if (!savedContext || !savedCamera || JSON.stringify(savedContext) !== JSON.stringify(wanted)) return null;
-      return savedCamera;
+      var latest = readRecord(KEY);
+      // 同科以主键的最近场景为准，避免旧页面新保存后又套用更早的同科画面。
+      var saved = latest && latest.context.subject === wanted.subject ? latest : readRecord(KEY + '.' + wanted.subject);
+      if (!saved || saved.context.subject !== wanted.subject || JSON.stringify(saved.context) !== JSON.stringify(wanted)) return null;
+      return saved.camera;
     } catch (error) { return null; }
   }
   function clear() {
-    try { root.sessionStorage.removeItem(KEY); return true; } catch (error) { return false; }
+    var cleared = true;
+    [KEY, KEY + '.physics', KEY + '.science'].forEach(function (key) {
+      try { root.sessionStorage.removeItem(key); } catch (error) { cleared = false; }
+    });
+    return cleared;
   }
   return { KEY:KEY, save:save, read:read, clear:clear };
 });

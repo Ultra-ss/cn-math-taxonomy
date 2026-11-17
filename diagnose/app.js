@@ -110,10 +110,6 @@
     if (subject === 'chemistry') return LS_SESSION_CHEM;
     return LS_SESSION;
   }
-  function withSubject(href) {
-    if (!href || href.indexOf('subject=') >= 0 || href.indexOf('http') === 0) return href;
-    return href + (href.indexOf('?') >= 0 ? '&' : '?') + 'subject=' + subject;
-  }
   function explorePath() {
     const base = /^(.*\/)diagnose(?:\/(?:index\.html)?)?$/.exec(location.pathname);
     return (base ? base[1] : '/') + 'explore/';
@@ -165,11 +161,7 @@
     document.body.classList.toggle('subject-geography', subject === 'geography');
     document.body.classList.toggle('subject-biology', subject === 'biology');
     document.body.classList.toggle('subject-chemistry', subject === 'chemistry');
-    document.querySelectorAll('.site-nav a:not(.subject-link):not([data-resume-graph]), a.brand').forEach(function (link) {
-      const href = link.getAttribute('href');
-      const next = withSubject(href);
-      if (next && next !== href) link.setAttribute('href', next);
-    });
+    if (window.CnmLastLocation) window.CnmLastLocation.syncNavigation(subject);
     document.querySelectorAll('.subject-link').forEach(function (link) {
       const on = link.getAttribute('data-subject') === subject;
       link.classList.toggle('on', on);

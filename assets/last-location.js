@@ -7,6 +7,7 @@
 })(typeof window !== 'undefined' ? window : globalThis, function (root) {
   'use strict';
   var KEY = 'cnmLastLocation.v1';
+  var SUBJECT_KEY = 'cnmNavigation.subject.v1';
   var CN = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
   var PHYSICS_BOOKS = ['八上', '八下', '九全', '必修一', '必修二', '必修三', '选必一', '选必二', '选必三'];
   var HIGH_BOOKS = {10:'必修一', 11:'必修二', 12:'必修三', 13:'选必一', 14:'选必二', 15:'选必三'};
@@ -49,12 +50,20 @@
       return record;
     } catch (error) { return null; }
   }
-  function read() {
+  function readKey(key) {
     try {
-      var raw = storage().getItem(KEY);
+      var raw = storage().getItem(key);
       if (!raw || raw.length > 4096) return null;
       return normalize(JSON.parse(raw));
     } catch (error) { return null; }
+  }
+  function read(subject) {
+    var latest = readKey(KEY);
+    if (subject === undefined) return latest;
+    if (subject !== 'physics' && subject !== 'science') return null;
+    if (latest && latest.subject === subject) return latest;
+    var saved = readKey(KEY + '.' + subject);
+    return saved && saved.subject === subject ? saved : null;
   }
   function remember(payload) {
     try {
@@ -64,7 +73,16 @@
         view:payload.view === undefined ? 'book' : payload.view, depth:payload.depth === undefined ? 2 : payload.depth,
         at:new Date().toISOString()});
       if (!record) return false;
+      // 升级后的第一次跨科保存也保留旧版唯一的位置。
+      var previous = read();
+      if (previous) {
+        var previousKey = KEY + '.' + previous.subject, archived = readKey(previousKey);
+        if (!archived || archived.subject !== previous.subject || Date.parse(archived.at) < Date.parse(previous.at)) {
+          try { storage().setItem(previousKey, JSON.stringify(previous)); } catch (error) { /* 仍尝试保存当前位置 */ }
+        }
+      }
       storage().setItem(KEY, JSON.stringify(record));
+      try { storage().setItem(KEY + '.' + record.subject, JSON.stringify(record)); } catch (error) { /* 旧全局位置仍可使用 */ }
       return true;
     } catch (error) { return false; }
   }
@@ -74,6 +92,8 @@
   function forgetIfSame(record) {
     try {
       if (JSON.stringify(read()) === JSON.stringify(record)) storage().removeItem(KEY);
+      var key = KEY + '.' + record.subject;
+      if (JSON.stringify(readKey(key)) === JSON.stringify(record)) storage().removeItem(key);
     } catch (error) { /* 存储不可用时仍可浏览 */ }
   }
   function resolve(topics, candidate) {
@@ -94,9 +114,46 @@
     if (!loc || (mode !== 'home' && mode !== 'explore') || loc.hash) return false;
     var params = new URLSearchParams(loc.search || '');
     if (params.get('home') === '1') return false;
-    return !['subject', 'volume', 'volumes', 'grade', 'stage', 'domain', 'q', 'view', 'depth', 'target', 'chapter', 'returnTo'].some(function (name) {
+    var managed = mode === 'explore' && params.get('resume') === '1' && ['physics', 'science'].indexOf(params.get('subject')) >= 0;
+    return !(managed ? [] : ['subject']).concat(['volume', 'volumes', 'grade', 'stage', 'domain', 'q', 'view', 'depth', 'target', 'chapter', 'returnTo']).some(function (name) {
       return params.has(name);
     });
+  }
+  function currentSubject(location) {
+    var loc = location || root.location || {}, params = new URLSearchParams(loc.search || '');
+    var explicit = params.get('subject');
+    if (explicit === 'physics' || explicit === 'science') return explicit;
+    var hash = String(loc.hash || '').replace(/^#/, '');
+    try { hash = decodeURIComponent(hash); } catch (error) { /* 保持原样 */ }
+    var inferred = subjectOf(hash);
+    if (inferred) return inferred;
+    if (/(^|,)\s*cns_/.test(params.get('target') || '')) return 'science';
+    if (/(^|,)\s*cnp_/.test(params.get('target') || '')) return 'physics';
+    // 裸首页保留默认物理；其他页面继承当前标签页选择的学科。
+    if (root.document && root.document.body && root.document.body.classList && root.document.body.classList.contains('page-home')) return 'physics';
+    try {
+      var selected = root.sessionStorage.getItem(SUBJECT_KEY);
+      if (selected === 'physics' || selected === 'science') return selected;
+    } catch (error) { /* 没有存储时仍由链接携带学科 */ }
+    var latest = read();
+    return latest ? latest.subject : 'physics';
+  }
+  function syncNavigation(subject) {
+    var selected = subject === 'physics' || subject === 'science' ? subject : currentSubject();
+    try { root.sessionStorage.setItem(SUBJECT_KEY, selected); } catch (error) { /* 链接本身仍保留学科 */ }
+    var doc = root.document;
+    if (!doc || typeof doc.querySelectorAll !== 'function') return selected;
+    doc.querySelectorAll('.site-nav a:not(.subject-link), a.brand').forEach(function (link) {
+      var href = link.getAttribute('href');
+      if (!href || /^(?:[A-Za-z][A-Za-z0-9+.-]*:|\/\/|#)/.test(href) || /[\\\u0000-\u001f]/.test(href)) return;
+      var hashAt = href.indexOf('#'), hash = hashAt < 0 ? '' : href.slice(hashAt);
+      var path = hashAt < 0 ? href : href.slice(0, hashAt), queryAt = path.indexOf('?');
+      var params = new URLSearchParams(queryAt < 0 ? '' : path.slice(queryAt + 1));
+      params.set('subject', selected);
+      if (link.hasAttribute('data-resume-graph')) params.set('resume', '1');
+      link.setAttribute('href', (queryAt < 0 ? path : path.slice(0, queryAt)) + '?' + params.toString() + hash);
+    });
+    return selected;
   }
   function siteBase(pathname) {
     var path = typeof pathname === 'string' ? pathname : '/';
@@ -163,5 +220,7 @@
     }).catch(function () { return false; });
     return homePromise;
   }
-  return {KEY:KEY, read:read, remember:remember, resolve:resolve, shouldResume:shouldResume, exploreURL:exploreURL, resumeHome:resumeHome};
+  if (root.document && typeof root.document.querySelectorAll === 'function') syncNavigation();
+  return {KEY:KEY, SUBJECT_KEY:SUBJECT_KEY, read:read, remember:remember, resolve:resolve, shouldResume:shouldResume,
+    currentSubject:currentSubject, syncNavigation:syncNavigation, exploreURL:exploreURL, resumeHome:resumeHome};
 });

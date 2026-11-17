@@ -12,6 +12,7 @@ let passed = 0;
 async function test(name, fn) { await fn();passed++;console.log('  ok   '+name); }
 function load(options = {}) {
   const store = new Map(Object.entries(options.entries || {}));
+  const sessionStore = new Map(Object.entries(options.sessionEntries || {}));
   const redirects = [], calls = [];
   const location = {pathname:'/', search:'', hash:'', replace(href){redirects.push(href);}, assign(href){redirects.push(href);}, ...options.location};
   const nodes = {};
@@ -25,12 +26,16 @@ function load(options = {}) {
     location,
     document:{documentElement:{style:{visibility:'visible'}},getElementById:id=>nodes[id] || null},
     localStorage:{getItem:key=>store.has(key)?store.get(key):null,setItem:(key,value)=>store.set(key,value),removeItem:key=>store.delete(key)},
+    sessionStorage:{getItem:key=>sessionStore.has(key)?sessionStore.get(key):null,setItem:(key,value)=>sessionStore.set(key,value)},
     fetch(url){calls.push(url);return options.fetch ? options.fetch(url) : Promise.resolve({ok:true,json:()=>Promise.resolve(topics)});}
   };
   if (options.denied) Object.defineProperty(root,'localStorage',{get(){throw new Error('Storage denied');}});
+  if (options.deniedSession) Object.defineProperty(root,'sessionStorage',{get(){throw new Error('Session denied');}});
+  if (options.home) root.document.body={classList:{contains:name=>name==='page-home'}};
+  if (options.links) root.document.querySelectorAll=()=>options.links;
   const context = {window:root,module:{exports:{}},URLSearchParams,Promise,Date,setTimeout:options.timer || setTimeout,clearTimeout};
   vm.runInNewContext(source,context,{filename:'assets/last-location.js'});
-  return {api:context.module.exports,root,store,redirects,calls,nodes,dialog};
+  return {api:context.module.exports,root,store,sessionStore,redirects,calls,nodes,dialog};
 }
 function remember(api, fields = {}) {
   assert.equal(api.remember({subject:'physics',volume:'八下',topicId:'cnp_030',view:'local',depth:3,...fields}),true);
@@ -57,6 +62,98 @@ function remember(api, fields = {}) {
     for (const fields of [{subject:'science',volume:'三下',topicId:'cns_p086',depth:'all'},{volume:'必修二',topicId:'cnp_h028'},{volume:'',topicId:'cnp_071'}]) {
       const record=remember(api,fields);assert.equal(api.resolve(topics).topicId,record.topicId);
     }
+  });
+  await test('物理和科学分别保留位置，多本范围不会在切科时互相覆盖，兼容旧版唯一存档',()=>{
+    const old=load();const physics=remember(old.api);
+    const app=load({entries:{[KEY]:old.store.get(KEY)}});
+    remember(app.api,{subject:'science',volume:'',volumes:['三下','三上'],topicId:'cns_p086'});
+    assert.equal(app.api.read().subject,'science');
+    assert.equal(app.api.read('physics').topicId,physics.topicId);
+    assert.deepEqual(Array.from(app.api.read('science').volumes),['三上','三下']);
+    remember(app.api,{topicId:'cnp_031'});
+    assert.equal(app.api.read('physics').topicId,'cnp_031');assert.equal(app.api.read('science').topicId,'cns_p086');
+    assert.equal(app.api.read('english'),null);
+    const next=load({entries:Object.fromEntries(app.store)});
+    assert.equal(next.api.read('physics').topicId,'cnp_031');assert.equal(next.api.read('science').topicId,'cns_p086');
+  });
+  await test('失效的某科位置只清理相同候选，不删除另一科或更新后的存档',()=>{
+    const app=load();const stale=remember(app.api,{topicId:'cnp_999'});
+    remember(app.api,{subject:'science',volume:'三下',topicId:'cns_p086'});
+    assert.equal(app.api.resolve(topics,app.api.read('physics')),null);
+    assert.equal(app.api.read('science').topicId,'cns_p086');assert.equal(app.api.read().subject,'science');
+    assert.equal(app.store.has(KEY+'.physics'),false);
+    remember(app.api,{topicId:'cnp_031'});assert.equal(app.api.resolve(topics,stale),null);
+    assert.equal(app.api.read('physics').topicId,'cnp_031');
+    app.store.set(KEY+'.science',app.store.get(KEY+'.physics'));
+    assert.equal(app.api.read('science'),null,'侧键内容不能冒充另一学科');
+  });
+  await test('跨科归档的旧快照不会覆盖另一窗口较新的同科位置',()=>{
+    const app=load();const old=remember(app.api,{subject:'science',volume:'三下',topicId:'cns_p086'});
+    const newer={...old,topicId:'cns_p087',at:new Date(Date.parse(old.at)+1000).toISOString()};
+    const get=app.root.localStorage.getItem;let interleaved=false;
+    app.root.localStorage.getItem=key=>{
+      const value=get(key);
+      if(key===KEY&&!interleaved) {
+        interleaved=true;
+        app.store.set(KEY,JSON.stringify(newer));app.store.set(KEY+'.science',JSON.stringify(newer));
+      }
+      return value;
+    };
+    remember(app.api);
+    assert.equal(app.api.read('physics').topicId,'cnp_030');assert.equal(app.api.read('science').topicId,'cns_p087');
+  });
+  await test('只有带当前学科的导航续看入口恢复该科，显式教材与分享参数仍优先',()=>{
+    const {api}=load();
+    for(const subject of ['science','physics']) {
+      assert.equal(api.shouldResume('explore',{search:'?subject='+subject+'&resume=1',hash:''}),true);
+      assert.equal(api.shouldResume('home',{search:'?subject='+subject+'&resume=1',hash:''}),false);
+      for(const suffix of ['&volume=三下','&volumes=三上,三下','&grade=3','&q=天气','&view=local','&depth=2','&target=cns_p086','&chapter=某单元','&returnTo=/explore/']) {
+        assert.equal(api.shouldResume('explore',{search:'?subject='+subject+'&resume=1'+suffix,hash:''}),false,suffix);
+      }
+      assert.equal(api.shouldResume('explore',{search:'?subject='+subject+'&resume=1',hash:'#cns_p086'}),false);
+    }
+    assert.equal(api.shouldResume('explore',{search:'?subject=bad&resume=1',hash:''}),false);
+  });
+  await test('共享导航跟随当前学科，并在个人中心等页面继承；裸首页仍默认物理',()=>{
+    function link(href,graph=false) {
+      const attrs=new Map([['href',href]]);if(graph)attrs.set('data-resume-graph','');
+      return {getAttribute:key=>attrs.get(key)||null,setAttribute:(key,value)=>attrs.set(key,value),hasAttribute:key=>attrs.has(key)};
+    }
+    const graph=link('explore/',true),home=link('./?home=1'),center=link('children/'),external=link('https://pansgo.com');
+    const app=load({home:true,location:{search:'?subject=science'},links:[graph,home,center,external]});
+    let url=new URL(graph.getAttribute('href'),'https://physicalmap.pages.dev');
+    assert.equal(url.searchParams.get('subject'),'science');assert.equal(url.searchParams.get('resume'),'1');
+    assert.equal(new URL(home.getAttribute('href'),'https://physicalmap.pages.dev').searchParams.get('home'),'1');
+    assert.equal(new URL(center.getAttribute('href'),'https://physicalmap.pages.dev').searchParams.get('subject'),'science');
+    assert.equal(external.getAttribute('href'),'https://pansgo.com');
+    const neutral=load({location:{pathname:'/children/'},sessionEntries:Object.fromEntries(app.sessionStore),links:[graph]});
+    assert.equal(neutral.api.currentSubject(),'science');
+    app.api.syncNavigation('physics');url=new URL(graph.getAttribute('href'),'https://physicalmap.pages.dev');
+    assert.equal(url.searchParams.get('subject'),'physics');assert.equal(url.searchParams.getAll('subject').length,1);
+    const freshHome=load({home:true,sessionEntries:Object.fromEntries(neutral.sessionStore)});
+    assert.equal(freshHome.api.currentSubject(),'physics');
+    const denied=load({denied:true,deniedSession:true,location:{search:'?subject=science'},links:[graph]});
+    assert.equal(denied.api.currentSubject(),'science');assert.ok(graph.getAttribute('href').includes('subject=science'));
+  });
+  await test('真实图谱恢复函数选择本学科存档，没有本科存档时不借用其他学科',()=>{
+    const app=load();remember(app.api);
+    remember(app.api,{subject:'science',volume:'',volumes:['三上','三下'],topicId:'cns_p086'});
+    const appSource=fs.readFileSync(path.join(ROOT,'explore/app.js'),'utf8');
+    const a=appSource.indexOf('function restoreLocation(allTopics)'),b=appSource.indexOf('function showLoadError(',a);
+    for(const subject of ['physics','science']) {
+      let restored='';const ctx={window:{CnmLastLocation:app.api},subject,
+        location:{pathname:'/explore/',search:'?subject='+subject+'&resume=1',hash:''},
+        history:{replaceState(_a,_b,value){restored=value;}},configureSubject(){},applyQuery(){}};
+      vm.runInNewContext(appSource.slice(a,b)+';restoreLocation(rows);',{...ctx,rows:topics});
+      const url=new URL(restored,'https://physicalmap.pages.dev');assert.equal(url.searchParams.get('subject'),subject);
+      assert.equal(url.hash,subject==='physics'?'#cnp_030':'#cns_p086');
+    }
+    const physicsOnly=load();remember(physicsOnly.api);let called=false;
+    const ctx={window:{CnmLastLocation:physicsOnly.api},subject:'science',location:{search:'?subject=science&resume=1',hash:''},
+      history:{replaceState(){called=true;}},configureSubject(){},applyQuery(){},rows:topics};
+    vm.runInNewContext(appSource.slice(a,b)+';restoreLocation(rows);',ctx);assert.equal(called,false);
+    ctx.location={search:'?subject=physics&volume=九全',hash:'#cnp_071'};
+    vm.runInNewContext(appSource.slice(a,b)+';restoreLocation(rows);',ctx);assert.equal(called,false);
   });
   await test('明确首页、学科、册次、年级、知识点与筛选链接始终优先',()=>{
     const {api}=load();

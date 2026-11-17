@@ -16,11 +16,6 @@
   var cancelSelection = document.getElementById('book-selection-cancel');
   var enterSelection = document.getElementById('book-selection-enter');
 
-  function withSubject(href) {
-    if (!href || href.indexOf('subject=') >= 0 || href.indexOf('http') === 0 || href.charAt(0) === '#') return href;
-    return href + (href.indexOf('?') >= 0 ? '&' : '?') + 'subject=' + subject;
-  }
-
   document.body.classList.toggle('subject-physics', subject === 'physics');
   document.body.classList.toggle('subject-science', subject === 'science');
   document.querySelectorAll('.subject-link').forEach(function (link) {
@@ -29,11 +24,7 @@
     if (on) link.setAttribute('aria-current', 'true');
     else link.removeAttribute('aria-current');
   });
-  document.querySelectorAll('.site-nav a:not(.subject-link):not([data-resume-graph]), a.brand').forEach(function (link) {
-    var href = link.getAttribute('href');
-    var next = withSubject(href);
-    if (next && next !== href) link.setAttribute('href', next);
-  });
+  if (window.CnmLastLocation) window.CnmLastLocation.syncNavigation(subject);
 
   document.title = (subject === 'physics' ? '物理' : '科学') + ' · 全网路物理学习图谱';
 

@@ -41,14 +41,38 @@ test('检测返回的五字段上下文和节点几何均须精确一致',()=>{
   ]) assert.equal(api.read({...scene,...fields}),null,JSON.stringify(fields));
   assert.equal(entries.get(KEY),before,'不匹配时不删旧场景');assert.deepEqual(plain(api.read(scene)),state);
 });
-test('仅保留最近场景，科学、高中和全部教材也能独立保存',()=>{
+test('每个学科各保留最近场景，科学和物理互不覆盖，同科换教材仍须匹配',()=>{
   const {api,entries}=load();api.save(scene,state);
-  for(const fields of [
-    {subject:'science',volume:'三下',topicId:'cns_p086'}, {volume:'必修二',topicId:'cnp_h028'}, {volume:'',topicId:'cnp_071'}
-  ]) {
+  const science={...scene,subject:'science',volume:'三下',topicId:'cns_p086'}, scienceState={...state,zoom:1.125,centerX:400,centerY:200};
+  assert.equal(api.save(science,scienceState),true);
+  assert.deepEqual(plain(api.read(scene)),state);assert.deepEqual(plain(api.read(science)),scienceState);
+  for(const fields of [{volume:'必修二',topicId:'cnp_h028'},{volume:'',topicId:'cnp_071'}]) {
     const next={...scene,...fields};assert.equal(api.save(next,state),true);assert.deepEqual(plain(api.read(next)),state);assert.equal(api.read(scene),null);
+    assert.deepEqual(plain(api.read(science)),scienceState);
   }
-  assert.equal(entries.size,1);
+  assert.equal(entries.size,3);
+  const next=load({entries:Object.fromEntries(entries)});assert.deepEqual(plain(next.api.read(science)),scienceState);
+});
+test('旧主键相机兼容读取，首次切学科前归档旧画面，旧页面同科新保存仍优先',()=>{
+  const legacy={v:1,context:scene,camera:state};
+  const {api,entries}=load({entries:{[KEY]:JSON.stringify(legacy)}});
+  assert.deepEqual(plain(api.read(scene)),state);
+  const science={...scene,subject:'science',volume:'三下',topicId:'cns_p086'};
+  assert.equal(api.save(science,{...state,zoom:1.25}),true);assert.deepEqual(plain(api.read(scene)),state);
+  const newer={...scene,topicId:'cnp_031'};
+  entries.set(KEY,JSON.stringify({v:1,context:newer,camera:{...state,zoom:1.5}}));
+  assert.equal(api.read(scene),null,'不能用较旧的同科旁路存档覆盖旧页面的新场景');
+  assert.equal(api.read(newer).zoom,1.5);
+  api.save(science,state);assert.equal(api.read(scene),null);assert.equal(api.read(newer).zoom,1.5);
+});
+test('旁路相机仍严格验证学科和场景，主键损坏可读取有效的本学科相机',()=>{
+  const saved={v:1,context:scene,camera:state};
+  const {api,entries}=load({entries:{[KEY]:'broken',[KEY+'.physics']:JSON.stringify(saved)}});
+  assert.deepEqual(plain(api.read(scene)),state);
+  assert.equal(api.read({...scene,topicId:'cnp_031'}),null);
+  const science={...scene,subject:'science',volume:'三下',topicId:'cns_p086'};
+  entries.set(KEY+'.science',JSON.stringify(saved));assert.equal(api.read(science),null,'错科旁路不能恢复');
+  entries.set(KEY+'.physics',JSON.stringify({...saved,camera:{...state,zoom:0}}));assert.equal(api.read(scene),null);
 });
 test('可选布局为空与省略等价，expanded省略默认为收起',()=>{
   const {api}=load();const noLayout={...scene};delete noLayout.layout;const noExpanded={...state};delete noExpanded.expanded;
@@ -129,7 +153,8 @@ test('存储禁用、读写失败和删除失败均不抛错，不改写学习�
   for(const option of ['denied','failWrite']) {const {api}=load({[option]:true});assert.equal(api.save(scene,state),false);}
   for(const option of ['denied','failRead']) {const {api}=load({[option]:true});assert.equal(api.read(scene),null);}
   for(const option of ['denied','failClear']) {const {api}=load({[option]:true});assert.equal(api.clear(),false);}
-  const {api,entries}=load({entries:{[KEY]:'old','cnmLastLocation.v1':'last-topic','cnmProgress.v1':'marks'}});
-  assert.equal(api.clear(),true);assert.equal(entries.has(KEY),false);assert.equal(entries.get('cnmLastLocation.v1'),'last-topic');assert.equal(entries.get('cnmProgress.v1'),'marks');
+  const {api,entries}=load({entries:{[KEY]:'old',[KEY+'.physics']:'physics',[KEY+'.science']:'science','cnmLastLocation.v1':'last-topic','cnmProgress.v1':'marks'}});
+  assert.equal(api.clear(),true);for(const key of [KEY,KEY+'.physics',KEY+'.science'])assert.equal(entries.has(key),false);
+  assert.equal(entries.get('cnmLastLocation.v1'),'last-topic');assert.equal(entries.get('cnmProgress.v1'),'marks');
 });
 console.log('test_explore_viewport: '+passed+' passed');

@@ -17,9 +17,10 @@ for (const file of pages) {
   assert.match(graph[0], /\sdata-resume-graph(?:\s|>)/, file + ': 导航图谱统一恢复上次位置');
   const graphHref = graph[0].match(/href="([^"]+)"/)[1];
   const graphURL = new URL(graphHref, 'https://physicalmap.pages.dev/' + file);
-  assert.strictEqual(graphURL.search, '', file + ': 不用学科或教材参数遮蔽本机位置');
+  assert.strictEqual(graphURL.search, '', file + ': 静态入口由共享导航补齐当前学科与续看参数');
   assert.strictEqual(graphURL.hash, '', file + ': 不预选其他知识点');
   const about = source.match(/<a\b[^>]*class="site-about"[^>]*>关于<\/a>/g);
+  assert.ok(source.includes('assets/last-location.js'), file + ': 共享学科续看导航已加载');
   assert.strictEqual(about && about.length, 1, file + ': 唯一角落说明入口');
   assert.match(about[0], /href="https:\/\/github.com\/Ultra-ss\/cn-math-taxonomy"/);
   assert.match(about[0], /target="_blank"/);
@@ -30,7 +31,8 @@ for (const file of pages) {
 }
 for (const script of ['assets/home.js', 'explore/app.js', 'diagnose/app.js']) {
   const source = fs.readFileSync(path.join(root, script), 'utf8');
-  assert.ok(source.includes('.site-nav a:not(.subject-link):not([data-resume-graph]), a.brand'), script + ': 学科注入跳过续看入口');
+  assert.ok(source.includes('CnmLastLocation.syncNavigation(subject)'), script + ': 导航使用当前页面真实学科');
+  assert.ok(!source.includes(':not([data-resume-graph])'), script + ': 图谱入口不再跳过学科同步');
 }
 const center = fs.readFileSync(path.join(root, 'children/index.html'), 'utf8');
 assert.match(center, /<title>本地个人中心 ·/);
