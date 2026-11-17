@@ -360,24 +360,53 @@
     return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10" fill="' + color + '" stroke="' + ink + '" stroke-width="2"/><path d="' + path + '" fill="none" stroke="' + ink + '" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
   }
   function expertGlowStyle(colors, width, height, badge) {
-    var pad = 10, w = width + pad * 2, h = height + pad * 2;
-    // 八段粗短圆头光线围绕卡片，右上角留给检测角标。
-    var rays = [];
-    [0.25, 0.5, 0.75].forEach(function (ratio) {
-      var x = pad + width * ratio;
-      rays.push('M' + x + ' 5V2', 'M' + x + ' ' + (pad + height + 5) + 'v3');
-    });
-    var middle = pad + height / 2;
-    rays.push('M5 ' + middle + 'H2', 'M' + (pad + width + 5) + ' ' + middle + 'h3');
+    var pad = 20, w = width + pad * 2, h = height + pad * 2, radius = 12;
+    var horizontal = width - radius * 2, vertical = height - radius * 2, arc = Math.PI * radius / 2;
+    // 沿整圈圆角边框等距布点，混合外法线与中心放射方向，四角自然形成斜向光芒。
+    var segments = [
+      { length: horizontal, x: radius, y: 0, tx: 1, ty: 0, nx: 0, ny: -1 },
+      { length: arc, cx: width - radius, cy: radius, angle: -Math.PI / 2 },
+      { length: vertical, x: width, y: radius, tx: 0, ty: 1, nx: 1, ny: 0 },
+      { length: arc, cx: width - radius, cy: height - radius, angle: 0 },
+      { length: horizontal, x: width - radius, y: height, tx: -1, ty: 0, nx: 0, ny: 1 },
+      { length: arc, cx: radius, cy: height - radius, angle: Math.PI / 2 },
+      { length: vertical, x: 0, y: height - radius, tx: 0, ty: -1, nx: -1, ny: 0 },
+      { length: arc, cx: radius, cy: radius, angle: Math.PI }
+    ];
+    var perimeter = horizontal * 2 + vertical * 2 + arc * 4;
+    var count = Math.max(24, Math.round(perimeter / 26) * 2), rays = [];
+    for (var i = 0; i < count; i++) {
+      var distance = (horizontal / 2 + i * perimeter / count) % perimeter, segment = segments[0];
+      for (var j = 0; j < segments.length; j++) {
+        segment = segments[j];
+        if (distance <= segment.length) break;
+        distance -= segment.length;
+      }
+      var x, y, nx, ny;
+      if (segment.angle !== undefined) {
+        var angle = segment.angle + distance / radius;
+        nx = Math.cos(angle); ny = Math.sin(angle);
+        x = segment.cx + radius * nx; y = segment.cy + radius * ny;
+      } else {
+        nx = segment.nx; ny = segment.ny;
+        x = segment.x + segment.tx * distance; y = segment.y + segment.ty * distance;
+      }
+      var rx = x - width / 2, ry = y - height / 2, radial = Math.hypot(rx, ry);
+      var dx = nx * 0.5 + rx / radial * 0.5, dy = ny * 0.5 + ry / radial * 0.5;
+      var direction = Math.hypot(dx, dy), length = i % (count / 2) % 2 === 0 ? 11 : 8;
+      if (Math.abs(nx) > 0.92) length = Math.min(length, 6.5);
+      var sx = pad + x + nx * 5, sy = pad + y + ny * 5;
+      rays.push('M' + sx.toFixed(2) + ' ' + sy.toFixed(2) + 'L' + (sx + dx / direction * length).toFixed(2) + ' ' + (sy + dy / direction * length).toFixed(2));
+    }
     var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">'
-      + '<path d="' + rays.join(' ') + '" fill="none" stroke="' + colors.expertGlow + '" stroke-width="4" stroke-linecap="round"/></svg>';
+      + '<path d="' + rays.join(' ') + '" fill="none" stroke="' + colors.expertGlow + '" stroke-width="3.4" stroke-linecap="round"/></svg>';
     return {
       'background-image': ['data:image/svg+xml,' + encodeURIComponent(svg), badge],
       'background-width': [w, 22], 'background-height': [h, 22],
       'background-position-x': ['50%', '100%'], 'background-position-y': ['50%', '0%'],
       'background-offset-x': [0, 7], 'background-offset-y': [0, -7],
       'background-fit': ['none', 'none'], 'background-clip': ['none', 'none'],
-      'background-image-containment': ['over', 'over']
+      'background-image-containment': ['over', 'over'], 'bounds-expansion': pad
     };
   }
   function theme() {
