@@ -361,12 +361,16 @@
   }
   function expertGlowStyle(colors, width, height, badge) {
     var pad = 10, w = width + pad * 2, h = height + pad * 2;
-    // 先模糊外环，再遮掉卡片与边框；黄色只出现在卡片四周。
+    // 八段粗短圆头光线围绕卡片，右上角留给检测角标。
+    var rays = [];
+    [0.25, 0.5, 0.75].forEach(function (ratio) {
+      var x = pad + width * ratio;
+      rays.push('M' + x + ' 5V2', 'M' + x + ' ' + (pad + height + 5) + 'v3');
+    });
+    var middle = pad + height / 2;
+    rays.push('M5 ' + middle + 'H2', 'M' + (pad + width + 5) + ' ' + middle + 'h3');
     var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">'
-      + '<defs><filter id="glow" x="-50%" y="-100%" width="200%" height="300%"><feGaussianBlur stdDeviation="3"/></filter>'
-      + '<mask id="outside" maskUnits="userSpaceOnUse" x="0" y="0" width="' + w + '" height="' + h + '"><rect width="' + w + '" height="' + h + '" fill="white"/>'
-      + '<rect x="8" y="8" width="' + (width + 4) + '" height="' + (height + 4) + '" rx="14" fill="black"/></mask></defs>'
-      + '<g mask="url(#outside)"><rect x="10" y="10" width="' + width + '" height="' + height + '" rx="12" fill="none" stroke="' + colors.expertGlow + '" stroke-width="6" opacity="0.85" filter="url(#glow)"/></g></svg>';
+      + '<path d="' + rays.join(' ') + '" fill="none" stroke="' + colors.expertGlow + '" stroke-width="4" stroke-linecap="round"/></svg>';
     return {
       'background-image': ['data:image/svg+xml,' + encodeURIComponent(svg), badge],
       'background-width': [w, 22], 'background-height': [h, 22],
