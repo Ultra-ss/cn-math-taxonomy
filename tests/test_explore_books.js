@@ -49,15 +49,16 @@ assert.equal(topics.filter(t => t.subject === 'science' && context.passFilter(t)
 
 // 角标独立于名称、标签；传给 Cytoscape 的状态类不改变知识点内容。
 const marker = {
-  byId: new Map([[physics[0].id, physics[0]]]), selected: physics[0].id,
+  subject: 'physics', byId: new Map([[physics[0].id, physics[0]]]), selected: physics[0].id,
   progressOf: () => ({status:'mastered'}), progressClass: () => 'test-passed',
   progressLabel: () => '已通过检测', clipLabel: x => x, paint: () => ({bg:'white',border:'black',cls:'junior'})
 };
-vm.runInNewContext(section('function topicElement(id, colors)', 'function edgeElement(') + ';this.result=topicElement("cnp_001",{currentBg:"orange",currentBorder:"red",text:"black"});', marker);
+vm.runInNewContext(section('function canChallengeExpert(id)', 'function nodeDiagnosisHref(id)') + section('function topicElement(id, colors)', 'function edgeElement(') + ';this.result=topicElement("cnp_001",{currentBg:"orange",currentBorder:"red",text:"black"});', marker);
 assert.equal(marker.result.data.name, physics[0].name);
 assert.equal(marker.result.data.label, physics[0].name);
 assert.equal(marker.result.data.testStatus, 'mastered');
 assert.ok(marker.result.classes.includes('test-passed'));
+assert.ok(marker.result.classes.includes('expert-unlocked'));
 assert.ok(source.includes("'background-position-x': '100%'"));
 assert.ok(source.includes("'background-position-y': '0%'"));
 

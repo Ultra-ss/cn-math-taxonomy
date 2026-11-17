@@ -198,6 +198,7 @@
           var row = progressOf(node.id());
           node.removeClass('test-passed test-failed test-expert');
           if (row) node.addClass(progressClass(row));
+          node.toggleClass('expert-unlocked', canChallengeExpert(node.id()));
           node.data('testStatus', row ? row.status : '');
           node.data('testLabel', progressLabel(row));
         });
@@ -358,6 +359,23 @@
     var path = passed === 'expert' ? 'm11 3 2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.6-4.8 2.6.9-5.4L3.2 8.7l5.4-.8Z' : passed ? 'm6 11 3 3 7-7' : 'm7 7 8 8m0-8-8 8';
     return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10" fill="' + color + '" stroke="' + ink + '" stroke-width="2"/><path d="' + path + '" fill="none" stroke="' + ink + '" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
   }
+  function expertGlowStyle(colors, width, height, badge) {
+    var pad = 10, w = width + pad * 2, h = height + pad * 2;
+    // 先模糊外环，再遮掉卡片与边框；黄色只出现在卡片四周。
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">'
+      + '<defs><filter id="glow" x="-50%" y="-100%" width="200%" height="300%"><feGaussianBlur stdDeviation="3"/></filter>'
+      + '<mask id="outside" maskUnits="userSpaceOnUse" x="0" y="0" width="' + w + '" height="' + h + '"><rect width="' + w + '" height="' + h + '" fill="white"/>'
+      + '<rect x="8" y="8" width="' + (width + 4) + '" height="' + (height + 4) + '" rx="14" fill="black"/></mask></defs>'
+      + '<g mask="url(#outside)"><rect x="10" y="10" width="' + width + '" height="' + height + '" rx="12" fill="none" stroke="' + colors.expertGlow + '" stroke-width="6" opacity="0.85" filter="url(#glow)"/></g></svg>';
+    return {
+      'background-image': ['data:image/svg+xml,' + encodeURIComponent(svg), badge],
+      'background-width': [w, 22], 'background-height': [h, 22],
+      'background-position-x': ['50%', '100%'], 'background-position-y': ['50%', '0%'],
+      'background-offset-x': [0, 7], 'background-offset-y': [0, -7],
+      'background-fit': ['none', 'none'], 'background-clip': ['none', 'none'],
+      'background-image-containment': ['over', 'over']
+    };
+  }
   function theme() {
     return {
       primary: cssVar('--node-primary'),
@@ -370,6 +388,7 @@
       currentBorder: cssVar('--node-current-border'),
       passedBorder: cssVar('--node-passed-border') || cssVar('--ok'),
       expertBorder: cssVar('--node-expert-border') || cssVar('--node-senior'),
+      expertGlow: cssVar('--node-expert-glow'),
       text: cssVar('--node-text'),
       edge: cssVar('--edge'),
       edgeSoft: cssVar('--edge-soft'),
@@ -1006,7 +1025,7 @@
         testStatus: progressOf(id) ? progressOf(id).status : '',
         testLabel: progressLabel(progressOf(id))
       },
-      classes: tone.cls + (current ? ' current' : '') + ' ' + progressClass(progressOf(id))
+      classes: tone.cls + (current ? ' current' : '') + ' ' + progressClass(progressOf(id)) + (canChallengeExpert(id) ? ' expert-unlocked' : '')
     };
   }
 
@@ -1228,6 +1247,10 @@
           { selector: 'node.test-passed', style: { 'background-image': colors.passedBadge, 'border-color': colors.passedBorder } },
           { selector: 'node.test-failed', style: { 'background-image': colors.failedBadge } },
           { selector: 'node.test-expert', style: { 'background-image': colors.expertBadge, 'border-color': colors.expertBorder } },
+          { selector: 'node.expert-unlocked', style: expertGlowStyle(colors, boxW, 40, colors.passedBadge) },
+          { selector: 'node.expert-unlocked.test-expert', style: expertGlowStyle(colors, boxW, 40, colors.expertBadge) },
+          { selector: 'node.expert-unlocked.current', style: expertGlowStyle(colors, boxW * 1.05, 42, colors.passedBadge) },
+          { selector: 'node.expert-unlocked.test-expert.current', style: expertGlowStyle(colors, boxW * 1.05, 42, colors.expertBadge) },
           { selector: 'edge', style: {
             width: 1.6, 'line-color': 'data(color)', 'target-arrow-color': 'data(color)',
             'target-arrow-shape': 'triangle', 'curve-style': dense ? 'straight' : 'bezier',

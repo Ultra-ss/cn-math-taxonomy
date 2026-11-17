@@ -128,7 +128,7 @@
     </details>
     </div>
     <div id="graph-stage" class="graph-stage">
-      <div id="cy" hidden role="img" tabindex="0" aria-label="选中知识点的局部先修图" aria-describedby="graph-drag-help"></div>
+      <div id="cy" hidden role="img" tabindex="0" aria-label="选中知识点的局部先修图" aria-describedby="graph-drag-help graph-learning-hint"></div>
       <button type="button" id="graph-motion-toggle" class="graph-motion-toggle" aria-controls="cy" aria-pressed="false" title="暂停方框漂浮" hidden>暂停漂浮</button>
       <div id="graph-empty" class="graph-empty">
         <p>选一个知识点后，这里只画它附近的先修，以及后面一层会用到它的知识点。</p>
@@ -137,6 +137,7 @@
       </div>
       <div id="node-tip" class="node-tip" role="tooltip" hidden></div>
     </div>
+    <p class="graph-learning-hint" id="graph-learning-hint">点击知识点即可进入检测；初中物理通过普通检测后，第二次挑战可解锁专家模式。</p>
     <ul class="legend">
       <li><i class="swatch sw-p"></i>小学</li>
       <li><i class="swatch sw-j"></i>初中</li>
