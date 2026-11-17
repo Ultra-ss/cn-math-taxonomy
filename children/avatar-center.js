@@ -300,6 +300,12 @@
       action.type = 'button'; action.setAttribute('data-avatar-action', col.unlocked ? 'equip' : 'draw');
       action.disabled = busy || !summary || !summary.ok || col.unlocked && summary.equipped === skin.id || !col.unlocked && summary.availableMoons < 1;
       action.addEventListener('click', function () { if (col.unlocked) wear(skin.id, ownerId); else draw(skin); }); description.appendChild(action);
+      var giftNote = node('p', 'avatar-draw-note avatar-gift-note');
+      var feedback = node('a', '', '首页二维码');
+      var feedbackSubject = root.CnmLastLocation && root.CnmLastLocation.currentSubject ? root.CnmLastLocation.currentSubject() : 'physics';
+      feedback.href = '../?home=1&subject=' + (feedbackSubject === 'science' ? 'science' : 'physics') + '#feedback-title';
+      giftNote.append('集齐十套装扮后，可扫描', feedback, '添加作者，领取彩蛋礼物。');
+      description.appendChild(giftNote);
       if (!col.unlocked && summary && summary.ok && summary.availableMoons < 1) {
         var earn = node('a', 'avatar-learn-link', '去知识图谱赚取月亮 →');
         var subject = root.CnmLastLocation && root.CnmLastLocation.currentSubject ? root.CnmLastLocation.currentSubject() : 'physics';
