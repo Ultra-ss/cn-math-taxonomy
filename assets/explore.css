@@ -21,7 +21,16 @@ body.page-explore {
   overflow: hidden;
 }
 :root[data-theme="dark"] { --node-passed-border: #a2bda9; --node-expert-border: #e5c96d; --node-expert-glow: #e5c96d; }
-body.page-explore .node-tip { font-family: var(--graph-label-font); font-size: 15px; font-weight: 400; line-height: 1.5; }
+body.page-explore .node-tip {
+  top: 8px;
+  left: 8px;
+  /* 留出右上角漂浮开关的位置，长名称在提示框内换行。 */
+  max-width: min(280px, calc(100% - 128px));
+  font-family: var(--graph-label-font);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+}
 body.page-explore .top-banner,
 body.page-explore .site-header,
 body.page-explore .site-footer { flex: none; }

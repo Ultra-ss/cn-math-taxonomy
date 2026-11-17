@@ -945,25 +945,11 @@
 
   function showTip(node) {
     var tip = $('node-tip');
-    var stage = $('graph-stage');
-    if (!tip || !stage || !cy || !node || node.empty()) return;
+    if (!tip || !node || node.empty()) return;
     var text = node.data('full') || node.data('label') || '';
     if (!text) { tip.hidden = true; return; }
     tip.textContent = text + (node.data('testStatus') ? ' · ' + node.data('testLabel') : '');
     tip.hidden = false;
-    var stageRect = stage.getBoundingClientRect();
-    var cyRect = cy.container().getBoundingClientRect();
-    var bb = node.renderedBoundingBox({ includeLabels: true });
-    var tipW = tip.offsetWidth;
-    var tipH = tip.offsetHeight;
-    var cx = cyRect.left - stageRect.left + (bb.x1 + bb.x2) / 2;
-    var top = cyRect.top - stageRect.top + bb.y1;
-    var left = Math.max(8, Math.min(cx - tipW / 2, Math.max(8, stageRect.width - tipW - 8)));
-    var y = top - tipH - 8;
-    if (y < 4) y = cyRect.top - stageRect.top + bb.y2 + 8;
-    if (y + tipH > stageRect.height - 4) y = Math.max(4, stageRect.height - tipH - 4);
-    tip.style.left = left + 'px';
-    tip.style.top = y + 'px';
   }
 
   function ensureDagre() {
@@ -1356,9 +1342,10 @@
         cy.on('tap', 'node', function (event) {
           if (graphSprings && graphSprings.consumeTap(event)) { explicitNodeSelection = null; tipFromTap = false; hideTip(); return; }
           var id = event.target.id();
+          activateGraphNode(id);
+          // 局部图切换会清理旧提示，选中后再显示当前内容。
           tipFromTap = true;
           showTip(event.target);
-          activateGraphNode(id);
         });
         cy.on('tap', function (event) {
           if (event.target === cy) { explicitNodeSelection = null; tipFromTap = false; hideTip(); }
