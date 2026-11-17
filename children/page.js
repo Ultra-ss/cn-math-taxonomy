@@ -4,6 +4,7 @@
   var CC = window.CnmChildren;
   var listBox = document.getElementById('list');
   var form = document.getElementById('form');
+  var formCard = document.getElementById('form-card');
   var nameIn = document.getElementById('f-name');
   var gradeSel = document.getElementById('f-grade');
   var bookSel = document.getElementById('f-book');
@@ -56,10 +57,11 @@
     nameIn.value = '';
     gradeSel.value = '';
     bookSel.value = CC.TEXTBOOKS[0];
-    formTitle.textContent = '添加孩子';
-    submitBtn.textContent = '添加孩子';
+    formTitle.textContent = '添加新账号';
+    submitBtn.textContent = '添加新账号';
     cancelBtn.hidden = true;
     showError('');
+    formCard.open = false;
   }
 
   function startEdit(c) {
@@ -71,8 +73,10 @@
     submitBtn.textContent = '保存修改';
     cancelBtn.hidden = false;
     showError('');
-    document.getElementById('form-card').scrollIntoView({ block: 'center' });
-    nameIn.focus();
+    formCard.hidden = false;
+    formCard.open = true;
+    formCard.scrollIntoView({ block: 'center' });
+    nameIn.focus({ preventScroll: true });
   }
 
   function stats(c) {
@@ -128,14 +132,14 @@
     exportStatus.hidden = true;
     listBox.textContent = '';
     if (!kids.length) {
-      listBox.appendChild(el('p', 'kid-empty', '还没有孩子。在下面填昵称和年级，添加第一个。'));
+      listBox.appendChild(el('p', 'kid-empty', '还没有本地账号。点击“添加新账号”后填写昵称和年级。'));
     } else {
       kids.forEach(function (c) { listBox.appendChild(card(c, !!cur && cur.id === c.id)); });
     }
     var full = kids.length >= CC.MAX_CHILDREN && !editing;
-    document.getElementById('form-card').hidden = full;
+    formCard.hidden = full;
     if (full) {
-      var note = el('p', 'muted small', '已经建满 ' + CC.MAX_CHILDREN + ' 个孩子。要添加新的，先删除不用的档案。');
+      var note = el('p', 'muted small', '已经建满 ' + CC.MAX_CHILDREN + ' 个本地账号。要添加新的，先删除不用的档案。');
       listBox.appendChild(note);
     }
     renderArchivedSessions();
@@ -360,8 +364,12 @@
     if (!editing && window.cnmTrack) window.cnmTrack('child_added');
     resetForm();
     render();
+    if (!formCard.hidden) formCard.querySelector('summary').focus({ preventScroll: true });
   });
-  cancelBtn.addEventListener('click', function () { resetForm(); render(); });
+  cancelBtn.addEventListener('click', function () {
+    resetForm(); render();
+    if (!formCard.hidden) formCard.querySelector('summary').focus({ preventScroll: true });
+  });
 
   function clearImport(keepFile) {
     fileRequest++;

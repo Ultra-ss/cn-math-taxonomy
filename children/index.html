@@ -88,8 +88,9 @@
     <p class="muted small">本机保存的最近检测，各自保留原来的档案归属；可接着作答或查看结果。</p>
     <ul class="center-learning-list" id="center-session-list"></ul>
   </section>
-  <section class="kid-backup" aria-labelledby="backup-title">
-    <h2 id="backup-title">备份与恢复</h2>
+  <details class="kid-backup center-disclosure" aria-labelledby="backup-title">
+    <summary class="center-disclosure-toggle"><h2 id="backup-title">备份和恢复</h2></summary>
+    <div class="center-disclosure-content">
     <p>备份所有孩子的资料，以及科学、物理的检测记录、错题、进行中检测、薄弱知识点、图谱检测进度和成就积分。没有建立档案的学习进度也可以迁移。</p>
     <button type="button" id="export-backup">导出全部学习数据</button>
     <p id="export-status" class="small" role="status" hidden></p>
@@ -117,11 +118,12 @@
       <ul id="archived-sessions"></ul>
       <p id="archive-status" class="small" role="status" hidden></p>
     </div>
-  </section>
+    </div>
+  </details>
   <div id="list" aria-live="polite"></div>
-  <section class="kid-form" id="form-card" aria-labelledby="form-title">
-    <h2 id="form-title">添加孩子</h2>
-    <form id="form" novalidate>
+  <details class="kid-form center-disclosure" id="form-card" aria-labelledby="form-title">
+    <summary class="center-disclosure-toggle"><h2 id="form-title">添加新账号</h2></summary>
+    <form id="form" class="center-disclosure-content" novalidate>
       <label for="f-name">昵称</label>
       <input id="f-name" type="text" maxlength="12" autocomplete="off" placeholder="例如：小满（最多 12 个字）">
       <label for="f-grade">年级</label>
@@ -131,12 +133,12 @@
       <p class="muted small" id="book-note">本站仅保留小学科学与物理：小学科学按教科版编排，物理按人教版编排。选择其他教材版本也能使用，但章节名称可能和手上的教材略有不同。</p>
       <p class="err" id="f-error" role="alert" hidden></p>
       <div class="form-actions">
-        <button type="submit" class="primary" id="f-submit">添加孩子</button>
+        <button type="submit" class="primary" id="f-submit">添加新账号</button>
         <button type="button" id="f-cancel" hidden>取消编辑</button>
       </div>
     </form>
-  </section>
-  <p class="muted small kid-note">档案和检测记录保存在当前浏览器中，不上传，也没有账号。清除浏览器数据或更换设备前，请先导出备份，再在新浏览器中导入。</p>
+  </details>
+  <p class="muted small kid-note">本地账号和检测记录保存在当前浏览器中。清除浏览器数据或更换设备前，请先导出备份，再在新浏览器中导入。</p>
 </main>
 <script src="../assets/stem-compat.js"></script>
 <script src="../assets/progress.js"></script>
