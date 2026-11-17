@@ -38,7 +38,7 @@ const ctx = {
   byId: new Map([['cnp_029',{name:'力',grade:8,semester:'下'}],['cnp_030',{name:'弹力',grade:8,semester:'下'}]]),
   CN:['','一','二','三','四','五','六','七','八','九'],EN_BOOK:{},selectedVolumes:['八下'],
   selected:'cnp_029', explicitNodeSelection:null, currentAlias:null, volume:'八下', subject:'physics', stage:'', domain:'', query:'', showWholeBook:true, upDepth:2,
-  ancestorsOpen:false, nodeDialogId:null, nodeDialogScroll:null, cy:null, mobileScroll:{detail:0}, graphNeedsRender:false,
+  ancestorsOpen:false, nodeDialogId:null, nodeDialogScroll:null, cy:null, mobileView:'graph', mobileScroll:{detail:0}, graphNeedsRender:false,
   $: id => ids[id],
   progressOf: () => null,
   document: {querySelector: s=>s==='.site-header'?header:explore, querySelectorAll:()=>[]},

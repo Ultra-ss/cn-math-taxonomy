@@ -117,10 +117,10 @@
       idleTimer = timer(resume, delay === undefined ? IDLE_DELAY : delay); updateState();
     }
     function hold(reason) { holds[reason || 'external'] = true; freeze(); }
-    function release(reason) {
+    function release(reason, delay) {
       reason = reason || 'external';
       if (!Object.prototype.hasOwnProperty.call(holds, reason)) return;
-      delete holds[reason]; resumeSoon();
+      delete holds[reason]; resumeSoon(delay);
     }
     function activity() {
       if (alive()) {

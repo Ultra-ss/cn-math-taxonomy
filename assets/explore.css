@@ -155,7 +155,9 @@ body.page-explore .site-footer { flex: none; }
 .graph-motion-toggle[aria-pressed="true"]::before { content: '▶'; font-size: 10px; }
 .graph-motion-toggle[hidden] { display: none; }
 .graph-motion-toggle:disabled { cursor: default; opacity: .65; }
-#cy { flex: 1; min-height: 280px; width: 100%; }
+#cy { flex: 1; min-height: 280px; width: 100%; cursor: grab; }
+#cy[data-spring-state="dragging"] { cursor: grabbing; }
+#cy canvas { cursor: inherit; }
 .graph-empty {
   flex: 1;
   display: flex;

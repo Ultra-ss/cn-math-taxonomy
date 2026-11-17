@@ -58,6 +58,7 @@
   var changingCamera = false;
   var viewportSaveTimer = null;
   var graphMotion = null;
+  var graphSprings = null;
   var graphMotionPaused = false;
   var GRAPH_MOTION_PAUSED_KEY = 'cnmGraph.motionPaused.v1';
 
@@ -437,6 +438,7 @@
 
   function fitGraph() {
     if (!cy) return;
+    if (graphSprings) graphSprings.stop();
     if (graphMotion) graphMotion.stop();
     cy.resize();
     var many = cy.nodes().length > 80;
@@ -573,7 +575,10 @@
 
   function syncMobileChrome() {
     var mobile = window.matchMedia('(max-width: 900px)').matches;
-    if (typeof graphMotion !== 'undefined' && graphMotion && mobile && mobileView !== 'graph') graphMotion.hold('view');
+    if (mobile && mobileView !== 'graph') {
+      if (typeof graphSprings !== 'undefined' && graphSprings) graphSprings.stop();
+      if (typeof graphMotion !== 'undefined' && graphMotion) graphMotion.hold('view');
+    }
     var menuOpen = document.querySelector('.site-header').classList.contains('menu-open');
     var optionsOpen = document.querySelector('.explore').classList.contains('options-open');
     $('main-nav').hidden = mobile && !menuOpen;
@@ -1119,6 +1124,7 @@
       return;
     }
     rememberViewport();
+    if (graphSprings) { graphSprings.destroy(); graphSprings = null; }
     if (graphMotion) { graphMotion.destroy(); graphMotion = null; }
     graphNeedsRender = false;
     var nextContext = cameraContext();
@@ -1197,7 +1203,8 @@
           maxZoom: 2.8,
           wheelSensitivity: 0.28,
           boxSelectionEnabled: false,
-          autoungrabify: true,
+          autoungrabify: false,
+          autounselectify: true,
           userPanningEnabled: true,
           userZoomingEnabled: true
         };
@@ -1211,6 +1218,7 @@
             shape: 'round-rectangle', width: boxW, height: 40, padding: 0, 'corner-radius': 12
           } },
           { selector: 'node.current', style: { width: boxW * 1.05, height: 42, 'border-width': 4, 'z-index': 10 } },
+          { selector: 'node:active', style: { 'overlay-opacity': 0 } },
           { selector: 'node.test-passed, node.test-failed, node.test-expert', style: {
             'background-width': 22, 'background-height': 22, 'background-fit': 'none',
             'background-position-x': '100%', 'background-position-y': '0%',
@@ -1228,13 +1236,15 @@
           { selector: 'edge.soft', style: { 'line-style': 'dashed', width: 1.5 } }
         ];
         cy = window.cytoscape(cyOptions);
+        cy.nodes().ungrabify();
         window.__cy = cy;
         renderedCameraContext = nextContext;
         renderedExpanded = ancestorsOpen;
         cy.on('pan zoom', queueViewportSave);
-        cy.on('mouseover', 'node', function (event) { showTip(event.target); });
+        cy.on('mouseover', 'node', function (event) { if (!graphSprings || !graphSprings.dragging()) showTip(event.target); });
         cy.on('mouseout', 'node', function () { if (!tipFromTap) hideTip(); });
         cy.on('tap', 'node', function (event) {
+          if (graphSprings && graphSprings.consumeTap(event)) { explicitNodeSelection = null; tipFromTap = false; hideTip(); return; }
           var id = event.target.id();
           tipFromTap = true;
           showTip(event.target);
@@ -1280,16 +1290,28 @@
             rememberViewport();
             syncGraphMotionButton();
             if (window.CnmGraphMotion) {
-              if (!graphMotion) graphMotion = window.CnmGraphMotion.create({ container: cyEl, paused: graphMotionPaused });
+              graphMotion = window.CnmGraphMotion.create({ container: cyEl, paused: graphMotionPaused });
+              graphMotion.hold('startup');
+            }
+            if (window.CnmGraphSprings) {
+              graphSprings = window.CnmGraphSprings.create({ cy: cy, container: cyEl,
+                onHold: function () { if (graphMotion) graphMotion.hold('spring'); },
+                onRelease: function () { if (graphMotion) graphMotion.release('spring'); },
+                onDragStart: function () { explicitNodeSelection = null; tipFromTap = false; hideTip(); }
+              });
+            }
+            if (window.CnmGraphMotion) {
               var enteringGraph = cy;
-              // 等布局和移动端尺寸稳定后漂浮；基点不参与视角保存。
+              // 先记录锚点，再允许原生拖拽；延时只释放启动暂停，不重读临时位移。
+              graphMotion.start(enteringGraph);
               setTimeout(function () {
                 if (token !== graphToken || cy !== enteringGraph || !graphMotion) return;
-                graphMotion.start(enteringGraph);
+                graphMotion.release('startup', 0);
                 if (window.matchMedia('(max-width: 900px)').matches && mobileView !== 'graph') graphMotion.hold('view');
                 if ($('node-diagnose-dialog') && $('node-diagnose-dialog').open) graphMotion.hold('dialog');
               }, 80);
             }
+            if (graphSprings) cy.nodes().not('.grade').grabify();
           });
         });
         layout.run();

@@ -123,15 +123,16 @@
     <details class="mobile-graph-help">
       <summary>图谱说明</summary>
       <p>知识点之间的箭头表示关联关系。实线为强关联，虚线为弱关联。</p>
+      <p id="graph-drag-help">按住知识点拖动，关联点会弹性跟随，松手后渐渐回稳。拖动空白处可平移图谱。</p>
       <p>✓ 表示已通过检测，× 表示未通过；尚未完成检测的知识点不标记。</p>
     </details>
     </div>
     <div id="graph-stage" class="graph-stage">
-      <div id="cy" hidden role="img" tabindex="0" aria-label="选中知识点的局部先修图"></div>
+      <div id="cy" hidden role="img" tabindex="0" aria-label="选中知识点的局部先修图" aria-describedby="graph-drag-help"></div>
       <button type="button" id="graph-motion-toggle" class="graph-motion-toggle" aria-controls="cy" aria-pressed="false" title="暂停方框漂浮" hidden>暂停漂浮</button>
       <div id="graph-empty" class="graph-empty">
         <p>选一个知识点后，这里只画它附近的先修，以及后面一层会用到它的知识点。</p>
-        <p class="muted">不会一次铺开全部知识点。点节点可以换选中项，滚轮或拖动可以缩放、平移。名称太长会省略，悬停或点按可看全名。</p>
+        <p class="muted">点节点可以换选中项，按住节点拖动可牵动关联点；拖动空白处可平移，滚轮可缩放。名称太长会省略，悬停或点按可看全名。</p>
         <button type="button" id="pick-sample" class="btn btn-primary">先看看「欧姆定律」</button>
       </div>
       <div id="node-tip" class="node-tip" role="tooltip" hidden></div>
@@ -147,7 +148,7 @@
       <li class="legend-status"><span class="test-symbol test-expert" aria-hidden="true">⭐</span>专家挑战通过</li>
       <li class="legend-status"><span class="test-symbol test-failed" aria-hidden="true">×</span>未通过，需巩固</li>
     </ul>
-    <p class="progress-note">实际通关后，边框会点亮为绿色或专家金色；原有底色保持不变。</p>
+    <p class="progress-note">按住方框拖动可牵动关联点，松手回稳。通关只点亮边框，底色不变。</p>
     <p id="graph-meta" class="graph-meta"></p>
     <div id="mobile-topic-summary" class="mobile-topic-summary" aria-live="polite" hidden>
       <div>
@@ -176,6 +177,7 @@
 <script src="../assets/last-location.js"></script>
 <script src="../assets/explore-viewport.js"></script>
 <script src="../assets/graph-motion.js"></script>
+<script src="../assets/graph-springs.js"></script>
 <script src="app.js"></script>
 <script src="../assets/stats-config.js"></script>
 <script src="../assets/stats.js"></script>
