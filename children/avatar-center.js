@@ -25,14 +25,34 @@
     var busy = false, busyLabel = '', mountedAlive = true, statusMessage = '', statusError = false;
     var sharing = Object.create(null), shareMessages = Object.create(null);
     var shell = node('div', 'avatar-center-content'), dialog = node('dialog', 'avatar-reveal');
+    var workshop = node('details', 'avatar-workshop'), compact = node('summary', 'avatar-workshop-summary');
+    var compactTitleId = uid + '-compact-title';
+    var mobile = root.matchMedia('(max-width: 600px)'), mobileOpen = false, wasMobile = mobile.matches;
+    var galleryScroll = 0;
     var cleanups = [];
-    container.classList.add('avatar-center'); container.textContent = ''; container.append(shell, dialog);
+    workshop.append(compact, shell); workshop.open = !mobile.matches;
+    container.classList.add('avatar-center'); container.textContent = ''; container.append(workshop, dialog);
     dialog.setAttribute('aria-labelledby', uid + '-title'); dialog.setAttribute('aria-modal', 'true');
     function on(target, type, fn) { target.addEventListener(type, fn); cleanups.push(function () { target.removeEventListener(type, fn); }); }
     function current() { return CC.current(); }
     function owner() { var c = current(); return c ? c.id : null; }
     function sameOwner(a, b) { return (a || '') === (b || ''); }
     function ownerKey(id) { return id || 'guest'; }
+    function syncWorkshop() {
+      var toggle = compact.querySelector('.avatar-workshop-toggle');
+      if (toggle) toggle.textContent = workshop.open ? '收起' : '展开';
+      compact.setAttribute('aria-expanded', workshop.open ? 'true' : 'false');
+      container.setAttribute('aria-labelledby', mobile.matches ? compactTitleId : 'avatar-center-title');
+    }
+    function resizedWorkshop() {
+      if (wasMobile) mobileOpen = workshop.open;
+      wasMobile = mobile.matches;
+      workshop.open = mobile.matches ? mobileOpen : true;
+      syncWorkshop();
+    }
+    on(workshop, 'toggle', function () { if (mobile.matches) mobileOpen = workshop.open; syncWorkshop(); });
+    if (mobile.addEventListener) on(mobile, 'change', resizedWorkshop);
+    else if (mobile.addListener) { mobile.addListener(resizedWorkshop); cleanups.push(function () { mobile.removeListener(resizedWorkshop); }); }
     function catId() { return summary && summary.catId || defaultCat; }
     function cat(id) { return cats.find(function (item) { return item.id === (id || catId()); }) || cats[0] || { id: defaultCat, name: '小猫' }; }
     function get(id, selectedCat) {
@@ -65,6 +85,7 @@
     }
     function restoreFocus() {
       if (!mountedAlive || !container.isConnected) return;
+      if (!workshop.open) { compact.focus({ preventScroll: true }); return; }
       var button = shell.querySelector('[data-avatar-action="draw"]:not(:disabled)') || shell.querySelector('[data-avatar-skin][aria-selected="true"]');
       if (button) button.focus({ preventScroll: true });
     }
@@ -189,10 +210,14 @@
       if (!mountedAlive) return;
       var c = current(), nextOwner = c ? c.id : null;
       var changedOwner = lastOwner !== null && !sameOwner(ownerId, nextOwner);
-      if (changedOwner) { closeReveal(); note('', false); }
+      if (changedOwner) { closeReveal(); note('', false); mobileOpen = false; galleryScroll = 0; }
+      else if (mobile.matches) mobileOpen = workshop.open;
+      workshop.open = !mobile.matches || mobileOpen;
       ownerId = nextOwner; lastOwner = ownerKey(ownerId);
       summary = Rewards.summary(ownerId);
-      var oldGallery = shell.querySelector('.avatar-gallery'), scroll = oldGallery && !changedOwner ? oldGallery.scrollLeft : 0;
+      var oldGallery = shell.querySelector('.avatar-gallery');
+      if (oldGallery && !changedOwner && workshop.open) galleryScroll = oldGallery.scrollLeft;
+      var scroll = changedOwner ? 0 : galleryScroll;
       var oldRules = shell.querySelector('.avatar-rules'), rulesOpen = !!(oldRules && oldRules.open);
       shell.textContent = '';
       var heading = node('div', 'avatar-section-heading');
@@ -201,6 +226,15 @@
       heading.appendChild(node('span', 'avatar-season-tag', '10 套主题服装')); shell.appendChild(heading);
       var avatar = get(summary && summary.equipped || 'default') || Catalog.defaultAvatar;
       var currentCat = cat();
+      compact.textContent = '';
+      compact.appendChild(picture(imageOf(avatar), '', 'avatar-workshop-portrait'));
+      var compactCopy = node('span', 'avatar-workshop-copy');
+      var compactTitle = node('strong', 'avatar-workshop-title', '我的装扮工坊'); compactTitle.id = compactTitleId;
+      compactCopy.appendChild(compactTitle);
+      compactCopy.appendChild(node('span', 'avatar-workshop-meta', (c ? c.name : '本机访客') + ' · ' + currentCat.name));
+      compactCopy.appendChild(node('span', 'avatar-workshop-balance', summary && summary.ok ? '可兑换 ' + summary.availableMoons + ' 🌙' : '余额暂不可用'));
+      compact.append(compactCopy, node('span', 'avatar-workshop-toggle'));
+      syncWorkshop();
       var hero = node('div', 'avatar-hero');
       var portrait = node('div', 'avatar-portrait'); portrait.appendChild(picture(imageOf(avatar), avatar.name, 'avatar-portrait-image'));
       var info = node('div', 'avatar-hero-info'); info.appendChild(node('p', 'avatar-owner-name', c ? c.name : '本机访客'));
@@ -264,6 +298,7 @@
         gallery.appendChild(tab);
       });
       shell.appendChild(gallery); gallery.scrollLeft = scroll;
+      gallery.addEventListener('scroll', function () { if (workshop.open) galleryScroll = gallery.scrollLeft; });
       if (changedOwner) { var activeTab = gallery.querySelector('[aria-selected="true"]'); if (activeTab) gallery.scrollLeft = Math.max(0, activeTab.offsetLeft - gallery.offsetLeft - 8); }
       var col = collection(skin.id), owned = Array.isArray(col.pieces) ? col.pieces : [];
       var panel = node('div', 'avatar-collection-panel'); panel.id = 'avatar-collection-panel'; panel.setAttribute('role', 'tabpanel'); panel.setAttribute('aria-label', skin.name + '拼图');
@@ -305,7 +340,7 @@
       rules.appendChild(ruleList); shell.appendChild(rules);
       var status = node('p', 'avatar-status' + (statusError ? ' is-error' : '')); status.setAttribute('role', statusError ? 'alert' : 'status'); status.setAttribute('aria-live', 'polite');
       status.textContent = statusMessage; status.hidden = !statusMessage; shell.appendChild(status);
-      container.setAttribute('aria-labelledby', 'avatar-center-title');
+      syncWorkshop();
     }
     function refresh() { render(); }
     function handleStore() { render(); }
