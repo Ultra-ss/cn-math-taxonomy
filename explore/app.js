@@ -1467,8 +1467,7 @@
     document.body.classList.toggle('subject-science', subject === 'science');
     if (window.CnmLastLocation) window.CnmLastLocation.syncNavigation(subject);
     document.querySelectorAll('.subject-link').forEach(function (link) {
-      var target = link.getAttribute('data-subject'), on = target === subject;
-      if (target === 'physics' || target === 'science') link.setAttribute('href', './?subject=' + target + '&resume=1');
+      var on = link.getAttribute('data-subject') === subject;
       link.classList.toggle('on', on);
       if (on) link.setAttribute('aria-current', 'true'); else link.removeAttribute('aria-current');
     });
