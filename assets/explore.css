@@ -20,9 +20,7 @@ body.page-explore {
   flex-direction: column;
   overflow: hidden;
 }
-@media (prefers-color-scheme: dark) {
-  :root { --node-passed-border: #a2bda9; --node-expert-border: #dbc88d; --node-expert-glow: #e5c96d; }
-}
+:root[data-theme="dark"] { --node-passed-border: #a2bda9; --node-expert-border: #dbc88d; --node-expert-glow: #e5c96d; }
 body.page-explore .node-tip { font-family: var(--graph-label-font); font-size: 15px; font-weight: 400; line-height: 1.5; }
 body.page-explore .top-banner,
 body.page-explore .site-header,

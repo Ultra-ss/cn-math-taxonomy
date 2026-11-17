@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../assets/theme.js"></script>
 <title>检测 · 全网路物理学习图谱</title>
 <meta name="description" content="默认进入物理。选择一册教材，从第一个知识点开始按课本顺序逐点检查，保存每个知识点的真实学习进度。也可选择单点追溯先修、查漏补缺。">
 <meta property="og:type" content="website">
@@ -32,6 +33,7 @@
 </head>
 <body>
 <header class="site-header no-print">
+  <div class="brand-area">
   <a class="brand" href="../?home=1">
     <svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><path fill="var(--logo-sheet)" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" d="M6.6 4.8H17L27.4 15.2V25Q27.4 27.4 25.2 27.4H6.6Q4.4 27.4 4.4 25.2V7Q4.4 4.8 6.6 4.8Z"/><path fill="var(--logo-fold)" d="M17.7 6.3 26.1 14.7H17.7Z"/><path fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" d="M17.7 6.3V14.7H26.1"/><path fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round" d="M8.3 24.2H12.4Q14.2 24.2 14.2 22.4V20.2Q14.2 18.6 16 18.6H18.8"/><path fill="currentColor" d="M18.5 16.85 23 18.6 18.5 20.35Z"/></svg>
     <span class="brand-copy">
@@ -39,6 +41,11 @@
       <span class="brand-kicker">学习路径</span>
     </span>
   </a>
+    <div class="theme-switch" role="group" aria-label="颜色主题">
+      <button type="button" data-theme-choice="light" aria-pressed="true" aria-label="日间模式" title="日间模式"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><span>日间<span class="theme-mode-word">模式</span></span></button>
+      <button type="button" data-theme-choice="dark" aria-pressed="false" aria-label="深夜模式" title="深夜模式"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14a8.5 8.5 0 0 1-10.5-10.5A8.5 8.5 0 1 0 20.5 14Z"/></svg><span>深夜<span class="theme-mode-word">模式</span></span></button>
+    </div>
+  </div>
   <nav class="site-nav" aria-label="主导航">
     <div class="subject-switch" role="group" aria-label="学科">
       <a class="nav-link subject-link" data-subject="science" href="../?home=1&amp;subject=science">小学科学</a>

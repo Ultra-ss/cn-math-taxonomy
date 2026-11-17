@@ -140,6 +140,9 @@ jobs:
       - name: tests/test_graph_springs.js
         run: node tests/test_graph_springs.js
 
+      - name: tests/test_theme.js
+        run: node tests/test_theme.js
+
       - name: 课标映射严格模式（仅报告）
         continue-on-error: true
         env:

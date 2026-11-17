@@ -58,6 +58,7 @@
   var changingCamera = false;
   var viewportSaveTimer = null;
   var graphMotion = null;
+  var graphStyleContext = null;
   var graphSprings = null;
   var graphMotionPaused = false;
   var GRAPH_MOTION_PAUSED_KEY = 'cnmGraph.motionPaused.v1';
@@ -1125,6 +1126,59 @@
     return elements;
   }
 
+  function graphStyles(colors, narrow, dense) {
+    var textMax = narrow ? 116 : 140, boxW = narrow ? 132 : 156;
+    return [
+      { selector: 'node', style: {
+        label: 'data(label)', 'text-wrap': 'ellipsis', 'text-max-width': textMax + 'px',
+        'text-overflow-wrap': 'anywhere',
+        'text-valign': 'center', 'text-halign': 'center',
+        'font-size': 14, 'font-weight': 400, 'font-family': FONT, color: 'data(color)',
+        'background-color': 'data(bg)', 'border-width': 3, 'border-color': 'data(border)',
+        shape: 'round-rectangle', width: boxW, height: 40, padding: 0, 'corner-radius': 12
+      } },
+      { selector: 'node.current', style: { width: boxW * 1.05, height: 42, 'border-width': 4, 'z-index': 10 } },
+      { selector: 'node:active', style: { 'overlay-opacity': 0 } },
+      { selector: 'node.test-passed, node.test-failed, node.test-expert', style: {
+        'background-width': 22, 'background-height': 22, 'background-fit': 'none',
+        'background-position-x': '100%', 'background-position-y': '0%',
+        'background-offset-x': 7, 'background-offset-y': -7, 'background-clip': 'none',
+        'background-image-containment': 'over', 'bounds-expansion': 10
+      } },
+      { selector: 'node.test-passed', style: { 'background-image': colors.passedBadge, 'border-color': colors.passedBorder } },
+      { selector: 'node.test-failed', style: { 'background-image': colors.failedBadge } },
+      { selector: 'node.test-expert', style: { 'background-image': colors.expertBadge, 'border-color': colors.expertBorder } },
+      { selector: 'node.expert-unlocked', style: expertGlowStyle(colors, boxW, 40, colors.passedBadge) },
+      { selector: 'node.expert-unlocked.test-expert', style: expertGlowStyle(colors, boxW, 40, colors.expertBadge) },
+      { selector: 'node.expert-unlocked.current', style: expertGlowStyle(colors, boxW * 1.05, 42, colors.passedBadge) },
+      { selector: 'node.expert-unlocked.test-expert.current', style: expertGlowStyle(colors, boxW * 1.05, 42, colors.expertBadge) },
+      { selector: 'edge', style: {
+        width: 1.6, 'line-color': 'data(color)', 'target-arrow-color': 'data(color)',
+        'target-arrow-shape': 'triangle', 'curve-style': dense ? 'straight' : 'bezier',
+        'arrow-scale': 0.8, 'line-style': 'solid'
+      } },
+      { selector: 'edge.soft', style: { 'line-style': 'dashed', width: 1.5 } }
+    ];
+  }
+
+  function syncGraphTheme() {
+    if (!cy || cy.destroyed() || !graphStyleContext) return;
+    var colors = theme();
+    // 只更新颜色和图标，不重建节点、布局、相机或正在运行的拖拽/漂浮。
+    cy.batch(function () {
+      cy.nodes().forEach(function (node) {
+        var tone = node.hasClass('primary') ? { bg: colors.primaryBg, border: colors.primary }
+          : node.hasClass('junior') ? { bg: colors.juniorBg, border: colors.junior }
+          : { bg: colors.seniorBg, border: colors.senior };
+        var current = node.hasClass('current');
+        node.data({ bg: current ? colors.currentBg : tone.bg,
+          border: current ? colors.currentBorder : tone.border, color: colors.text });
+      });
+      cy.edges().forEach(function (edge) { edge.data('color', edge.hasClass('soft') ? colors.edgeSoft : colors.edge); });
+      cy.style().fromJson(graphStyles(colors, graphStyleContext.narrow, graphStyleContext.dense)).update();
+    });
+  }
+
   function renderGraph(restoreSavedCamera) {
     if (window.matchMedia('(max-width: 900px)').matches && mobileView !== 'graph') {
       graphNeedsRender = true;
@@ -1199,8 +1253,6 @@
         ensureDagre();
         var colors = theme();
         var narrow = labelLimit() <= 8;
-        var textMax = narrow ? 116 : 140;
-        var boxW = narrow ? 132 : 156;
         var elements = folded ? buildFoldedElements(nodeSet, colors) : buildFullElements(nodeSet, colors);
         var dense = heavy;
         var cyOptions = {
@@ -1216,38 +1268,9 @@
           userPanningEnabled: true,
           userZoomingEnabled: true
         };
-        cyOptions.style = [
-          { selector: 'node', style: {
-            label: 'data(label)', 'text-wrap': 'ellipsis', 'text-max-width': textMax + 'px',
-            'text-overflow-wrap': 'anywhere',
-            'text-valign': 'center', 'text-halign': 'center',
-            'font-size': 14, 'font-weight': 400, 'font-family': FONT, color: 'data(color)',
-            'background-color': 'data(bg)', 'border-width': 3, 'border-color': 'data(border)',
-            shape: 'round-rectangle', width: boxW, height: 40, padding: 0, 'corner-radius': 12
-          } },
-          { selector: 'node.current', style: { width: boxW * 1.05, height: 42, 'border-width': 4, 'z-index': 10 } },
-          { selector: 'node:active', style: { 'overlay-opacity': 0 } },
-          { selector: 'node.test-passed, node.test-failed, node.test-expert', style: {
-            'background-width': 22, 'background-height': 22, 'background-fit': 'none',
-            'background-position-x': '100%', 'background-position-y': '0%',
-            'background-offset-x': 7, 'background-offset-y': -7, 'background-clip': 'none',
-            'background-image-containment': 'over', 'bounds-expansion': 10
-          } },
-          { selector: 'node.test-passed', style: { 'background-image': colors.passedBadge, 'border-color': colors.passedBorder } },
-          { selector: 'node.test-failed', style: { 'background-image': colors.failedBadge } },
-          { selector: 'node.test-expert', style: { 'background-image': colors.expertBadge, 'border-color': colors.expertBorder } },
-          { selector: 'node.expert-unlocked', style: expertGlowStyle(colors, boxW, 40, colors.passedBadge) },
-          { selector: 'node.expert-unlocked.test-expert', style: expertGlowStyle(colors, boxW, 40, colors.expertBadge) },
-          { selector: 'node.expert-unlocked.current', style: expertGlowStyle(colors, boxW * 1.05, 42, colors.passedBadge) },
-          { selector: 'node.expert-unlocked.test-expert.current', style: expertGlowStyle(colors, boxW * 1.05, 42, colors.expertBadge) },
-          { selector: 'edge', style: {
-            width: 1.6, 'line-color': 'data(color)', 'target-arrow-color': 'data(color)',
-            'target-arrow-shape': 'triangle', 'curve-style': dense ? 'straight' : 'bezier',
-            'arrow-scale': 0.8, 'line-style': 'solid'
-          } },
-          { selector: 'edge.soft', style: { 'line-style': 'dashed', width: 1.5 } }
-        ];
+        cyOptions.style = graphStyles(colors, narrow, dense);
         cy = window.cytoscape(cyOptions);
+        graphStyleContext = { narrow: narrow, dense: dense };
         cy.nodes().ungrabify();
         window.__cy = cy;
         renderedCameraContext = nextContext;
@@ -1658,9 +1681,10 @@
     if (window.ResizeObserver) {
       new ResizeObserver(resizeGraphViewport).observe($('cy'));
     }
+    window.addEventListener('cnm:theme', syncGraphTheme);
     var colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
     if (colorScheme.addEventListener) {
-      colorScheme.addEventListener('change', function () { if (selected) renderGraph(); });
+      colorScheme.addEventListener('change', function () { if (!window.CnmTheme) syncGraphTheme(); });
     }
     var narrow = window.matchMedia('(max-width: 700px)');
     if (narrow.addEventListener) {

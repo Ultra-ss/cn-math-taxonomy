@@ -167,4 +167,50 @@ test('浏览器API与CommonJS一致，不创建控制器就没有事件和存储
   const window={};vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../assets/graph-motion.js'),'utf8'),{window});
   assert.equal(typeof window.CnmGraphMotion.create,'function');assert.equal(window.CnmGraphMotion.IDLE_DELAY,700);
 });
+for(const resultGraph of [false,true])test((resultGraph?'检测结果路径':'知识图谱')+'切换主题只重着色，节点、相机与样式数量保持不变',()=>{
+  const cytoscape=require('../assets/vendor/cytoscape.min.js');
+  const app=resultGraph?fs.readFileSync(path.join(__dirname,'../diagnose/app.js'),'utf8'):source;
+  function section(start,end){const a=app.indexOf(start),b=app.indexOf(end,a);assert.ok(a>=0&&b>a);return app.slice(a,b);}
+  function palette(dark){
+    const names=['primary','primaryBg','junior','juniorBg','senior','seniorBg','currentBg','currentBorder','passedBorder','expertBorder','expertGlow','text','edge','edgeSoft','bad','badBg'];
+    const colors=Object.fromEntries(names.map((name,i)=>[name,'#'+(dark?0x554422+i*0x20301:0xaabbcc-i*0x30201).toString(16).padStart(6,'0')]));
+    for(const name of ['passedBadge','failedBadge','expertBadge'])colors[name]='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"><circle cx="11" cy="11" r="10" fill="'+colors.text+'"/></svg>');
+    return colors;
+  }
+  let colors=palette(false);
+  const extracted=resultGraph?section('function toneOf(', 'function pathNodeElement(')+section('function pathGraphStyles(', 'function mountPathGraph(')
+    :section('function expertGlowStyle(', 'function theme()')+section('function graphStyles(', 'function renderGraph(');
+  // 提取函数与真实vendor在同一realm运行，保持plain-object API和浏览器一致。
+  const ctx=new Function('theme','FONT','var cy=null,pathCy=null,graphStyleContext={narrow:false,dense:false},pathStyleContext={narrow:false,heavy:false};'+extracted+
+    ';return {styles:'+(resultGraph?'pathGraphStyles':'graphStyles')+',sync:'+(resultGraph?'syncPathTheme':'syncGraphTheme')+',attach:function(graph){cy=graph;pathCy=graph;},current:function(){return '+(resultGraph?'pathCy':'cy')+';}};')(()=>colors,'sans-serif');
+  const style=ctx.styles,sync=ctx.sync;
+  const graph=cytoscape({headless:true,styleEnabled:true,layout:{name:'preset'},elements:[
+    {data:{id:'a',label:'科学'},position:{x:20,y:30},classes:'primary grade'},
+    {data:{id:'b',label:'专家',testStatus:'mastered'},position:{x:210,y:130},classes:'junior current test-expert expert-unlocked'},
+    {data:{id:'c',label:'高中'},position:{x:400,y:210},classes:'senior test-passed'},
+    {data:{id:'d',label:'薄弱'},position:{x:590,y:320},classes:'junior root test-failed'},
+    {data:{id:'e',label:'已通过'},position:{x:770,y:420},classes:'junior test-passed expert-unlocked'},
+    {data:{id:'ab',source:'a',target:'b'},classes:'soft'},
+    {data:{id:'bc',source:'b',target:'c'},classes:'hard'}
+  ].map(element=>({...element,data:{bg:'#ffffff',border:'#000000',color:'#333333',...element.data}})),style:style(colors,false,false)});
+  ctx.attach(graph);sync();graph.zoom(1.37);graph.pan({x:88,y:-49});
+  const geometry=()=>graph.nodes().map(n=>({id:n.id(),x:n.position('x'),y:n.position('y'),w:n.width(),h:n.height(),classes:n.classes()}));
+  const before=JSON.parse(JSON.stringify(geometry())),camera={zoom:graph.zoom(),pan:{...graph.pan()}},rules=graph.style().json().length;
+  for(let i=0;i<30;i++){
+    colors=palette(i%2===0);sync();
+    assert.equal(ctx.current(),graph);
+    assert.deepEqual(JSON.parse(JSON.stringify(geometry())),before);
+    assert.deepEqual({zoom:graph.zoom(),pan:{...graph.pan()}},camera);
+    assert.equal(graph.style().json().length,rules,'主题切换不能累加stylesheet');
+    assert.equal(graph.$id('a').data('bg'),colors.primaryBg);assert.equal(graph.$id('b').data('bg'),colors.currentBg);
+    assert.equal(graph.$id('d').data('bg'),resultGraph?colors.badBg:colors.juniorBg);
+    assert.equal(graph.$id('ab').data('color'),colors.edgeSoft);assert.equal(graph.$id('bc').data('color'),colors.edge);
+    if(!resultGraph){
+      assert.equal(graph.$id('b').pstyle('background-image').value[1],colors.expertBadge);
+      assert.ok(decodeURIComponent(graph.$id('b').pstyle('background-image').value[0]).includes(colors.expertGlow));
+      assert.equal(graph.$id('e').pstyle('background-image').value[1],colors.passedBadge);
+    }
+  }
+  graph.destroy();assert.doesNotThrow(sync);
+});
 console.log('test_graph_motion: '+passed+' passed');

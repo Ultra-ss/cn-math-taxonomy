@@ -55,6 +55,7 @@
   let returnToParam = null; // null 表示没有显式返回参数；空字符串表示显式参数无效
   let resultPanelState = { analysis: false, log: false, more: false };
   let pathCy = null;
+  let pathStyleContext = null;
   let pathToken = 0;
   let pathTipLock = false;
   let pathExpanded = false;
@@ -1738,6 +1739,45 @@
     if (!window.cytoscape || !window.dagre || !window.cytoscapeDagre) throw new Error('图形库没有加载');
     if (!ensureDagre.ready) { window.cytoscape.use(window.cytoscapeDagre); ensureDagre.ready = true; }
   }
+  function pathGraphStyles(colors, narrow, heavy) {
+    const textMax = narrow ? 104 : 126, boxW = narrow ? 118 : 142;
+    const FONT = '"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", sans-serif';
+    return [
+      { selector: 'node', style: {
+        label: 'data(label)', 'text-wrap': 'ellipsis', 'text-max-width': textMax + 'px',
+        'text-overflow-wrap': 'anywhere',
+        'text-valign': 'center', 'text-halign': 'center',
+        'font-size': 13, 'font-family': FONT, color: 'data(color)',
+        'background-color': 'data(bg)', 'border-width': 2, 'border-color': 'data(border)',
+        shape: 'round-rectangle', width: boxW, height: 34, padding: 0, 'corner-radius': 8
+      } },
+      { selector: 'node.current', style: { 'border-width': 4, 'z-index': 8 } },
+      { selector: 'node.root', style: {
+        'background-color': colors.badBg, 'border-color': colors.bad, 'border-width': 4, 'z-index': 11
+      } },
+      { selector: 'edge', style: {
+        width: 1.6, 'line-color': 'data(color)', 'target-arrow-color': 'data(color)',
+        'target-arrow-shape': 'triangle', 'curve-style': heavy ? 'straight' : 'bezier', 'arrow-scale': 0.8, 'line-style': 'solid'
+      } },
+      { selector: 'edge.soft', style: { 'line-style': 'dashed', width: 1.5 } },
+      { selector: 'edge.indirect', style: { 'line-style': 'dotted', width: 1.4 } }
+    ];
+  }
+  function syncPathTheme() {
+    if (!pathCy || pathCy.destroyed() || !pathStyleContext) return;
+    const colors = theme();
+    pathCy.batch(function () {
+      pathCy.nodes().forEach(function (node) {
+        const kind = node.hasClass('primary') ? 'primary' : node.hasClass('junior') ? 'junior' : 'senior';
+        const tone = toneOf(kind, colors), root = node.hasClass('root'), target = node.hasClass('current');
+        node.data({ bg: root ? colors.badBg : target ? colors.currentBg : tone[0],
+          border: root ? colors.bad : target ? colors.currentBorder : tone[1], color: colors.text });
+      });
+      pathCy.edges().forEach(function (edge) { edge.data('color', edge.hasClass('hard') ? colors.edge : colors.edgeSoft); });
+      pathCy.style().fromJson(pathGraphStyles(colors, pathStyleContext.narrow, pathStyleContext.heavy)).update();
+    });
+  }
+
   function mountPathGraph(sum) {
     const token = ++pathToken;
     if (pathCy) { pathCy.destroy(); pathCy = null; window.__pathCy = null; }
@@ -1752,9 +1792,6 @@
         ensureDagre();
         const colors = theme();
         const narrow = labelLimit() <= 8;
-        const textMax = narrow ? 104 : 126;
-        const boxW = narrow ? 118 : 142;
-        const FONT = '"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", sans-serif';
         const total = lay.nodes.length;
         const folded = total > PATH_FOLD_AT && !pathExpanded;
         const heavy = !folded && total > 48;
@@ -1772,27 +1809,9 @@
           autoungrabify: true,
           userPanningEnabled: true,
           userZoomingEnabled: true,
-          style: [
-            { selector: 'node', style: {
-              label: 'data(label)', 'text-wrap': 'ellipsis', 'text-max-width': textMax + 'px',
-              'text-overflow-wrap': 'anywhere',
-              'text-valign': 'center', 'text-halign': 'center',
-              'font-size': 13, 'font-family': FONT, color: 'data(color)',
-              'background-color': 'data(bg)', 'border-width': 2, 'border-color': 'data(border)',
-              shape: 'round-rectangle', width: boxW, height: 34, padding: 0, 'corner-radius': 8
-            } },
-            { selector: 'node.current', style: { 'border-width': 4, 'z-index': 8 } },
-            { selector: 'node.root', style: {
-              'background-color': colors.badBg, 'border-color': colors.bad, 'border-width': 4, 'z-index': 11
-            } },
-            { selector: 'edge', style: {
-              width: 1.6, 'line-color': 'data(color)', 'target-arrow-color': 'data(color)',
-              'target-arrow-shape': 'triangle', 'curve-style': heavy ? 'straight' : 'bezier', 'arrow-scale': 0.8, 'line-style': 'solid'
-            } },
-            { selector: 'edge.soft', style: { 'line-style': 'dashed', width: 1.5 } },
-            { selector: 'edge.indirect', style: { 'line-style': 'dotted', width: 1.4 } }
-          ]
+          style: pathGraphStyles(colors, narrow, heavy)
         });
+        pathStyleContext = { narrow: narrow, heavy: heavy };
         window.__pathCy = pathCy;
         pathCy.on('mouseover', 'node', function (event) { showPathTip(event.target); });
         pathCy.on('mouseout', 'node', function () { if (!pathTipLock) hidePathTip(); });
@@ -2096,13 +2115,14 @@
     if (session && D) mountPathGraph(E.summarize(D.graph, session));
   });
 
+  window.addEventListener('cnm:theme', syncPathTheme);
   if (window.matchMedia) {
     const scheme = window.matchMedia('(prefers-color-scheme: dark)');
     const relayout = function () {
       if (!session || !document.getElementById('path-cy')) return;
       mountPathGraph(E.summarize(D.graph, session));
     };
-    if (scheme.addEventListener) scheme.addEventListener('change', relayout);
+    if (scheme.addEventListener) scheme.addEventListener('change', function () { if (!window.CnmTheme) syncPathTheme(); });
     const narrow = window.matchMedia('(max-width: 700px)');
     if (narrow.addEventListener) narrow.addEventListener('change', relayout);
   }
