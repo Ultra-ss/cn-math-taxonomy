@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../assets/pwa.css">
 <link rel="stylesheet" href="children.css">
+<link rel="stylesheet" href="avatar-center.css">
 </head>
 <body class="page-kids">
 <header class="site-header">
@@ -43,8 +44,9 @@
 </header>
 <main class="kids" id="root">
   <h1>本地个人中心</h1>
-  <p class="lede">管理这台设备上的孩子档案、学习记录与备份。资料只保存在当前浏览器；选好当前孩子后，可以分别查看每次的检测结果和薄弱知识点。</p>
+  <p class="lede">管理本地账号、卡通形象、学习记录与备份。资料只保存在当前浏览器，每个账号分别记录学习成就与装扮。</p>
   <p id="back" class="quiet-link" hidden></p>
+  <section id="avatar-center" class="avatar-center" aria-label="我的形象与拼图装扮"></section>
   <section class="center-achievements center-learning" id="achievements" aria-labelledby="achievements-title">
     <div class="center-section-head">
       <h2 id="achievements-title">我的学习成就</h2>
@@ -98,7 +100,7 @@
   <details class="kid-backup center-disclosure" aria-labelledby="backup-title">
     <summary class="center-disclosure-toggle"><h2 id="backup-title">备份和恢复</h2></summary>
     <div class="center-disclosure-content">
-    <p>备份所有孩子的资料，以及科学、物理的检测记录、错题、进行中检测、薄弱知识点、图谱检测进度和成就积分。没有建立档案的学习进度也可以迁移。</p>
+    <p>备份所有账号的资料、检测记录、错题、进行中检测、薄弱知识点、图谱进度、成就积分，以及拼图兑换、已解锁装扮与穿戴状态。访客的学习进度和装扮也可以迁移。</p>
     <button type="button" id="export-backup">导出全部学习数据</button>
     <p id="export-status" class="small" role="status" hidden></p>
     <div class="kid-import">
@@ -155,6 +157,9 @@
 <script src="../assets/book-selection.js"></script>
 <script src="../assets/last-location.js"></script>
 <script src="../assets/achievement-books.js"></script>
+<script src="../assets/avatar-catalog.js"></script>
+<script src="../assets/avatar-rewards.js"></script>
+<script src="avatar-center.js"></script>
 <script src="page.js"></script>
 <script src="../assets/stats-config.js"></script>
 <script src="../assets/stats.js"></script>

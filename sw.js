@@ -3,7 +3,7 @@
  * 改了 SHELL 或 DATA 列表、或数据结构变了，就把 VERSION 加一。 */
 'use strict';
 
-var VERSION = 'v68';
+var VERSION = 'v69';
 var CACHE = 'cnm-pwa-' + VERSION;
 var SCOPE = self.registration.scope;
 
@@ -21,6 +21,8 @@ var SHELL = [
   'children/',
   'children/history.html',
   'children/children.css',
+  'children/avatar-center.css',
+  'children/avatar-center.js',
   'children/page.js',
   'children/history.js',
   'wrongbook/',
@@ -40,6 +42,19 @@ var SHELL = [
   'assets/last-location.js',
   'assets/book-selection.js',
   'assets/achievement-books.js',
+  'assets/avatar-catalog.js',
+  'assets/avatar-rewards.js',
+  'assets/avatars/default.svg',
+  'assets/avatars/skin-01.svg',
+  'assets/avatars/skin-02.svg',
+  'assets/avatars/skin-03.svg',
+  'assets/avatars/skin-04.svg',
+  'assets/avatars/skin-05.svg',
+  'assets/avatars/skin-06.svg',
+  'assets/avatars/skin-07.svg',
+  'assets/avatars/skin-08.svg',
+  'assets/avatars/skin-09.svg',
+  'assets/avatars/skin-10.svg',
   'assets/explore-viewport.js',
   'assets/stats-config.js',
   'assets/stats.js',

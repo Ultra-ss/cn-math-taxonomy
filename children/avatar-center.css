@@ -1,0 +1,120 @@
+/* 月亮拼图装扮工坊，沿用全站的雾紫、奶油黄与灰蓝。 */
+.avatar-center {
+  margin: 0 0 18px;
+  padding: 20px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--bg-elev);
+  background-image: linear-gradient(150deg, var(--brand-soft), transparent 38%), var(--surface-wash, none);
+  box-shadow: var(--shadow);
+}
+.avatar-center-content { min-width: 0; }
+.avatar-section-heading, .avatar-gallery-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.avatar-eyebrow, .avatar-collection-kicker, .avatar-reveal-kicker { display: block; margin-bottom: 4px; font-size: .72rem; font-weight: 750; letter-spacing: .06em; color: var(--brand-strong); }
+.avatar-center h2 { margin: 0; color: var(--brand-strong); font-size: 1.2rem; }
+.avatar-season-tag { flex: none; padding: 5px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: .72rem; white-space: nowrap; background: var(--bg-elev); }
+.avatar-hero { display: flex; align-items: center; gap: 18px; padding: 20px 0 16px; }
+.avatar-portrait { flex: none; width: 112px; height: 112px; padding: 5px; border: 1px solid var(--line); border-radius: 27px; background: var(--bg-elev); box-shadow: 0 7px 20px rgb(66 53 78 / 9%); transform: rotate(-3deg); }
+.avatar-portrait-image { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 21px; }
+.avatar-hero-info { min-width: 0; }
+.avatar-owner-name { margin: 0 0 4px; font-size: 1.3rem; font-weight: 800; overflow-wrap: anywhere; }
+.avatar-equipped-name { margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.5; }
+.avatar-text-button { margin: 5px 0 -5px; padding: 6px 0; min-height: 38px; border: 0; border-radius: 4px; background: transparent; color: var(--brand-strong); box-shadow: none; font-size: .8rem; text-decoration: underline; text-underline-offset: 3px; }
+.avatar-text-button:hover { background: transparent; }
+.avatar-wallet { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 13px 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--yellow-soft); background-image: linear-gradient(115deg, transparent, var(--bg-elev)); }
+.avatar-wallet-main { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.avatar-wallet-main > span { color: var(--muted); font-size: .85rem; font-weight: 650; }
+.avatar-wallet-main strong { color: var(--text); font-size: 1.7rem; font-weight: 800; line-height: 1.25; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.avatar-wallet-meta { flex: none; display: grid; gap: 3px; text-align: right; color: var(--muted); font-size: .75rem; }
+.avatar-guest-note { margin: 10px 0 0; color: var(--muted); font-size: .75rem; line-height: 1.65; }
+.avatar-guest-note a { display: inline-block; margin-left: 7px; color: var(--brand-strong); font-weight: 700; }
+.avatar-gallery-heading { margin-top: 21px; margin-bottom: 9px; }
+.avatar-gallery-heading h3 { margin: 0; font-size: .92rem; }
+.avatar-gallery-heading > span { color: var(--muted); font-size: .72rem; white-space: nowrap; }
+.avatar-gallery { display: flex; gap: 8px; padding: 2px 2px 10px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: var(--line) transparent; -webkit-overflow-scrolling: touch; }
+.avatar-gallery .avatar-skin-tab { flex: 0 0 89px; display: flex; flex-direction: column; align-items: stretch; gap: 5px; min-width: 0; padding: 6px; margin: 0; border: 1px solid transparent; border-radius: 14px; background: transparent; color: var(--text); box-shadow: none; scroll-snap-align: start; touch-action: manipulation; }
+.avatar-gallery .avatar-skin-tab:hover { background: var(--bg-muted); }
+.avatar-gallery .avatar-skin-tab.is-selected { border-color: var(--brand); background: var(--brand-soft); box-shadow: inset 0 0 0 1px var(--brand); }
+.avatar-skin-thumb { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 9px; }
+.avatar-skin-name { display: block; font-size: .74rem; line-height: 1.4; font-weight: 750; overflow-wrap: anywhere; }
+.avatar-skin-progress { font-size: .67rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.avatar-collection-panel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .98fr); gap: 22px; align-items: center; margin-top: 5px; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--bg-elev); background-image: linear-gradient(135deg, var(--blue-soft), transparent 65%); }
+.avatar-board-wrap { width: 100%; min-width: 0; padding: 7px; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-elev); box-shadow: 0 4px 13px rgb(66 53 78 / 7%); }
+.avatar-puzzle { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); gap: 3px; width: 100%; aspect-ratio: 1; }
+.avatar-piece { position: relative; min-width: 0; min-height: 0; overflow: hidden; isolation: isolate; border-radius: 5px; background: var(--bg-muted); }
+.avatar-piece-art { position: absolute; display: block; width: 300%; height: 300%; max-width: none; object-fit: cover; pointer-events: none; user-select: none; -webkit-user-select: none; }
+.avatar-piece.is-missing { box-shadow: inset 0 0 0 1px var(--line); }
+.avatar-piece.is-missing .avatar-piece-art { opacity: .12; filter: grayscale(.9) blur(1px); }
+.avatar-piece-number { position: absolute; z-index: 1; top: 5px; left: 5px; display: grid; place-items: center; min-width: 18px; height: 18px; padding: 0 3px; border-radius: 5px; background: var(--bg-elev); color: var(--brand-strong); font-size: .64rem; line-height: 1; font-weight: 800; box-shadow: 0 1px 4px rgb(40 30 50 / 10%); }
+.avatar-piece.is-owned .avatar-piece-number { opacity: .86; }
+.avatar-piece-waiting { position: absolute; z-index: 1; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: .65rem; font-weight: 600; }
+.avatar-collection-info { min-width: 0; }
+.avatar-collection-info h3 { margin: 0 0 7px; color: var(--brand-strong); font-size: 1.15rem; }
+.avatar-description { margin: 0 0 14px; color: var(--muted); font-size: .82rem; line-height: 1.65; }
+.avatar-collection-progress { display: flex; align-items: baseline; flex-wrap: wrap; gap: 7px; margin: 0 0 7px; }
+.avatar-collection-progress strong { font-size: 1.6rem; line-height: 1.2; color: var(--brand-strong); font-variant-numeric: tabular-nums; }
+.avatar-collection-progress > span { color: var(--muted); font-size: .75rem; }
+.avatar-puzzle-meter { display: block; appearance: none; -webkit-appearance: none; width: 100%; height: 7px; border: 0; border-radius: 99px; overflow: hidden; background: var(--bg-muted); color: var(--brand); }
+.avatar-puzzle-meter::-webkit-progress-bar { border-radius: 99px; background: var(--bg-muted); }
+.avatar-puzzle-meter::-webkit-progress-value { border-radius: 99px; background: var(--brand-gradient, var(--brand)); }
+.avatar-puzzle-meter::-moz-progress-bar { border-radius: 99px; background: var(--brand-gradient, var(--brand)); }
+.avatar-draw-count { margin: 8px 0 14px; color: var(--muted); font-size: .72rem; line-height: 1.5; }
+.avatar-collection-info .avatar-draw-button { display: flex; justify-content: center; align-items: center; width: 100%; min-height: 46px; padding: 10px 11px; border: 1px solid transparent; border-radius: 11px; color: var(--on-brand); background: var(--brand); background-image: var(--brand-gradient, none); font-size: .86rem; font-weight: 750; box-shadow: 0 4px 10px rgb(66 53 78 / 12%); }
+.avatar-collection-info .avatar-draw-button:disabled { opacity: .58; box-shadow: none; cursor: default; }
+.avatar-learn-link { display: inline-flex; align-items: center; min-height: 38px; margin-top: 4px; color: var(--brand-strong); font-size: .78rem; font-weight: 700; text-underline-offset: 3px; }
+.avatar-draw-note, .avatar-unlocked-note { margin: 9px 0 0; color: var(--muted); font-size: .73rem; line-height: 1.6; }
+.avatar-unlocked-note { color: var(--ok); }
+.avatar-rules { margin-top: 12px; border-top: 1px solid var(--line); }
+.avatar-rules summary { min-height: 44px; padding: 13px 0 5px; color: var(--muted); font-size: .78rem; font-weight: 650; cursor: pointer; }
+.avatar-rules ul { margin: 5px 0 0; padding-left: 18px; color: var(--muted); font-size: .76rem; line-height: 1.75; }
+.avatar-rules li + li { margin-top: 5px; }
+.avatar-status { margin: 10px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--ok-bg); color: var(--ok); font-size: .8rem; line-height: 1.6; }
+.avatar-status.is-error { background: var(--bad-bg); color: var(--bad); }
+.avatar-center button:focus-visible, .avatar-center a:focus-visible, .avatar-rules summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.avatar-reveal { width: min(360px, calc(100vw - 32px)); max-height: calc(100dvh - 40px); margin: auto; padding: 25px 23px 22px; border: 1px solid var(--line); border-radius: 22px; background: var(--bg-elev); background-image: linear-gradient(145deg, var(--brand-soft), transparent 55%); color: var(--text); box-shadow: 0 18px 60px rgb(25 18 32 / 24%); overflow-y: auto; text-align: center; }
+.avatar-reveal[open] { display: flex; flex-direction: column; align-items: center; animation: avatarReveal .25s ease-out; }
+.avatar-reveal::backdrop { background: var(--overlay, rgb(43 39 51 / 48%)); backdrop-filter: blur(3px); }
+.avatar-reveal-top { width: 100%; }
+.avatar-reveal h2 { margin: 4px 0 18px; font-size: 1.42rem; color: var(--brand-strong); }
+.avatar-reveal-piece { flex: none; width: 156px; height: 156px; margin: 0 auto 15px; border: 4px solid var(--bg-elev); border-radius: 14px; box-shadow: 0 5px 18px rgb(40 30 50 / 13%); transform: rotate(-4deg); }
+.avatar-reveal-piece .avatar-piece-number { top: 8px; left: 8px; width: 25px; height: 25px; font-size: .8rem; }
+.avatar-reveal-full { display: block; width: 184px; height: 184px; margin: 0 auto 15px; object-fit: cover; border: 5px solid var(--bg-elev); border-radius: 20px; box-shadow: 0 5px 24px rgb(40 30 50 / 14%); }
+.avatar-reveal-name { margin: 0 0 8px; font-size: .95rem; color: var(--brand-strong); font-weight: 800; }
+.avatar-reveal-message { margin: 0; color: var(--muted); font-size: .85rem; line-height: 1.7; }
+.avatar-reveal-owner { margin: 12px 0 0; color: var(--muted); font-size: .72rem; }
+.avatar-reveal-actions { display: flex; gap: 9px; width: 100%; margin-top: 21px; }
+.avatar-reveal-actions button { flex: 1; display: flex; justify-content: center; align-items: center; min-height: 46px; border-radius: 11px; font-weight: 750; font-size: .88rem; }
+.avatar-reveal.is-unlock { background-image: radial-gradient(ellipse at 80% 0%, var(--yellow-soft), transparent 55%), linear-gradient(145deg, var(--brand-soft), transparent 75%); }
+@keyframes avatarReveal { from { opacity: 0; transform: translateY(7px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@media (max-width: 600px) {
+  .avatar-center { padding: 16px; border-radius: 18px; }
+  .avatar-collection-panel { grid-template-columns: minmax(0, 1fr); gap: 18px; padding: 14px; }
+  .avatar-board-wrap { max-width: 300px; justify-self: center; }
+  .avatar-collection-info h3 { font-size: 1.1rem; }
+  .avatar-description { margin-bottom: 11px; }
+  .avatar-collection-info .avatar-draw-button { min-height: 48px; }
+  .avatar-gallery .avatar-skin-tab { flex-basis: 84px; }
+}
+@media (max-width: 360px) {
+  .avatar-center { padding: 12px; }
+  .avatar-season-tag { padding: 5px 7px; font-size: .65rem; }
+  .avatar-center h2 { font-size: 1.1rem; }
+  .avatar-hero { gap: 14px; padding: 16px 0 14px; }
+  .avatar-portrait { width: 90px; height: 90px; border-radius: 23px; }
+  .avatar-portrait-image { border-radius: 18px; }
+  .avatar-owner-name { font-size: 1.1rem; }
+  .avatar-equipped-name { font-size: .78rem; }
+  .avatar-wallet { padding: 11px 12px; gap: 8px; }
+  .avatar-wallet-main { display: grid; gap: 2px; }
+  .avatar-wallet-main strong { font-size: 1.55rem; }
+  .avatar-wallet-meta { font-size: .7rem; }
+  .avatar-gallery-heading h3 { font-size: .85rem; }
+  .avatar-gallery-heading > span { font-size: .65rem; }
+  .avatar-collection-panel { gap: 14px; padding: 11px; }
+  .avatar-gallery .avatar-skin-tab { flex-basis: 78px; }
+  .avatar-reveal { padding: 22px 17px 18px; }
+  .avatar-reveal h2 { font-size: 1.3rem; }
+}
+@media (prefers-reduced-motion: reduce) { .avatar-reveal[open] { animation: none; } }
+@media print { .avatar-center { display: none; } }

@@ -59,6 +59,7 @@ main.kids { width: min(760px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
 .kid-card { padding: 14px 16px; margin-bottom: 12px; border-top: 3px solid var(--line); }
 .kid-card.is-current { border-top-color: var(--brand); }
 .kid-head { display: flex; align-items: center; gap: 8px; }
+.kid-avatar { flex: none; width: 48px; height: 48px; object-fit: cover; border: 1px solid var(--line); border-radius: 50%; background: var(--bg-muted); }
 .kid-head h3 { margin: 0; font-size: 1.15rem; overflow-wrap: anywhere; }
 .kid-badge { background: var(--brand); background-image: var(--brand-gradient, none); color: var(--on-brand); font-size: 0.78rem; font-weight: 800; padding: 1px 9px; border-radius: 999px; }
 .kid-meta { margin: 2px 0 0; color: var(--muted); font-weight: 650; overflow-wrap: anywhere; }

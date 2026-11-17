@@ -784,4 +784,143 @@ test('专家记录不混入普通弱点汇总，非法等级及积分数据拒�
   for(const mutate of cases){const data=learningBackup();mutate(data);assert.throws(()=>load().api.parseBackup(JSON.stringify(data)));}
 });
 
+
+const AVATAR_KEY = 'cnmAvatarRewards.v1';
+const AVATAR_EPOCH = '1970-01-01T00:00:00.000Z';
+const AVATAR_AT = '2026-11-17T10:00:00.000Z';
+function avatarDraw(id, piece=0, skinId='skin-01', at=AVATAR_AT) {
+  return {id, skinId, piece, cost:1, at};
+}
+function avatarBox(draws=[], equipped='default', equippedAt=AVATAR_EPOCH) {
+  return {draws, equipped, equippedAt};
+}
+function avatarFixture() {
+  return {v:1,byOwner:{
+    'child-a':avatarBox(Array.from({length:9},(_,n)=>avatarDraw('draw-a-'+n,n)),'skin-01',AVATAR_AT),
+    'child-b':avatarBox([avatarDraw('draw-b-0',2,'skin-02')]),
+    guest:avatarBox([avatarDraw('draw-g-0',5,'skin-10'),avatarDraw('draw-g-1',6,'skin-10'),avatarDraw('draw-g-2',6,'skin-10')])
+  }};
+}
+function avatarBackup() {
+  return exported(load({...learningFixture(),[AVATAR_KEY]:JSON.stringify(avatarFixture())}).api);
+}
+
+test('备份头像schema与实际兑换模块交叉兼容，合并后仍可由模块正常读取',()=>{
+  const AR=require('../assets/avatar-rewards.js'),data=avatarBackup();
+  assert.equal(AR.validateStore(data.learning.avatarRewards),true);
+  const local=avatarFixture();local.byOwner.guest.draws.push(avatarDraw('cross-local',1,'skin-10'));
+  const {api,storage}=load({...learningFixture(),[AVATAR_KEY]:JSON.stringify(local)});
+  importInto(api,data);assert.equal(AR.validateStore(stored(storage,AVATAR_KEY)),true);
+});
+
+test('头像拼图备份完整保留账号和访客、重复消耗与已穿戴装扮，往返不发放新资源',()=>{
+  const source=avatarFixture(),data=avatarBackup();
+  assert.deepStrictEqual(data.learning.avatarRewards,source);
+  const {api,storage}=load();const preview=api.previewImport(data);
+  assert.equal(preview.addedAvatarDraws,13);assert.equal(preview.updatedAvatarEquipment,1);
+  api.importBackup(data,preview.token);
+  assert.deepStrictEqual(stored(storage,AVATAR_KEY),source);
+  assert.equal(stored(storage,AVATAR_KEY).byOwner.guest.draws.length,3,'第三次抽中重复片仍保留三笔月亮支出');
+  const once=Object.fromEntries(storage);const second=importInto(api,data);
+  assert.equal(second.addedAvatarDraws,0);assert.equal(second.updatedAvatarEquipment,0);
+  assert.deepStrictEqual(Object.fromEntries(storage),once);
+});
+
+test('旧版v1及缺少装扮字段的v2备份均保留本机拼图和所有月亮支出',()=>{
+  for(const version of [1,2]) {
+    const data=learningBackup();data.version=version;
+    if(version===1)delete data.learning;else delete data.learning.avatarRewards;
+    const entries={...learningFixture(),[AVATAR_KEY]:JSON.stringify(avatarFixture(),null,2)};
+    const {api,storage}=load(entries);importInto(api,data);
+    assert.deepStrictEqual(stored(storage,AVATAR_KEY),avatarFixture());
+  }
+});
+
+test('跨设备拼图事件按id并集，不同事件抽到同一片也分别计入支出，导入幂等',()=>{
+  const original=avatarFixture(),local=JSON.parse(JSON.stringify(original)),data=avatarBackup();
+  local.byOwner['child-a'].draws.push(avatarDraw('offline-local',0));
+  data.learning.avatarRewards.byOwner['child-a'].draws.push(avatarDraw('offline-incoming',0));
+  const {api,storage}=load({...learningFixture(),[AVATAR_KEY]:JSON.stringify(local)});
+  const summary=importInto(api,data);assert.equal(summary.addedAvatarDraws,1);
+  const box=stored(storage,AVATAR_KEY).byOwner['child-a'];
+  assert.equal(box.draws.length,11);assert.equal(new Set(box.draws.map(draw=>draw.piece)).size,9);
+  const once=Object.fromEntries(storage);importInto(api,data);assert.deepStrictEqual(Object.fromEntries(storage),once);
+  const old=avatarBackup();old.learning.avatarRewards.byOwner['child-a'].draws=old.learning.avatarRewards.byOwner['child-a'].draws.slice(0,9);
+  importInto(api,old);assert.equal(stored(storage,AVATAR_KEY).byOwner['child-a'].draws.length,11,'恢复旧备份不返还任何已消耗月亮');
+});
+
+test('同一兑换事件id内容冲突拒绝整份导入，不能凭新备份替换碎片或消耗',()=>{
+  const data=avatarBackup(),entries={...learningFixture(),[AVATAR_KEY]:JSON.stringify(avatarFixture())};
+  data.learning.avatarRewards.byOwner.guest.draws[0].piece=7;
+  const {api,storage,writes}=load(entries);
+  assert.throws(()=>api.previewImport(data),/拼图兑换记录存在冲突/);
+  assert.deepStrictEqual(Object.fromEntries(storage),entries);assert.deepStrictEqual(writes,[]);
+});
+
+test('穿戴按较新的明确时间合并，相同时间保留本机；未解锁装扮不能穿戴',()=>{
+  const local=avatarFixture();local.byOwner['child-a'].equipped='default';
+  local.byOwner['child-a'].equippedAt='2026-11-18T00:00:00.000Z';
+  const {api,storage}=load({...learningFixture(),[AVATAR_KEY]:JSON.stringify(local)});
+  const data=avatarBackup();data.learning.avatarRewards.byOwner['child-a'].equippedAt=local.byOwner['child-a'].equippedAt;
+  importInto(api,data);assert.equal(stored(storage,AVATAR_KEY).byOwner['child-a'].equipped,'default');
+  data.learning.avatarRewards.byOwner['child-a'].equippedAt='2026-11-19T00:00:00.000Z';
+  const summary=importInto(api,data);assert.equal(summary.updatedAvatarEquipment,1);
+  assert.equal(stored(storage,AVATAR_KEY).byOwner['child-a'].equipped,'skin-01');
+  data.learning.avatarRewards.byOwner.guest.equipped='skin-10';
+  assert.throws(()=>api.previewImport(data),/尚未集齐/);
+});
+
+test('拼图单独存在时可以导出访客装扮，并拒绝损坏schema和危险对象键',()=>{
+  const store={v:1,byOwner:{guest:avatarBox([avatarDraw('guest-only',4)])}};
+  const backup=exported(load({[AVATAR_KEY]:JSON.stringify(store)}).api);
+  assert.equal(backup.profiles.children.length,0);assert.deepStrictEqual(backup.learning.avatarRewards,store);
+  const mutations=[
+    x=>{x.v=2;},x=>{x.byOwner=[];},x=>{x.byOwner.guest.equippedAt='bad';},
+    x=>{x.byOwner.guest.draws[0].skinId='skin-11';},x=>{x.byOwner.guest.draws[0].cost=0;},
+    x=>{x.byOwner.guest.draws[0].piece=9;},x=>{x.byOwner.guest.draws[0].piece=.5;},
+    x=>{x.byOwner.guest.draws[0].id='';},x=>{x.byOwner.guest.draws[0].at='bad';},
+    x=>{x.byOwner.guest.draws.push({...x.byOwner.guest.draws[0]});},
+    x=>{x.byOwner.guest.equipped='skin-01';}
+  ];
+  for(const mutate of mutations) {
+    const data=avatarBackup();mutate(data.learning.avatarRewards);
+    assert.throws(()=>load().api.parseBackup(JSON.stringify(data)));
+  }
+  const unsafe=JSON.stringify(backup).replace('"byOwner":{','"byOwner":{"__proto__":{},');
+  assert.throws(()=>load().api.parseBackup(unsafe),/不允许/);
+});
+
+test('拼图存储读取失败或损坏不会导出不完整备份，也不写入任何数据',()=>{
+  for(const entries of [{...fixture(),[AVATAR_KEY]:'{broken'},{...fixture(),[AVATAR_KEY]:'[]'}]) {
+    const {api,writes}=load(entries);assert.throws(()=>api.exportBackup(),/无法读取|头像装扮/);assert.deepStrictEqual(writes,[]);
+  }
+  const {api,writes}=load(fixture(),AVATAR_KEY);assert.throws(()=>api.exportBackup(),/无法读取/);assert.deepStrictEqual(writes,[]);
+});
+
+test('预览后抽取或更换装扮会使导入token过期，保护新兑换记录不被覆盖',()=>{
+  const entries={...learningFixture(),[AVATAR_KEY]:JSON.stringify(avatarFixture())};
+  const {api,storage,writes}=load(entries),data=avatarBackup(),preview=api.previewImport(data);
+  const newer=avatarFixture();newer.byOwner.guest.draws.push(avatarDraw('after-preview',3));
+  storage.set(AVATAR_KEY,JSON.stringify(newer));
+  assert.throws(()=>api.importBackup(data,preview.token),/已发生变化/);assert.deepStrictEqual(writes,[]);
+  assert.equal(stored(storage,AVATAR_KEY).byOwner.guest.draws.length,4);
+});
+
+test('拼图键写入失败回滚全部学习数据，后续积分键失败也回滚已写入拼图键',()=>{
+  const data=avatarBackup();
+  for(const key of [AVATAR_KEY,PROGRESS_KEY]) {
+    const entries={[PROFILE_KEY]:JSON.stringify({...profiles,current:null},null,2),[RECORD_KEY]:'{}'};
+    const {api,storage}=load(entries,null,{failWrite:k=>k===key});
+    assert.throws(()=>importInto(api,data),/原有档案和学习数据未改变/);
+    assert.deepStrictEqual(Object.fromEntries(storage),entries);
+  }
+});
+
+test('删除账号只清理该账号拼图与消费，其他账号和访客均保留，不依赖装扮模块',()=>{
+  const source=avatarFixture(),{api,storage}=load({...fixture(),[AVATAR_KEY]:JSON.stringify(source)});
+  assert.equal(api.remove('child-a'),true);
+  const after=stored(storage,AVATAR_KEY);assert.equal(after.byOwner['child-a'],undefined);
+  assert.deepStrictEqual(after.byOwner['child-b'],source.byOwner['child-b']);assert.deepStrictEqual(after.byOwner.guest,source.byOwner.guest);
+});
+
 console.log('\n' + passed + ' passed, 0 failed');

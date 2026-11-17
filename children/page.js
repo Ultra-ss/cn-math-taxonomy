@@ -87,10 +87,33 @@
     return { runs: recs.length, weak: weak };
   }
 
+  function avatarFor(owner) {
+    var catalog = window.CnmAvatarCatalog, rewards = window.CnmAvatarRewards;
+    if (!catalog) return null;
+    var summary = rewards && rewards.summary(owner);
+    return catalog.get(summary && summary.ok ? summary.equipped : 'default');
+  }
+  function refreshProfileAvatars() {
+    document.querySelectorAll('img.kid-avatar[data-avatar-owner]').forEach(function (image) {
+      var avatar = avatarFor(image.getAttribute('data-avatar-owner'));
+      if (avatar) { image.src = avatar.image; image.title = avatar.name; }
+    });
+  }
+  function withAvatarLock(task) {
+    var locks = window.navigator && window.navigator.locks;
+    return locks && locks.request ? locks.request('cnmAvatarRewards.v1', { mode: 'exclusive' }, task) : Promise.resolve().then(task);
+  }
+
   function card(c, isCurrent) {
     var st = stats(c);
     var art = el('article', 'kid-card' + (isCurrent ? ' is-current' : ''));
     var head = el('div', 'kid-head');
+    var avatar = avatarFor(c.id);
+    if (avatar) {
+      var image = el('img', 'kid-avatar'); image.src = avatar.image; image.alt = c.name + '的头像'; image.title = avatar.name;
+      image.width = 48; image.height = 48; image.decoding = 'async'; image.setAttribute('data-avatar-owner', c.id);
+      head.appendChild(image);
+    }
     head.appendChild(el('h3', null, c.name));
     if (isCurrent) head.appendChild(el('span', 'kid-badge', '当前'));
     art.appendChild(head);
@@ -114,9 +137,11 @@
     row.appendChild(edit);
     var del = el('button', 'danger', '删除');
     del.type = 'button';
-    del.addEventListener('click', function () {
+    del.addEventListener('click', async function () {
       if (!confirm('删除「' + c.name + '」的档案和全部检测记录？删除后无法恢复。')) return;
-      CC.remove(c.id);
+      del.disabled = true;
+      try { await withAvatarLock(function () { CC.remove(c.id); }); }
+      catch (error) { del.disabled = false; showError('删除暂未完成，请重试。'); return; }
       if (editing === c.id) resetForm();
       render();
     });
@@ -144,6 +169,7 @@
     }
     renderArchivedSessions();
     renderLearningOverview();
+    if (window.CnmAvatarCenter) window.CnmAvatarCenter.refresh();
   }
 
   var topicNames = {}, achievementTopics = null, achievementLoadFailed = false;
@@ -396,6 +422,7 @@
       '新增薄弱知识点 ' + preview.addedBlindspots + ' 个、更新 ' + preview.updatedBlindspots + ' 个；' +
       '恢复检测进度 ' + preview.restoredSessions + ' 份、归档 ' + preview.archivedSessions + ' 份。' +
       '图谱检测记录新增 ' + preview.addedProgress + ' 份、更新 ' + preview.updatedProgress + ' 份。' +
+      '拼图兑换记录新增 ' + (preview.addedAvatarDraws || 0) + ' 次、更新穿戴 ' + (preview.updatedAvatarEquipment || 0) + ' 项。' +
       (preview.legacy ? '这是旧版档案备份，不包含错题、进行中检测和薄弱知识点台账。' : '');
     var children = document.getElementById('import-children');
     children.textContent = '';
@@ -426,19 +453,24 @@
     });
   });
   document.getElementById('cancel-import').addEventListener('click', clearImport);
-  confirmImport.addEventListener('click', function () {
+  confirmImport.addEventListener('click', async function () {
     if (!pendingBackup || !pendingPreview) return;
+    var candidate = pendingBackup, preview = pendingPreview;
     confirmImport.disabled = true;
     importError.hidden = true;
     try {
-      var result = CC.importBackup(pendingBackup, pendingPreview.token);
+      var result = await withAvatarLock(function () {
+        if (pendingBackup !== candidate || pendingPreview !== preview) throw new Error('导入内容已改变，请重新确认。');
+        return CC.importBackup(candidate, preview.token);
+      });
       clearImport();
       resetForm();
       render();
       importStatus.textContent = '导入完成：新增 ' + result.addedChildren + ' 个孩子，合并 ' + result.matchedChildren +
         ' 个已有档案；新增记录 ' + result.addedRecords + ' 条、错题 ' + result.addedWrongs + ' 道、薄弱知识点 ' +
         result.addedBlindspots + ' 个；恢复进度 ' + result.restoredSessions + ' 份，归档进度 ' + result.archivedSessions +
-        ' 份；图谱检测记录新增 ' + result.addedProgress + ' 份、更新 ' + result.updatedProgress + ' 份。';
+        ' 份；图谱检测记录新增 ' + result.addedProgress + ' 份、更新 ' + result.updatedProgress + ' 份；' +
+        '拼图兑换记录新增 ' + (result.addedAvatarDraws || 0) + ' 次、更新穿戴 ' + (result.updatedAvatarEquipment || 0) + ' 项。';
       importStatus.hidden = false;
     } catch (error) {
       // 失败后重新计算预览，防止其他页面的修改让旧预览失效。
@@ -477,10 +509,15 @@
   render();
   function revealWeakPoints() {
     if (location.hash === '#weak-points') document.getElementById('weak-points').open = true;
+    if (location.hash === '#form-card') formCard.open = true;
   }
   revealWeakPoints();
   if (window.addEventListener) {
-    window.addEventListener('storage', renderLearningOverview);
+    window.addEventListener('storage', function (event) {
+      if (event.key === 'cnmChildren.v1') render();
+      else { renderLearningOverview(); refreshProfileAvatars(); }
+    });
+    window.addEventListener('cnm:avatar-rewards', refreshProfileAvatars);
     window.addEventListener('focus', renderLearningOverview);
     window.addEventListener('cnm:progress', renderLearningOverview);
     window.addEventListener('hashchange', revealWeakPoints);

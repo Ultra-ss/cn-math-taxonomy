@@ -11,8 +11,9 @@
   var BLIND_KEY = 'cnmBlind.local.v1';
   var ARCHIVE_KEY = 'cnmDiagnose.archived.v1';
   var PROGRESS_KEY = 'cnmProgress.v1';
+  var AVATAR_KEY = 'cnmAvatarRewards.v1';
   var SESSION_KEYS = { science: 'cnsDiagnose.session.v1', physics: 'cnpDiagnose.session.v2' };
-  var BACKUP_KEYS = [KEY, REC_KEY, WRONG_KEY, BLIND_KEY, SESSION_KEYS.science, SESSION_KEYS.physics, ARCHIVE_KEY, PROGRESS_KEY];
+  var BACKUP_KEYS = [KEY, REC_KEY, WRONG_KEY, BLIND_KEY, SESSION_KEYS.science, SESSION_KEYS.physics, ARCHIVE_KEY, PROGRESS_KEY, AVATAR_KEY];
   var GRADES = ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三'];
   var TEXTBOOKS = ['教科版', '人教版', '其他'];
 
@@ -102,6 +103,15 @@
         emitProgress();
       }
     } catch (e) { /* 存储异常时保留原数据 */ }
+    try {
+      var rawAvatar = localStorage.getItem(AVATAR_KEY);
+      if (rawAvatar !== null) {
+        var avatars = JSON.parse(rawAvatar);
+        checkAvatarRewards(avatars);
+        delete avatars.byOwner[id];
+        localStorage.setItem(AVATAR_KEY, JSON.stringify(avatars));
+      }
+    } catch (e) { /* 装扮存储异常时保留原数据，不影响其他档案。 */ }
     return true;
   }
 
@@ -189,7 +199,8 @@
     if (!snapshot.profiles.children.length && !Object.keys(snapshot.learning.wrongbook).some(function (id) {
       return snapshot.learning.wrongbook[id].length;
     }) && !Object.keys(snapshot.learning.blindspots.byId).length && !Object.keys(snapshot.learning.sessions).length &&
-        !snapshot.learning.archivedSessions.length && !Object.keys(snapshot.learning.progress.byChild).length) {
+        !snapshot.learning.archivedSessions.length && !Object.keys(snapshot.learning.progress.byChild).length &&
+        !Object.keys(snapshot.learning.avatarRewards.byOwner).length) {
       throw new Error('还没有可导出的档案或学习数据。');
     }
     var backup = {
@@ -300,7 +311,7 @@
   }
   function natural(value) { return Number.isSafeInteger(value) && value >= 0; }
   function emptyLearning() {
-    return { wrongbook: {}, sessions: {}, blindspots: { v: 1, byId: {} }, archivedSessions: [], progress: { v: 1, byChild: {} } };
+    return { wrongbook: {}, sessions: {}, blindspots: { v: 1, byId: {} }, archivedSessions: [], progress: { v: 1, byChild: {} }, avatarRewards: { v: 1, byOwner: {} } };
   }
   function checkSession(session, subject) {
     function topics(ids) { return Array.isArray(ids) && ids.every(function (id) { return subjectOfTopic(id) === subject; }); }
@@ -335,10 +346,11 @@
     if (!isObject(learning) || !isObject(learning.wrongbook) || !isObject(learning.sessions) ||
         !isObject(learning.blindspots) || learning.blindspots.v !== 1 || !isObject(learning.blindspots.byId) ||
         !Array.isArray(learning.archivedSessions) || Object.keys(learning).some(function (key) {
-          return ['wrongbook', 'sessions', 'blindspots', 'archivedSessions', 'progress'].indexOf(key) < 0;
+          return ['wrongbook', 'sessions', 'blindspots', 'archivedSessions', 'progress', 'avatarRewards'].indexOf(key) < 0;
         })) throw new Error('学习备份数据格式不正确。');
     // 新增字段保持可选，旧版 v2 学习备份可原样导入。
     if (own(learning, 'progress')) checkProgress(learning.progress);
+    if (own(learning, 'avatarRewards')) checkAvatarRewards(learning.avatarRewards);
     Object.keys(learning.wrongbook).forEach(function (bucket) {
       if (!validId(bucket) || !Array.isArray(learning.wrongbook[bucket])) throw new Error('错题本分组不正确。');
       var seen = new Set();
@@ -399,6 +411,29 @@
       });
     });
   }
+  function avatarSkin(value) { return typeof value === 'string' && /^skin-(?:0[1-9]|10)$/.test(value); }
+  function checkAvatarRewards(store) {
+    if (!isObject(store) || store.v !== 1 || !isObject(store.byOwner)) throw new Error('头像装扮数据格式不正确。');
+    Object.keys(store.byOwner).forEach(function (owner) {
+      var box = store.byOwner[owner], ids = new Set(), pieces = {};
+      if (!validId(owner) || !isObject(box) || !Array.isArray(box.draws) ||
+          (box.equipped !== 'default' && !avatarSkin(box.equipped)) || !validDate(box.equippedAt)) {
+        throw new Error('头像装扮的归属或穿戴数据不正确。');
+      }
+      box.draws.forEach(function (draw) {
+        if (!isObject(draw) || !validId(draw.id) || ids.has(draw.id) || !avatarSkin(draw.skinId) ||
+            !Number.isInteger(draw.piece) || draw.piece < 0 || draw.piece > 8 || draw.cost !== 1 || !validDate(draw.at)) {
+          throw new Error('拼图兑换记录的标识、装扮、碎片或消耗不正确。');
+        }
+        ids.add(draw.id);
+        if (!pieces[draw.skinId]) pieces[draw.skinId] = new Set();
+        pieces[draw.skinId].add(draw.piece);
+      });
+      if (box.equipped !== 'default' && (!pieces[box.equipped] || pieces[box.equipped].size !== 9)) {
+        throw new Error('穿戴的装扮尚未集齐九块拼图。');
+      }
+    });
+  }
   function parseBackup(text) {
     if (typeof text !== 'string') throw new Error('备份文件不是文本。');
     checkSize(text);
@@ -418,6 +453,7 @@
       if (raw[BLIND_KEY] !== null) learning.blindspots = JSON.parse(raw[BLIND_KEY]);
       if (raw[ARCHIVE_KEY] !== null) learning.archivedSessions = JSON.parse(raw[ARCHIVE_KEY]);
       if (raw[PROGRESS_KEY] !== null) learning.progress = JSON.parse(raw[PROGRESS_KEY]);
+      if (raw[AVATAR_KEY] !== null) learning.avatarRewards = JSON.parse(raw[AVATAR_KEY]);
       Object.keys(SESSION_KEYS).forEach(function (subject) {
         if (raw[SESSION_KEYS[subject]] !== null) learning.sessions[subject] = JSON.parse(raw[SESSION_KEYS[subject]]);
       });
@@ -523,6 +559,29 @@
         box.earned = localEarned;
       }
     });
+    var avatars = incoming.avatarRewards || { v: 1, byOwner: {} };
+    Object.keys(avatars.byOwner).forEach(function (owner) {
+      var source = avatars.byOwner[owner];
+      if (!own(merged.avatarRewards.byOwner, owner)) {
+        merged.avatarRewards.byOwner[owner] = copy(source);
+        summary.addedAvatarDraws += source.draws.length;
+        if (source.equipped !== 'default') summary.updatedAvatarEquipment++;
+        return;
+      }
+      var box = merged.avatarRewards.byOwner[owner], draws = new Map();
+      box.draws.forEach(function (draw) { draws.set(draw.id, draw); });
+      source.draws.forEach(function (draw) {
+        var old = draws.get(draw.id);
+        if (old && stableJSON(old) !== stableJSON(draw)) throw new Error('同一笔拼图兑换记录存在冲突，未导入任何数据。');
+        if (!old) { draws.set(draw.id, copy(draw)); summary.addedAvatarDraws++; }
+      });
+      // 支出按唯一兑换事件并集保留，旧备份不会返还已经消耗的月亮。
+      box.draws = Array.from(draws.values());
+      if (Date.parse(source.equippedAt) > Date.parse(box.equippedAt)) {
+        if (box.equipped !== source.equipped) summary.updatedAvatarEquipment++;
+        box.equipped = source.equipped; box.equippedAt = source.equippedAt;
+      }
+    });
     return merged;
   }
   function prepareImport(backup) {
@@ -539,7 +598,7 @@
     backup.profiles.children.forEach(function (c) { if (!byId.has(c.id)) names.add(c.name); });
     var summary = { addedChildren: 0, matchedChildren: 0, renamedChildren: 0, addedRecords: 0, updatedRecords: 0, keptRecords: 0,
       addedWrongs: 0, updatedWrongs: 0, addedBlindspots: 0, updatedBlindspots: 0, restoredSessions: 0, archivedSessions: 0,
-      addedProgress: 0, updatedProgress: 0,
+      addedProgress: 0, updatedProgress: 0, addedAvatarDraws: 0, updatedAvatarEquipment: 0,
       children: [], token: before.token, legacy: backup.version === 1 };
     var usedNames = new Set(profiles.children.map(function (c) { return c.name; }));
     backup.profiles.children.forEach(function (source) {
@@ -589,13 +648,14 @@
       next[SESSION_KEYS[subject]] = learning.sessions[subject] ? JSON.stringify(learning.sessions[subject]) : null;
     });
     next[ARCHIVE_KEY] = JSON.stringify(learning.archivedSessions);
+    next[AVATAR_KEY] = JSON.stringify(learning.avatarRewards);
     next[PROGRESS_KEY] = JSON.stringify(learning.progress);
     var written = [];
     try {
       Object.keys(next).forEach(function (key) {
         // 不创建无内容的辅助键，也避免重复导入造成无意义写入。
         if (next[key] === before.raw[key] || (before.raw[key] === null &&
-            (next[key] === '{}' || next[key] === '[]' || next[key] === '{"v":1,"byId":{}}' || next[key] === '{"v":1,"byChild":{}}'))) return;
+            (next[key] === '{}' || next[key] === '[]' || next[key] === '{"v":1,"byId":{}}' || next[key] === '{"v":1,"byChild":{}}' || next[key] === '{"v":1,"byOwner":{}}'))) return;
         if (next[key] === null) localStorage.removeItem(key);
         else localStorage.setItem(key, next[key]);
         written.push(key);

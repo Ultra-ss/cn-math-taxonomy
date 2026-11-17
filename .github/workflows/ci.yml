@@ -149,6 +149,9 @@ jobs:
       - name: tests/test_graph_camera.js
         run: node tests/test_graph_camera.js
 
+      - name: tests/test_avatar_rewards.js
+        run: node tests/test_avatar_rewards.js
+
       - name: 课标映射严格模式（仅报告）
         continue-on-error: true
         env:
