@@ -40,7 +40,7 @@ body.page-explore .site-footer { flex: none; }
 .explore-mobile-bar { display: none; }
 .mobile-menu-toggle { display: none; }
 .graph-options { flex: none; min-width: 0; }
-.mobile-view-tabs, .mobile-topic-summary, .mobile-graph-help, #mobile-filter-toggle { display: none; }
+.mobile-view-tabs, .mobile-graph-help, #mobile-filter-toggle { display: none; }
 
 .side, .detail, .graph-pane { min-width: 0; min-height: 0; }
 .side {
@@ -354,20 +354,10 @@ body.page-explore .site-footer { flex: none; }
   .legend { flex: none; gap: 6px 12px; justify-content: center; padding: 4px 8px; font-size: 0.75rem; }
   .legend li:not(.legend-status), .progress-note, .graph-meta { display: none; }
   .legend .test-symbol { width: 16px; height: 16px; font-size: 0.65rem; }
-  .mobile-topic-summary { display: flex; flex: none; align-items: center; justify-content: space-between; gap: 10px; min-height: 58px; padding: 6px max(10px, env(safe-area-inset-right, 0px)) 6px max(10px, env(safe-area-inset-left, 0px)); background: var(--bg-elev); border-top: 1px solid var(--line); }
-  .mobile-topic-summary > div { min-width: 0; flex: 1; }
-  #mobile-topic-name, #mobile-topic-state { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  #mobile-topic-name { font-size: 0.9rem; }
-  #mobile-topic-state { font-size: 0.75rem; color: var(--muted); }
-  #mobile-topic-state.test-passed { color: var(--ok); }
-  #mobile-topic-state.test-failed { color: var(--bad); }
-  #mobile-topic-state.test-expert { color: var(--node-senior); }
-.test-expert { color: var(--node-senior); }
-  #mobile-show-detail { flex: none; min-height: 44px; padding: 6px 12px; font-size: 0.85rem; }
   .mobile-view-tabs { grid-column: 1; grid-row: 3; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 5px calc(48px + env(safe-area-inset-right, 0px)) calc(5px + env(safe-area-inset-bottom, 0px)) calc(8px + env(safe-area-inset-left, 0px)); background: var(--bg-elev); border-top: 1px solid var(--line); z-index: 18; }
   .mobile-view-tabs button { min-width: 0; min-height: 44px; padding: 6px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); font-size: 0.9rem; font-weight: 700; }
   .mobile-view-tabs button[aria-selected="true"] { color: var(--brand-strong); background: var(--brand-soft); }
-  .mobile-topic-summary, .mobile-view-tabs { background-image: var(--surface-wash, none); }
+  .mobile-view-tabs { background-image: var(--surface-wash, none); }
   .mobile-view-tabs button:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
   body.page-explore a.site-about { z-index: 19; right: calc(7px + env(safe-area-inset-right, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); min-width: 32px; min-height: 24px; padding: 3px 4px; font-size: 11px; border: 0; background: transparent; }
   body.page-explore .pwa-bar { display: none !important; }
@@ -385,7 +375,6 @@ body.page-explore .site-footer { flex: none; }
   body.page-explore .logo { width: 26px; height: 26px; }
   .explore-mobile-bar { min-height: 44px; padding-top: 0; padding-bottom: 0; }
   .graph-pane > .legend { display: none; }
-  .mobile-topic-summary { min-height: 54px; padding-top: 4px; padding-bottom: 4px; }
 }
 
 /* 手机选项展开时允许工具换行，层数、缩放和适配按钮都能直接看见。 */

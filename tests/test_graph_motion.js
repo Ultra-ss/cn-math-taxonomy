@@ -155,10 +155,12 @@ const source=fs.readFileSync(path.join(__dirname,'../explore/app.js'),'utf8');
 test('实际节点只改通过边框颜色，选中轻微增大而普通/专家状态不改变几何和填充',()=>{
   assert.match(source,/'background-color': 'data\(bg\)'/);assert.match(source,/'border-width': 3/);
   assert.match(source,/selector: 'node.current', style: \{ width: boxW \* 1\.05, height: 42/);
-  for(const status of ['passed','expert']){
+  for(const status of ['passed']){
     const rule=source.match(new RegExp("selector: 'node\\.test-"+status+"', style: \\{([^}]+)\\}"));
     assert.ok(rule[1].includes("'border-color'"));assert.ok(!rule[1].includes("'background-color'"));assert.ok(!rule[1].includes("'border-width'"));
   }
+  const expertRule=source.match(/selector: 'node\.test-expert', style: \{([^}]+)\}/)[1];
+  assert.ok(!expertRule.includes("'border-color'"),'专家卡片保留原学段或当前节点边框，只用柔光表达成就');
   const capture=source.slice(source.indexOf('function captureViewport()'),source.indexOf('function saveLiveCamera()'));
   assert.ok(!capture.includes('graphMotion.stop'),'相机读取不永久终止持续漂浮');
   assert.ok(source.includes("layout: 'playful-v2-floating-labels-'"));
@@ -181,8 +183,8 @@ for(const resultGraph of [false,true])test((resultGraph?'检测结果路径':'�
   const extracted=resultGraph?section('function toneOf(', 'function pathNodeElement(')+section('function pathGraphStyles(', 'function mountPathGraph(')
     :section('function expertGlowStyle(', 'function theme()')+section('function graphStyles(', 'function renderGraph(');
   // 提取函数与真实vendor在同一realm运行，保持plain-object API和浏览器一致。
-  const ctx=new Function('theme','FONT','var cy=null,pathCy=null,graphStyleContext={narrow:false,dense:false},pathStyleContext={narrow:false,heavy:false};'+extracted+
-    ';return {styles:'+(resultGraph?'pathGraphStyles':'graphStyles')+',sync:'+(resultGraph?'syncPathTheme':'syncGraphTheme')+',attach:function(graph){cy=graph;pathCy=graph;},current:function(){return '+(resultGraph?'pathCy':'cy')+';}};')(()=>colors,'sans-serif');
+  const ctx=new Function('theme','FONT','window','var cy=null,pathCy=null,graphStyleContext={narrow:false,dense:false},pathStyleContext={narrow:false,heavy:false};'+extracted+
+    ';return {styles:'+(resultGraph?'pathGraphStyles':'graphStyles')+',sync:'+(resultGraph?'syncPathTheme':'syncGraphTheme')+',attach:function(graph){cy=graph;pathCy=graph;},current:function(){return '+(resultGraph?'pathCy':'cy')+';}};')(()=>colors,'sans-serif',{CnmGraphHalo:require('../assets/graph-halo.js')});
   const style=ctx.styles,sync=ctx.sync;
   const graph=cytoscape({headless:true,styleEnabled:true,layout:{name:'preset'},elements:[
     {data:{id:'a',label:'科学'},position:{x:20,y:30},classes:'primary grade'},

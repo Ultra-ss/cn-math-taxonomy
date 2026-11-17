@@ -339,49 +339,19 @@
   function childLabel(c) { return c.name + (c.grade ? '（' + c.grade + '）' : ''); }
   function childrenHref(path) { return '../children/' + (path || ''); }
   function fromQuery() { return '?from=diagnose' + (subject !== 'math' ? '&subject=' + subject : ''); }
-  function childSelect(onPick) {
-    const cur = CC.current();
-    const sel = h('select', { id: 'child-select', 'aria-label': '当前孩子' },
-      h('option', { value: '' }, '不保存到档案'),
-      CC.list().map(function (c) { return h('option', { value: c.id, selected: !!cur && cur.id === c.id }, childLabel(c)); }));
-    sel.value = cur ? cur.id : '';
-    sel.addEventListener('change', function () { onPick(sel.value || null); });
-    return sel;
-  }
   function childBar(mode) {
-    if (demo) return null;
-    const kids = CC.list();
-    const cur = CC.current();
-    if (mode === 'question' || mode === 'result') {
-      const ownerId = sessionMeta && sessionMeta.progressChildId;
-      const owner = ownerId ? CC.get(ownerId) : null;
-      const label = ownerId === undefined ? '旧记录（未绑定孩子）' : owner ? childLabel(owner) : ownerId ? '原孩子档案' : '本机访客';
-      return h('div', { class: 'banner child-bar no-print', id: 'child-bar' },
-        h('b', null, '本轮记录归属：' + label),
-        h('p', { class: 'muted small', style: 'margin:6px 0' }, ownerId === undefined
-          ? '这份旧记录没有孩子归属，本轮不会自动写入任何孩子的图谱学习标记。为当前孩子记录，请回开始页新建检测。'
-          : '本轮固定保存在这里。更换孩子时，请先回开始页选择孩子，再新建检测。'),
-        h('div', { class: 'row' },
-          h('button', { id: 'btn-new-child-session', onclick: function () {
-            if (confirm('结束当前答题过程并回到开始页？已保存的学习记录会保留，下一次检测使用开始页所选孩子。')) restart();
-          } }, '回开始页新建检测'),
-          owner ? h('a', { class: 'btn', href: childrenHref('history.html?child=' + encodeURIComponent(owner.id)), text: '本轮孩子的历史' }) : null));
-    }
-    if (!kids.length) {
-      return h('div', { class: 'banner child-bar no-print', id: 'child-bar' },
-        h('b', { text: '还没有孩子档案。' }),
-        '添加后，检测结果会按孩子保存，之后能回看每次的记录和薄弱知识点。', ' ',
-        h('a', { class: 'btn btn-primary', href: childrenHref(fromQuery()), text: '添加孩子' }));
-    }
-    return h('div', { class: 'card child-bar no-print', id: 'child-bar' },
+    if (demo || mode !== 'result') return null;
+    const ownerId = sessionMeta && sessionMeta.progressChildId;
+    const owner = ownerId ? CC.get(ownerId) : null;
+    const label = ownerId === undefined ? '旧记录（未绑定账号）' : owner ? childLabel(owner) : ownerId ? '原账号档案' : '本机访客';
+    return h('div', { class: 'banner child-bar no-print', id: 'child-bar' },
+      h('b', null, '本轮记录归属：' + label),
+      h('p', { class: 'muted small', style: 'margin:6px 0' }, ownerId === undefined
+        ? '这份旧记录未绑定账号，结果不会自动写入任何账号。账号管理请在本地个人中心完成。'
+        : '本轮记录固定归属于以上账号。账号切换和新增请在本地个人中心完成。'),
       h('div', { class: 'row' },
-        h('label', { for: 'child-select' }, '当前孩子'),
-        childSelect(function (id) { CC.setCurrent(id); renderStart(null, true); }),
-        h('span', { class: 'grow' }),
-        cur ? h('a', { class: 'btn', href: childrenHref('history.html?child=' + encodeURIComponent(cur.id)), text: '薄弱知识点与历史' }) : null,
-        h('a', { class: 'btn', href: childrenHref(fromQuery()), text: '孩子档案' })),
-      h('p', { class: 'muted small', style: 'margin:8px 0 0' },
-        cur ? '检测做完，结果会保存到「' + cur.name + '」的档案里。' : '未选择孩子时，图谱检测标记保存在本机访客记录，不计入孩子档案。'));
+        h('a', { class: 'btn', href: childrenHref(fromQuery()), text: '本地个人中心' }),
+        owner ? h('a', { class: 'btn', href: childrenHref('history.html?child=' + encodeURIComponent(owner.id)), text: '本轮账号的历史' }) : null));
   }
   function recordKey() { return (sessionMeta && sessionMeta.level === 'pro' ? 'pro|' : '') + [subject, session.seed, session.targets.join(',')].join('|'); }
   function saveToChild(sum) {
@@ -733,7 +703,6 @@
       h('p', { class: 'muted small', id: 'match-count' })));
     setup.addEventListener('toggle', function () { settingsOpen = setup.open; });
     page.append(setup);
-    append(page, childBar('start'));
     page.append(h('div', { class: 'card' }, browser));
     page.append(h('p', { class: 'muted small' },
       '可以检测的知识点：' + D.topics.length + ' 个。进度和出过的题只保存在这台浏览器里。'));
@@ -837,7 +806,7 @@
       h('h1', { text: '开启一口气挑战' }),
       h('p', { class: 'muted challenge-intro' }, '可以挑战整本教材，也可以只挑战一个单元。'), scope,
       h('label', { for: 'book-select' }, '教材册次'), select, chapterField, info,
-      h('p', { class: 'muted small challenge-owner' }, '记录归属：' + (owner ? childLabel(owner) : '本机访客') + '　', h('a', { href: '#child-bar', text: '更换' })),
+      h('p', { class: 'muted small challenge-owner' }, '记录归属：' + (owner ? childLabel(owner) : '本机访客') + '　', h('a', { href: childrenHref(fromQuery()), text: '本地个人中心' })),
       h('div', { class: 'row challenge-actions' }, start));
   }
 

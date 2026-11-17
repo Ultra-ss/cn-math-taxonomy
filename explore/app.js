@@ -58,6 +58,7 @@
   var changingCamera = false;
   var viewportSaveTimer = null;
   var graphMotion = null;
+  var graphHalo = null;
   var graphStyleContext = null;
   var graphSprings = null;
   var graphMotionPaused = false;
@@ -192,7 +193,6 @@
     if (topics.length) {
       renderList();
       renderDetail();
-      syncMobileTopic();
       if (cy) {
         cy.nodes().forEach(function (node) {
           if (!byId.has(node.id())) return;
@@ -361,20 +361,16 @@
     return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10" fill="' + color + '" stroke="' + ink + '" stroke-width="2"/><path d="' + path + '" fill="none" stroke="' + ink + '" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
   }
   function expertGlowStyle(colors, width, height, badge) {
-    var pad = 16, w = width + pad * 2, h = height + pad * 2;
-    // 扩大柔和光晕，再遮掉卡片与边框；黄色只出现在卡片四周。
-    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">'
-      + '<defs><filter id="glow" x="-50%" y="-100%" width="200%" height="300%"><feGaussianBlur stdDeviation="4"/></filter>'
-      + '<mask id="outside" maskUnits="userSpaceOnUse" x="0" y="0" width="' + w + '" height="' + h + '"><rect width="' + w + '" height="' + h + '" fill="white"/>'
-      + '<rect x="14" y="14" width="' + (width + 4) + '" height="' + (height + 4) + '" rx="14" fill="black"/></mask></defs>'
-      + '<g mask="url(#outside)"><rect x="16" y="16" width="' + width + '" height="' + height + '" rx="12" fill="none" stroke="' + colors.expertGlow + '" stroke-width="7" opacity="0.85" filter="url(#glow)"/></g></svg>';
+    var halo = typeof window !== 'undefined' && window.CnmGraphHalo
+      ? window.CnmGraphHalo.image(width, height, colors.expertGlow)
+      : { url: 'none', width: width + 56, height: height + 56 };
     return {
-      'background-image': ['data:image/svg+xml,' + encodeURIComponent(svg), badge],
-      'background-width': [w, 22], 'background-height': [h, 22],
+      'background-image': [halo.url, badge],
+      'background-width': [halo.width, 22], 'background-height': [halo.height, 22],
       'background-position-x': ['50%', '100%'], 'background-position-y': ['50%', '0%'],
       'background-offset-x': [0, 7], 'background-offset-y': [0, -7],
       'background-fit': ['none', 'none'], 'background-clip': ['none', 'none'],
-      'background-image-containment': ['over', 'over'], 'bounds-expansion': pad
+      'background-image-containment': ['over', 'over'], 'background-image-opacity': [0.7, 1], 'bounds-expansion': 34
     };
   }
   function theme() {
@@ -577,27 +573,12 @@
     if (view === 'graph') resizeGraphViewport();
     if (focusTab && $('mobile-tab-' + view)) $('mobile-tab-' + view).focus({ preventScroll: true });
   }
-  function syncMobileTopic() {
-    var topic = selected && byId.get(selected);
-    var name = $('mobile-topic-name'), state = $('mobile-topic-state'), button = $('mobile-show-detail');
-    if (name) name.textContent = topic ? topic.name : '先选择知识点';
-    if (state) {
-      var row = topic ? progressOf(topic.id) : null;
-      state.textContent = row ? progressMark(row) + (row.expert ? ' 专家已通过' : row.status === 'mastered' ? ' 已通过' : ' 未通过') : '尚未检测';
-      state.className = 'mobile-topic-state ' + progressClass(row);
-    }
-    if (button) {
-      button.disabled = !topic;
-      button.setAttribute('aria-label', topic ? '查看“' + topic.name + '”详情' : '选择知识点后查看详情');
-    }
-    if ($('mobile-topic-summary')) $('mobile-topic-summary').hidden = !topic;
-  }
-
   function syncMobileChrome() {
     var mobile = window.matchMedia('(max-width: 900px)').matches;
     if (mobile && mobileView !== 'graph') {
       if (typeof graphSprings !== 'undefined' && graphSprings) graphSprings.stop();
       if (typeof graphMotion !== 'undefined' && graphMotion) graphMotion.hold('view');
+      if (typeof graphHalo !== 'undefined' && graphHalo) graphHalo.hold('view');
     }
     var menuOpen = document.querySelector('.site-header').classList.contains('menu-open');
     var optionsOpen = document.querySelector('.explore').classList.contains('options-open');
@@ -611,6 +592,7 @@
     syncMobilePanels();
     syncDirectoryFilters();
     if (typeof graphMotion !== 'undefined' && graphMotion && (!mobile || mobileView === 'graph')) graphMotion.release('view');
+    if (typeof graphHalo !== 'undefined' && graphHalo && (!mobile || mobileView === 'graph')) graphHalo.release('view');
     if (!mobile && graphNeedsRender) renderGraph(pendingGraphRestore);
     resizeGraphViewport();
   }
@@ -666,6 +648,7 @@
     $('node-dialog-try').setAttribute('href', nodeDiagnosisHref(id));
     dialog.showModal();
     if (typeof graphMotion !== 'undefined' && graphMotion) graphMotion.hold('dialog');
+    if (typeof graphHalo !== 'undefined' && graphHalo) graphHalo.hold('dialog');
     return true;
   }
   function activateGraphNode(id) {
@@ -689,6 +672,7 @@
       // close 事件异步派发；关闭后快速重开时，旧事件不能清除新弹窗的选择。
       if (dialog.open) return;
       if (typeof graphMotion !== 'undefined' && graphMotion) graphMotion.release('dialog');
+      if (typeof graphHalo !== 'undefined' && graphHalo) graphHalo.release('dialog');
       nodeDialogId = null;
       var point = nodeDialogScroll;
       nodeDialogScroll = null;
@@ -1147,7 +1131,7 @@
       } },
       { selector: 'node.test-passed', style: { 'background-image': colors.passedBadge, 'border-color': colors.passedBorder } },
       { selector: 'node.test-failed', style: { 'background-image': colors.failedBadge } },
-      { selector: 'node.test-expert', style: { 'background-image': colors.expertBadge, 'border-color': colors.expertBorder } },
+      { selector: 'node.test-expert', style: { 'background-image': colors.expertBadge } },
       { selector: 'node.expert-unlocked', style: expertGlowStyle(colors, boxW, 40, colors.passedBadge) },
       { selector: 'node.expert-unlocked.test-expert', style: expertGlowStyle(colors, boxW, 40, colors.expertBadge) },
       { selector: 'node.expert-unlocked.current', style: expertGlowStyle(colors, boxW * 1.05, 42, colors.passedBadge) },
@@ -1186,6 +1170,7 @@
       return;
     }
     rememberViewport();
+    if (graphHalo) { graphHalo.destroy(); graphHalo = null; }
     if (graphSprings) { graphSprings.destroy(); graphSprings = null; }
     if (graphMotion) { graphMotion.destroy(); graphMotion = null; }
     graphNeedsRender = false;
@@ -1210,7 +1195,6 @@
       emptyEl.hidden = false;
       meta.textContent = '';
       updateFold(0, false);
-      syncMobileTopic();
       return;
     }
     var depth = upDepth === 'all' ? Infinity : upDepth;
@@ -1346,6 +1330,11 @@
                 if ($('node-diagnose-dialog') && $('node-diagnose-dialog').open) graphMotion.hold('dialog');
               }, 80);
             }
+            if (window.CnmGraphHalo) {
+              graphHalo = window.CnmGraphHalo.create({ cy: cy, container: cyEl, paused: graphMotionPaused });
+              if (window.matchMedia('(max-width: 900px)').matches && mobileView !== 'graph') graphHalo.hold('view');
+              if ($('node-diagnose-dialog') && $('node-diagnose-dialog').open) graphHalo.hold('dialog');
+            }
             if (graphSprings) cy.nodes().not('.grade').grabify();
           });
         });
@@ -1397,7 +1386,6 @@
     }
     highlight(true);
     renderDetail();
-    syncMobileTopic();
     if (!same || graphNeedsRender) renderGraph();
   }
 
@@ -1545,6 +1533,7 @@
       graphMotionPaused = !graphMotionPaused;
       try { localStorage.setItem(GRAPH_MOTION_PAUSED_KEY, graphMotionPaused ? '1' : '0'); } catch (error) { /* 不影响当前页。 */ }
       if (graphMotion) graphMotion.setPaused(graphMotionPaused);
+      if (graphHalo) graphHalo.setPaused(graphMotionPaused);
       syncGraphMotionButton();
     });
     var motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -1575,7 +1564,6 @@
       event.preventDefault();
       setMobileView(views[next], true);
     });
-    $('mobile-show-detail').addEventListener('click', function () { setMobileView('detail', true); });
     $('mobile-filter-toggle').addEventListener('click', function () { setDirectoryFilters(!mobileFiltersOpen); });
     document.addEventListener('keydown', function (event) {
       if (event.key !== 'Escape' || $('node-diagnose-dialog').open) return;
@@ -1592,7 +1580,6 @@
     var mobileChrome = window.matchMedia('(max-width: 900px)');
     if (mobileChrome.addEventListener) mobileChrome.addEventListener('change', syncMobileChrome);
     syncMobileChrome();
-    syncMobileTopic();
     bindNodeConfirmation();
     $('q').addEventListener('input', function () {
       query = $('q').value.trim().toLowerCase();

@@ -157,7 +157,7 @@ syncContext.demo = {};
 syncContext.syncProgress();
 assert.strictEqual(syncCalls.length, 2, '演示绝不写学习进度');
 
-// 空值过滤 helper 不会把可选内容渲染成 "null"；档案只在开始和结果页展示。
+// 空值过滤 helper 不会把可选内容渲染成 "null"；仅结果更多信息保留只读归属。
 const appendCode = section('function append(el, c)', 'function figureEl(svg)');
 const appended = [];
 const domContext = {
@@ -169,13 +169,33 @@ vm.runInContext(appendCode, domContext);
 const node = { nodeType: 1 };
 domContext.append({ append(child) { appended.push(child); } }, [null, false, node]);
 assert.deepStrictEqual(appended, [node]);
-for (const mode of ['start']) {
-  assert.ok(source.includes("append(page, childBar('" + mode + "'))"));
-  assert.ok(!source.includes("page.append(childBar('" + mode + "'))"));
-}
+assert.ok(!source.includes("append(page, childBar('start'))"), '检测开始页不展示添加或切换账号卡片');
 assert.ok(!source.includes("append(page, childBar('question'))"), '答题期间不展示档案条');
 assert.ok(source.includes("append(morePanel, childBar('result'))"));
 assert.ok(!source.includes("page.append(childBar('result'))"));
+assert.ok(!source.includes('function childSelect('), '账号切换仅在个人中心完成');
+assert.ok(!source.includes('btn-new-child-session'), '结果归属区不提供更换账号的新建检测控件');
+assert.ok(!source.includes("href: '#child-bar'"), '挑战入口不再跳向已删除的开始页档案条');
+
+// 结果归属必须读取本轮绑定账号，而不是当前已在个人中心切换的账号。
+const ownerNodes=[];
+const ownerContext={
+  demo:null, subject:'physics', sessionMeta:{progressChildId:'child-a'},
+  CC:{get(id){return id==='child-a'?{id,name:'原账号甲',grade:'八年级'}:null;},
+    current(){throw new Error('只读归属不能读取或切换当前账号');},setCurrent(){throw new Error('归属提示不可切换账号');}},
+  h(tag,props,...kids){const node={tag,props:props||{},kids};ownerNodes.push(node);return node;},encodeURIComponent
+};
+vm.createContext(ownerContext);
+vm.runInContext(section('function childLabel(c)', 'function recordKey()'),ownerContext);
+assert.equal(ownerContext.childBar('start'),null);
+assert.equal(ownerContext.childBar('question'),null);
+const ownerBar=ownerContext.childBar('result');
+assert.ok(JSON.stringify(ownerBar).includes('原账号甲'));
+assert.ok(!ownerNodes.some(node=>node.tag==='select'||node.tag==='button'));
+assert.ok(ownerNodes.some(node=>node.tag==='a'&&node.props.text==='本地个人中心'&&node.props.href==='../children/?from=diagnose&subject=physics'));
+assert.ok(ownerNodes.some(node=>node.tag==='a'&&node.props.href==='../children/history.html?child=child-a'));
+ownerContext.sessionMeta={progressChildId:null};assert.ok(JSON.stringify(ownerContext.childBar('result')).includes('本机访客'));
+ownerContext.sessionMeta={};assert.ok(JSON.stringify(ownerContext.childBar('result')).includes('旧记录（未绑定账号）'));
 
 // “我要试试”的重测意图只消费一次，刷新仍可以恢复刚开始的新进度。
 const retryChanges = [];

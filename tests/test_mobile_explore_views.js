@@ -17,7 +17,7 @@ function element() {
     focus(options){this.focused=options;}};
 }
 const ids = Object.fromEntries(['cy','list','side','detail','graph-pane','main-nav','graph-options','mobile-menu-toggle','mobile-options-toggle','list-toggle',
-  'mobile-tab-directory','mobile-tab-graph','mobile-tab-detail','mobile-topic-summary','mobile-topic-name','mobile-topic-state','mobile-show-detail',
+  'mobile-tab-directory','mobile-tab-graph','mobile-tab-detail',
   'directory-filters','mobile-filter-toggle'].map(id=>[id,element()]));
 const frame=element(),header=element(),writes=[];
 ids.cy.dataset.ready='1';
@@ -76,10 +76,6 @@ assert.equal(ctx.captureViewport(),null);
 ids.cy.clientWidth=390;ids.cy.clientHeight=500;ctx.mobileView='graph';ids.cy.dataset.ready='0';
 assert.equal(ctx.captureViewport(),null);ids.cy.dataset.ready='1';
 ctx.graphNeedsRender=true;ctx.setMobileView('graph');assert.equal(renders,1,'隐藏时待更新的布局只在回图谱后处理');
-ctx.syncMobileTopic();assert.equal(ids['mobile-topic-name'].textContent,'热量 比热容');
-assert.equal(ids['mobile-show-detail'].disabled,false);
-row={status:'mastered'};ctx.syncMobileTopic();assert.equal(ids['mobile-topic-state'].textContent,'✓ 已通过');
-assert.equal(ids['mobile-show-detail'].getAttribute('aria-label'),'查看“热量 比热容”详情');
 // 桌面断点撤销移动端的可访问性隐藏，恢复三栏。
 mobile=false;ctx.syncMobileChrome();
 for(const id of ['side','graph-pane','detail']){assert.equal(ids[id].inert,false);assert.equal(ids[id].getAttribute('aria-hidden'),undefined);}
@@ -90,4 +86,5 @@ assert.equal(renders,2,'切到桌面三栏时也要完成手机隐藏期间等�
 const html=fs.readFileSync(path.join(__dirname,'../explore/index.html'),'utf8');
 assert.ok(html.indexOf('id="mobile-view-tabs"')<html.indexOf('id="side"'),'底栏在DOM上先于panel，键盘Tab可进入当前工作区');
 assert.ok(html.indexOf('assets/explore-viewport.js')<html.indexOf('src="app.js"'));
+assert.ok(!html.includes('mobile-topic-summary') && !html.includes('mobile-show-detail'),'详情统一使用保留的底栏tab，图谱下方不重复占空间');
 console.log('test_mobile_explore_views: tabs, focus/aria, retained graph/scroll/camera and desktop fallback passed');
