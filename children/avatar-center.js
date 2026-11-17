@@ -18,9 +18,12 @@
     var Catalog = root.CnmAvatarCatalog, Rewards = root.CnmAvatarRewards, CC = root.CnmChildren;
     if (!Catalog || !Rewards || !CC) return null;
     var skins = Array.isArray(Catalog.skins) ? Catalog.skins : [];
+    var cats = Array.isArray(Catalog.cats) ? Catalog.cats : [];
+    var defaultCat = Catalog.DEFAULT_CAT || 'cat-snow';
     if (!skins.length) return null;
     var uid = 'avatar-reveal-' + (++serial), selected = {}, ownerId = null, lastOwner = null, summary = null;
     var busy = false, busyLabel = '', mountedAlive = true, statusMessage = '', statusError = false;
+    var sharing = Object.create(null), shareMessages = Object.create(null);
     var shell = node('div', 'avatar-center-content'), dialog = node('dialog', 'avatar-reveal');
     var cleanups = [];
     container.classList.add('avatar-center'); container.textContent = ''; container.append(shell, dialog);
@@ -30,11 +33,13 @@
     function owner() { var c = current(); return c ? c.id : null; }
     function sameOwner(a, b) { return (a || '') === (b || ''); }
     function ownerKey(id) { return id || 'guest'; }
-    function get(id) {
-      if (id === 'default') return Catalog.defaultAvatar;
-      var found = skins.find(function (skin) { return skin.id === id; });
-      return found ? Catalog.get && Catalog.get(id) || found : null;
+    function catId() { return summary && summary.catId || defaultCat; }
+    function cat(id) { return cats.find(function (item) { return item.id === (id || catId()); }) || cats[0] || { id: defaultCat, name: '小猫' }; }
+    function get(id, selectedCat) {
+      var found = id === 'default' ? Catalog.defaultAvatar : skins.find(function (skin) { return skin.id === id; });
+      return found ? Catalog.get && Catalog.get(id, selectedCat || catId()) || found : null;
     }
+    function duplicateChance() { return typeof Rewards.DUPLICATE_CHANCE === 'number' ? Rewards.DUPLICATE_CHANCE : 10; }
     function imageOf(skin) { return skin && (skin.image || skin.src || skin.imageUrl) || ''; }
     function collection(id) {
       var value = summary && summary.collections && summary.collections[id];
@@ -72,9 +77,10 @@
     });
     function note(text, bad) { statusMessage = text; statusError = !!bad; }
     function explain(code) {
-      return ({ insufficient_moons: '可兑换月亮还不够。每累计 5⭐ 就能获得 1🌙 兑换额度，继续学习后再来吧。',
+      return ({ insufficient_moons: '可兑换月亮还不够。每累计 3⭐ 就能获得 1🌙 兑换额度，继续学习后再来吧。',
         already_unlocked: '这套装扮已经集齐，无需再消耗月亮。', locked_skin: '集齐这套装扮的 9 块不同拼图后，就可以穿戴。',
         invalid_owner: '当前账号已变更，请重新选择账号后再试。', invalid_skin: '这套装扮暂时无法读取，请刷新后再试。',
+        invalid_cat: '这只猫咪暂时无法读取，请刷新页面后重试。',
         progress_unavailable: '学习积分暂时无法读取，月亮未扣除，请刷新页面后重试。',
         random_unavailable: '浏览器暂时无法打开拼图，月亮未扣除，请稍后重试。',
         storage_unavailable: '兑换没有保存成功，月亮未扣除。请确认浏览器允许保存本地数据后重试。',
@@ -95,9 +101,37 @@
       tile.appendChild(img); tile.setAttribute('data-piece', String(piece + 1));
       return tile;
     }
+    async function chooseCat(id) {
+      if (busy || !Rewards.setCat) return;
+      var account = owner();
+      busy = true; busyLabel = '正在切换猫咪…'; note('', false); shareMessages[ownerKey(account)] = null; render();
+      try {
+        var result = await Rewards.setCat(account, id);
+        if (!mountedAlive) return;
+        if (sameOwner(owner(), account)) note(result && result.ok ? '已选择「' + cat(id).name + '」，服装和拼图进度会保留。' : explain(result && result.code), !result || !result.ok);
+      } catch (error) { if (mountedAlive && sameOwner(owner(), account)) note('猫咪选择暂时没有保存成功，请稍后重试。', true); }
+      finally { busy = false; busyLabel = ''; if (mountedAlive) render(); }
+    }
+    async function shareAvatar() {
+      var account = owner(), key = ownerKey(account);
+      if (sharing[key]) return;
+      var person = current(), saved = Rewards.summary(account), activeCat = saved.catId || defaultCat;
+      var avatar = get(saved.equipped || 'default', activeCat);
+      var options = { image: imageOf(avatar), username: person ? person.name : '本机访客', createdAt: person && person.createdAt || null };
+      var label = cat(activeCat).name + (saved.equipped === 'default' ? '默认形象' : ' · ' + avatar.name);
+      sharing[key] = true; shareMessages[key] = null; render();
+      try {
+        if (!root.CnmAvatarShare || !root.CnmAvatarShare.download) throw new Error('图片保存功能暂时不可用，请刷新后重试。');
+        var result = await root.CnmAvatarShare.download(options);
+        if (!result || !result.ok) throw new Error('图片暂时没有保存成功，请稍后重试。');
+        shareMessages[key] = { text: '已保存「' + label + '」个人秀图片。', error: false };
+      } catch (error) {
+        shareMessages[key] = { text: '保存失败：' + String(error && error.message || '请稍后重试。').slice(0, 160), error: true };
+      } finally { sharing[key] = false; if (mountedAlive) render(); }
+    }
     async function wear(id, account) {
       if (busy) return;
-      busy = true; busyLabel = '正在保存装扮…'; render();
+      busy = true; busyLabel = '正在保存装扮…'; shareMessages[ownerKey(account)] = null; render();
       try {
         var result = await Rewards.equip(account, id);
         if (!mountedAlive) return;
@@ -119,7 +153,7 @@
       }
       dialog.appendChild(node('p', 'avatar-reveal-name', skin.name + (result.unlocked ? '' : ' · 第 ' + (result.piece + 1) + ' 块')));
       dialog.appendChild(node('p', 'avatar-reveal-message', result.unlocked ? '9 / 9 块不同拼图已集齐。这套装扮现在可以永久穿戴。'
-        : result.duplicate ? '这块拼图已经拥有，本次仍消耗 1🌙，不增加收集进度。' : '新的一块已放进拼图。集齐 9 块不同拼图即可解锁装扮。'));
+        : result.duplicate ? '本次无效：这块拼图已经拥有，仍消耗 1🌙，不增加收集进度。' : '新的一块已放进拼图。集齐 9 块不同拼图即可解锁装扮。'));
       dialog.appendChild(node('p', 'avatar-reveal-owner', nickname + ' · 本次消耗 1🌙'));
       var actions = node('div', 'avatar-reveal-actions');
       var done = node('button', result.unlocked ? '' : 'primary', result.unlocked ? '稍后再穿' : '收好了'); done.type = 'button';
@@ -137,6 +171,8 @@
     async function draw(skin) {
       if (busy) return;
       var account = owner(), c = current(), nickname = c ? c.name : '本机访客';
+      // 图源在兑换开始时捕获，等待期间换猫或换账号不会把结果换成另一只猫。
+      var requestSkin = get(skin.id, catId());
       busy = true; busyLabel = '正在打开拼图…'; note('', false); render();
       var result;
       try { result = await Rewards.draw(account, skin.id); }
@@ -145,9 +181,9 @@
       if (!mountedAlive) return;
       if (!result || !result.ok) note(explain(result && result.code), true);
       else if (!sameOwner(owner(), account)) note('兑换结果已为「' + nickname + '」保存，切回该账号即可查看。', false);
-      else note(result.duplicate ? '重复拼图未增加进度，本次消耗 1🌙。' : '第 ' + (result.piece + 1) + ' 块拼图已加入「' + skin.name + '」。', false);
+      else note(result.duplicate ? '本次无效：重复拼图未计入，本次消耗 1🌙。' : '第 ' + (result.piece + 1) + ' 块拼图已加入「' + skin.name + '」。', false);
       render();
-      if (result && result.ok && sameOwner(owner(), account)) reveal(result, skin, account, nickname);
+      if (result && result.ok && sameOwner(owner(), account)) reveal(result, requestSkin, account, nickname);
     }
     function render() {
       if (!mountedAlive) return;
@@ -162,17 +198,39 @@
       var heading = node('div', 'avatar-section-heading');
       var titles = node('div'); titles.appendChild(node('span', 'avatar-eyebrow', '学习换来的小惊喜'));
       var h2 = node('h2', '', '我的装扮工坊'); h2.id = 'avatar-center-title'; titles.appendChild(h2); heading.appendChild(titles);
-      heading.appendChild(node('span', 'avatar-season-tag', '10 套主题装扮')); shell.appendChild(heading);
+      heading.appendChild(node('span', 'avatar-season-tag', '10 套主题服装')); shell.appendChild(heading);
       var avatar = get(summary && summary.equipped || 'default') || Catalog.defaultAvatar;
+      var currentCat = cat();
       var hero = node('div', 'avatar-hero');
       var portrait = node('div', 'avatar-portrait'); portrait.appendChild(picture(imageOf(avatar), avatar.name, 'avatar-portrait-image'));
       var info = node('div', 'avatar-hero-info'); info.appendChild(node('p', 'avatar-owner-name', c ? c.name : '本机访客'));
-      info.appendChild(node('p', 'avatar-equipped-name', avatar.id === 'default' ? '默认形象 · ' + avatar.name : '正在穿戴 · ' + avatar.name));
+      info.appendChild(node('p', 'avatar-equipped-name', currentCat.name + (avatar.id === 'default' ? ' · 默认形象' : ' · ' + avatar.name)));
+      var heroActions = node('div', 'avatar-hero-actions');
+      var share = node('button', 'avatar-share-button', sharing[ownerKey(ownerId)] ? '保存中…' : '晒一晒'); share.type = 'button';
+      share.setAttribute('data-avatar-action', 'share'); share.disabled = !!sharing[ownerKey(ownerId)];
+      share.setAttribute('aria-label', sharing[ownerKey(ownerId)] ? '正在保存个人秀图片' : '晒一晒，保存当前形象的个人秀图片');
+      share.addEventListener('click', shareAvatar); heroActions.appendChild(share);
       if (summary && summary.equipped !== 'default') {
         var reset = node('button', 'avatar-text-button', '恢复默认形象'); reset.type = 'button'; reset.disabled = busy;
-        reset.addEventListener('click', function () { wear('default', ownerId); }); info.appendChild(reset);
+        reset.addEventListener('click', function () { wear('default', ownerId); }); heroActions.appendChild(reset);
       }
+      info.appendChild(heroActions);
+      var shared = shareMessages[ownerKey(ownerId)];
+      var shareStatus = node('p', 'avatar-share-status' + (shared && shared.error ? ' is-error' : ''), shared ? shared.text : '');
+      shareStatus.setAttribute('role', shared && shared.error ? 'alert' : 'status'); shareStatus.setAttribute('aria-live', 'polite'); shareStatus.hidden = !shared; info.appendChild(shareStatus);
       hero.append(portrait, info); shell.appendChild(hero);
+      if (cats.length) {
+        var catHeading = node('div', 'avatar-cat-heading'); catHeading.appendChild(node('h3', '', '选择你的猫咪')); catHeading.appendChild(node('span', '', '三只都免费')); shell.appendChild(catHeading);
+        var options = node('div', 'avatar-cat-options'); options.setAttribute('role', 'group'); options.setAttribute('aria-label', '免费基础猫咪');
+        cats.forEach(function (item) {
+          var pick = node('button', 'avatar-cat-option' + (item.id === currentCat.id ? ' is-selected' : '')); pick.type = 'button';
+          pick.setAttribute('data-avatar-cat', item.id); pick.setAttribute('aria-pressed', item.id === currentCat.id ? 'true' : 'false'); pick.disabled = busy;
+          pick.appendChild(picture(item.image || imageOf(get('default', item.id)), '', 'avatar-cat-image'));
+          var label = node('span', 'avatar-cat-label'); label.appendChild(node('strong', '', item.name)); label.appendChild(node('span', '', item.id === currentCat.id ? '已选择' : '免费选择')); pick.appendChild(label);
+          pick.addEventListener('click', function () { chooseCat(item.id); }); options.appendChild(pick);
+        });
+        shell.appendChild(options);
+      }
       var unlocked = skins.filter(function (skin) { return collection(skin.id).unlocked; }).length;
       var wallet = node('div', 'avatar-wallet');
       var balance = node('div', 'avatar-wallet-main'); balance.appendChild(node('span', '', '可兑换月亮'));
@@ -189,14 +247,14 @@
       if (!summary || !summary.ok) {
         var error = node('p', 'avatar-status is-error', explain(summary && summary.code)); error.setAttribute('role', 'alert'); shell.appendChild(error);
       }
-      var galleryHeading = node('div', 'avatar-gallery-heading'); galleryHeading.appendChild(node('h3', '', '选择想收集的装扮'));
+      var galleryHeading = node('div', 'avatar-gallery-heading'); galleryHeading.appendChild(node('h3', '', '选择想收集的服装'));
       galleryHeading.appendChild(node('span', '', '左右滑动查看')); shell.appendChild(galleryHeading);
       var skin = chosen(), gallery = node('div', 'avatar-gallery'); gallery.setAttribute('role', 'tablist'); gallery.setAttribute('aria-label', '装扮画册');
       skins.forEach(function (item, index) {
         var col = collection(item.id), tab = node('button', 'avatar-skin-tab' + (item.id === skin.id ? ' is-selected' : ''));
         tab.type = 'button'; tab.setAttribute('role', 'tab'); tab.setAttribute('data-avatar-skin', item.id);
         tab.setAttribute('aria-selected', item.id === skin.id ? 'true' : 'false'); tab.setAttribute('aria-controls', 'avatar-collection-panel'); tab.tabIndex = item.id === skin.id ? 0 : -1;
-        tab.appendChild(picture(imageOf(item), '', 'avatar-skin-thumb')); tab.appendChild(node('span', 'avatar-skin-name', item.name));
+        tab.appendChild(picture(imageOf(get(item.id)), '', 'avatar-skin-thumb')); tab.appendChild(node('span', 'avatar-skin-name', item.name));
         tab.appendChild(node('span', 'avatar-skin-progress', summary && summary.equipped === item.id ? '已穿戴' : col.unlocked ? '已解锁' : count(col) + ' / 9'));
         tab.addEventListener('click', function () { selectSkin(item.id, true); });
         tab.addEventListener('keydown', function (event) {
@@ -218,14 +276,15 @@
       }
       boardWrap.appendChild(board); panel.appendChild(boardWrap);
       var description = node('div', 'avatar-collection-info'); description.appendChild(node('span', 'avatar-collection-kicker', col.unlocked ? '已解锁装扮' : '正在收集'));
-      description.appendChild(node('h3', '', skin.name)); description.appendChild(node('p', 'avatar-description', skin.description));
+      description.appendChild(node('h3', '', skin.name)); description.appendChild(node('p', 'avatar-collection-cat', '正在为「' + currentCat.name + '」收集服装'));
+      description.appendChild(node('p', 'avatar-description', skin.description));
       var progress = node('p', 'avatar-collection-progress'); progress.appendChild(node('strong', '', owned.length + ' / 9'));
       progress.appendChild(node('span', '', '块不同拼图')); description.appendChild(progress);
       var meter = node('progress', 'avatar-puzzle-meter'); meter.max = 9; meter.value = owned.length;
       meter.setAttribute('aria-label', skin.name + '收集进度'); description.appendChild(meter);
       var drawCount = col.drawCount === undefined ? col.draws || 0 : col.drawCount;
       description.appendChild(node('p', 'avatar-draw-count', '这套已兑换 ' + drawCount + ' 次' + (drawCount < 2 && !col.unlocked ? ' · 前两次保证不重复' : '')));
-      var action = node('button', 'primary avatar-draw-button', busy ? busyLabel : col.unlocked ? summary.equipped === skin.id ? '正在穿戴' : '穿戴这套装扮' : '用 1🌙 兑换拼图');
+      var action = node('button', 'primary avatar-draw-button', busy ? busyLabel : col.unlocked ? summary.equipped === skin.id ? '正在穿戴' : '穿戴这套装扮' : '兑换拼图 · 1🌙');
       action.type = 'button'; action.setAttribute('data-avatar-action', col.unlocked ? 'equip' : 'draw');
       action.disabled = busy || !summary || !summary.ok || col.unlocked && summary.equipped === skin.id || !col.unlocked && summary.availableMoons < 1;
       action.addEventListener('click', function () { if (col.unlocked) wear(skin.id, ownerId); else draw(skin); }); description.appendChild(action);
@@ -234,14 +293,14 @@
         var subject = root.CnmLastLocation && root.CnmLastLocation.currentSubject ? root.CnmLastLocation.currentSubject() : 'physics';
         earn.href = '../explore/?subject=' + (subject === 'science' ? 'science' : 'physics') + '&resume=1'; earn.setAttribute('data-resume-graph', ''); description.appendChild(earn);
       } else if (col.unlocked) description.appendChild(node('p', 'avatar-unlocked-note', '已集齐，不会再消耗月亮兑换这套拼图。'));
-      else description.appendChild(node('p', 'avatar-draw-note', '第 3 次起可能重复；重复仍消耗 1🌙，不增加收集进度。'));
+      else description.appendChild(node('p', 'avatar-draw-note', '第 3 次起 ' + duplicateChance() + '% 概率重复；重复本次无效，仍消耗 1🌙。'));
       panel.appendChild(description); shell.appendChild(panel);
       var rules = node('details', 'avatar-rules'), ruleSummary = node('summary', '', '月亮与拼图兑换规则'); rules.open = rulesOpen; rules.appendChild(ruleSummary);
       var ruleList = node('ul');
-      ['每累计 5⭐ 产生 1🌙 兑换额度；1🌞 按 5🌙 计算，历史成就与总积分保留。',
-        '先选择一套装扮，每次用 1🌙 兑换其中一块拼图。同一套前两次保证不重复。',
-        '从第 3 次起，9 块拼图等概率出现。重复拼图仍消耗月亮，但不增加收集进度。',
-        '集齐 9 块不同拼图即可永久解锁装扮，之后可以随时穿戴或恢复默认形象。',
+      ['每累计 3⭐ 产生 1🌙 兑换额度，历史成就与累计总积分保留。',
+        '先免费选择猫咪，再选择想收集的服装，每次用 1🌙 兑换其中一块拼图。同一套前两次保证不重复。',
+        '从第 3 次起，每次有 ' + duplicateChance() + '% 概率抽到重复拼图，' + (100 - duplicateChance()) + '% 概率获得未拥有的新拼图。重复本次无效，仍消耗 1🌙，不增加收集进度。',
+        '集齐 9 块不同拼图即可永久解锁服装；三只猫咪都可以穿已解锁的服装，换猫不影响拼图进度。',
         '所有记录按本地账号分别保存。换设备或清理浏览器前，请先在下方导出学习数据备份。'].forEach(function (text) { ruleList.appendChild(node('li', '', text)); });
       rules.appendChild(ruleList); shell.appendChild(rules);
       var status = node('p', 'avatar-status' + (statusError ? ' is-error' : '')); status.setAttribute('role', statusError ? 'alert' : 'status'); status.setAttribute('aria-live', 'polite');

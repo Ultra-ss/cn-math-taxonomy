@@ -160,7 +160,7 @@
       Object.keys(earned[level]).forEach(function (id) { if (subjectOf(id) !== subject) delete earned[level][id]; });
     });
     var normal = Object.keys(earned.normal).length, pro = Object.keys(earned.pro).length, total = normal + pro;
-    return { total: total, normal: normal, pro: pro, suns: Math.floor(total / 25), moons: Math.floor((total % 25) / 5), stars: total % 5, earned: earned };
+    return { total: total, normal: normal, pro: pro, moons: Math.floor(total / 3), stars: total % 3, earned: earned };
   }
   function chapters(childId, topics) {
     var normal = { science: statuses(childId, 'science'), physics: statuses(childId, 'physics') }, groups = {};

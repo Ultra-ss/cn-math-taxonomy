@@ -923,4 +923,103 @@ test('删除账号只清理该账号拼图与消费，其他账号和访客均�
   assert.deepStrictEqual(after.byOwner['child-b'],source.byOwner['child-b']);assert.deepStrictEqual(after.byOwner.guest,source.byOwner.guest);
 });
 
+
+function catAvatarFixture() {
+  const store=avatarFixture();
+  for(const [owner,catId] of [['child-a','cat-ginger'],['child-b','cat-tuxedo'],['guest','cat-snow']]) {
+    store.byOwner[owner].catId=catId;store.byOwner[owner].catAt=AVATAR_AT;
+  }
+  return store;
+}
+function catAvatarBackup() {
+  return exported(load({...learningFixture(),[AVATAR_KEY]:JSON.stringify(catAvatarFixture())}).api);
+}
+
+test('三只猫咪按账号和访客完整备份恢复，不改变旧拼图消费、皮肤或账号注册时间',()=>{
+  const data=catAvatarBackup(),source=catAvatarFixture(),{api,storage}=load();
+  const AR=require('../assets/avatar-rewards.js');assert.equal(AR.validateStore(data.learning.avatarRewards),true);
+  importInto(api,data);assert.deepStrictEqual(stored(storage,AVATAR_KEY),source);
+  assert.equal(AR.validateStore(stored(storage,AVATAR_KEY)),true);
+  assert.deepStrictEqual(exported(api).profiles.children.map(child=>child.createdAt),profiles.children.map(child=>child.createdAt));
+  for(const owner of ['child-a','child-b','guest']) {
+    assert.deepStrictEqual(stored(storage,AVATAR_KEY).byOwner[owner].draws,avatarFixture().byOwner[owner].draws);
+    assert.equal(stored(storage,AVATAR_KEY).byOwner[owner].equipped,avatarFixture().byOwner[owner].equipped);
+    assert.ok(stored(storage,AVATAR_KEY).byOwner[owner].draws.every(draw=>draw.cost===1),'旧记录每次仍消耗一个月亮');
+  }
+  const once=Object.fromEntries(storage);importInto(api,data);assert.deepStrictEqual(Object.fromEntries(storage),once);
+});
+
+test('旧v2猫咪字段缺省或整个装扮字段缺省及v1导入，不回退本机较新的猫咪选择',()=>{
+  for(const kind of ['old-avatar','no-avatar','v1']) {
+    const data=avatarBackup();
+    if(kind==='no-avatar')delete data.learning.avatarRewards;
+    if(kind==='v1'){data.version=1;delete data.learning;}
+    const entries={...learningFixture(),[AVATAR_KEY]:JSON.stringify(catAvatarFixture())};
+    const {api,storage}=load(entries);importInto(api,data);
+    assert.deepStrictEqual(stored(storage,AVATAR_KEY),catAvatarFixture());
+    const first=Object.fromEntries(storage);importInto(api,data);assert.deepStrictEqual(Object.fromEntries(storage),first);
+  }
+});
+
+test('猫咪选择只按各账号catAt较新值合并，同时间本机优先，晚选默认猫也会保留时间',()=>{
+  const local=catAvatarFixture(),data=catAvatarBackup();
+  data.learning.avatarRewards.byOwner['child-a'].catId='cat-tuxedo';
+  data.learning.avatarRewards.byOwner['child-b'].catId='cat-snow';
+  data.learning.avatarRewards.byOwner['child-b'].catAt='2026-11-18T10:00:00.000Z';
+  data.learning.avatarRewards.byOwner.guest.catId='cat-ginger';
+  data.learning.avatarRewards.byOwner.guest.catAt='2026-11-16T10:00:00.000Z';
+  const {api,storage}=load({...learningFixture(),[AVATAR_KEY]:JSON.stringify(local)});
+  const summary=importInto(api,data),after=stored(storage,AVATAR_KEY);
+  assert.equal(summary.updatedAvatarCats,1);
+  assert.equal(after.byOwner['child-a'].catId,'cat-ginger','同时间保留本机');
+  assert.equal(after.byOwner['child-b'].catId,'cat-snow','较新的免费默认猫选择可覆盖旧选择');
+  assert.equal(after.byOwner['child-b'].catAt,'2026-11-18T10:00:00.000Z');
+  assert.equal(after.byOwner.guest.catId,'cat-snow','较旧猫咪备份不会覆盖本机');
+  for(const owner of Object.keys(after.byOwner)) {
+    assert.deepStrictEqual(after.byOwner[owner].draws,local.byOwner[owner].draws);
+    assert.equal(after.byOwner[owner].equipped,local.byOwner[owner].equipped);
+  }
+  const repeated=importInto(api,data);assert.equal(repeated.updatedAvatarCats,0);
+  assert.deepStrictEqual(stored(storage,AVATAR_KEY),after);
+});
+
+test('没有兑换记录的免费猫咪选择可以独立备份，旧账本缺猫字段仍原样保留',()=>{
+  const store={v:1,byOwner:{guest:{...avatarBox(),catId:'cat-tuxedo',catAt:AVATAR_AT}}};
+  const data=exported(load({[AVATAR_KEY]:JSON.stringify(store)}).api),{api,storage}=load();
+  const summary=importInto(api,data);assert.equal(summary.addedAvatarDraws,0);assert.equal(summary.updatedAvatarCats,1);
+  assert.deepStrictEqual(stored(storage,AVATAR_KEY),store);
+  assert.equal(stored(storage,AVATAR_KEY).byOwner.guest.draws.length,0);
+  const old=avatarBackup(),legacy=load();importInto(legacy.api,old);
+  assert.ok(!Object.prototype.hasOwnProperty.call(stored(legacy.storage,AVATAR_KEY).byOwner['child-a'],'catId'));
+});
+
+test('备份拒绝缺一项的猫咪字段、未知猫咪和无效选择时间，失败不写入或污染其他账号',()=>{
+  const mutations=[
+    box=>{delete box.catId;},box=>{delete box.catAt;},box=>{box.catId='cat-unknown';},
+    box=>{box.catId=null;},box=>{box.catId={};},box=>{box.catAt='not-a-date';},box=>{box.catAt=null;}
+  ];
+  for(const mutate of mutations) {
+    const data=catAvatarBackup();mutate(data.learning.avatarRewards.byOwner['child-a']);
+    assert.equal(require('../assets/avatar-rewards.js').validateStore(data.learning.avatarRewards),false);
+    const entries={...learningFixture(),[AVATAR_KEY]:JSON.stringify(catAvatarFixture())};
+    const {api,storage,writes}=load(entries);
+    assert.throws(()=>api.parseBackup(JSON.stringify(data)),/猫咪形象/);
+    assert.throws(()=>api.previewImport(data),/猫咪形象/);
+    assert.deepStrictEqual(Object.fromEntries(storage),entries);assert.deepStrictEqual(writes,[]);
+  }
+});
+
+test('导入预览后免费切猫也令token失效，猫咪写入失败保留本机原字节和消费账本',()=>{
+  const entries={...learningFixture(),[AVATAR_KEY]:JSON.stringify(catAvatarFixture(),null,2)},data=catAvatarBackup();
+  const {api,storage,writes}=load(entries),preview=api.previewImport(data);
+  const next=catAvatarFixture();next.byOwner['child-a'].catId='cat-snow';next.byOwner['child-a'].catAt='2026-11-18T00:00:00.000Z';
+  storage.set(AVATAR_KEY,JSON.stringify(next));
+  assert.throws(()=>api.importBackup(data,preview.token),/已发生变化/);assert.deepStrictEqual(writes,[]);
+  const failing=load(entries,null,{failWrite:key=>key===AVATAR_KEY});
+  data.learning.avatarRewards.byOwner['child-a'].catAt='2026-11-19T00:00:00.000Z';
+  data.learning.avatarRewards.byOwner['child-a'].catId='cat-snow';
+  assert.throws(()=>importInto(failing.api,data),/原有档案和学习数据未改变/);
+  assert.deepStrictEqual(Object.fromEntries(failing.storage),entries);
+});
+
 console.log('\n' + passed + ' passed, 0 failed');

@@ -3,7 +3,7 @@
  * 改了 SHELL 或 DATA 列表、或数据结构变了，就把 VERSION 加一。 */
 'use strict';
 
-var VERSION = 'v69';
+var VERSION = 'v70';
 var CACHE = 'cnm-pwa-' + VERSION;
 var SCOPE = self.registration.scope;
 
@@ -44,6 +44,7 @@ var SHELL = [
   'assets/achievement-books.js',
   'assets/avatar-catalog.js',
   'assets/avatar-rewards.js',
+  'assets/avatar-share.js',
   'assets/avatars/default.svg',
   'assets/avatars/skin-01.svg',
   'assets/avatars/skin-02.svg',
@@ -55,6 +56,28 @@ var SHELL = [
   'assets/avatars/skin-08.svg',
   'assets/avatars/skin-09.svg',
   'assets/avatars/skin-10.svg',
+  'assets/avatars/ginger/default.svg',
+  'assets/avatars/ginger/skin-01.svg',
+  'assets/avatars/ginger/skin-02.svg',
+  'assets/avatars/ginger/skin-03.svg',
+  'assets/avatars/ginger/skin-04.svg',
+  'assets/avatars/ginger/skin-05.svg',
+  'assets/avatars/ginger/skin-06.svg',
+  'assets/avatars/ginger/skin-07.svg',
+  'assets/avatars/ginger/skin-08.svg',
+  'assets/avatars/ginger/skin-09.svg',
+  'assets/avatars/ginger/skin-10.svg',
+  'assets/avatars/tuxedo/default.svg',
+  'assets/avatars/tuxedo/skin-01.svg',
+  'assets/avatars/tuxedo/skin-02.svg',
+  'assets/avatars/tuxedo/skin-03.svg',
+  'assets/avatars/tuxedo/skin-04.svg',
+  'assets/avatars/tuxedo/skin-05.svg',
+  'assets/avatars/tuxedo/skin-06.svg',
+  'assets/avatars/tuxedo/skin-07.svg',
+  'assets/avatars/tuxedo/skin-08.svg',
+  'assets/avatars/tuxedo/skin-09.svg',
+  'assets/avatars/tuxedo/skin-10.svg',
   'assets/explore-viewport.js',
   'assets/stats-config.js',
   'assets/stats.js',

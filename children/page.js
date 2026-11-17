@@ -91,7 +91,7 @@
     var catalog = window.CnmAvatarCatalog, rewards = window.CnmAvatarRewards;
     if (!catalog) return null;
     var summary = rewards && rewards.summary(owner);
-    return catalog.get(summary && summary.ok ? summary.equipped : 'default');
+    return catalog.get(summary && summary.ok ? summary.equipped : 'default', summary && summary.catId);
   }
   function refreshProfileAvatars() {
     document.querySelectorAll('img.kid-avatar[data-avatar-owner]').forEach(function (image) {
@@ -273,7 +273,7 @@
     var total = el('div', 'achievement-total');
     total.appendChild(el('strong', null, String(score.total))); total.appendChild(el('span', null, '累计总积分（⭐）')); scoreBox.appendChild(total);
     var medals = el('div', 'achievement-medals');
-    [['🌞', score.suns, '太阳'], ['🌙', score.moons, '月亮'], ['⭐', score.stars, '星星']].forEach(function (row) {
+    [['🌙', score.moons, '月亮'], ['⭐', score.stars, '星星']].forEach(function (row) {
       var item = el('span', 'achievement-medal'); item.setAttribute('aria-label', row[2] + ' ' + row[1] + ' 个');
       item.appendChild(el('span', 'achievement-icon', row[0])); item.appendChild(el('strong', null, '× ' + row[1])); medals.appendChild(item);
     });
@@ -422,7 +422,7 @@
       '新增薄弱知识点 ' + preview.addedBlindspots + ' 个、更新 ' + preview.updatedBlindspots + ' 个；' +
       '恢复检测进度 ' + preview.restoredSessions + ' 份、归档 ' + preview.archivedSessions + ' 份。' +
       '图谱检测记录新增 ' + preview.addedProgress + ' 份、更新 ' + preview.updatedProgress + ' 份。' +
-      '拼图兑换记录新增 ' + (preview.addedAvatarDraws || 0) + ' 次、更新穿戴 ' + (preview.updatedAvatarEquipment || 0) + ' 项。' +
+      '拼图兑换记录新增 ' + (preview.addedAvatarDraws || 0) + ' 次、更新穿戴 ' + (preview.updatedAvatarEquipment || 0) + ' 项、更新猫咪 ' + (preview.updatedAvatarCats || 0) + ' 项。' +
       (preview.legacy ? '这是旧版档案备份，不包含错题、进行中检测和薄弱知识点台账。' : '');
     var children = document.getElementById('import-children');
     children.textContent = '';
@@ -470,7 +470,7 @@
         ' 个已有档案；新增记录 ' + result.addedRecords + ' 条、错题 ' + result.addedWrongs + ' 道、薄弱知识点 ' +
         result.addedBlindspots + ' 个；恢复进度 ' + result.restoredSessions + ' 份，归档进度 ' + result.archivedSessions +
         ' 份；图谱检测记录新增 ' + result.addedProgress + ' 份、更新 ' + result.updatedProgress + ' 份；' +
-        '拼图兑换记录新增 ' + (result.addedAvatarDraws || 0) + ' 次、更新穿戴 ' + (result.updatedAvatarEquipment || 0) + ' 项。';
+        '拼图兑换记录新增 ' + (result.addedAvatarDraws || 0) + ' 次、更新穿戴 ' + (result.updatedAvatarEquipment || 0) + ' 项、更新猫咪 ' + (result.updatedAvatarCats || 0) + ' 项。';
       importStatus.hidden = false;
     } catch (error) {
       // 失败后重新计算预览，防止其他页面的修改让旧预览失效。

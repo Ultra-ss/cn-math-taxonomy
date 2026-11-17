@@ -420,6 +420,10 @@
           (box.equipped !== 'default' && !avatarSkin(box.equipped)) || !validDate(box.equippedAt)) {
         throw new Error('头像装扮的归属或穿戴数据不正确。');
       }
+      if (own(box, 'catId') !== own(box, 'catAt') || (own(box, 'catId') &&
+          (['cat-snow', 'cat-ginger', 'cat-tuxedo'].indexOf(box.catId) < 0 || !validDate(box.catAt)))) {
+        throw new Error('猫咪形象的选择或时间不正确。');
+      }
       box.draws.forEach(function (draw) {
         if (!isObject(draw) || !validId(draw.id) || ids.has(draw.id) || !avatarSkin(draw.skinId) ||
             !Number.isInteger(draw.piece) || draw.piece < 0 || draw.piece > 8 || draw.cost !== 1 || !validDate(draw.at)) {
@@ -566,6 +570,7 @@
         merged.avatarRewards.byOwner[owner] = copy(source);
         summary.addedAvatarDraws += source.draws.length;
         if (source.equipped !== 'default') summary.updatedAvatarEquipment++;
+        if (source.catId && source.catId !== 'cat-snow') summary.updatedAvatarCats++;
         return;
       }
       var box = merged.avatarRewards.byOwner[owner], draws = new Map();
@@ -580,6 +585,11 @@
       if (Date.parse(source.equippedAt) > Date.parse(box.equippedAt)) {
         if (box.equipped !== source.equipped) summary.updatedAvatarEquipment++;
         box.equipped = source.equipped; box.equippedAt = source.equippedAt;
+      }
+      // 旧备份没有猫咪选择时不覆盖本机；同一时间仍保留本机选择。
+      if (own(source, 'catId') && Date.parse(source.catAt) > Date.parse(box.catAt || '1970-01-01T00:00:00.000Z')) {
+        if (source.catId !== (box.catId || 'cat-snow')) summary.updatedAvatarCats++;
+        box.catId = source.catId; box.catAt = source.catAt;
       }
     });
     return merged;
@@ -598,7 +608,7 @@
     backup.profiles.children.forEach(function (c) { if (!byId.has(c.id)) names.add(c.name); });
     var summary = { addedChildren: 0, matchedChildren: 0, renamedChildren: 0, addedRecords: 0, updatedRecords: 0, keptRecords: 0,
       addedWrongs: 0, updatedWrongs: 0, addedBlindspots: 0, updatedBlindspots: 0, restoredSessions: 0, archivedSessions: 0,
-      addedProgress: 0, updatedProgress: 0, addedAvatarDraws: 0, updatedAvatarEquipment: 0,
+      addedProgress: 0, updatedProgress: 0, addedAvatarDraws: 0, updatedAvatarEquipment: 0, updatedAvatarCats: 0,
       children: [], token: before.token, legacy: backup.version === 1 };
     var usedNames = new Set(profiles.children.map(function (c) { return c.name; }));
     backup.profiles.children.forEach(function (source) {

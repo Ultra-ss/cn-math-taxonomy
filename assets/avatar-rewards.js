@@ -8,12 +8,15 @@
   'use strict';
   var KEY = 'cnmAvatarRewards.v1';
   var SKIN_IDS = Array.from({ length: 10 }, function (_, i) { return 'skin-' + String(i + 1).padStart(2, '0'); });
+  var CAT_IDS = ['cat-snow', 'cat-ginger', 'cat-tuxedo'];
+  var DUPLICATE_CHANCE = 10;
   var BAD_KEYS = ['__proto__', 'constructor', 'prototype'];
   function object(value) { return !!value && typeof value === 'object' && !Array.isArray(value); }
   function own(value, key) { return Object.prototype.hasOwnProperty.call(value, key); }
   function safeId(value) { return typeof value === 'string' && /^[A-Za-z0-9_-]{1,128}$/.test(value) && BAD_KEYS.indexOf(value) < 0; }
   function owner(value) { return value === null || value === undefined || value === '' || value === 'guest' ? 'guest' : safeId(value) ? value : ''; }
   function skin(value) { return SKIN_IDS.indexOf(value) >= 0; }
+  function cat(value) { return CAT_IDS.indexOf(value) >= 0; }
   function date(value) { return typeof value === 'string' && Number.isFinite(Date.parse(value)); }
   function collection(draws, skinId) {
     var matching = draws.filter(function (draw) { return draw.skinId === skinId; });
@@ -26,6 +29,7 @@
       var box = store.byOwner[id], seen = new Set();
       if (owner(id) !== id || !object(box) || !Array.isArray(box.draws) ||
           (box.equipped !== 'default' && !skin(box.equipped)) || !date(box.equippedAt)) return false;
+      if (own(box, 'catId') !== own(box, 'catAt') || (own(box, 'catId') && (!cat(box.catId) || !date(box.catAt)))) return false;
       if (!box.draws.every(function (draw) {
         if (!object(draw) || !safeId(draw.id) || seen.has(draw.id) || !skin(draw.skinId) ||
             !Number.isInteger(draw.piece) || draw.piece < 0 || draw.piece > 8 || draw.cost !== 1 || !date(draw.at)) return false;
@@ -57,11 +61,12 @@
     }
     function summarize(id, store, total) {
       var box = own(store.byOwner, id) ? store.byOwner[id] : emptyBox();
-      var totalStars = total === null ? 0 : total, totalMoons = Math.floor(totalStars / 5), spent = box.draws.length;
+      var totalStars = total === null ? 0 : total, totalMoons = Math.floor(totalStars / 3), spent = box.draws.length;
       var collections = {};
       SKIN_IDS.forEach(function (skinId) { collections[skinId] = collection(box.draws, skinId); });
       return { ok: true, owner: id, totalStars: totalStars, totalMoons: totalMoons, earnedMoons: totalMoons,
-        spentMoons: spent, availableMoons: Math.max(0, totalMoons - spent), equipped: box.equipped, collections: collections };
+        spentMoons: spent, availableMoons: Math.max(0, totalMoons - spent), equipped: box.equipped,
+        catId: box.catId || 'cat-snow', collections: collections };
     }
     function summary(value) {
       var id = owner(value), result = read();
@@ -129,8 +134,13 @@
         if (pieces.unlocked) return { ok: false, code: 'already_unlocked', summary: current };
         if (total === null) return { ok: false, code: 'progress_unavailable' };
         if (current.availableMoons < 1) return { ok: false, code: 'insufficient_moons', summary: current };
-        var pool = Array.from({ length: 9 }, function (_, i) { return i; });
-        if (pieces.draws < 2) pool = pool.filter(function (piece) { return pieces.pieces.indexOf(piece) < 0; });
+        var missing = Array.from({ length: 9 }, function (_, i) { return i; }).filter(function (piece) { return pieces.pieces.indexOf(piece) < 0; });
+        var pool = missing;
+        if (pieces.draws >= 2 && pieces.pieces.length) {
+          var chance = integer(100);
+          if (chance === null) return { ok: false, code: 'random_unavailable' };
+          if (chance < DUPLICATE_CHANCE) pool = pieces.pieces;
+        }
         var picked = integer(pool.length), at = now();
         if (picked === null) return { ok: false, code: 'random_unavailable' };
         if (!date(at)) return { ok: false, code: 'storage_unavailable' };
@@ -159,9 +169,25 @@
         return { ok: true, code: 'equipped', summary: summarize(id, result.store, total) };
       });
     }
-    return { summary: summary, draw: draw, equip: equip };
+    function setCat(value, catId) {
+      return exclusive(function () {
+        var id = owner(value);
+        if (!id) return { ok: false, code: 'invalid_owner' };
+        if (!cat(catId)) return { ok: false, code: 'invalid_cat' };
+        var result = read(); if (!result.ok) return result;
+        var total = stars(id), current = summarize(id, result.store, total);
+        if (current.catId === catId) return { ok: true, code: 'cat_selected', summary: current };
+        var box = own(result.store.byOwner, id) ? result.store.byOwner[id] : emptyBox(), at = now();
+        if (!date(at)) return { ok: false, code: 'storage_unavailable' };
+        box.catId = catId; box.catAt = at; result.store.byOwner[id] = box;
+        if (!write(result.store, id)) return { ok: false, code: 'storage_unavailable' };
+        return { ok: true, code: 'cat_selected', summary: summarize(id, result.store, total) };
+      });
+    }
+    return { summary: summary, draw: draw, equip: equip, setCat: setCat };
   }
   var api = create();
-  api.KEY = KEY; api.SKIN_IDS = SKIN_IDS.slice(); api.validateStore = validateStore; api.create = create;
+  api.KEY = KEY; api.SKIN_IDS = SKIN_IDS.slice(); api.CAT_IDS = CAT_IDS.slice(); api.DUPLICATE_CHANCE = DUPLICATE_CHANCE;
+  api.validateStore = validateStore; api.create = create;
   return api;
 });

@@ -10,18 +10,24 @@
     var scriptURL = typeof document !== 'undefined' && document.currentScript
         ? document.currentScript.src
         : '';
+    var DEFAULT_CAT = 'cat-snow';
 
-    function avatarImage(id) {
+    function avatarImage(id, catId) {
+        var directory = catId === 'cat-ginger' ? 'ginger/'
+            : catId === 'cat-tuxedo' ? 'tuxedo/' : '';
+        var path = 'avatars/' + directory + id + '.svg';
         if (scriptURL) {
-            return new URL('avatars/' + id + '.svg', scriptURL).href;
+            return new URL(path, scriptURL).href;
         }
-        return '/assets/avatars/' + id + '.svg';
+        return '/assets/' + path;
     }
 
     var defaultAvatar = {
         id: 'default',
         name: '星芽小探员',
-        image: avatarImage('default')
+        description: '带着好奇心出发，发现每一天的小小惊喜。',
+        image: avatarImage('default', DEFAULT_CAT),
+        catId: DEFAULT_CAT
     };
 
     var skins = [
@@ -36,20 +42,52 @@
         { id: 'skin-09', name: '霜雪精灵', description: '珍藏雪花的细节，把清亮的善意送给伙伴。' },
         { id: 'skin-10', name: '日光骑士', description: '迎着阳光勇敢前行，用热心照亮每一天。' }
     ].map(function (skin) {
-        skin.image = avatarImage(skin.id);
+        skin.image = avatarImage(skin.id, DEFAULT_CAT);
+        skin.catId = DEFAULT_CAT;
         return skin;
     });
 
-    function get(id) {
-        for (var i = 0; i < skins.length; i += 1) {
-            if (skins[i].id === id) {
-                return skins[i];
+    var cats = [
+        { id: 'cat-snow', name: '奶油白猫' },
+        { id: 'cat-ginger', name: '橘子猫' },
+        { id: 'cat-tuxedo', name: '奶牛猫' }
+    ].map(function (cat) {
+        cat.image = avatarImage('default', cat.id);
+        return cat;
+    });
+
+    function get(id, catId) {
+        var selectedCat = DEFAULT_CAT;
+        for (var c = 0; c < cats.length; c += 1) {
+            if (cats[c].id === catId) {
+                selectedCat = catId;
+                break;
             }
         }
-        return defaultAvatar;
+
+        var avatar = defaultAvatar;
+        for (var i = 0; i < skins.length; i += 1) {
+            if (skins[i].id === id) {
+                avatar = skins[i];
+                break;
+            }
+        }
+
+        if (selectedCat === DEFAULT_CAT) {
+            return avatar;
+        }
+        return {
+            id: avatar.id,
+            name: avatar.name,
+            description: avatar.description,
+            image: avatarImage(avatar.id, selectedCat),
+            catId: selectedCat
+        };
     }
 
     return {
+        cats: cats,
+        DEFAULT_CAT: DEFAULT_CAT,
         skins: skins,
         defaultAvatar: defaultAvatar,
         get: get

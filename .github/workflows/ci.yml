@@ -152,6 +152,9 @@ jobs:
       - name: tests/test_avatar_rewards.js
         run: node tests/test_avatar_rewards.js
 
+      - name: tests/test_avatar_share.js
+        run: node tests/test_avatar_share.js
+
       - name: 课标映射严格模式（仅报告）
         continue-on-error: true
         env:

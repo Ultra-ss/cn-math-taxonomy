@@ -245,18 +245,20 @@ test('成就按孩子、访客和学科隔离，刷新保留；删除档案清�
   assert.equal(fresh.achievements(null).total,1);
 });
 
-test('星月日按5与25进位，保留累计积分总额', () => {
+test('取消太阳，每3颗星折1个月亮，保留累计积分总额', () => {
   const {api}=load();
   const session={answers:[],status:{}};
   for(let i=1;i<=26;i++) {
     const id='cnp_n'+i;session.answers.push({id,qid:id+'_q1',result:'correct'});session.status[id]={s:'mastered',src:'direct'};
     api.recordSession({childId:'child-a',subject:'physics',key:'series',session,at:t1});
     const score=api.achievements('child-a');
-    if(i===5) assert.deepStrictEqual([score.total,score.suns,score.moons,score.stars],[5,0,1,0]);
-    if(i===25) assert.deepStrictEqual([score.total,score.suns,score.moons,score.stars],[25,1,0,0]);
+    if(i===3) assert.deepStrictEqual([score.total,score.moons,score.stars],[3,1,0]);
+    if(i===5) assert.deepStrictEqual([score.total,score.moons,score.stars],[5,1,2]);
+    if(i===25) assert.deepStrictEqual([score.total,score.moons,score.stars],[25,8,1]);
+    assert.equal(Object.prototype.hasOwnProperty.call(score,'suns'),false);
   }
   const score=api.achievements('child-a');
-  assert.deepStrictEqual([score.total,score.suns,score.moons,score.stars],[26,1,0,1]);
+  assert.deepStrictEqual([score.total,score.moons,score.stars],[26,8,2]);
 });
 
 test('旧直接通关自动回填成就，读取不写数据，后续更正保留首次积分', () => {
