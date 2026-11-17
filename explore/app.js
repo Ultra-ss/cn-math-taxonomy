@@ -58,7 +58,8 @@
   var changingCamera = false;
   var viewportSaveTimer = null;
   var graphMotion = null;
-  var graphEntranceShown = false;
+  var graphMotionPaused = false;
+  var GRAPH_MOTION_PAUSED_KEY = 'cnmGraph.motionPaused.v1';
 
   function $(id) { return document.getElementById(id); }
 
@@ -377,6 +378,18 @@
     };
   }
 
+  function syncGraphMotionButton() {
+    var button = $('graph-motion-toggle');
+    if (!button) return;
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    button.hidden = !window.CnmGraphMotion || !cy || cy.destroyed() || $('cy').dataset.ready !== '1';
+    button.disabled = reduced;
+    button.setAttribute('aria-pressed', graphMotionPaused ? 'true' : 'false');
+    button.textContent = reduced ? '静态显示' : graphMotionPaused ? '继续漂浮' : '暂停漂浮';
+    button.setAttribute('aria-label', reduced ? '静态显示：已启用系统减少动态效果' : button.textContent);
+    button.title = reduced ? '已遵循系统的减少动态效果设置' : graphMotionPaused ? '继续知识点的轻柔漂浮' : '暂停知识点漂浮，方便静心阅读';
+  }
+
   function restoreDepth() {
     try {
       var saved = sessionStorage.getItem('cnmExplore.depth');
@@ -433,6 +446,7 @@
       cy.zoom(0.5);
       cy.center();
     }
+    if (graphMotion) graphMotion.start(cy);
   }
 
   function closeDrawerIfMobile() {
@@ -446,12 +460,11 @@
   }
   function cameraContext() {
     var context = { subject: subject, volume: volume, topicId: selected,
-      view: showWholeBook ? 'book' : 'local', depth: upDepth, layout: 'playful-v1-labels-' + labelLimit() };
+      view: showWholeBook ? 'book' : 'local', depth: upDepth, layout: 'playful-v2-floating-labels-' + labelLimit() };
     if (selectedVolumes.length > 1) context.volumes = selectedVolumes.slice();
     return context;
   }
   function captureViewport() {
-    if (typeof graphMotion !== 'undefined' && graphMotion) graphMotion.stop();
     if (!cy || changingCamera || !renderedCameraContext || $('cy').dataset.ready !== '1' || !graphIsVisible()) return null;
     var zoom = cy.zoom(), pan = cy.pan(), width = $('cy').clientWidth, height = $('cy').clientHeight;
     return { zoom: zoom, centerX: (width / 2 - pan.x) / zoom, centerY: (height / 2 - pan.y) / zoom,
@@ -560,6 +573,7 @@
 
   function syncMobileChrome() {
     var mobile = window.matchMedia('(max-width: 900px)').matches;
+    if (typeof graphMotion !== 'undefined' && graphMotion && mobile && mobileView !== 'graph') graphMotion.hold('view');
     var menuOpen = document.querySelector('.site-header').classList.contains('menu-open');
     var optionsOpen = document.querySelector('.explore').classList.contains('options-open');
     $('main-nav').hidden = mobile && !menuOpen;
@@ -571,6 +585,7 @@
     $('mobile-options-toggle').setAttribute('aria-label', optionsOpen ? '收起图谱选项' : '展开图谱选项');
     syncMobilePanels();
     syncDirectoryFilters();
+    if (typeof graphMotion !== 'undefined' && graphMotion && (!mobile || mobileView === 'graph')) graphMotion.release('view');
     if (!mobile && graphNeedsRender) renderGraph(pendingGraphRestore);
     resizeGraphViewport();
   }
@@ -625,6 +640,7 @@
     $('node-dialog-try').textContent = expert ? '我要挑战' : '我要试试';
     $('node-dialog-try').setAttribute('href', nodeDiagnosisHref(id));
     dialog.showModal();
+    if (typeof graphMotion !== 'undefined' && graphMotion) graphMotion.hold('dialog');
     return true;
   }
   function activateGraphNode(id) {
@@ -647,6 +663,7 @@
     dialog.addEventListener('close', function () {
       // close 事件异步派发；关闭后快速重开时，旧事件不能清除新弹窗的选择。
       if (dialog.open) return;
+      if (typeof graphMotion !== 'undefined' && graphMotion) graphMotion.release('dialog');
       nodeDialogId = null;
       var point = nodeDialogScroll;
       nodeDialogScroll = null;
@@ -1121,6 +1138,7 @@
       cyEl.dataset.ready = '0';
       cyEl.dataset.mode = '';
       cyEl.dataset.total = '';
+      syncGraphMotionButton();
       emptyEl.hidden = false;
       meta.textContent = '';
       updateFold(0, false);
@@ -1192,7 +1210,7 @@
             'background-color': 'data(bg)', 'border-width': 3, 'border-color': 'data(border)',
             shape: 'round-rectangle', width: boxW, height: 40, padding: 0, 'corner-radius': 12
           } },
-          { selector: 'node.current', style: { 'border-width': 4, 'z-index': 10 } },
+          { selector: 'node.current', style: { width: boxW * 1.05, height: 42, 'border-width': 4, 'z-index': 10 } },
           { selector: 'node.test-passed, node.test-failed, node.test-expert', style: {
             'background-width': 22, 'background-height': 22, 'background-fit': 'none',
             'background-position-x': '100%', 'background-position-y': '0%',
@@ -1260,14 +1278,16 @@
             if (savedCamera) applyViewport(savedCamera);
             cyEl.dataset.ready = '1';
             rememberViewport();
-            if (!graphEntranceShown && window.CnmGraphMotion) {
-              if (!graphMotion) graphMotion = window.CnmGraphMotion.create({ container: cyEl });
+            syncGraphMotionButton();
+            if (window.CnmGraphMotion) {
+              if (!graphMotion) graphMotion = window.CnmGraphMotion.create({ container: cyEl, paused: graphMotionPaused });
               var enteringGraph = cy;
-              // 等布局和移动端尺寸稳定后进场，恢复位置时始终先保存静止画面。
+              // 等布局和移动端尺寸稳定后漂浮；基点不参与视角保存。
               setTimeout(function () {
-                if (token !== graphToken || cy !== enteringGraph || !graphIsVisible() || document.hidden) return;
-                graphEntranceShown = true;
+                if (token !== graphToken || cy !== enteringGraph || !graphMotion) return;
                 graphMotion.start(enteringGraph);
+                if (window.matchMedia('(max-width: 900px)').matches && mobileView !== 'graph') graphMotion.hold('view');
+                if ($('node-diagnose-dialog') && $('node-diagnose-dialog').open) graphMotion.hold('dialog');
               }, 80);
             }
           });
@@ -1464,6 +1484,17 @@
   }
 
   function bind() {
+    try { graphMotionPaused = localStorage.getItem(GRAPH_MOTION_PAUSED_KEY) === '1'; } catch (error) { /* 隐私模式使用当前页设置。 */ }
+    var motionToggle = $('graph-motion-toggle');
+    if (motionToggle) motionToggle.addEventListener('click', function () {
+      graphMotionPaused = !graphMotionPaused;
+      try { localStorage.setItem(GRAPH_MOTION_PAUSED_KEY, graphMotionPaused ? '1' : '0'); } catch (error) { /* 不影响当前页。 */ }
+      if (graphMotion) graphMotion.setPaused(graphMotionPaused);
+      syncGraphMotionButton();
+    });
+    var motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (motionPreference.addEventListener) motionPreference.addEventListener('change', syncGraphMotionButton);
+    syncGraphMotionButton();
     $('mobile-menu-toggle').addEventListener('click', function () {
       var open = !document.querySelector('.site-header').classList.contains('menu-open');
       if (open) setMobileOptions(false);
@@ -1620,7 +1651,6 @@
           FONT = PLAYFUL_FONT;
           // 慢网络使用系统字体先显示；字体到达后只换文字，不重新排列节点或移动相机。
           if (cy && !cy.destroyed()) {
-            if (graphMotion) graphMotion.stop();
             cy.style().selector('node').style('font-family', FONT).update();
           }
           finish(true);

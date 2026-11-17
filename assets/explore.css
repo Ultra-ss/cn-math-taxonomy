@@ -150,6 +150,11 @@ body.page-explore .site-footer { flex: none; }
 }
 .graph-fold button { white-space: normal; max-width: 100%; }
 .graph-stage { position: relative; flex: 1; min-width: 0; min-height: 280px; display: flex; flex-direction: column; }
+.graph-motion-toggle { position: absolute; z-index: 5; top: 8px; right: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-height: 44px; padding: 7px 11px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg-elev); color: var(--muted); box-shadow: var(--control-shadow); font: 650 12px/1.2 var(--font); cursor: pointer; }
+.graph-motion-toggle::before { content: 'Ⅱ'; font-size: 15px; }
+.graph-motion-toggle[aria-pressed="true"]::before { content: '▶'; font-size: 10px; }
+.graph-motion-toggle[hidden] { display: none; }
+.graph-motion-toggle:disabled { cursor: default; opacity: .65; }
 #cy { flex: 1; min-height: 280px; width: 100%; }
 .graph-empty {
   flex: 1;

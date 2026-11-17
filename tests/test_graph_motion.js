@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* 进场动画必须可中断、精确归位，且不碰相机、颜色和学习状态。 */
+/* 持续独立漂浮：长时运行、输入暂停恢复、基点精确归位和生命周期。 */
 'use strict';
 const assert = require('assert');
 const fs = require('fs');
@@ -7,105 +7,164 @@ const path = require('path');
 const vm = require('vm');
 const Motion = require('../assets/graph-motion.js');
 let passed = 0;
-function test(name, fn) { fn(); passed++; console.log('  ok   '+name); }
+function test(name, fn) { fn();passed++;console.log('  ok   '+name); }
 function target(extra={}) {
-  const listeners = new Map();
+  const listeners=new Map();
   return {...extra,addEventListener(type,fn){if(!listeners.has(type))listeners.set(type,new Set());listeners.get(type).add(fn);},
     removeEventListener(type,fn){if(listeners.has(type))listeners.get(type).delete(fn);},
-    fire(type){for(const fn of [...(listeners.get(type)||[])])fn();},
-    listenerCount(){return [...listeners.values()].reduce((sum,set)=>sum+set.size,0);}};
+    fire(type,event={}){for(const fn of [...(listeners.get(type)||[])])fn(event);},
+    listenerCount(){return [...listeners.values()].reduce((n,set)=>n+set.size,0);}};
 }
-function fixture({zoom=1,count=8,reduced=false,hidden=false,offscreen=false}={}) {
-  const container=target({clientWidth:390,clientHeight:500,dataset:{}}),doc=target({hidden}),win=target();
-  const media=target({matches:reduced}),frames=new Map();let serial=0,mutations=0;
+function fixture({zoom=1,count=12,reduced=false,hidden=false,offscreen=false,paused=false}={}) {
+  const container=target({clientWidth:390,clientHeight:500,dataset:{}}),doc=target({hidden}),win=target({PointerEvent:function(){}});
+  const media=target({matches:reduced}),frames=new Map(),timers=new Map();let serial=0,clock=0,mutations=0,pan={x:0,y:0};
   const nodes=Array.from({length:count},(_,i)=>{
-    let point={x:100+i%9*16,y:80+Math.floor(i/9)*10};
-    const original={...point};
+    let point={x:100+i%9*16,y:80+Math.floor(i/9)*10};const original={...point};
     return {original,id:()=>`cnp_${String(i+1).padStart(3,'0')}`,visible:()=>true,
-      renderedPosition:()=>offscreen&&i===count-1?{x:10000,y:10000}:{x:point.x*zoom,y:point.y*zoom},
+      renderedPosition:()=>({x:point.x*zoom+pan.x+(offscreen&&i===count-1?10000:0),y:point.y*zoom+pan.y}),
       position(value){if(value){point={...value};mutations++;}return {...point};}};
   });
   const coreListeners=new Map();let dead=false,disposing=false;
-  const graph={nodes:()=>nodes,zoom:()=>zoom,destroyed:()=>dead,batch(fn){if(disposing)throw new Error('renderer already removed');fn();},
-    on(types,fn){types.split(' ').forEach(type=>{if(!coreListeners.has(type))coreListeners.set(type,new Set());coreListeners.get(type).add(fn);});},
-    off(types,fn){types.split(' ').forEach(type=>{if(coreListeners.has(type))coreListeners.get(type).delete(fn);});},
+  const graph={nodes:()=>nodes,zoom:()=>zoom,pan:()=>({...pan}),destroyed:()=>dead,
+    batch(fn){if(disposing)throw new Error('renderer already removed');fn();},
+    on(types,fn){types.split(' ').forEach(t=>{if(!coreListeners.has(t))coreListeners.set(t,new Set());coreListeners.get(t).add(fn);});},
+    off(types,fn){types.split(' ').forEach(t=>{if(coreListeners.has(t))coreListeners.get(t).delete(fn);});},
     emit(type){for(const fn of [...(coreListeners.get(type)||[])])fn();},
-    destroy(){disposing=true;this.emit('destroy');dead=true;}};
-  const api=Motion.create({container,document:doc,window:win,matchMedia:()=>media,
-    requestFrame(fn){const id=++serial;frames.set(id,fn);return id;},cancelFrame:id=>frames.delete(id)});
-  function step(time){const current=[...frames.values()];frames.clear();current.forEach(fn=>fn(time));}
+    setPan(value){pan={...value};this.emit('pan');},setZoom(value){zoom=value;this.emit('zoom');},destroy(){disposing=true;this.emit('destroy');dead=true;}};
+  const api=Motion.create({container,document:doc,window:win,paused,matchMedia:()=>media,
+    requestFrame(fn){const id=++serial;frames.set(id,fn);return id;},cancelFrame:id=>frames.delete(id),
+    setTimer(fn,ms){const id=++serial;timers.set(id,{fn,at:clock+ms});return id;},clearTimer:id=>timers.delete(id)});
+  function advance(ms){clock+=ms;for(let i=0;i<100;i++){const hit=[...timers].find(([,t])=>t.at<=clock);if(!hit)break;timers.delete(hit[0]);hit[1].fn();}}
+  function step(time){assert.ok(time>=clock);advance(time-clock);const current=[...frames.values()];frames.clear();current.forEach(fn=>fn(time));}
   function exact(){nodes.forEach(node=>assert.deepEqual(node.position(),node.original));}
-  return {api,container,doc,win,media,nodes,graph,frames,step,exact,mutations:()=>mutations};
+  function snapshot(){return nodes.map(node=>node.position());}
+  function warm(){api.start(graph);step(clock);step(clock+1100);}
+  return {api,container,doc,win,media,nodes,graph,frames,timers,step,advance,exact,snapshot,warm,mutations:()=>mutations,now:()=>clock};
 }
-test('每个节点相位不同、位移轻柔，动画结束后模型坐标精确归位且不重复播放',()=>{
-  const f=fixture();assert.equal(f.api.start(f.graph),true);assert.equal(f.container.dataset.motion,'running');
-  f.step(0);f.step(780);
-  const offsets=f.nodes.map(node=>({x:node.position().x-node.original.x,y:node.position().y-node.original.y}));
-  assert.ok(offsets.some(p=>Math.abs(p.x)>0.05));
-  assert.ok(new Set(offsets.map(p=>p.x.toFixed(5)+','+p.y.toFixed(5))).size>1);
-  offsets.forEach(p=>{assert.ok(Math.abs(p.x)<=2);assert.ok(Math.abs(p.y)<=1.2);});
-  f.step(Motion.DURATION+1);f.exact();assert.equal(f.api.active(),false);assert.equal(f.frames.size,0);
-  assert.equal(f.container.dataset.motion,'settled');assert.equal(f.api.start(f.graph),false);
+test('连续相邻编号也有不同方向，25秒后仍持续漂浮且未更改相机',()=>{
+  const f=fixture({count:24});f.warm();const first=f.snapshot(),camera={zoom:f.graph.zoom(),pan:f.graph.pan()};
+  f.step(2300);const second=f.snapshot();
+  const directions=new Set(second.map((p,i)=>Math.sign(p.x-first[i].x)+','+Math.sign(p.y-first[i].y)));
+  assert.ok(directions.size>=4,'相邻编号必须呈现多种独立运动方向');
+  for(const t of [5000,11000,19000,25000])f.step(t);
+  assert.equal(f.api.active(),true);assert.equal(f.container.dataset.motion,'running');assert.equal(f.frames.size,1);
+  assert.notDeepEqual(f.snapshot(),second);assert.deepEqual({zoom:f.graph.zoom(),pan:f.graph.pan()},camera);
+  f.api.stop();f.exact();assert.equal(f.frames.size+f.timers.size,0);
 });
-test('渲染位移按缩放换算，放大与缩小时仍不超过2像素',()=>{
-  for(const zoom of [.5,2.8]){
-    const f=fixture({zoom});f.api.start(f.graph);f.step(0);f.step(830);
-    f.nodes.forEach(n=>{assert.ok(Math.abs((n.position().x-n.original.x)*zoom)<=2.001);assert.ok(Math.abs((n.position().y-n.original.y)*zoom)<=1.201);});
-    f.api.stop();f.exact();assert.equal(f.frames.size,0);
+test('慢速运动的屏幕位移始终不超过3像素，缩放不同仍满足同样上限',()=>{
+  for(const zoom of [.5,1,2.8]) {
+    const f=fixture({zoom});f.api.start(f.graph);f.step(0);
+    for(let t=1100;t<=70000;t+=743){f.step(t);f.nodes.forEach(n=>{
+      assert.ok(Math.abs((n.position().x-n.original.x)*zoom)<=2.801);
+      assert.ok(Math.abs((n.position().y-n.original.y)*zoom)<=2.301);
+    });}
+    f.api.stop();f.exact();
   }
 });
-test('指针、滚轮、键盘、pan/zoom以及切后台均立即中断且不残留偏移',()=>{
-  for(const event of ['pointerdown','wheel','keydown','pan','zoom','visibilitychange','pagehide']){
-    const f=fixture();f.api.start(f.graph);f.step(0);f.step(650);
-    if(event==='visibilitychange'){f.doc.hidden=true;f.doc.fire(event);}
-    else if(event==='keydown')f.doc.fire(event);
-    else if(event==='pagehide')f.win.fire(event);
-    else if(event==='pan'||event==='zoom')f.graph.emit(event);
-    else f.container.fire(event);
-    f.exact();assert.equal(f.api.active(),false,event);assert.equal(f.frames.size,0,event);
-  }
+test('正常漂浮速度平缓，相邻编号的X与Y速度并不绑定为同一方向',()=>{
+  const f=fixture({count:24});f.warm();f.step(7000);const a=f.snapshot();f.step(7100);const b=f.snapshot();
+  const velocity=b.map((p,i)=>({x:(p.x-a[i].x)/.1,y:(p.y-a[i].y)/.1}));
+  velocity.forEach(p=>{assert.ok(Math.abs(p.x)<2.6);assert.ok(Math.abs(p.y)<1.7);});
+  for(const axis of ['x','y']){assert.ok(velocity.some(p=>p[axis]>.1));assert.ok(velocity.some(p=>p[axis]<-.1));}
+  assert.ok(velocity.some(p=>p.x*p.y<0));assert.ok(velocity.some(p=>p.x*p.y>0));
 });
-test('减少动态效果从启动时生效，运行中更改系统偏好也能归位',()=>{
-  const f=fixture({reduced:true});assert.equal(f.container.dataset.motion,'reduced');
-  assert.equal(f.api.start(f.graph),false);assert.equal(f.mutations(),0);assert.equal(f.frames.size,0);
-  const g=fixture();g.api.start(g.graph);g.step(0);g.step(900);g.media.matches=true;g.media.fire('change');
-  g.exact();assert.equal(g.container.dataset.motion,'reduced');assert.equal(g.api.active(),false);
-});
-test('进场开始前已经操作时保持静止；隐藏或已销毁图谱也不启动',()=>{
-  const f=fixture();f.container.fire('pointerdown');assert.equal(f.api.start(f.graph),false);f.exact();
-  const g=fixture({hidden:true});assert.equal(g.api.start(g.graph),false);assert.equal(g.frames.size,0);
-  const h=fixture();h.graph.destroy();assert.equal(h.api.start(h.graph),false);
-});
-test('大图只处理附近最多60个节点，不移动远处节点',()=>{
-  const f=fixture({count:269,zoom:.5,offscreen:true});f.api.start(f.graph);f.step(0);f.step(700);
-  const moved=f.nodes.filter(n=>n.position().x!==n.original.x||n.position().y!==n.original.y);
-  assert.equal(moved.length,Motion.MAX_NODES);assert.deepEqual(f.nodes.at(-1).position(),f.nodes.at(-1).original);
+test('缩放操作期间保持原有屏幕漂移幅度，不把世界坐标偏移放大成大跳动',()=>{
+  const f=fixture({zoom:.5});f.warm();
+  const before=f.nodes.map(n=>({x:(n.position().x-n.original.x)*.5,y:(n.position().y-n.original.y)*.5}));
+  f.graph.setZoom(2.8);
+  f.nodes.forEach((n,i)=>{assert.ok(Math.abs((n.position().x-n.original.x)*2.8-before[i].x)<1e-9);assert.ok(Math.abs((n.position().y-n.original.y)*2.8-before[i].y)<1e-9);});
+  f.advance(Motion.IDLE_DELAY);f.step(f.now());f.step(f.now()+1100);
+  f.nodes.forEach(n=>assert.ok(Math.abs((n.position().x-n.original.x)*2.8)<=2.801));
   f.api.stop();f.exact();
 });
-test('destroy清理监听器与待执行帧，后续事件不会再访问已销毁图谱',()=>{
-  const f=fixture();f.api.start(f.graph);f.step(0);f.step(500);f.api.destroy();f.exact();
-  assert.equal(f.frames.size,0);assert.equal(f.container.listenerCount()+f.doc.listenerCount()+f.win.listenerCount()+f.media.listenerCount(),0);
-  f.graph.destroy();f.api.destroy();assert.equal(f.api.start(f.graph),false);
+test('按下时冻结当前姿态而不跳回基点，最后一个指针抬起700ms后平滑恢复',()=>{
+  const f=fixture();f.warm();const pose=f.snapshot();
+  f.container.fire('pointerdown',{pointerId:1});f.container.fire('pointerdown',{pointerId:2});
+  f.step(1500);assert.deepEqual(f.snapshot(),pose);assert.equal(f.api.active(),false);
+  f.doc.fire('pointerup',{pointerId:1});f.advance(1000);assert.equal(f.api.active(),false);
+  f.doc.fire('pointerup',{pointerId:2});f.advance(Motion.IDLE_DELAY-1);assert.equal(f.api.active(),false);
+  f.advance(1);assert.equal(f.api.active(),true);f.step(f.now());assert.deepEqual(f.snapshot(),pose,'恢复第一帧不跳动');
+  f.step(f.now()+1200);assert.notDeepEqual(f.snapshot(),pose);f.api.stop();f.exact();
 });
-test('Cytoscape已经移除renderer但尚未标记destroyed时不再尝试位置归位',()=>{
-  const f=fixture();f.api.start(f.graph);f.step(0);f.step(500);
-  assert.doesNotThrow(()=>f.graph.destroy());assert.equal(f.frames.size,0);assert.equal(f.api.active(),false);
-  assert.doesNotThrow(()=>f.api.destroy());
+test('滚轮、键盘、pan/zoom短暂停住后自动继续，非画布pointerup不制造重复帧',()=>{
+  for(const event of ['wheel','keydown','pan','zoom']) {
+    const f=fixture();f.warm();const pose=f.snapshot();
+    if(event==='wheel')f.container.fire(event);else if(event==='keydown')f.doc.fire(event);else f.graph.emit(event);
+    assert.equal(f.api.active(),false);f.advance(Motion.IDLE_DELAY);assert.equal(f.api.active(),true);
+    f.step(f.now());assert.deepEqual(f.snapshot(),pose);f.step(f.now()+1100);assert.notDeepEqual(f.snapshot(),pose);
+    for(let i=0;i<20;i++)f.doc.fire('pointerup',{pointerId:i+20});
+    f.advance(1000);assert.equal(f.frames.size,1);assert.equal(f.timers.size,0);
+    f.api.stop();f.exact();
+  }
+});
+test('手动暂停与弹窗暂停互不覆盖，恢复后持续运行，fit重启也保留手动选择',()=>{
+  const f=fixture();f.warm();const pose=f.snapshot();f.api.setPaused(true);f.step(8000);
+  assert.deepEqual(f.snapshot(),pose);assert.equal(f.container.dataset.motion,'paused');
+  f.api.hold('dialog');f.api.setPaused(false);f.advance(1000);assert.equal(f.api.active(),false);
+  f.api.release('dialog');f.advance(Motion.IDLE_DELAY);assert.equal(f.api.active(),true);
+  f.api.setPaused(true);f.api.stop();f.exact();f.api.start(f.graph);assert.equal(f.api.active(),false);
+  assert.equal(f.container.dataset.motion,'paused');f.api.setPaused(false);f.advance(Motion.IDLE_DELAY);assert.equal(f.api.active(),true);
+});
+test('减少动态效果可随时停用和恢复，初始静态设置不阻止用户以后恢复',()=>{
+  const f=fixture({reduced:true});f.api.start(f.graph);assert.equal(f.api.active(),false);assert.equal(f.mutations(),0);
+  f.media.matches=false;f.media.fire('change');f.advance(Motion.IDLE_DELAY);assert.equal(f.api.active(),true);
+  f.step(f.now());f.step(f.now()+1200);const pose=f.snapshot();f.media.matches=true;f.media.fire('change');
+  f.step(f.now()+8000);assert.deepEqual(f.snapshot(),pose);assert.equal(f.container.dataset.motion,'reduced');
+  f.media.matches=false;f.media.fire('change');f.advance(Motion.IDLE_DELAY);assert.equal(f.api.active(),true);
+});
+test('切后台或失焦丢失pointerup也能恢复，且不会解除弹窗或手动暂停',()=>{
+  for(const hidden of ['visibilitychange','pagehide','blur']){
+    const f=fixture();f.warm();f.container.fire('pointerdown',{pointerId:1});
+    if(hidden==='visibilitychange'){f.doc.hidden=true;f.doc.fire(hidden);f.doc.hidden=false;f.doc.fire(hidden);}
+    else{f.win.fire(hidden);f.win.fire(hidden==='blur'?'focus':'pageshow');}
+    f.advance(Motion.IDLE_DELAY);assert.equal(f.api.active(),true,hidden);
+    f.api.hold('dialog');f.container.fire('pointerdown',{pointerId:2});f.doc.hidden=true;f.doc.fire('visibilitychange');
+    f.doc.hidden=false;f.doc.fire('visibilitychange');f.advance(1000);assert.equal(f.api.active(),false,'保留弹窗暂停');
+    f.api.release('dialog');f.advance(Motion.IDLE_DELAY);assert.equal(f.api.active(),true);
+  }
+});
+test('手机隐藏视图不占用RAF，恢复时即使release先于CSS显示也能续动',()=>{
+  const f=fixture();f.warm();f.api.hold('view');f.container.clientWidth=0;f.api.release('view');
+  assert.equal(f.frames.size,0);f.container.clientWidth=390;f.advance(Motion.IDLE_DELAY);
+  assert.equal(f.api.active(),true);f.step(f.now());f.step(f.now()+1200);
+  f.container.clientWidth=0;f.step(f.now()+100);assert.equal(f.frames.size,0);assert.equal(f.api.active(),false);
+  const pending=fixture();pending.api.hold('view');pending.container.clientWidth=0;pending.api.start(pending.graph);
+  assert.equal(pending.api.active(),false,'首次附着保留提前触发的视图暂停');
+  pending.container.clientWidth=390;pending.api.release('view');pending.advance(Motion.IDLE_DELAY);assert.equal(pending.api.active(),true);
+  const pressed=fixture();pressed.container.fire('pointerdown',{pointerId:1});pressed.api.start(pressed.graph);
+  assert.equal(pressed.api.active(),false,'首次附着不能清除按住状态');
+  pressed.doc.fire('pointerup',{pointerId:1});pressed.advance(Motion.IDLE_DELAY);assert.equal(pressed.api.active(),true);
+});
+test('所有可见框参与漂浮，平移后选择新视口且不累加旧偏移',()=>{
+  const f=fixture({count:269,zoom:.5,offscreen:true});f.warm();
+  const moved=f.nodes.filter(n=>n.position().x!==n.original.x||n.position().y!==n.original.y);
+  assert.equal(moved.length,268);assert.deepEqual(f.nodes.at(-1).position(),f.nodes.at(-1).original);
+  f.graph.setPan({x:-10000,y:0});f.advance(Motion.IDLE_DELAY);f.step(f.now());f.step(f.now()+1100);
+  assert.notDeepEqual(f.nodes.at(-1).position(),f.nodes.at(-1).original);
+  f.nodes.slice(0,-1).forEach(n=>assert.deepEqual(n.position(),n.original));
+  f.graph.setPan({x:0,y:0});f.advance(Motion.IDLE_DELAY);f.step(f.now());f.step(f.now()+1100);
+  f.api.stop();f.exact();
+});
+test('Cytoscape移除renderer但未标destroyed时不再归位；destroy清掉RAF、idle和监听器',()=>{
+  const f=fixture();f.warm();assert.doesNotThrow(()=>f.graph.destroy());assert.equal(f.frames.size+f.timers.size,0);
+  assert.doesNotThrow(()=>f.api.destroy());assert.equal(f.api.start(f.graph),false);
+  const g=fixture();g.warm();g.container.fire('wheel');g.api.destroy();g.exact();
+  assert.equal(g.frames.size+g.timers.size,0);assert.equal(g.container.listenerCount()+g.doc.listenerCount()+g.win.listenerCount()+g.media.listenerCount(),0);
 });
 const source=fs.readFileSync(path.join(__dirname,'../explore/app.js'),'utf8');
-test('实际绘图的通过状态只改边框颜色，所有状态边框宽度和填充规则相同',()=>{
-  assert.match(source,/'background-color': 'data\(bg\)'/);
-  assert.match(source,/'border-width': 3/);
+test('实际节点只改通过边框颜色，选中轻微增大而普通/专家状态不改变几何和填充',()=>{
+  assert.match(source,/'background-color': 'data\(bg\)'/);assert.match(source,/'border-width': 3/);
+  assert.match(source,/selector: 'node.current', style: \{ width: boxW \* 1\.05, height: 42/);
   for(const status of ['passed','expert']){
     const rule=source.match(new RegExp("selector: 'node\\.test-"+status+"', style: \\{([^}]+)\\}"));
-    assert.ok(rule);assert.ok(rule[1].includes("'border-color'"));
-    assert.ok(!rule[1].includes("'background-color'"));assert.ok(!rule[1].includes("'border-width'"));
+    assert.ok(rule[1].includes("'border-color'"));assert.ok(!rule[1].includes("'background-color'"));assert.ok(!rule[1].includes("'border-width'"));
   }
-  assert.ok(source.includes("layout: 'playful-v1-labels-'"),'旧尺寸布局缓存分开保存');
-  assert.ok(source.includes('graphMotion.stop();'),'保存画面与操作前精确归位');
+  const capture=source.slice(source.indexOf('function captureViewport()'),source.indexOf('function saveLiveCamera()'));
+  assert.ok(!capture.includes('graphMotion.stop'),'相机读取不永久终止持续漂浮');
+  assert.ok(source.includes("layout: 'playful-v2-floating-labels-'"));
 });
-test('浏览器导出与CommonJS一致，未创建控制器时不产生动画或事件副作用',()=>{
+test('浏览器API与CommonJS一致，不创建控制器就没有事件和存储副作用',()=>{
   const window={};vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../assets/graph-motion.js'),'utf8'),{window});
-  assert.equal(typeof window.CnmGraphMotion.create,'function');assert.equal(window.CnmGraphMotion.DURATION,Motion.DURATION);
+  assert.equal(typeof window.CnmGraphMotion.create,'function');assert.equal(window.CnmGraphMotion.IDLE_DELAY,700);
 });
 console.log('test_graph_motion: '+passed+' passed');
