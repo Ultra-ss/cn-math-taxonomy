@@ -2,7 +2,9 @@
 (function () {
   'use strict';
 
-  var FONT = '"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", sans-serif';
+  var SYSTEM_FONT = '"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", sans-serif';
+  var PLAYFUL_FONT = '"Physicalmap Playful", ' + SYSTEM_FONT;
+  var FONT = SYSTEM_FONT;
   var CN = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
   var DOMAIN_ORDER = ['数与代数', '图形与几何', '统计与概率', '综合与实践'];
   var SCI_DOMAIN_ORDER = ['物质科学', '生命科学', '地球与宇宙科学', '技术与工程'];
@@ -55,6 +57,8 @@
   var liveCamera = null;
   var changingCamera = false;
   var viewportSaveTimer = null;
+  var graphMotion = null;
+  var graphEntranceShown = false;
 
   function $(id) { return document.getElementById(id); }
 
@@ -362,6 +366,8 @@
       seniorBg: cssVar('--node-senior-bg'),
       currentBg: cssVar('--node-current-bg'),
       currentBorder: cssVar('--node-current-border'),
+      passedBorder: cssVar('--node-passed-border') || cssVar('--ok'),
+      expertBorder: cssVar('--node-expert-border') || cssVar('--node-senior'),
       text: cssVar('--node-text'),
       edge: cssVar('--edge'),
       edgeSoft: cssVar('--edge-soft'),
@@ -418,6 +424,7 @@
 
   function fitGraph() {
     if (!cy) return;
+    if (graphMotion) graphMotion.stop();
     cy.resize();
     var many = cy.nodes().length > 80;
     if (many) cy.minZoom(0.5);
@@ -439,11 +446,12 @@
   }
   function cameraContext() {
     var context = { subject: subject, volume: volume, topicId: selected,
-      view: showWholeBook ? 'book' : 'local', depth: upDepth, layout: 'labels-' + labelLimit() };
+      view: showWholeBook ? 'book' : 'local', depth: upDepth, layout: 'playful-v1-labels-' + labelLimit() };
     if (selectedVolumes.length > 1) context.volumes = selectedVolumes.slice();
     return context;
   }
   function captureViewport() {
+    if (typeof graphMotion !== 'undefined' && graphMotion) graphMotion.stop();
     if (!cy || changingCamera || !renderedCameraContext || $('cy').dataset.ready !== '1' || !graphIsVisible()) return null;
     var zoom = cy.zoom(), pan = cy.pan(), width = $('cy').clientWidth, height = $('cy').clientHeight;
     return { zoom: zoom, centerX: (width / 2 - pan.x) / zoom, centerY: (height / 2 - pan.y) / zoom,
@@ -1094,6 +1102,7 @@
       return;
     }
     rememberViewport();
+    if (graphMotion) { graphMotion.destroy(); graphMotion = null; }
     graphNeedsRender = false;
     var nextContext = cameraContext();
     var savedCamera = restoreSavedCamera !== false && window.CnmExploreViewport ? window.CnmExploreViewport.read(nextContext) : null;
@@ -1158,8 +1167,8 @@
         ensureDagre();
         var colors = theme();
         var narrow = labelLimit() <= 8;
-        var textMax = narrow ? 104 : 126;
-        var boxW = narrow ? 118 : 142;
+        var textMax = narrow ? 116 : 140;
+        var boxW = narrow ? 132 : 156;
         var elements = folded ? buildFoldedElements(nodeSet, colors) : buildFullElements(nodeSet, colors);
         var dense = heavy;
         var cyOptions = {
@@ -1179,9 +1188,9 @@
             label: 'data(label)', 'text-wrap': 'ellipsis', 'text-max-width': textMax + 'px',
             'text-overflow-wrap': 'anywhere',
             'text-valign': 'center', 'text-halign': 'center',
-            'font-size': 13, 'font-family': FONT, color: 'data(color)',
-            'background-color': 'data(bg)', 'border-width': 2, 'border-color': 'data(border)',
-            shape: 'round-rectangle', width: boxW, height: 34, padding: 0, 'corner-radius': 8
+            'font-size': 14, 'font-weight': 400, 'font-family': FONT, color: 'data(color)',
+            'background-color': 'data(bg)', 'border-width': 3, 'border-color': 'data(border)',
+            shape: 'round-rectangle', width: boxW, height: 40, padding: 0, 'corner-radius': 12
           } },
           { selector: 'node.current', style: { 'border-width': 4, 'z-index': 10 } },
           { selector: 'node.test-passed, node.test-failed, node.test-expert', style: {
@@ -1190,9 +1199,9 @@
             'background-offset-x': 7, 'background-offset-y': -7, 'background-clip': 'none',
             'background-image-containment': 'over', 'bounds-expansion': 10
           } },
-          { selector: 'node.test-passed', style: { 'background-image': colors.passedBadge } },
+          { selector: 'node.test-passed', style: { 'background-image': colors.passedBadge, 'border-color': colors.passedBorder } },
           { selector: 'node.test-failed', style: { 'background-image': colors.failedBadge } },
-          { selector: 'node.test-expert', style: { 'background-image': colors.expertBadge } },
+          { selector: 'node.test-expert', style: { 'background-image': colors.expertBadge, 'border-color': colors.expertBorder } },
           { selector: 'edge', style: {
             width: 1.6, 'line-color': 'data(color)', 'target-arrow-color': 'data(color)',
             'target-arrow-shape': 'triangle', 'curve-style': dense ? 'straight' : 'bezier',
@@ -1251,6 +1260,16 @@
             if (savedCamera) applyViewport(savedCamera);
             cyEl.dataset.ready = '1';
             rememberViewport();
+            if (!graphEntranceShown && window.CnmGraphMotion) {
+              if (!graphMotion) graphMotion = window.CnmGraphMotion.create({ container: cyEl });
+              var enteringGraph = cy;
+              // 等布局和移动端尺寸稳定后进场，恢复位置时始终先保存静止画面。
+              setTimeout(function () {
+                if (token !== graphToken || cy !== enteringGraph || !graphIsVisible() || document.hidden) return;
+                graphEntranceShown = true;
+                graphMotion.start(enteringGraph);
+              }, 80);
+            }
           });
         });
         layout.run();
@@ -1586,6 +1605,30 @@
     }
   }
 
+  function prepareGraphFont() {
+    if (!document.fonts || typeof document.fonts.load !== 'function') { FONT = PLAYFUL_FONT; return Promise.resolve(false); }
+    return new Promise(function (done) {
+      var finished = false;
+      var timer = setTimeout(function () { finish(false); }, 1000);
+      function finish(loaded) {
+        if (finished) return;
+        finished = true; clearTimeout(timer); done(loaded);
+      }
+      try {
+        document.fonts.load('14px "Physicalmap Playful"', '物理知识图谱').then(function (faces) {
+          if (!faces || !faces.length) { finish(false); return; }
+          FONT = PLAYFUL_FONT;
+          // 慢网络使用系统字体先显示；字体到达后只换文字，不重新排列节点或移动相机。
+          if (cy && !cy.destroyed()) {
+            if (graphMotion) graphMotion.stop();
+            cy.style().selector('node').style('font-family', FONT).update();
+          }
+          finish(true);
+        }, function () { finish(false); });
+      } catch (error) { finish(false); }
+    });
+  }
+
   async function load() {
     var files = ['topics.json', 'dependencies.json', 'id-aliases.json', 'cn-curriculum-standards.json'];
     var responses = await Promise.all(files.map(function (file) { return fetch('../data/' + file); }));
@@ -1627,7 +1670,7 @@
   syncDepthButtons();
   applyQuery();
   bind();
-  load().then(function () {
+  load().then(prepareGraphFont).then(function () {
     fillMoralityGrades();
     fillDomain();
     syncControls();

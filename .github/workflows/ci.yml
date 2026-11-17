@@ -134,6 +134,9 @@ jobs:
       - name: tests/test_achievement_books.js
         run: node tests/test_achievement_books.js
 
+      - name: tests/test_graph_motion.js
+        run: node tests/test_graph_motion.js
+
       - name: 课标映射严格模式（仅报告）
         continue-on-error: true
         env:

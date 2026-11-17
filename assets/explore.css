@@ -1,11 +1,28 @@
 /* 知识图谱浏览：左目录、中局部图、右详情。手机以目录、图谱、详情三个视图切换。 */
 
+@font-face {
+  font-family: 'Physicalmap Playful';
+  src: url('fonts/physicalmap-playful.woff') format('woff');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --node-passed-border: #668774;
+  --node-expert-border: #9a7e46;
+}
 body.page-explore {
+  --graph-label-font: 'Physicalmap Playful', var(--font);
   height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
+@media (prefers-color-scheme: dark) {
+  :root { --node-passed-border: #a2bda9; --node-expert-border: #dbc88d; }
+}
+body.page-explore .node-tip { font-family: var(--graph-label-font); font-size: 15px; font-weight: 400; line-height: 1.5; }
 body.page-explore .top-banner,
 body.page-explore .site-header,
 body.page-explore .site-footer { flex: none; }

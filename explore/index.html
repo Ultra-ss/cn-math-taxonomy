@@ -21,6 +21,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20fill%3D%22%23ece5ef%22%20stroke%3D%22%23786685%22%20stroke-width%3D%221.7%22%20stroke-linejoin%3D%22round%22%20d%3D%22M6.6%204.8H17L27.4%2015.2V25Q27.4%2027.4%2025.2%2027.4H6.6Q4.4%2027.4%204.4%2025.2V7Q4.4%204.8%206.6%204.8Z%22%2F%3E%3Cpath%20fill%3D%22%23fffcf9%22%20d%3D%22M17.7%206.3%2026.1%2014.7H17.7Z%22%2F%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22%23786685%22%20stroke-width%3D%221.35%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22M17.7%206.3V14.7H26.1%22%2F%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22%23786685%22%20stroke-width%3D%222.15%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22M8.3%2024.2H12.4Q14.2%2024.2%2014.2%2022.4V20.2Q14.2%2018.6%2016%2018.6H18.8%22%2F%3E%3Cpath%20fill%3D%22%23786685%22%20d%3D%22M18.5%2016.85%2023%2018.6%2018.5%2020.35Z%22%2F%3E%3C%2Fsvg%3E">
 <link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../assets/explore.css">
+<link rel="preload" href="../assets/fonts/physicalmap-playful.woff" as="font" type="font/woff" crossorigin>
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
 <meta name="theme-color" content="#786685" media="(prefers-color-scheme: light)">
@@ -145,7 +146,7 @@
       <li class="legend-status"><span class="test-symbol test-expert" aria-hidden="true">⭐</span>专家挑战通过</li>
       <li class="legend-status"><span class="test-symbol test-failed" aria-hidden="true">×</span>未通过，需巩固</li>
     </ul>
-    <p class="progress-note">角标来自当前孩子或本机访客的实际检测；尚未完成的知识点不标记。</p>
+    <p class="progress-note">实际通关后，边框会点亮为绿色或专家金色；原有底色保持不变。</p>
     <p id="graph-meta" class="graph-meta"></p>
     <div id="mobile-topic-summary" class="mobile-topic-summary" aria-live="polite" hidden>
       <div>
@@ -173,6 +174,7 @@
 <script src="../assets/book-selection.js"></script>
 <script src="../assets/last-location.js"></script>
 <script src="../assets/explore-viewport.js"></script>
+<script src="../assets/graph-motion.js"></script>
 <script src="app.js"></script>
 <script src="../assets/stats-config.js"></script>
 <script src="../assets/stats.js"></script>
