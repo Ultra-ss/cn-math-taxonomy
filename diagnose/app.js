@@ -193,48 +193,48 @@
       else link.removeAttribute('aria-current');
     });
     if (subject === 'english') {
-      document.title = '检测 · 英语';
+      document.title = '检测设置 · 英语';
       var juniorOk = '三四五六七八九'.indexOf(gradeSel) >= 0;
       var seniorOk = gradeSel.indexOf('必修') === 0 || gradeSel.indexOf('选必') === 0;
       if (!juniorOk && !seniorOk) gradeSel = '四';
     }
     if (subject === 'physics') {
-      document.title = '检测 · 物理';
+      document.title = '检测设置 · 物理';
       if (gradeSel !== '八' && gradeSel !== '九' && !/^(必修[一二三]|选必[一二三])$/.test(gradeSel)) gradeSel = '八';
       if (gradeSel === '九') volSel = '全';
     }
     if (subject === 'science') {
-      document.title = '检测 · 小学科学';
+      document.title = '检测设置 · 小学科学';
       if ('一二三四五六'.indexOf(gradeSel) < 0) gradeSel = '一';
       if (volSel === '全') volSel = '';
     }
     if (subject === 'morality') {
-      document.title = '检测 · 道德与法治';
+      document.title = '检测设置 · 道德与法治';
       if ('一二三四五六七八九'.indexOf(gradeSel) < 0) gradeSel = '一';
       if (volSel === '全') volSel = '';
     }
     if (subject === 'history') {
-      document.title = '检测 · 初中历史';
+      document.title = '检测设置 · 初中历史';
       if ('七八九'.indexOf(gradeSel) < 0) gradeSel = '七';
       if (volSel === '全') volSel = '';
     }
     if (subject === 'geography') {
-      document.title = '检测 · 初中地理';
+      document.title = '检测设置 · 初中地理';
       if ('七八'.indexOf(gradeSel) < 0) gradeSel = '七';
       if (volSel === '全') volSel = '';
     }
     if (subject === 'biology') {
-      document.title = '检测 · 初中生物';
+      document.title = '检测设置 · 初中生物';
       if ('七八'.indexOf(gradeSel) < 0) gradeSel = '七';
       if (volSel === '全') volSel = '';
     }
     if (subject === 'chemistry') {
-      document.title = '检测 · 化学';
+      document.title = '检测设置 · 化学';
       if (gradeSel !== '九' && !/^(必修[一二]|选必[一二三]|选择性必修第[一二三]册)$/.test(gradeSel)) gradeSel = '九';
       if (volSel === '全') volSel = '';
     }
     if (subject === 'chinese') {
-      document.title = '检测 · 语文';
+      document.title = '检测设置 · 语文';
       if ('一二三四五六七八九'.indexOf(gradeSel) < 0) gradeSel = '一';
       // 全站初始值是七年级。语文原先从一年级进入，这里仍改回一年级；点选七年级之后不会再进这段。
       else if (gradeSel === '七') gradeSel = '一';
