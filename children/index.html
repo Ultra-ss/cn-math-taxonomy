@@ -47,6 +47,12 @@
     <div class="achievement-score" id="achievement-score" aria-live="polite"></div>
     <p class="achievement-breakdown" id="achievement-breakdown"></p>
     <p class="muted small">普通检测首次通过得 1⭐，专家挑战首次通过再得 1⭐；重复通过不重复计分。每 5⭐ 自动合为 1🌙，每 5🌙 合为 1🌞，总积分始终保留。</p>
+    <div class="achievement-books-head">
+      <h3 id="achievement-books-title">当前选择的教材</h3>
+      <a class="btn" href="../?home=1">更换教材</a>
+    </div>
+    <p class="muted small" id="achievement-books-context">正在读取教材范围…</p>
+    <div id="achievement-books" aria-labelledby="achievement-books-title" aria-live="polite"></div>
     <details class="achievement-chapters" id="achievement-chapters">
       <summary id="achievement-chapters-summary">已解锁章节</summary>
       <p class="muted small">一章内全部知识点通过普通检测后解锁；章节进度以当前通过状态为准。</p>
@@ -60,10 +66,11 @@
     </div>
     <a class="btn btn-primary" id="center-wrongbook-link" href="../wrongbook/">打开错题本</a>
   </section>
-  <section class="center-learning" id="weak-points" aria-labelledby="weak-points-title">
+  <details class="center-learning" id="weak-points" aria-labelledby="weak-points-title">
+    <summary class="weak-points-toggle"><h2 id="weak-points-title">我的薄弱知识点</h2><span id="weak-points-count" class="kid-tag"></span></summary>
+    <div class="weak-points-content">
     <div class="center-section-head">
       <div>
-        <h2 id="weak-points-title">我的薄弱知识点</h2>
         <p class="muted small" id="weak-points-owner"></p>
       </div>
       <a class="btn" id="center-weak-all" href="history.html?scope=guest">查看全部</a>
@@ -74,7 +81,8 @@
       <p class="muted small">旧版汇总没有保存档案归属，单独保留在这里，不计入当前孩子的薄弱知识点。</p>
       <a class="btn" href="history.html?scope=local">查看本机历史汇总</a>
     </details>
-  </section>
+    </div>
+  </details>
   <section class="center-learning" id="center-sessions" aria-labelledby="center-sessions-title" hidden>
     <h2 id="center-sessions-title">检测进度与结果</h2>
     <p class="muted small">本机保存的最近检测，各自保留原来的档案归属；可接着作答或查看结果。</p>
@@ -135,6 +143,9 @@
 <script src="../assets/children.js"></script>
 <script src="../assets/blindspots.js"></script>
 <script src="../assets/local-learning.js"></script>
+<script src="../assets/book-selection.js"></script>
+<script src="../assets/last-location.js"></script>
+<script src="../assets/achievement-books.js"></script>
 <script src="page.js"></script>
 <script src="../assets/stats-config.js"></script>
 <script src="../assets/stats.js"></script>

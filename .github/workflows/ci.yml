@@ -131,6 +131,9 @@ jobs:
       - name: tests/test_challenge_scope.js
         run: node tests/test_challenge_scope.js
 
+      - name: tests/test_achievement_books.js
+        run: node tests/test_achievement_books.js
+
       - name: 课标映射严格模式（仅报告）
         continue-on-error: true
         env:

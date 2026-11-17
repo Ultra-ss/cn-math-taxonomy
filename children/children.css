@@ -18,6 +18,14 @@ main.kids { width: min(760px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
 .center-wrongbook .btn { flex: none; }
 .center-learning { padding: 14px 16px; margin-bottom: 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-elev); background-image: var(--surface-wash, none); box-shadow: var(--shadow); scroll-margin-top: 16px; }
 #weak-points { background-image: linear-gradient(135deg, var(--brand-soft), transparent 72%); }
+#weak-points > .weak-points-toggle { display: flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; list-style: none; }
+#weak-points > .weak-points-toggle::-webkit-details-marker { display: none; }
+.weak-points-toggle::before { content: '›'; color: var(--brand-strong); font-size: 1.5rem; line-height: 1; transition: transform .15s; }
+#weak-points[open] > .weak-points-toggle::before { transform: rotate(90deg); }
+.weak-points-toggle h2 { margin: 0; flex: 1; min-width: 0; color: var(--brand-strong); }
+.weak-points-toggle:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: 8px; }
+.weak-points-content { padding-top: 12px; }
+#weak-points:not([open]) > .weak-points-content { display: none; }
 #center-sessions { background-image: linear-gradient(135deg, var(--node-primary-bg), transparent 72%); }
 .center-section-head h2, #center-sessions > h2 { color: var(--brand-strong); }
 .center-learning > p { margin: 4px 0 10px; }
@@ -142,6 +150,30 @@ main.kids { width: min(760px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
 .achievement-medal { display: flex; align-items: center; gap: 5px; border: 1px solid var(--line); border-radius: 12px; padding: 7px 9px; background: var(--bg-elev); font-variant-numeric: tabular-nums; }
 .achievement-icon { font-size: 1.3rem; }
 .achievement-breakdown { font-weight: 700; font-size: .9rem; }
+.achievement-books-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; border-top: 1px solid var(--line); margin-top: 16px; padding-top: 12px; }
+.achievement-books-head h3 { margin: 0; color: var(--brand-strong); font-size: 1rem; }
+.achievement-books-head .btn { flex: none; min-height: 40px; padding: 7px 10px; font-size: .85rem; }
+#achievement-books-context { line-height: 1.55; }
+.achievement-book { margin: 8px 0; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-elev); overflow: hidden; }
+.achievement-book > summary { cursor: pointer; min-height: 64px; padding: 12px; }
+.achievement-book-title { font-weight: 750; color: var(--brand-strong); }
+.achievement-book-progress { display: block; padding-left: 16px; color: var(--muted); font-size: .84rem; margin-top: 3px; font-variant-numeric: tabular-nums; }
+.achievement-book-content { padding: 0 12px 10px; }
+.achievement-book-meter { display: block; width: 100%; height: 8px; margin: 0 0 10px; accent-color: var(--brand); border: 0; border-radius: 999px; overflow: hidden; }
+.achievement-book-meter::-webkit-progress-bar { background: var(--bg-muted); }
+.achievement-book-meter::-webkit-progress-value { background: var(--brand); }
+.achievement-book-meter::-moz-progress-bar { background: var(--brand); }
+.achievement-book-passed, .achievement-book-remaining { border-top: 1px solid var(--line); }
+.achievement-book-passed > summary, .achievement-book-remaining > summary { cursor: pointer; min-height: 44px; padding: 10px 0; font-size: .9rem; font-weight: 700; }
+.achievement-topic-chapter { margin: 12px 0 4px; color: var(--muted); font-size: .85rem; }
+.achievement-topic-list { list-style: none; margin: 0; padding: 0; }
+.achievement-topic-row { display: flex; align-items: center; gap: 8px; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.achievement-topic-row:last-child { border-bottom: 0; }
+.achievement-topic-link { min-width: 0; min-height: 36px; display: flex; align-items: center; color: var(--brand-strong); font-weight: 650; font-size: .9rem; overflow-wrap: anywhere; }
+.achievement-topic-status { flex: none; font-size: .76rem; color: var(--muted); }
+.achievement-topic-status.mastered { color: var(--ok); }
+.achievement-topic-status.weak, .achievement-topic-status.shaky { color: var(--bad); }
+.achievement-book summary:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; border-radius: 8px; }
 .achievement-chapters { border-top: 1px solid var(--line); margin-top: 12px; }
 .achievement-chapters > summary { cursor: pointer; padding: 12px 0; font-weight: 750; min-height: 44px; }
 .achievement-chapters ul { padding-left: 20px; margin: 8px 0 0; }

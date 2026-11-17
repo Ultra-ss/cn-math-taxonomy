@@ -142,8 +142,94 @@
     renderLearningOverview();
   }
 
-  var topicNames = {}, achievementTopics = null;
+  var topicNames = {}, achievementTopics = null, achievementLoadFailed = false;
   function cleanLabel(value) { return String(value || '').replace(/\u8bca\u65ad/g, '检测'); }
+  function achievementSelection(childId) {
+    var memory = window.CnmLastLocation, helper = window.CnmAchievementBooks;
+    var record = memory && memory.resolve(achievementTopics);
+    if (record) return { record: record, from: 'graph' };
+    if (!helper || !Array.isArray(achievementTopics)) return null;
+    // 尚未浏览图谱时，沿用本档案最近一次检测所用的教材。
+    var latest = null;
+    [['physics', 'cnpDiagnose.session.v2'], ['science', 'cnsDiagnose.session.v1']].forEach(function (pair) {
+      try {
+        var saved = JSON.parse(localStorage.getItem(pair[1]));
+        if (!saved || saved.v !== 2 || saved.progressChildId !== childId ||
+            ['target', 'textbook', 'screen'].indexOf(saved.mode) < 0 || !Array.isArray(saved.targets) || !saved.targets.length ||
+            typeof saved.savedAt !== 'string' || !Number.isFinite(Date.parse(saved.savedAt))) return;
+        var targetTopics = saved.targets.map(function (id) { return achievementTopics.find(function (topic) { return topic.id === id; }); });
+        var first = targetTopics[0], volume = saved.volume || helper.bookOf(first);
+        if (!first || targetTopics.some(function (topic) { return !topic || topic.external || topic.subject !== pair[0] || helper.bookOf(topic) !== volume; })) return;
+        var candidate = { subject: pair[0], volume: volume, topicId: first.id };
+        if (!helper.build({ topics: achievementTopics, selection: candidate }).books.length) return;
+        if (!latest || Date.parse(saved.savedAt) > latest.at) latest = { record: candidate, from: 'session', at: Date.parse(saved.savedAt) };
+      } catch (error) { /* 损坏或无法归属的检测记录不用于教材选择。 */ }
+    });
+    return latest;
+  }
+  function achievementTopicHref(model, id) {
+    var params = new URLSearchParams({ subject: model.subject });
+    window.CnmBookSelection.writeParams(params, model.subject, model.volumes);
+    return '../explore/?' + params.toString() + '#' + encodeURIComponent(id);
+  }
+  function renderAchievementBooks(childId) {
+    var box = document.getElementById('achievement-books'), context = document.getElementById('achievement-books-context');
+    var opened = new Set(Array.from(box.querySelectorAll('details[data-achievement-state][open]')).map(function (node) { return node.getAttribute('data-achievement-state'); }));
+    box.textContent = '';
+    if (achievementTopics === null) {
+      context.textContent = achievementLoadFailed ? '教材进度暂时无法读取，请刷新页面重试。' : '正在读取教材范围…';
+      return null;
+    }
+    var selected = achievementSelection(childId), helper = window.CnmAchievementBooks, P = window.CnmProgress;
+    var model = helper && helper.build({ topics: achievementTopics, selection: selected && selected.record,
+      normal: selected ? P.statuses(childId, selected.record.subject) : {},
+      pro: selected ? P.statuses(childId, selected.record.subject, 'pro') : {} });
+    if (!model || !model.books.length) {
+      context.textContent = '尚未选择教材。请从首页选择教材，这里会显示对应知识点的完成情况。';
+      return null;
+    }
+    context.textContent = (model.subject === 'physics' ? '初高中物理' : '小学科学') + ' · 已选 ' + model.books.length + ' 本教材 · 已通过 ' + model.completed + '/' + model.total +
+      '，待完成 ' + model.remaining + '。' + (selected.from === 'graph' ? '范围与最近一次图谱选择一致。' : '沿用当前档案最近检测的教材。');
+    function disclosure(className, key, label) {
+      var node = el('details', className); node.setAttribute('data-achievement-state', (childId || 'guest') + '|' + model.subject + '|' + key);
+      node.open = opened.has(node.getAttribute('data-achievement-state'));
+      if (label) node.appendChild(el('summary', null, label));
+      return node;
+    }
+    model.books.forEach(function (book) {
+      var card = disclosure('achievement-book', book.volume, '');
+      card.setAttribute('data-volume', book.volume); card.setAttribute('data-subject', book.subject);
+      var summary = el('summary'), title = el('span', 'achievement-book-title', book.title);
+      summary.appendChild(title);
+      summary.appendChild(el('span', 'achievement-book-progress', '已通过 ' + book.completed + '/' + book.total + ' · 待完成 ' + book.remaining));
+      card.appendChild(summary);
+      var body = el('div', 'achievement-book-content'), progress = el('progress', 'achievement-book-meter');
+      progress.max = book.total; progress.value = book.completed; progress.setAttribute('aria-label', book.title + ' 已通过 ' + book.completed + ' 个，共 ' + book.total + ' 个知识点');
+      body.appendChild(progress);
+      if (book.expert) body.appendChild(el('p', 'muted small', '⭐ 其中 ' + book.expert + ' 个已通过专家挑战'));
+      [[true, '已通过', book.completed, 'passed'], [false, '待完成', book.remaining, 'remaining']].forEach(function (group) {
+        var details = disclosure('achievement-book-' + group[3], book.volume + '|' + group[3], group[1] + '（' + group[2] + '）');
+        if (!group[2]) details.appendChild(el('p', 'muted small', group[0] ? '还没有通过的知识点。' : '本册所有知识点均已通过。'));
+        book.chapters.forEach(function (chapter) {
+          var topics = chapter.topics.filter(function (topic) { return (topic.status === 'mastered') === group[0]; });
+          if (!topics.length) return;
+          details.appendChild(el('h4', 'achievement-topic-chapter', chapter.title));
+          var list = el('ul', 'achievement-topic-list');
+          topics.forEach(function (topic) {
+            var row = el('li', 'achievement-topic-row'), link = el('a', 'achievement-topic-link', topic.name);
+            link.href = achievementTopicHref(model, topic.id); link.setAttribute('data-topic-id', topic.id);
+            row.appendChild(link);
+            var status = topic.expert ? '⭐ 专家通过' : topic.status === 'mastered' ? '✓ 已通过' : topic.status === 'weak' ? '× 未通过' : topic.status === 'shaky' ? '× 待巩固' : '未检测';
+            row.appendChild(el('span', 'achievement-topic-status ' + topic.status, status)); list.appendChild(row);
+          });
+          details.appendChild(list);
+        });
+        body.appendChild(details);
+      });
+      card.appendChild(body); box.appendChild(card);
+    });
+    return model;
+  }
   function renderAchievements() {
     var P = window.CnmProgress;
     if (!P || !P.achievements) return;
@@ -155,22 +241,25 @@
     document.getElementById('achievement-owner-name').textContent = '当前：' + (current ? current.name : '本机访客') + ' · 成就按档案分别保存';
     var scoreBox = document.getElementById('achievement-score'); scoreBox.textContent = '';
     var total = el('div', 'achievement-total');
-    total.appendChild(el('strong', null, String(score.total))); total.appendChild(el('span', null, '总积分（⭐）')); scoreBox.appendChild(total);
+    total.appendChild(el('strong', null, String(score.total))); total.appendChild(el('span', null, '累计总积分（⭐）')); scoreBox.appendChild(total);
     var medals = el('div', 'achievement-medals');
     [['🌞', score.suns, '太阳'], ['🌙', score.moons, '月亮'], ['⭐', score.stars, '星星']].forEach(function (row) {
       var item = el('span', 'achievement-medal'); item.setAttribute('aria-label', row[2] + ' ' + row[1] + ' 个');
       item.appendChild(el('span', 'achievement-icon', row[0])); item.appendChild(el('strong', null, '× ' + row[1])); medals.appendChild(item);
     });
     scoreBox.appendChild(medals);
-    document.getElementById('achievement-breakdown').textContent = '普通通关 ' + score.normal + ' 个 · 专家通关 ' + score.pro + ' 个';
+    document.getElementById('achievement-breakdown').textContent = '累计普通通关 ' + score.normal + ' 个 · 累计专家通关 ' + score.pro + ' 个';
+    var model = renderAchievementBooks(id);
     var list = document.getElementById('achievement-chapter-list'); list.textContent = '';
-    if (achievementTopics === null) { document.getElementById('achievement-chapters-summary').textContent = '已解锁章节 · 正在读取'; return; }
-    var chapters = P.chapters(id, achievementTopics), unlocked = chapters.filter(function (chapter) { return chapter.unlocked; });
-    document.getElementById('achievement-chapters-summary').textContent = '已解锁章节 ' + unlocked.length + ' / ' + chapters.length;
+    if (achievementTopics === null) { document.getElementById('achievement-chapters-summary').textContent = '当前教材已解锁章节 · ' + (achievementLoadFailed ? '暂时无法读取' : '正在读取'); return; }
+    if (!model) { document.getElementById('achievement-chapters-summary').textContent = '已解锁章节 · 请先选择教材'; return; }
+    var selectedTopics = achievementTopics.filter(function (topic) { return topic.subject === model.subject && model.volumes.indexOf(window.CnmAchievementBooks.bookOf(topic)) >= 0; });
+    var chapters = P.chapters(id, selectedTopics), unlocked = chapters.filter(function (chapter) { return chapter.unlocked; });
+    document.getElementById('achievement-chapters-summary').textContent = '当前教材已解锁章节 ' + unlocked.length + ' / ' + chapters.length;
     if (!unlocked.length) list.appendChild(el('li', 'muted small', '还没有整章通关。完成一章内所有知识点的普通检测，即可在这里点亮章节。'));
     unlocked.forEach(function (chapter) {
       var item = el('li'), link = el('a', null, '✓ ' + chapter.book + ' · ' + chapter.title);
-      link.href = '../explore/?subject=' + chapter.subject + '#' + encodeURIComponent(chapter.firstTopicId);
+      link.href = achievementTopicHref(model, chapter.firstTopicId);
       item.appendChild(link); item.appendChild(el('span', 'muted small', ' ' + chapter.completed + '/' + chapter.total)); list.appendChild(item);
     });
   }
@@ -185,6 +274,7 @@
     var rows = learning.weakPoints({ childId: childId });
     var weakList = document.getElementById('center-weak-list');
     weakList.textContent = '';
+    document.getElementById('weak-points-count').textContent = rows.length + ' 个';
     document.getElementById('weak-points-owner').textContent = '当前：' + (current ? current.name : '本机访客') + ' · 共 ' + rows.length + ' 个';
     document.getElementById('center-weak-all').href = 'history.html?' + (childId ? 'child=' + encodeURIComponent(childId) : 'scope=guest');
     if (!rows.length) weakList.appendChild(el('li', 'muted small', '暂无薄弱知识点，完成检测后会在这里汇总。'));
@@ -377,20 +467,26 @@
 
   resetForm();
   render();
+  function revealWeakPoints() {
+    if (location.hash === '#weak-points') document.getElementById('weak-points').open = true;
+  }
+  revealWeakPoints();
   if (window.addEventListener) {
     window.addEventListener('storage', renderLearningOverview);
     window.addEventListener('focus', renderLearningOverview);
     window.addEventListener('cnm:progress', renderLearningOverview);
+    window.addEventListener('hashchange', revealWeakPoints);
   }
   fetch('../data/topics.json').then(function (response) {
     if (!response.ok) throw new Error('HTTP ' + response.status);
     return response.json();
   }).then(function (rows) {
-    if (!Array.isArray(rows)) return;
+    if (!Array.isArray(rows) || !rows.length) throw new Error('教材数据格式错误');
     achievementTopics = rows;
     rows.forEach(function (topic) { if (topic && typeof topic.id === 'string') topicNames[topic.id] = topic.name; });
     renderLearningOverview();
   }).catch(function () {
-    document.getElementById('achievement-chapters-summary').textContent = '已解锁章节 · 暂时无法读取';
+    achievementLoadFailed = true;
+    renderAchievements();
   });
 })();
