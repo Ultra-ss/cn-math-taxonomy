@@ -139,7 +139,7 @@ await test('注册猫咪身份优先于旧账本并按账号显示；猫咪锁�
   const legacy={v:1,byOwner:{a:{...box(Array.from({length:9},(_,n)=>draw('legacy-'+n,n)),'skin-01'),catId:'cat-snow',catAt:'2026-11-17T10:00:00.000Z'}}};
   const children={a:{catId:'cat-ginger'},b:{catId:'cat-tuxedo'}};
   const f=fixture({children,totals:{a:27,b:0,guest:0},entries:{[KEY]:JSON.stringify(legacy),'cnmProgress.v1':'progress-unchanged'}});
-  assert.deepEqual(Rewards.CAT_IDS,['cat-snow','cat-ginger','cat-tuxedo']);
+  assert.deepEqual(Rewards.CAT_IDS,['cat-snow','cat-ginger','cat-tuxedo','cat-blue','cat-mocha']);
   for(const catId of Rewards.CAT_IDS)assert.equal((await f.api.setCat('a',catId)).code,'cat_locked');
   const result=f.api.summary('a');assert.equal(result.catId,'cat-ginger');
   assert.equal(result.equipped,'skin-01');assert.equal(result.spentMoons,9);assert.equal(result.availableMoons,0);
@@ -180,6 +180,39 @@ await test('访客固定白猫；缺少档案模块时旧账号仍沿用账本�
   await f.api.draw('a','skin-01');assert.equal(f.api.summary('a').catId,'cat-tuxedo');
   await f.api.equip('a','default');assert.equal(f.api.summary('a').catId,'cat-tuxedo');
   assert.equal(f.api.summary('a').spentMoons,1);
+});
+await test('新注册仅提供四猫，旧白猫与五种身份的全部服装仍能正确查询',()=>{
+  const catalog=require('../assets/avatar-catalog.js');
+  assert.deepEqual(catalog.cats.map(c=>c.id),['cat-ginger','cat-tuxedo','cat-blue','cat-mocha']);
+  assert.equal(catalog.getCat('cat-snow').name,'奶油白猫');
+  const directories={'cat-snow':'','cat-ginger':'ginger/','cat-tuxedo':'tuxedo/','cat-blue':'blue/','cat-mocha':'mocha/'};
+  for(const [catId,directory] of Object.entries(directories)) {
+    assert.equal(catalog.getCat(catId).id,catId);
+    for(const id of ['default',...Rewards.SKIN_IDS]) {
+      const art=catalog.get(id,catId);
+      assert.equal(art.catId,catId);assert.equal(art.id,id);
+      assert.equal(art.image,'/assets/avatars/'+directory+id+'.svg');
+    }
+  }
+  assert.equal(catalog.get('default','unknown').catId,'cat-snow');
+});
+await test('新两猫各自兑换解锁穿戴并重载保留身份，月亮与拼图不串账号',async()=>{
+  const f=fixture({totals:{a:27,b:27},children:{a:{catId:'cat-blue'},b:{catId:'cat-mocha'}}});
+  for(const [id,catId] of [['a','cat-blue'],['b','cat-mocha']]) {
+    for(let n=0;n<9;n++)assert.equal((await f.api.draw(id,'skin-01')).ok,true);
+    assert.equal((await f.api.equip(id,'skin-01')).ok,true);
+    const before=f.map.get(KEY),writes=f.writes;
+    assert.equal((await f.api.setCat(id,'cat-tuxedo')).code,'cat_locked');
+    assert.equal(f.map.get(KEY),before);assert.equal(f.writes,writes);
+    const summary=Rewards.create(f.options).summary(id);
+    assert.equal(summary.catId,catId);assert.equal(summary.equipped,'skin-01');
+    assert.equal(summary.collections['skin-01'].count,9);
+    assert.equal(summary.availableMoons,0);assert.equal(summary.spentMoons,9);assert.equal(summary.totalStars,27);
+  }
+  const legacy={v:1,byOwner:{a:{...box(),catId:'cat-blue',catAt:'2026-11-17T10:00:00.000Z'},b:{...box(),catId:'cat-mocha',catAt:'2026-11-17T10:00:00.000Z'}}};
+  assert.equal(Rewards.validateStore(legacy),true);
+  const oldContext=fixture({entries:{[KEY]:JSON.stringify(legacy)}});
+  assert.equal(oldContext.api.summary('a').catId,'cat-blue');assert.equal(oldContext.api.summary('b').catId,'cat-mocha');
 });
 console.log('test_avatar_rewards: '+passed+' passed');
 })().catch(error=>{console.error(error);process.exitCode=1;});

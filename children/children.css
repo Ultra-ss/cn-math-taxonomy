@@ -81,7 +81,7 @@ main.kids { width: min(760px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
 .registration-cat-field { min-width: 0; margin: 14px 0; padding: 12px; border: 1px solid var(--line); border-radius: 14px; }
 .registration-cat-field legend { padding: 0 5px; font-weight: 750; }
 .registration-cat-field[hidden], .registration-cat-fixed[hidden] { display: none; }
-.registration-cat-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.registration-cat-options { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
 .kid-form .registration-cat-choice { position: relative; display: grid; justify-items: center; align-content: start; gap: 6px; min-width: 0; margin: 0; padding: 9px 5px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-elev); text-align: center; cursor: pointer; }
 .kid-form .registration-cat-choice.is-selected { border-color: var(--brand); background: var(--brand-soft); box-shadow: inset 0 0 0 1px var(--brand); }
 .kid-form .registration-cat-choice:focus-within { outline: 2px solid var(--focus); outline-offset: 2px; }
@@ -91,6 +91,9 @@ main.kids { width: min(760px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
 .registration-cat-fixed { display: flex; align-items: center; gap: 12px; margin: 14px 0; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-muted); }
 .registration-cat-fixed img { flex: none; width: 52px; height: 52px; border-radius: 10px; }
 .registration-cat-fixed p { margin: 4px 0 0; }
+@media (max-width: 600px) {
+  .registration-cat-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 .kid-form .form-actions { display: flex; gap: 8px; margin-top: 14px; }
 .kid-form .form-actions button { flex: 1 1 0; }
 .kid-form .small { margin: 8px 0 0; }

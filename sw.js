@@ -3,7 +3,7 @@
  * 改了 SHELL 或 DATA 列表、或数据结构变了，就把 VERSION 加一。 */
 'use strict';
 
-var VERSION = 'v75';
+var VERSION = 'v76';
 var CACHE = 'cnm-pwa-' + VERSION;
 var SCOPE = self.registration.scope;
 
@@ -78,6 +78,28 @@ var SHELL = [
   'assets/avatars/tuxedo/skin-08.svg',
   'assets/avatars/tuxedo/skin-09.svg',
   'assets/avatars/tuxedo/skin-10.svg',
+  'assets/avatars/blue/default.svg',
+  'assets/avatars/blue/skin-01.svg',
+  'assets/avatars/blue/skin-02.svg',
+  'assets/avatars/blue/skin-03.svg',
+  'assets/avatars/blue/skin-04.svg',
+  'assets/avatars/blue/skin-05.svg',
+  'assets/avatars/blue/skin-06.svg',
+  'assets/avatars/blue/skin-07.svg',
+  'assets/avatars/blue/skin-08.svg',
+  'assets/avatars/blue/skin-09.svg',
+  'assets/avatars/blue/skin-10.svg',
+  'assets/avatars/mocha/default.svg',
+  'assets/avatars/mocha/skin-01.svg',
+  'assets/avatars/mocha/skin-02.svg',
+  'assets/avatars/mocha/skin-03.svg',
+  'assets/avatars/mocha/skin-04.svg',
+  'assets/avatars/mocha/skin-05.svg',
+  'assets/avatars/mocha/skin-06.svg',
+  'assets/avatars/mocha/skin-07.svg',
+  'assets/avatars/mocha/skin-08.svg',
+  'assets/avatars/mocha/skin-09.svg',
+  'assets/avatars/mocha/skin-10.svg',
   'assets/explore-viewport.js',
   'assets/stats-config.js',
   'assets/stats.js',

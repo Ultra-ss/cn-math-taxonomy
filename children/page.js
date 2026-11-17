@@ -90,7 +90,7 @@
     gradeSel.value = c.grade;
     bookSel.value = c.textbook;
     catField.hidden = true; fixedCat.hidden = false; fixedCat.textContent = '';
-    var cat = catCatalog.cats.find(function (item) { return item.id === c.catId; }) || catCatalog.cats[0];
+    var cat = catCatalog.getCat(c.catId);
     var catImage = el('img'); catImage.src = cat.image; catImage.alt = ''; catImage.width = 52; catImage.height = 52;
     var catInfo = el('div'); catInfo.append(el('strong', null, cat.name), el('p', 'muted small', '注册时已选定，猫咪不可更换；可以更换服装。'));
     fixedCat.append(catImage, catInfo);

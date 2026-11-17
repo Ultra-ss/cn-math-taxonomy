@@ -8,7 +8,7 @@
   'use strict';
   var KEY = 'cnmAvatarRewards.v1';
   var SKIN_IDS = Array.from({ length: 10 }, function (_, i) { return 'skin-' + String(i + 1).padStart(2, '0'); });
-  var CAT_IDS = ['cat-snow', 'cat-ginger', 'cat-tuxedo'];
+  var CAT_IDS = ['cat-snow', 'cat-ginger', 'cat-tuxedo', 'cat-blue', 'cat-mocha'];
   var DUPLICATE_CHANCE = 10;
   var BAD_KEYS = ['__proto__', 'constructor', 'prototype'];
   function object(value) { return !!value && typeof value === 'object' && !Array.isArray(value); }

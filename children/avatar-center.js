@@ -18,7 +18,7 @@
     var Catalog = root.CnmAvatarCatalog, Rewards = root.CnmAvatarRewards, CC = root.CnmChildren;
     if (!Catalog || !Rewards || !CC) return null;
     var skins = Array.isArray(Catalog.skins) ? Catalog.skins : [];
-    var cats = Array.isArray(Catalog.cats) ? Catalog.cats : [];
+    var cats = Array.isArray(Catalog.allCats) ? Catalog.allCats : Array.isArray(Catalog.cats) ? Catalog.cats : [];
     var defaultCat = Catalog.DEFAULT_CAT || 'cat-snow';
     if (!skins.length) return null;
     var uid = 'avatar-reveal-' + (++serial), selected = {}, ownerId = null, lastOwner = null, summary = null;
@@ -54,7 +54,7 @@
     if (mobile.addEventListener) on(mobile, 'change', resizedWorkshop);
     else if (mobile.addListener) { mobile.addListener(resizedWorkshop); cleanups.push(function () { mobile.removeListener(resizedWorkshop); }); }
     function catId() { return summary && summary.catId || defaultCat; }
-    function cat(id) { return cats.find(function (item) { return item.id === (id || catId()); }) || cats[0] || { id: defaultCat, name: '小猫' }; }
+    function cat(id) { return Catalog.getCat ? Catalog.getCat(id || catId()) : cats.find(function (item) { return item.id === (id || catId()); }) || cats[0] || { id: defaultCat, name: '小猫' }; }
     function get(id, selectedCat) {
       var found = id === 'default' ? Catalog.defaultAvatar : skins.find(function (skin) { return skin.id === id; });
       return found ? Catalog.get && Catalog.get(id, selectedCat || catId()) || found : null;

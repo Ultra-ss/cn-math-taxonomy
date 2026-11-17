@@ -14,7 +14,9 @@
 
     function avatarImage(id, catId) {
         var directory = catId === 'cat-ginger' ? 'ginger/'
-            : catId === 'cat-tuxedo' ? 'tuxedo/' : '';
+            : catId === 'cat-tuxedo' ? 'tuxedo/'
+            : catId === 'cat-blue' ? 'blue/'
+            : catId === 'cat-mocha' ? 'mocha/' : '';
         var path = 'avatars/' + directory + id + '.svg';
         if (scriptURL) {
             return new URL(path, scriptURL).href;
@@ -47,23 +49,27 @@
         return skin;
     });
 
+    // 新注册只展示四种选择；原有白猫仍是有效身份，旧账号无需重选。
     var cats = [
-        { id: 'cat-snow', name: '奶油白猫' },
         { id: 'cat-ginger', name: '橘子猫' },
-        { id: 'cat-tuxedo', name: '奶牛猫' }
+        { id: 'cat-tuxedo', name: '奶牛猫' },
+        { id: 'cat-blue', name: '蓝灰猫' },
+        { id: 'cat-mocha', name: '奶咖狸花猫' }
     ].map(function (cat) {
         cat.image = avatarImage('default', cat.id);
         return cat;
     });
+    var allCats = cats.concat([{ id: DEFAULT_CAT, name: '奶油白猫', image: avatarImage('default', DEFAULT_CAT) }]);
+
+    function getCat(id) {
+        for (var c = 0; c < allCats.length; c += 1) {
+            if (allCats[c].id === id) return allCats[c];
+        }
+        return allCats[allCats.length - 1];
+    }
 
     function get(id, catId) {
-        var selectedCat = DEFAULT_CAT;
-        for (var c = 0; c < cats.length; c += 1) {
-            if (cats[c].id === catId) {
-                selectedCat = catId;
-                break;
-            }
-        }
+        var selectedCat = getCat(catId).id;
 
         var avatar = defaultAvatar;
         for (var i = 0; i < skins.length; i += 1) {
@@ -87,6 +93,8 @@
 
     return {
         cats: cats,
+        allCats: allCats,
+        getCat: getCat,
         DEFAULT_CAT: DEFAULT_CAT,
         skins: skins,
         defaultAvatar: defaultAvatar,

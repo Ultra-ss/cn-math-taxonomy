@@ -1032,8 +1032,8 @@ test('导入预览后免费切猫也令token失效，猫咪写入失败保留本
   assert.deepStrictEqual(Object.fromEntries(failing.storage),entries);
 });
 
-test('注册时三种猫均可选，每个账号只写一次档案，失败和非法猫不留下半份账号',()=>{
-  for(const [index,catId] of ['cat-snow','cat-ginger','cat-tuxedo'].entries()) {
+test('注册时新旧五种有效猫身份均可保存，每个账号只写一次档案，失败和非法猫不留下半份账号',()=>{
+  for(const [index,catId] of ['cat-snow','cat-ginger','cat-tuxedo','cat-blue','cat-mocha'].entries()) {
     const {api,storage,writes}=load({[PROGRESS_KEY]:'old-progress',[AVATAR_KEY]:'old-ledger'});
     const result=api.add({name:'新账号'+index,grade:'八年级',textbook:'人教版',catId});
     assert.equal(result.ok,true);assert.equal(result.child.catId,catId);
@@ -1051,6 +1051,37 @@ test('注册时三种猫均可选，每个账号只写一次档案，失败和�
   const prior=fixture(),f=load(prior,null,{failWrite:key=>key===PROFILE_KEY});
   assert.equal(f.api.add({name:'保存失败',grade:'八年级',catId:'cat-tuxedo'}).ok,false);
   assert.deepStrictEqual(Object.fromEntries(f.storage),prior);assert.deepStrictEqual(f.writes,[PROFILE_KEY]);
+});
+
+test('蓝灰猫与奶咖狸花猫注册后身份锁定，完整备份往返和重复导入保留服装消费',()=>{
+  for(const catId of ['cat-blue','cat-mocha']) {
+    const {api,storage}=load();
+    const child=api.add({name:'少年猫同学',grade:'八年级',catId}).child;
+    assert.equal(api.update(child.id,{name:'改名同学',grade:'九年级',catId:'cat-tuxedo'}).child.catId,catId);
+    assert.equal(load(Object.fromEntries(storage)).api.get(child.id).catId,catId);
+  }
+  const data=catAvatarBackup();
+  for(const [i,catId] of ['cat-blue','cat-mocha'].entries()) {
+    data.profiles.children[i].catId=catId;
+    data.learning.avatarRewards.byOwner[data.profiles.children[i].id].catId=catId;
+  }
+  const {api,storage,writes}=load();
+  const parsed=api.parseBackup(JSON.stringify(data));api.previewImport(parsed);
+  assert.deepStrictEqual(writes,[]);
+  importInto(api,parsed);
+  const restored=exported(api);
+  assert.deepStrictEqual(restored.profiles.children.map(c=>c.catId),['cat-blue','cat-mocha']);
+  assert.deepStrictEqual(restored.learning.avatarRewards,data.learning.avatarRewards);
+  assert.equal(require('../assets/avatar-rewards.js').validateStore(restored.learning.avatarRewards),true);
+  const once=Object.fromEntries(storage);importInto(api,parsed);
+  assert.deepStrictEqual(Object.fromEntries(storage),once);
+  const other=load();importInto(other.api,restored);
+  assert.deepStrictEqual(exported(other.api).profiles.children.map(c=>c.catId),['cat-blue','cat-mocha']);
+  const local={...learningFixture(),[AVATAR_KEY]:JSON.stringify(catAvatarFixture()),
+    [PROFILE_KEY]:JSON.stringify(fixedProfiles(profiles,{'child-a':'cat-blue','child-b':'cat-snow'}))};
+  const conflict=load(local);importInto(conflict.api,data);
+  assert.deepStrictEqual(JSON.parse(JSON.stringify(conflict.api.list())).map(c=>c.catId),['cat-blue','cat-snow']);
+  assert.deepStrictEqual(stored(conflict.storage,AVATAR_KEY).byOwner['child-b'].draws,catAvatarFixture().byOwner['child-b'].draws);
 });
 
 test('兼容旧注册调用默认白猫，编辑资料和切换账号都不能改变猫咪身份',()=>{

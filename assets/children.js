@@ -16,7 +16,7 @@
   var BACKUP_KEYS = [KEY, REC_KEY, WRONG_KEY, BLIND_KEY, SESSION_KEYS.science, SESSION_KEYS.physics, ARCHIVE_KEY, PROGRESS_KEY, AVATAR_KEY];
   var GRADES = ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三'];
   var TEXTBOOKS = ['教科版', '人教版', '其他'];
-  var CAT_IDS = ['cat-snow', 'cat-ginger', 'cat-tuxedo'];
+  var CAT_IDS = ['cat-snow', 'cat-ginger', 'cat-tuxedo', 'cat-blue', 'cat-mocha'];
 
   function validCat(value) { return CAT_IDS.indexOf(value) >= 0; }
   // 猫咪属于账号身份。旧账号沿用以前选过的猫，而不重置装扮、拼图或积分。
@@ -447,7 +447,7 @@
         throw new Error('头像装扮的归属或穿戴数据不正确。');
       }
       if (own(box, 'catId') !== own(box, 'catAt') || (own(box, 'catId') &&
-          (['cat-snow', 'cat-ginger', 'cat-tuxedo'].indexOf(box.catId) < 0 || !validDate(box.catAt)))) {
+          (!validCat(box.catId) || !validDate(box.catAt)))) {
         throw new Error('猫咪形象的选择或时间不正确。');
       }
       box.draws.forEach(function (draw) {
