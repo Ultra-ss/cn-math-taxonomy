@@ -135,6 +135,12 @@
     <form id="form" class="center-disclosure-content" novalidate>
       <label for="f-name">昵称</label>
       <input id="f-name" type="text" maxlength="12" autocomplete="off" placeholder="例如：小满（最多 12 个字）">
+      <fieldset class="registration-cat-field" id="f-cat-field">
+        <legend>选择你的小猫咪</legend>
+        <div class="registration-cat-options" id="f-cat-options"></div>
+        <p class="muted small" id="f-cat-note">猫咪在注册时选定，创建账号后不能更换；之后可以自由更换已解锁的服装。</p>
+      </fieldset>
+      <div class="registration-cat-fixed" id="f-cat-fixed" hidden></div>
       <label for="f-grade">年级</label>
       <select id="f-grade"></select>
       <label for="f-book">教材版本</label>

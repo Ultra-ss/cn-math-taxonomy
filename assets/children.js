@@ -16,6 +16,20 @@
   var BACKUP_KEYS = [KEY, REC_KEY, WRONG_KEY, BLIND_KEY, SESSION_KEYS.science, SESSION_KEYS.physics, ARCHIVE_KEY, PROGRESS_KEY, AVATAR_KEY];
   var GRADES = ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三'];
   var TEXTBOOKS = ['教科版', '人教版', '其他'];
+  var CAT_IDS = ['cat-snow', 'cat-ginger', 'cat-tuxedo'];
+
+  function validCat(value) { return CAT_IDS.indexOf(value) >= 0; }
+  // 猫咪属于账号身份。旧账号沿用以前选过的猫，而不重置装扮、拼图或积分。
+  function resolveCats(profiles, avatars) {
+    var changed = false;
+    profiles.children.forEach(function (child) {
+      if (validCat(child.catId)) return;
+      var box = avatars && avatars.byOwner && own(avatars.byOwner, child.id) ? avatars.byOwner[child.id] : null;
+      child.catId = box && validCat(box.catId) ? box.catId : 'cat-snow';
+      changed = true;
+    });
+    return changed;
+  }
 
   function read(k, fallback) {
     try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? fallback : v; } catch (e) { return fallback; }
@@ -24,10 +38,19 @@
     try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; }
   }
 
-  function state() {
+  function state(freezeCats) {
     var s = read(KEY, null);
     if (!s || !Array.isArray(s.children)) s = { v: 1, current: null, children: [] };
     if (s.current && !s.children.some(function (c) { return c.id === s.current; })) s.current = s.children.length ? s.children[0].id : null;
+    if (s.children.some(function (c) { return !validCat(c.catId); })) {
+      var avatars = null, readable = true;
+      try {
+        var rawAvatar = localStorage.getItem(AVATAR_KEY);
+        if (rawAvatar !== null) { avatars = JSON.parse(rawAvatar); checkAvatarRewards(avatars); }
+      } catch (e) { readable = false; }
+      // 只在普通档案读取时迁移；备份预览和失败的表单提交仍保持无写入。
+      if (resolveCats(s, avatars) && freezeCats && readable) write(KEY, s);
+    }
     return s;
   }
   function records() {
@@ -36,9 +59,9 @@
   }
   function newId() { return 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
 
-  function list() { return state().children.slice(); }
-  function get(id) { return state().children.filter(function (c) { return c.id === id; })[0] || null; }
-  function current() { var s = state(); return s.current ? get(s.current) : null; }
+  function list() { return state(true).children.slice(); }
+  function get(id) { return state(true).children.filter(function (c) { return c.id === id; })[0] || null; }
+  function current() { var s = state(true); return s.children.filter(function (c) { return c.id === s.current; })[0] || null; }
   function setCurrent(id) {
     var s = state();
     if (id && !s.children.some(function (c) { return c.id === id; })) return false;
@@ -67,7 +90,9 @@
     if (s.children.length >= MAX_CHILDREN) return { ok: false, error: '最多可以建 ' + MAX_CHILDREN + ' 个孩子。' };
     var err = check(s, f, null);
     if (err) return { ok: false, error: err };
-    var child = { id: newId(), name: f.name, grade: f.grade, textbook: f.textbook, createdAt: new Date().toISOString() };
+    var catId = form && own(form, 'catId') ? form.catId : 'cat-snow';
+    if (!validCat(catId)) return { ok: false, error: '请选择一种猫咪形象。' };
+    var child = { id: newId(), name: f.name, grade: f.grade, textbook: f.textbook, catId: catId, createdAt: new Date().toISOString() };
     s.children.push(child);
     if (!s.current) s.current = child.id;
     if (!write(KEY, s)) return { ok: false, error: '浏览器不允许保存数据（可能是隐私模式），档案无法保存。' };
@@ -81,7 +106,7 @@
     var err = check(s, f, id);
     if (err) return { ok: false, error: err };
     s.children[i] = Object.assign({}, s.children[i], f);
-    write(KEY, s);
+    if (!write(KEY, s)) return { ok: false, error: '浏览器无法保存修改，请检查存储空间后重试。' };
     return { ok: true, child: s.children[i] };
   }
   function remove(id) {
@@ -241,7 +266,8 @@
     profiles.children.forEach(function (c) {
       if (!isObject(c) || !validId(c.id) || ids.has(c.id) ||
           typeof c.name !== 'string' || !c.name.trim() || c.name.length > 12 ||
-          GRADES.indexOf(c.grade) < 0 || TEXTBOOKS.indexOf(c.textbook) < 0 || !validDate(c.createdAt)) {
+          GRADES.indexOf(c.grade) < 0 || TEXTBOOKS.indexOf(c.textbook) < 0 || !validDate(c.createdAt) ||
+          (own(c, 'catId') && !validCat(c.catId))) {
         throw new Error('孩子资料不完整、ID 重复，或年级和教材版本不正确。');
       }
       ids.add(c.id);
@@ -465,6 +491,7 @@
     checkSafeKeys(profiles); checkSafeKeys(history); checkSafeKeys(learning);
     checkArchive(profiles, history, true);
     checkLearning(learning);
+    resolveCats(profiles, learning.avatarRewards);
     return { profiles: profiles, records: history, learning: learning, raw: raw, token: JSON.stringify(raw) };
   }
   function recordTime(r) { return Math.max(Date.parse(r.savedAt), Date.parse(r.updatedAt || r.savedAt)); }
@@ -586,11 +613,7 @@
         if (box.equipped !== source.equipped) summary.updatedAvatarEquipment++;
         box.equipped = source.equipped; box.equippedAt = source.equippedAt;
       }
-      // 旧备份没有猫咪选择时不覆盖本机；同一时间仍保留本机选择。
-      if (own(source, 'catId') && Date.parse(source.catAt) > Date.parse(box.catAt || '1970-01-01T00:00:00.000Z')) {
-        if (source.catId !== (box.catId || 'cat-snow')) summary.updatedAvatarCats++;
-        box.catId = source.catId; box.catAt = source.catAt;
-      }
+      // 旧猫咪字段仅作为迁移资料保留。账号身份由 profile.catId 决定，不能通过新备份换猫。
     });
     return merged;
   }
@@ -617,6 +640,7 @@
       if (child) summary.matchedChildren++;
       else {
         child = copy(source);
+        resolveCats({ children: [child] }, backup.version === 2 ? backup.learning.avatarRewards : null);
         if (usedNames.has(child.name)) {
           var n = 1, candidate;
           do {
@@ -719,7 +743,7 @@
   }
 
   window.CnmChildren = {
-    GRADES: GRADES, TEXTBOOKS: TEXTBOOKS, MAX_CHILDREN: MAX_CHILDREN,
+    GRADES: GRADES, TEXTBOOKS: TEXTBOOKS, CAT_IDS: CAT_IDS.slice(), MAX_CHILDREN: MAX_CHILDREN,
     list: list, get: get, current: current, setCurrent: setCurrent,
     add: add, update: update, remove: remove,
     recordsOf: recordsOf, saveRecord: saveRecord, hasRecord: hasRecord, moveRecord: moveRecord, removeRecord: removeRecord,

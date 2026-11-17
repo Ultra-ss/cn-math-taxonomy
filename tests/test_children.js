@@ -57,6 +57,11 @@ const records = {
 function fixture() {
   return { [PROFILE_KEY]: JSON.stringify(profiles), [RECORD_KEY]: JSON.stringify(records) };
 }
+function fixedProfiles(value, cats = {}) {
+  const out = JSON.parse(JSON.stringify(value));
+  for (const child of out.children) child.catId = child.catId || cats[child.id] || 'cat-snow';
+  return out;
+}
 
 test('档案仅显示科学物理，已移除学科不能写入记录', () => {
   const { api, storage } = load(fixture());
@@ -73,7 +78,7 @@ test('导出包含全部孩子、当前孩子和科学和物理完整历史，�
   assert.equal(backup.format, 'cn-math-taxonomy.children');
   assert.equal(backup.version, 2);
   assert.ok(Date.parse(backup.exportedAt) >= before && Date.parse(backup.exportedAt) <= Date.now());
-  assert.deepStrictEqual(backup.profiles, profiles);
+  assert.deepStrictEqual(backup.profiles, fixedProfiles(profiles));
   assert.deepStrictEqual(backup.records, records);
 });
 
@@ -92,13 +97,13 @@ test('保留未选择当前孩子、未知扩展字段和超过 40 条的已存�
   entries[PROFILE_KEY] = JSON.stringify(extraProfiles);
   entries[RECORD_KEY] = JSON.stringify(extraRecords);
   const backup = exported(load(entries).api);
-  assert.deepStrictEqual(backup.profiles, extraProfiles);
+  assert.deepStrictEqual(backup.profiles, fixedProfiles(extraProfiles));
   assert.deepStrictEqual(backup.records, extraRecords);
 });
 
 test('有孩子但没有检测记录时仍能备份资料', () => {
   const backup = exported(load({ [PROFILE_KEY]: JSON.stringify(profiles) }).api);
-  assert.deepStrictEqual(backup.profiles, profiles);
+  assert.deepStrictEqual(backup.profiles, fixedProfiles(profiles));
   assert.deepStrictEqual(backup.records, {});
 });
 
@@ -114,11 +119,11 @@ test('每次读取最新数据，修改导出快照不会污染已存档案', ()
   const backup = api.exportBackup();
   backup.profiles.children[0].name = '修改快照';
   backup.records['child-a'][0].weak.push('extra');
-  assert.deepStrictEqual(exported(api).profiles, profiles);
+  assert.deepStrictEqual(exported(api).profiles, fixedProfiles(profiles));
   assert.deepStrictEqual(exported(api).records, records);
   const next = { ...profiles, current: 'child-a' };
   storage.set(PROFILE_KEY, JSON.stringify(next));
-  assert.deepStrictEqual(exported(api).profiles, next);
+  assert.deepStrictEqual(exported(api).profiles, fixedProfiles(next));
 });
 
 test('没有孩子时不生成无意义的空备份', () => {
@@ -159,7 +164,7 @@ test('新浏览器完整恢复多孩子、当前孩子与科学和物理历史�
   const result = importInto(api, api.parseBackup(JSON.stringify(data)));
   assert.equal(result.addedChildren, 2);
   assert.equal(result.addedRecords, 3);
-  assert.deepStrictEqual(stored(storage, PROFILE_KEY), profiles);
+  assert.deepStrictEqual(stored(storage, PROFILE_KEY), fixedProfiles(profiles));
   assert.deepStrictEqual(stored(storage, RECORD_KEY), records);
   assert.equal(api.current().id, 'child-b');
   assert.equal(api.latestStatus('child-a', 'science')['cns_w0'].status, 'weak');
@@ -444,7 +449,8 @@ test('真实串行作答存储：科学完成后物理排重包含科学题号�
   const { api, storage } = load();
   importInto(api, api.parseBackup(JSON.stringify(data)));
   for (const key of [PROFILE_KEY, RECORD_KEY, WRONG_KEY, BLIND_KEY, SCI_SESSION, PHY_SESSION]) {
-    assert.deepStrictEqual(stored(storage, key), JSON.parse(entries[key]));
+    const original = JSON.parse(entries[key]);
+    assert.deepStrictEqual(stored(storage, key), key === PROFILE_KEY ? fixedProfiles(original) : original);
   }
   assert.deepStrictEqual(exported(api).learning, data.learning);
 });
@@ -471,7 +477,10 @@ test('v2完整恢复错题、访客错题、两科进行中会话、盲区和会
   assert.equal(preview.restoredSessions, 2);
   assert.equal(preview.archivedSessions, 1);
   api.importBackup(data, preview.token);
-  for (const [key, value] of Object.entries(entries)) assert.deepStrictEqual(stored(storage, key), JSON.parse(value));
+  for (const [key, value] of Object.entries(entries)) {
+    const original = JSON.parse(value);
+    assert.deepStrictEqual(stored(storage, key), key === PROFILE_KEY ? fixedProfiles(original) : original);
+  }
   const first = Object.fromEntries(storage);
   importInto(api, data);
   assert.deepStrictEqual(Object.fromEntries(storage), first);
@@ -961,7 +970,7 @@ test('旧v2猫咪字段缺省或整个装扮字段缺省及v1导入，不回退�
   }
 });
 
-test('猫咪选择只按各账号catAt较新值合并，同时间本机优先，晚选默认猫也会保留时间',()=>{
+test('同ID档案固定本机猫咪，备份中较新的catAt不能更换身份，也不改变拼图消费',()=>{
   const local=catAvatarFixture(),data=catAvatarBackup();
   data.learning.avatarRewards.byOwner['child-a'].catId='cat-tuxedo';
   data.learning.avatarRewards.byOwner['child-b'].catId='cat-snow';
@@ -970,10 +979,11 @@ test('猫咪选择只按各账号catAt较新值合并，同时间本机优先，
   data.learning.avatarRewards.byOwner.guest.catAt='2026-11-16T10:00:00.000Z';
   const {api,storage}=load({...learningFixture(),[AVATAR_KEY]:JSON.stringify(local)});
   const summary=importInto(api,data),after=stored(storage,AVATAR_KEY);
-  assert.equal(summary.updatedAvatarCats,1);
+  assert.equal(summary.updatedAvatarCats,0);
   assert.equal(after.byOwner['child-a'].catId,'cat-ginger','同时间保留本机');
-  assert.equal(after.byOwner['child-b'].catId,'cat-snow','较新的免费默认猫选择可覆盖旧选择');
-  assert.equal(after.byOwner['child-b'].catAt,'2026-11-18T10:00:00.000Z');
+  assert.equal(after.byOwner['child-b'].catId,'cat-tuxedo','较新的备份不能改变固定猫咪');
+  assert.equal(after.byOwner['child-b'].catAt,AVATAR_AT);
+  assert.equal(api.get('child-b').catId,'cat-tuxedo');
   assert.equal(after.byOwner.guest.catId,'cat-snow','较旧猫咪备份不会覆盖本机');
   for(const owner of Object.keys(after.byOwner)) {
     assert.deepStrictEqual(after.byOwner[owner].draws,local.byOwner[owner].draws);
@@ -1020,6 +1030,83 @@ test('导入预览后免费切猫也令token失效，猫咪写入失败保留本
   data.learning.avatarRewards.byOwner['child-a'].catId='cat-snow';
   assert.throws(()=>importInto(failing.api,data),/原有档案和学习数据未改变/);
   assert.deepStrictEqual(Object.fromEntries(failing.storage),entries);
+});
+
+test('注册时三种猫均可选，每个账号只写一次档案，失败和非法猫不留下半份账号',()=>{
+  for(const [index,catId] of ['cat-snow','cat-ginger','cat-tuxedo'].entries()) {
+    const {api,storage,writes}=load({[PROGRESS_KEY]:'old-progress',[AVATAR_KEY]:'old-ledger'});
+    const result=api.add({name:'新账号'+index,grade:'八年级',textbook:'人教版',catId});
+    assert.equal(result.ok,true);assert.equal(result.child.catId,catId);
+    assert.equal(stored(storage,PROFILE_KEY).children[0].catId,catId);
+    assert.equal(api.get(result.child.id).catId,catId);
+    assert.deepStrictEqual(writes,[PROFILE_KEY]);
+    assert.equal(storage.get(PROGRESS_KEY),'old-progress');assert.equal(storage.get(AVATAR_KEY),'old-ledger');
+  }
+  for(const catId of ['',null,undefined,'unknown','__proto__',{},0]) {
+    const {api,storage,writes}=load(fixture());
+    const result=api.add({name:'无效形象',grade:'八年级',catId});
+    assert.equal(result.ok,false);assert.match(result.error,/猫咪/);assert.deepStrictEqual(writes,[]);
+    assert.deepStrictEqual(Object.fromEntries(storage),fixture());
+  }
+  const prior=fixture(),f=load(prior,null,{failWrite:key=>key===PROFILE_KEY});
+  assert.equal(f.api.add({name:'保存失败',grade:'八年级',catId:'cat-tuxedo'}).ok,false);
+  assert.deepStrictEqual(Object.fromEntries(f.storage),prior);assert.deepStrictEqual(f.writes,[PROFILE_KEY]);
+});
+
+test('兼容旧注册调用默认白猫，编辑资料和切换账号都不能改变猫咪身份',()=>{
+  const {api,storage}=load();
+  const a=api.add({name:'白猫同学',grade:'八年级'}).child;
+  const b=api.add({name:'橘猫同学',grade:'九年级',catId:'cat-ginger'}).child;
+  assert.equal(a.catId,'cat-snow');assert.equal(b.catId,'cat-ginger');
+  const change=api.update(b.id,{name:'改名同学',grade:'高一',textbook:'其他',catId:'cat-tuxedo'});
+  assert.equal(change.ok,true);assert.equal(change.child.catId,'cat-ginger');assert.equal(change.child.grade,'高一');
+  assert.equal(api.setCurrent(b.id),true);assert.equal(api.current().catId,'cat-ginger');
+  api.setCurrent(a.id);assert.equal(api.current().catId,'cat-snow');
+  const reloaded=load(Object.fromEntries(storage)).api;
+  assert.equal(reloaded.get(b.id).catId,'cat-ginger');assert.equal(reloaded.get(a.id).catId,'cat-snow');
+});
+
+test('旧账号继承已经选择的猫且只冻结一次，后续旧标签页账本改猫不影响身份',()=>{
+  const source=catAvatarFixture(),entries={...learningFixture(),[AVATAR_KEY]:JSON.stringify(source)};
+  const {api,storage,writes}=load(entries);
+  assert.deepStrictEqual(JSON.parse(JSON.stringify(api.list())).map(c=>c.catId),['cat-ginger','cat-tuxedo']);
+  assert.deepStrictEqual(writes,[PROFILE_KEY]);assert.equal(storage.get(AVATAR_KEY),entries[AVATAR_KEY]);
+  source.byOwner['child-a'].catId='cat-snow';source.byOwner['child-a'].catAt='2026-12-01T00:00:00.000Z';
+  storage.set(AVATAR_KEY,JSON.stringify(source));
+  assert.equal(api.get('child-a').catId,'cat-ginger');assert.equal(api.current().catId,'cat-tuxedo');
+  assert.deepStrictEqual(writes,[PROFILE_KEY]);
+  assert.equal(load(Object.fromEntries(storage)).api.get('child-a').catId,'cat-ginger');
+  assert.equal(storage.get(PROGRESS_KEY),entries[PROGRESS_KEY]);
+});
+
+test('新导入旧档案从该备份账本继承猫；无猫的旧v1默认白猫，新备份携带固定身份',()=>{
+  const data=catAvatarBackup();data.profiles.children.forEach(child=>delete child.catId);
+  const {api,storage,writes}=load();
+  api.previewImport(data);assert.deepStrictEqual(writes,[]);
+  importInto(api,data);
+  assert.deepStrictEqual(stored(storage,PROFILE_KEY).children.map(c=>c.catId),['cat-ginger','cat-tuxedo']);
+  assert.deepStrictEqual(exported(api).profiles.children.map(c=>c.catId),['cat-ginger','cat-tuxedo']);
+  const old=backup();old.version=1;delete old.learning;old.profiles.children.forEach(c=>delete c.catId);
+  const target=load();importInto(target.api,old);
+  assert.deepStrictEqual(stored(target.storage,PROFILE_KEY).children.map(c=>c.catId),['cat-snow','cat-snow']);
+});
+
+test('固定profile身份优先于冲突的旧账本和备份，非法新备份身份拒绝且无写入',()=>{
+  const data=catAvatarBackup();data.profiles.children[0].catId='cat-tuxedo';
+  data.learning.avatarRewards.byOwner['child-a'].catId='cat-tuxedo';
+  data.learning.avatarRewards.byOwner['child-a'].catAt='2026-12-01T00:00:00.000Z';
+  const entries={...learningFixture(),[AVATAR_KEY]:JSON.stringify(catAvatarFixture())};
+  entries[PROFILE_KEY]=JSON.stringify(fixedProfiles(profiles,{'child-a':'cat-snow','child-b':'cat-tuxedo'}));
+  const {api,storage}=load(entries);importInto(api,data);
+  assert.equal(api.get('child-a').catId,'cat-snow');
+  assert.equal(stored(storage,AVATAR_KEY).byOwner['child-a'].catId,'cat-ginger','历史账本原样保留');
+  const reloaded=load(Object.fromEntries(storage)).api;assert.equal(reloaded.get('child-a').catId,'cat-snow');
+  for(const catId of [null,'unknown',{},'']) {
+    const bad=catAvatarBackup();bad.profiles.children[0].catId=catId;
+    const target=load(entries);assert.throws(()=>target.api.parseBackup(JSON.stringify(bad)),/资料不完整/);
+    assert.throws(()=>target.api.previewImport(bad),/资料不完整/);assert.deepStrictEqual(target.writes,[]);
+    assert.deepStrictEqual(Object.fromEntries(target.storage),entries);
+  }
 });
 
 console.log('\n' + passed + ' passed, 0 failed');

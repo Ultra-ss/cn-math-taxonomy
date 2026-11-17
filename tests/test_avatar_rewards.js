@@ -5,10 +5,10 @@ const Rewards=require('../assets/avatar-rewards.js');
 const KEY=Rewards.KEY;
 let passed=0;
 async function test(name,fn){await fn();passed++;console.log('  ok   '+name);}
-function fixture({totals={a:100,b:50,guest:0},indices=[],entries={},locks=false}={}){
+function fixture({totals={a:100,b:50,guest:0},indices=[],entries={},locks=false,children={}}={}){
   const map=new Map(Object.entries(entries)),events=[];let serial=0,fail=false,writes=0;
   const storage={getItem:key=>map.has(key)?map.get(key):null,setItem(key,value){if(fail)throw Error('quota');writes++;map.set(key,value);}};
-  const options={storage,locks,progress:{achievements:id=>({total:totals[id||'guest']||0})},
+  const options={storage,locks,children:{get:id=>children[id]||null},progress:{achievements:id=>({total:totals[id||'guest']||0})},
     now:()=> '2026-11-17T10:00:00.000Z',newId:()=> 'event-'+(++serial),
     randomIndex:size=>{const n=indices.length?indices.shift():size===100?99:0;assert.ok(n<size);return n;},emit:id=>events.push(id)};
   const api=Rewards.create(options);
@@ -135,39 +135,51 @@ await test('三星兑换边界与旧余额重算保留消费记录，不返还�
   assert.equal(score.totalStars,25);assert.equal(score.totalMoons,8);assert.equal(score.spentMoons,2);assert.equal(score.availableMoons,6);
   assert.equal(score.catId,'cat-snow');assert.equal(f.map.get(KEY),JSON.stringify(legacy));assert.equal(f.writes,0);
 });
-await test('三只猫免费切换按账号保存，已解锁服装和历史消费保留，默认猫无需写入',async()=>{
-  const legacy={v:1,byOwner:{a:box(Array.from({length:9},(_,n)=>draw('legacy-'+n,n)),'skin-01')}};
-  const f=fixture({totals:{a:27,b:0,guest:0},entries:{[KEY]:JSON.stringify(legacy),'cnmProgress.v1':'progress-unchanged'}});
+await test('注册猫咪身份优先于旧账本并按账号显示；猫咪锁定不影响已解锁服装、历史消费或积分',async()=>{
+  const legacy={v:1,byOwner:{a:{...box(Array.from({length:9},(_,n)=>draw('legacy-'+n,n)),'skin-01'),catId:'cat-snow',catAt:'2026-11-17T10:00:00.000Z'}}};
+  const children={a:{catId:'cat-ginger'},b:{catId:'cat-tuxedo'}};
+  const f=fixture({children,totals:{a:27,b:0,guest:0},entries:{[KEY]:JSON.stringify(legacy),'cnmProgress.v1':'progress-unchanged'}});
   assert.deepEqual(Rewards.CAT_IDS,['cat-snow','cat-ginger','cat-tuxedo']);
-  assert.equal((await f.api.setCat('a','cat-snow')).ok,true);assert.equal(f.writes,0);
-  const result=await f.api.setCat('a','cat-ginger');assert.equal(result.code,'cat_selected');assert.equal(result.summary.catId,'cat-ginger');
-  assert.equal(result.summary.equipped,'skin-01');assert.equal(result.summary.spentMoons,9);assert.equal(result.summary.availableMoons,0);
-  assert.equal(result.summary.collections['skin-01'].unlocked,true);assert.equal(f.map.get('cnmProgress.v1'),'progress-unchanged');
-  const saved=f.map.get(KEY),writes=f.writes;await f.api.setCat('a','cat-ginger');assert.equal(f.writes,writes);assert.equal(f.map.get(KEY),saved);
-  assert.equal((await f.api.setCat('b','cat-tuxedo')).summary.catId,'cat-tuxedo');
-  assert.equal((await f.api.setCat(null,'cat-ginger')).summary.catId,'cat-ginger');
+  for(const catId of Rewards.CAT_IDS)assert.equal((await f.api.setCat('a',catId)).code,'cat_locked');
+  const result=f.api.summary('a');assert.equal(result.catId,'cat-ginger');
+  assert.equal(result.equipped,'skin-01');assert.equal(result.spentMoons,9);assert.equal(result.availableMoons,0);
+  assert.equal(result.collections['skin-01'].unlocked,true);assert.equal(f.map.get('cnmProgress.v1'),'progress-unchanged');
+  assert.equal((await f.api.setCat('b','cat-snow')).code,'cat_locked');
+  assert.equal((await f.api.setCat(null,'cat-ginger')).code,'cat_locked');
   const fresh=Rewards.create(f.options);assert.equal(fresh.summary('a').catId,'cat-ginger');assert.equal(fresh.summary('b').catId,'cat-tuxedo');
-  assert.equal(fresh.summary(null).catId,'cat-ginger');assert.equal(fresh.summary('b').spentMoons,0);
+  assert.equal(fresh.summary(null).catId,'cat-snow');assert.equal(fresh.summary('b').spentMoons,0);
+  assert.equal(f.writes,0);assert.deepEqual(f.events,[]);assert.equal(f.map.get(KEY),JSON.stringify(legacy));
   assert.equal(Rewards.validateStore(JSON.parse(f.map.get(KEY))),true);
-  assert.equal((await fresh.setCat('a','cat-snow')).summary.equipped,'skin-01');
 });
-await test('非法猫、成对字段、存储失败和损坏账本不会覆盖选择或扣款',async()=>{
-  const f=fixture();await f.api.setCat('a','cat-ginger');const before=f.map.get(KEY),events=f.events.length;
+await test('旧setCat接口只拒绝更换，不访问存储或发事件；账本猫字段仍验证以兼容旧备份',async()=>{
+  const store={v:1,byOwner:{a:{...box(),catId:'cat-ginger',catAt:'2026-11-17T10:00:00.000Z'}}};
+  const f=fixture({entries:{[KEY]:JSON.stringify(store)}}),before=f.map.get(KEY),events=f.events.length;
   assert.equal((await f.api.setCat('a','other-cat')).code,'invalid_cat');assert.equal(f.map.get(KEY),before);
   assert.equal((await f.api.setCat('__proto__','cat-snow')).code,'invalid_owner');
-  f.fail(true);assert.equal((await f.api.setCat('a','cat-tuxedo')).code,'storage_unavailable');assert.equal(f.map.get(KEY),before);assert.equal(f.events.length,events);
+  f.fail(true);assert.equal((await f.api.setCat('a','cat-tuxedo')).code,'cat_locked');assert.equal(f.map.get(KEY),before);assert.equal(f.events.length,events);assert.equal(f.writes,0);
   for(const change of [s=>delete s.byOwner.a.catAt,s=>delete s.byOwner.a.catId,s=>s.byOwner.a.catId='unknown',s=>s.byOwner.a.catAt='bad']){
     const copy=JSON.parse(before);change(copy);assert.equal(Rewards.validateStore(copy),false);
   }
-  const bad=fixture({entries:{[KEY]:'broken'}});assert.equal((await bad.api.setCat('a','cat-ginger')).code,'invalid_store');assert.equal(bad.map.get(KEY),'broken');
+  const bad=fixture({entries:{[KEY]:'broken'}});assert.equal((await bad.api.setCat('a','cat-ginger')).code,'cat_locked');assert.equal(bad.map.get(KEY),'broken');
+  const denied=Rewards.create({storage:{getItem(){throw Error('must not read');},setItem(){throw Error('must not write');}}});
+  assert.equal((await denied.setCat('a','cat-snow')).code,'cat_locked');
 });
-await test('换猫和兑换共用账本锁，跨窗口并发不会覆盖已保存的衣服与支出',async()=>{
+await test('旧窗口尝试换猫与正常兑换并发，固定身份、衣服与消费均保留',async()=>{
   let queue=Promise.resolve();const names=[];
   const locks={request(name,opts,fn){names.push(name);const task=queue.then(fn);queue=task.catch(()=>{});return task;}};
-  const f=fixture({totals:{a:3},locks}),other=Rewards.create(f.options);
+  const f=fixture({totals:{a:3},locks,children:{a:{catId:'cat-ginger'}}}),other=Rewards.create(f.options);
   const [picked,exchanged]=await Promise.all([f.api.setCat('a','cat-tuxedo'),other.draw('a','skin-01')]);
-  assert.equal(picked.ok,true);assert.equal(exchanged.ok,true);assert.equal(f.api.summary('a').catId,'cat-tuxedo');assert.equal(f.api.summary('a').spentMoons,1);
+  assert.equal(picked.code,'cat_locked');assert.equal(exchanged.ok,true);assert.equal(f.api.summary('a').catId,'cat-ginger');assert.equal(f.api.summary('a').spentMoons,1);
+  assert.equal(f.writes,1);assert.deepEqual(f.events,['a']);
   assert.ok(names.every(name=>name===KEY));
+});
+await test('访客固定白猫；缺少档案模块时旧账号仍沿用账本形象，抽取和换装不改变猫',async()=>{
+  const legacy={v:1,byOwner:{a:{...box(),catId:'cat-tuxedo',catAt:'2026-11-17T10:00:00.000Z'},guest:{...box(),catId:'cat-ginger',catAt:'2026-11-17T10:00:00.000Z'}}};
+  const f=fixture({entries:{[KEY]:JSON.stringify(legacy)}});
+  assert.equal(f.api.summary('a').catId,'cat-tuxedo');assert.equal(f.api.summary(null).catId,'cat-snow');
+  await f.api.draw('a','skin-01');assert.equal(f.api.summary('a').catId,'cat-tuxedo');
+  await f.api.equip('a','default');assert.equal(f.api.summary('a').catId,'cat-tuxedo');
+  assert.equal(f.api.summary('a').spentMoons,1);
 });
 console.log('test_avatar_rewards: '+passed+' passed');
 })().catch(error=>{console.error(error);process.exitCode=1;});

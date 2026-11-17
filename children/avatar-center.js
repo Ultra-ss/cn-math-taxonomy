@@ -101,7 +101,6 @@
       return ({ insufficient_moons: '可兑换月亮还不够。每累计 3⭐ 就能获得 1🌙 兑换额度，继续学习后再来吧。',
         already_unlocked: '这套装扮已经集齐，无需再消耗月亮。', locked_skin: '集齐这套装扮的 9 块不同拼图后，就可以穿戴。',
         invalid_owner: '当前账号已变更，请重新选择账号后再试。', invalid_skin: '这套装扮暂时无法读取，请刷新后再试。',
-        invalid_cat: '这只猫咪暂时无法读取，请刷新页面后重试。',
         progress_unavailable: '学习积分暂时无法读取，月亮未扣除，请刷新页面后重试。',
         random_unavailable: '浏览器暂时无法打开拼图，月亮未扣除，请稍后重试。',
         storage_unavailable: '兑换没有保存成功，月亮未扣除。请确认浏览器允许保存本地数据后重试。',
@@ -121,17 +120,6 @@
       img.style.left = -(piece % 3) * 100 + '%'; img.style.top = -Math.floor(piece / 3) * 100 + '%';
       tile.appendChild(img); tile.setAttribute('data-piece', String(piece + 1));
       return tile;
-    }
-    async function chooseCat(id) {
-      if (busy || !Rewards.setCat) return;
-      var account = owner();
-      busy = true; busyLabel = '正在切换猫咪…'; note('', false); shareMessages[ownerKey(account)] = null; render();
-      try {
-        var result = await Rewards.setCat(account, id);
-        if (!mountedAlive) return;
-        if (sameOwner(owner(), account)) note(result && result.ok ? '已选择「' + cat(id).name + '」，服装和拼图进度会保留。' : explain(result && result.code), !result || !result.ok);
-      } catch (error) { if (mountedAlive && sameOwner(owner(), account)) note('猫咪选择暂时没有保存成功，请稍后重试。', true); }
-      finally { busy = false; busyLabel = ''; if (mountedAlive) render(); }
     }
     async function shareAvatar() {
       var account = owner(), key = ownerKey(account);
@@ -192,7 +180,7 @@
     async function draw(skin) {
       if (busy) return;
       var account = owner(), c = current(), nickname = c ? c.name : '本机访客';
-      // 图源在兑换开始时捕获，等待期间换猫或换账号不会把结果换成另一只猫。
+      // 图源在兑换开始时捕获，等待期间切换账号或服装预览不会改写这次结果。
       var requestSkin = get(skin.id, catId());
       busy = true; busyLabel = '正在打开拼图…'; note('', false); render();
       var result;
@@ -239,6 +227,7 @@
       var portrait = node('div', 'avatar-portrait'); portrait.appendChild(picture(imageOf(avatar), avatar.name, 'avatar-portrait-image'));
       var info = node('div', 'avatar-hero-info'); info.appendChild(node('p', 'avatar-owner-name', c ? c.name : '本机访客'));
       info.appendChild(node('p', 'avatar-equipped-name', currentCat.name + (avatar.id === 'default' ? ' · 默认形象' : ' · ' + avatar.name)));
+      info.appendChild(node('p', 'avatar-cat-fixed-note', c ? '猫咪已固定，可更换已解锁的服装。' : '创建账号时选择猫咪，创建后固定。'));
       var heroActions = node('div', 'avatar-hero-actions');
       var share = node('button', 'avatar-share-button', sharing[ownerKey(ownerId)] ? '保存中…' : '晒一晒'); share.type = 'button';
       share.setAttribute('data-avatar-action', 'share'); share.disabled = !!sharing[ownerKey(ownerId)];
@@ -253,18 +242,6 @@
       var shareStatus = node('p', 'avatar-share-status' + (shared && shared.error ? ' is-error' : ''), shared ? shared.text : '');
       shareStatus.setAttribute('role', shared && shared.error ? 'alert' : 'status'); shareStatus.setAttribute('aria-live', 'polite'); shareStatus.hidden = !shared; info.appendChild(shareStatus);
       hero.append(portrait, info); shell.appendChild(hero);
-      if (cats.length) {
-        var catHeading = node('div', 'avatar-cat-heading'); catHeading.appendChild(node('h3', '', '选择你的猫咪')); catHeading.appendChild(node('span', '', '三只都免费')); shell.appendChild(catHeading);
-        var options = node('div', 'avatar-cat-options'); options.setAttribute('role', 'group'); options.setAttribute('aria-label', '免费基础猫咪');
-        cats.forEach(function (item) {
-          var pick = node('button', 'avatar-cat-option' + (item.id === currentCat.id ? ' is-selected' : '')); pick.type = 'button';
-          pick.setAttribute('data-avatar-cat', item.id); pick.setAttribute('aria-pressed', item.id === currentCat.id ? 'true' : 'false'); pick.disabled = busy;
-          pick.appendChild(picture(item.image || imageOf(get('default', item.id)), '', 'avatar-cat-image'));
-          var label = node('span', 'avatar-cat-label'); label.appendChild(node('strong', '', item.name)); label.appendChild(node('span', '', item.id === currentCat.id ? '已选择' : '免费选择')); pick.appendChild(label);
-          pick.addEventListener('click', function () { chooseCat(item.id); }); options.appendChild(pick);
-        });
-        shell.appendChild(options);
-      }
       var unlocked = skins.filter(function (skin) { return collection(skin.id).unlocked; }).length;
       var wallet = node('div', 'avatar-wallet');
       var balance = node('div', 'avatar-wallet-main'); balance.appendChild(node('span', '', '可兑换月亮'));
@@ -333,9 +310,9 @@
       var rules = node('details', 'avatar-rules'), ruleSummary = node('summary', '', '月亮与拼图兑换规则'); rules.open = rulesOpen; rules.appendChild(ruleSummary);
       var ruleList = node('ul');
       ['每累计 3⭐ 产生 1🌙 兑换额度，历史成就与累计总积分保留。',
-        '先免费选择猫咪，再选择想收集的服装，每次用 1🌙 兑换其中一块拼图。同一套前两次保证不重复。',
+        '注册时选择猫咪，账号创建后固定；在工坊选择想收集的服装，每次用 1🌙 兑换其中一块拼图。同一套前两次保证不重复。',
         '从第 3 次起，每次有 ' + duplicateChance() + '% 概率抽到重复拼图，' + (100 - duplicateChance()) + '% 概率获得未拥有的新拼图。重复本次无效，仍消耗 1🌙，不增加收集进度。',
-        '集齐 9 块不同拼图即可永久解锁服装；三只猫咪都可以穿已解锁的服装，换猫不影响拼图进度。',
+        '集齐 9 块不同拼图即可永久解锁服装，可自由更换已解锁的服装或恢复默认穿着。',
         '所有记录按本地账号分别保存。换设备或清理浏览器前，请先在下方导出学习数据备份。'].forEach(function (text) { ruleList.appendChild(node('li', '', text)); });
       rules.appendChild(ruleList); shell.appendChild(rules);
       var status = node('p', 'avatar-status' + (statusError ? ' is-error' : '')); status.setAttribute('role', statusError ? 'alert' : 'status'); status.setAttribute('aria-live', 'polite');

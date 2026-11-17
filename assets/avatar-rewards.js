@@ -59,6 +59,15 @@
         return result && Number.isSafeInteger(result.total) && result.total >= 0 ? result.total : null;
       } catch (error) { return null; }
     }
+    function fixedCat(id, box) {
+      if (id === 'guest') return 'cat-snow';
+      try {
+        var children = options.children || root.CnmChildren;
+        var child = children && children.get(id);
+        if (child && cat(child.catId)) return child.catId;
+      } catch (error) { /* 旧环境仍可显示迁移前已经保存的形象。 */ }
+      return box.catId || 'cat-snow';
+    }
     function summarize(id, store, total) {
       var box = own(store.byOwner, id) ? store.byOwner[id] : emptyBox();
       var totalStars = total === null ? 0 : total, totalMoons = Math.floor(totalStars / 3), spent = box.draws.length;
@@ -66,7 +75,7 @@
       SKIN_IDS.forEach(function (skinId) { collections[skinId] = collection(box.draws, skinId); });
       return { ok: true, owner: id, totalStars: totalStars, totalMoons: totalMoons, earnedMoons: totalMoons,
         spentMoons: spent, availableMoons: Math.max(0, totalMoons - spent), equipped: box.equipped,
-        catId: box.catId || 'cat-snow', collections: collections };
+        catId: fixedCat(id, box), collections: collections };
     }
     function summary(value) {
       var id = owner(value), result = read();
@@ -170,19 +179,9 @@
       });
     }
     function setCat(value, catId) {
-      return exclusive(function () {
-        var id = owner(value);
-        if (!id) return { ok: false, code: 'invalid_owner' };
-        if (!cat(catId)) return { ok: false, code: 'invalid_cat' };
-        var result = read(); if (!result.ok) return result;
-        var total = stars(id), current = summarize(id, result.store, total);
-        if (current.catId === catId) return { ok: true, code: 'cat_selected', summary: current };
-        var box = own(result.store.byOwner, id) ? result.store.byOwner[id] : emptyBox(), at = now();
-        if (!date(at)) return { ok: false, code: 'storage_unavailable' };
-        box.catId = catId; box.catAt = at; result.store.byOwner[id] = box;
-        if (!write(result.store, id)) return { ok: false, code: 'storage_unavailable' };
-        return { ok: true, code: 'cat_selected', summary: summarize(id, result.store, total) };
-      });
+      // 保留旧标签页的 API，但注册后的账号和访客均不允许更换猫咪。
+      var code = !owner(value) ? 'invalid_owner' : !cat(catId) ? 'invalid_cat' : 'cat_locked';
+      return Promise.resolve({ ok: false, code: code });
     }
     return { summary: summary, draw: draw, equip: equip, setCat: setCat };
   }

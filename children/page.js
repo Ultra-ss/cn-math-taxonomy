@@ -8,6 +8,10 @@
   var nameIn = document.getElementById('f-name');
   var gradeSel = document.getElementById('f-grade');
   var bookSel = document.getElementById('f-book');
+  var catField = document.getElementById('f-cat-field');
+  var catOptions = document.getElementById('f-cat-options');
+  var fixedCat = document.getElementById('f-cat-fixed');
+  var catCatalog = window.CnmAvatarCatalog;
   var errBox = document.getElementById('f-error');
   var submitBtn = document.getElementById('f-submit');
   var cancelBtn = document.getElementById('f-cancel');
@@ -38,6 +42,19 @@
   }
   fillSelect(gradeSel, CC.GRADES, '请选择年级');
   fillSelect(bookSel, CC.TEXTBOOKS);
+  function syncCatChoices() {
+    catOptions.querySelectorAll('.registration-cat-choice').forEach(function (label) {
+      label.classList.toggle('is-selected', label.querySelector('input').checked);
+    });
+  }
+  catCatalog.cats.forEach(function (cat) {
+    var choice = el('label', 'registration-cat-choice');
+    var radio = el('input'); radio.type = 'radio'; radio.name = 'catId'; radio.value = cat.id;
+    radio.required = true; radio.setAttribute('aria-describedby', 'f-cat-note');
+    radio.addEventListener('change', syncCatChoices);
+    var image = el('img'); image.src = cat.image; image.alt = ''; image.width = 72; image.height = 72; image.decoding = 'async';
+    choice.append(radio, image, el('strong', null, cat.name)); catOptions.appendChild(choice);
+  });
 
   var params = new URLSearchParams(location.search);
   if (params.get('from') === 'diagnose') {
@@ -57,6 +74,9 @@
     nameIn.value = '';
     gradeSel.value = '';
     bookSel.value = CC.TEXTBOOKS[0];
+    catField.hidden = false; fixedCat.hidden = true; fixedCat.textContent = '';
+    catOptions.querySelectorAll('input').forEach(function (radio) { radio.checked = false; });
+    syncCatChoices();
     formTitle.textContent = '添加新账号';
     submitBtn.textContent = '添加新账号';
     cancelBtn.hidden = true;
@@ -69,6 +89,11 @@
     nameIn.value = c.name;
     gradeSel.value = c.grade;
     bookSel.value = c.textbook;
+    catField.hidden = true; fixedCat.hidden = false; fixedCat.textContent = '';
+    var cat = catCatalog.cats.find(function (item) { return item.id === c.catId; }) || catCatalog.cats[0];
+    var catImage = el('img'); catImage.src = cat.image; catImage.alt = ''; catImage.width = 52; catImage.height = 52;
+    var catInfo = el('div'); catInfo.append(el('strong', null, cat.name), el('p', 'muted small', '注册时已选定，猫咪不可更换；可以更换服装。'));
+    fixedCat.append(catImage, catInfo);
     formTitle.textContent = '修改「' + c.name + '」的信息';
     submitBtn.textContent = '保存修改';
     cancelBtn.hidden = false;
@@ -385,6 +410,16 @@
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var f = { name: nameIn.value, grade: gradeSel.value, textbook: bookSel.value };
+    if (!editing) {
+      var chosenCat = catOptions.querySelector('input:checked');
+      if (!chosenCat) {
+        showError('请选择一只小猫咪，注册后猫咪将固定。');
+        catField.scrollIntoView({ block: 'nearest' });
+        catOptions.querySelector('input').focus({ preventScroll: true });
+        return;
+      }
+      f.catId = chosenCat.value;
+    }
     var res = editing ? CC.update(editing, f) : CC.add(f);
     if (!res.ok) { showError(res.error); return; }
     if (!editing && window.cnmTrack) window.cnmTrack('child_added');
