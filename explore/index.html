@@ -105,25 +105,9 @@
         <p class="muted" id="book-note">按教材册次浏览知识点，随时查看已通过和待巩固的内容。</p>
       </div>
       <div class="book-actions">
+        <button type="button" id="side-collapse" class="side-collapse" aria-expanded="true" aria-controls="side">收起目录</button>
         <a class="btn btn-primary" id="book-diagnose" href="../diagnose/" hidden>按教材顺序检测</a>
-        <button type="button" id="book-view" aria-pressed="true" hidden>本章节图谱</button>
-      </div>
-    </div>
-    <div class="graph-toolbar">
-      <button type="button" id="side-collapse" class="side-collapse" aria-expanded="true" aria-controls="side">收起目录</button>
-      <div class="depth" id="depth-switch" role="group" aria-label="向上先修层数">
-        <span class="depth-label">向上</span>
-        <div class="seg">
-          <button type="button" data-depth="1" aria-pressed="false" aria-label="1 层"><span class="wide-only">1 层</span><span class="narrow-only">1层</span></button>
-          <button type="button" data-depth="2" class="on" aria-pressed="true" aria-label="2 层"><span class="wide-only">2 层</span><span class="narrow-only">2层</span></button>
-          <button type="button" data-depth="3" aria-pressed="false" aria-label="3 层"><span class="wide-only">3 层</span><span class="narrow-only">3层</span></button>
-          <button type="button" data-depth="all" aria-pressed="false" aria-label="全部">全部</button>
-        </div>
-      </div>
-      <div class="zoom-tools" role="group" aria-label="缩放">
-        <button type="button" id="btn-zoom-out" aria-label="缩小" title="缩小"><svg class="zoom-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14.6 14.6 19.5 19.5M7.4 10h5.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="zoom-label">缩小</span></button>
-        <button type="button" id="btn-zoom-in" aria-label="放大" title="放大"><svg class="zoom-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14.6 14.6 19.5 19.5M7.4 10h5.2M10 7.4v5.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="zoom-label">放大</span></button>
-        <button type="button" id="btn-fit" aria-label="适配画面" title="适配画面"><svg class="zoom-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="zoom-label">适配画面</span></button>
+        <button type="button" id="book-view" aria-pressed="true" hidden>局部图谱</button>
       </div>
     </div>
     <p id="graph-fold" class="graph-fold" hidden></p>
@@ -135,6 +119,11 @@
     </details>
     </div>
     <div id="graph-stage" class="graph-stage">
+      <div id="graph-viewport-tools" class="zoom-tools graph-viewport-tools" role="group" aria-label="图谱视角工具" hidden>
+        <button type="button" id="btn-zoom-out" aria-label="缩小" title="缩小"><svg class="zoom-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14.6 14.6 19.5 19.5M7.4 10h5.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="zoom-label">缩小</span></button>
+        <button type="button" id="btn-zoom-in" aria-label="放大" title="放大"><svg class="zoom-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14.6 14.6 19.5 19.5M7.4 10h5.2M10 7.4v5.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="zoom-label">放大</span></button>
+        <button type="button" id="btn-fit" aria-label="适配画面" title="适配画面"><svg class="zoom-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="zoom-label">适配画面</span></button>
+      </div>
       <div id="cy" hidden role="img" tabindex="0" aria-label="选中知识点的局部先修图" aria-describedby="graph-drag-help graph-learning-hint"></div>
       <button type="button" id="graph-motion-toggle" class="graph-motion-toggle" aria-controls="cy" aria-pressed="false" title="暂停方框漂浮" hidden>暂停漂浮</button>
       <div id="graph-empty" class="graph-empty">

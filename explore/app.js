@@ -258,7 +258,7 @@
     if (volume) action.setAttribute('data-diagnose-return', '../diagnose/?subject=' + subject + '&volume=' + encodeURIComponent(volume) + '&order=book');
     else action.removeAttribute('data-diagnose-return');
     $('book-view').hidden = !hasBookScope();
-    $('book-view').textContent = showWholeBook ? '本章节图谱' : '全网路图谱';
+    $('book-view').textContent = showWholeBook ? '局部图谱' : '全网路图谱';
     $('book-view').setAttribute('aria-pressed', showWholeBook ? 'true' : 'false');
     refreshDiagnosisLinks();
   }
@@ -398,6 +398,8 @@
   }
 
   function syncGraphMotionButton() {
+    var controls = $('graph-viewport-tools');
+    if (controls) controls.hidden = !cy || cy.destroyed() || $('cy').dataset.ready !== '1';
     var button = $('graph-motion-toggle');
     if (!button) return;
     var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -407,14 +409,6 @@
     button.textContent = reduced ? '静态显示' : graphMotionPaused ? '继续漂浮' : '暂停漂浮';
     button.setAttribute('aria-label', reduced ? '静态显示：已启用系统减少动态效果' : button.textContent);
     button.title = reduced ? '已遵循系统的减少动态效果设置' : graphMotionPaused ? '继续知识点的轻柔漂浮' : '暂停知识点漂浮，方便静心阅读';
-  }
-
-  function restoreDepth() {
-    try {
-      var saved = sessionStorage.getItem('cnmExplore.depth');
-      if (saved === '1' || saved === '2' || saved === '3') upDepth = parseInt(saved, 10);
-      else if (saved === 'all') upDepth = 'all';
-    } catch (error) { /* 隐私模式 */ }
   }
 
   function syncControls() {
@@ -433,16 +427,6 @@
     if (Array.prototype.some.call(domainSelect.options, function (option) { return option.value === domain; })) {
       domainSelect.value = domain;
     }
-    syncDepthButtons();
-  }
-
-  function syncDepthButtons() {
-    var current = upDepth === 'all' ? 'all' : String(upDepth);
-    document.querySelectorAll('#depth-switch [data-depth]').forEach(function (button) {
-      var on = button.getAttribute('data-depth') === current;
-      button.classList.toggle('on', on);
-      button.setAttribute('aria-pressed', on ? 'true' : 'false');
-    });
   }
 
   var SIDE_COLLAPSED_KEY = 'explore.sideCollapsed';
@@ -1316,6 +1300,7 @@
     cyEl.hidden = false;
     emptyEl.hidden = true;
     cyEl.dataset.ready = '0';
+    $('graph-viewport-tools').hidden = true;
     cyEl.dataset.mode = folded ? 'grade' : 'full';
     cyEl.dataset.total = String(total);
     var heavy = !folded && total > 80;
@@ -1735,19 +1720,6 @@
       renderList();
       highlight(false);
     });
-    $('depth-switch').addEventListener('click', function (event) {
-      var button = event.target.closest('[data-depth]');
-      if (!button) return;
-      var value = button.getAttribute('data-depth');
-      upDepth = value === 'all' ? 'all' : parseInt(value, 10);
-      rememberLocation();
-      ancestorsOpen = false;
-      try { sessionStorage.setItem('cnmExplore.depth', value); } catch (error) { /* 忽略 */ }
-      syncDepthButtons();
-      syncBookQuery();
-      refreshDiagnosisLinks();
-      renderGraph();
-    });
     $('graph-fold').addEventListener('click', function (event) {
       if (event.target.closest('#btn-expand-all')) ancestorsOpen = true;
       else if (event.target.closest('#btn-collapse-all')) ancestorsOpen = false;
@@ -1858,8 +1830,6 @@
 
   subject = readSubject();
   configureSubject();
-  restoreDepth();
-  syncDepthButtons();
   applyQuery();
   bind();
   load().then(prepareGraphFont).then(function () {

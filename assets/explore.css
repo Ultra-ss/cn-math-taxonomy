@@ -119,22 +119,6 @@ body.page-explore .site-footer { flex: none; }
   background: var(--bg);
   background-image: var(--page-wash, none);
 }
-.graph-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 10px;
-  border-bottom: 1px solid var(--line);
-  background: var(--bg-elev);
-}
-.graph-toolbar button { background: var(--bg); }
-.depth, .zoom-tools, .seg { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.depth-label { color: var(--muted); font-weight: 800; font-size: 0.92rem; }
-.narrow-only, .zoom-ico { display: none; }
-.zoom-tools button { display: inline-flex; align-items: center; justify-content: center; }
-.depth button.on { background: var(--brand); background-image: var(--brand-gradient, none); color: var(--on-brand); border-color: transparent; }
 .graph-fold {
   display: flex;
   flex-wrap: wrap;
@@ -149,6 +133,44 @@ body.page-explore .site-footer { flex: none; }
 }
 .graph-fold button { white-space: normal; max-width: 100%; }
 .graph-stage { position: relative; flex: 1; min-width: 0; min-height: 280px; display: flex; flex-direction: column; }
+.graph-viewport-tools {
+  position: absolute;
+  z-index: 5;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--bg-elev);
+  background: color-mix(in srgb, var(--bg-elev) 94%, transparent);
+  box-shadow: 0 2px 7px rgb(40 34 48 / 8%);
+  color: var(--muted);
+}
+.graph-viewport-tools[hidden] { display: none; }
+.graph-viewport-tools button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: inherit;
+  box-shadow: none;
+  touch-action: manipulation;
+}
+.graph-viewport-tools button:hover { background: var(--bg-muted); color: var(--text); }
+.graph-viewport-tools button:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.graph-viewport-tools button:disabled { opacity: .5; cursor: default; }
+.graph-viewport-tools .zoom-label { display: none; }
+.graph-viewport-tools .zoom-ico { display: block; width: 18px; height: 18px; }
 .graph-motion-toggle { position: absolute; z-index: 5; top: 8px; right: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-height: 44px; padding: 7px 11px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg-elev); color: var(--muted); box-shadow: var(--control-shadow); font: 650 12px/1.2 var(--font); cursor: pointer; }
 .graph-motion-toggle::before { content: 'Ⅱ'; font-size: 15px; }
 .graph-motion-toggle[aria-pressed="true"]::before { content: '▶'; font-size: 10px; }
@@ -343,11 +365,12 @@ body.page-explore .site-footer { flex: none; }
   .mobile-graph-help p { margin: 0 0 8px; color: var(--muted); font-size: 0.85rem; }
   .side-collapse { display: none; }
   .graph-stage { flex: 1; min-height: 0; }
+  .graph-viewport-tools { right: max(10px, env(safe-area-inset-right, 0px)); }
+  .graph-viewport-tools button { width: 40px; min-width: 40px; min-height: 40px; }
   #cy { height: 100%; min-height: 0 !important; flex: 1; }
   .graph-empty { min-height: 0; padding: 16px; overflow: auto; }
   .graph-empty p:nth-child(2) { font-size: 0.85rem; }
   .detail { border: 0; padding: 16px max(16px, env(safe-area-inset-right, 0px)) 24px max(16px, env(safe-area-inset-left, 0px)); overscroll-behavior: contain; }
-  .graph-toolbar { padding: 8px; }
   .book-context { align-items: flex-start; flex-wrap: wrap; }
   .book-actions { width: 100%; justify-content: flex-start; }
   .book-context .btn { flex: 1; justify-content: center; text-align: center; }
@@ -375,59 +398,6 @@ body.page-explore .site-footer { flex: none; }
   body.page-explore .logo { width: 26px; height: 26px; }
   .explore-mobile-bar { min-height: 44px; padding-top: 0; padding-bottom: 0; }
   .graph-pane > .legend { display: none; }
-}
-
-/* 手机选项展开时允许工具换行，层数、缩放和适配按钮都能直接看见。 */
-@media (max-width: 640px) {
-  .graph-toolbar {
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 6px;
-    padding: 6px 8px;
-    min-width: 0;
-    max-width: 100%;
-    overflow: visible;
-  }
-  .depth, .zoom-tools, .seg { flex: none; flex-wrap: nowrap; gap: 0; }
-  .depth { gap: 6px; }
-  .zoom-tools { gap: 4px; margin-left: auto; }
-  .depth-label { font-size: 0.75rem; white-space: nowrap; }
-  .wide-only { display: none; }
-  .narrow-only { display: inline; }
-  .seg { background: transparent; }
-  .graph-toolbar .seg button {
-    position: relative;
-    min-height: 44px;
-    min-width: 44px;
-    margin-left: -1px;
-    padding: 0 9px;
-    border: 1px solid var(--line);
-    border-radius: 0;
-    background: var(--bg);
-    font-size: 0.8rem;
-    line-height: 1;
-    white-space: nowrap;
-  }
-  .graph-toolbar .seg button:first-child { margin-left: 0; border-radius: 999px 0 0 999px; }
-  .graph-toolbar .seg button:last-child { border-radius: 0 999px 999px 0; }
-  .graph-toolbar .seg button.on,
-  .graph-toolbar .seg button.on:hover {
-    z-index: 1;
-    background: var(--brand);
-    background-image: var(--brand-gradient, none);
-    color: var(--on-brand);
-    border-color: var(--brand);
-  }
-  .graph-toolbar .seg button:hover:not(.on) { background: var(--bg-muted); }
-  .zoom-label { display: none; }
-  .zoom-ico { display: block; width: 18px; height: 18px; }
-  .graph-toolbar .zoom-tools button {
-    width: 44px;
-    min-width: 44px;
-    min-height: 44px;
-    padding: 0;
-    border-radius: 999px;
-  }
 }
 
 /* 第二次点选知识点时的确认框，使用原生 dialog 的焦点和顶层遮罩。 */
