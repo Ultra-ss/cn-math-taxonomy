@@ -13,15 +13,16 @@ function target(extra={}){const listeners=new Map();return {...extra,
   fire(type,event={}){for(const fn of [...(listeners.get(type)||[])])fn(event);},
   count(){return [...listeners.values()].reduce((n,set)=>n+set.size,0);}};}
 const badge=color=>'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"><circle cx="11" cy="11" r="10" fill="'+color+'"/></svg>');
-function fixture({paused=false,reduced=false}={}){
+function fixture({paused=false,reduced=false,experts=true}={}){
   function styles(color){return [
     {selector:'node',style:{width:'data(w)',height:'data(h)','background-color':'data(bg)','border-color':'data(border)','border-width':3,'background-image':badge(color),'background-width':22,'background-height':22,'background-image-opacity':1}},
-    {selector:'node.expert-unlocked',style:{'background-image':['none',badge(color)],'background-width':[212,22],'background-height':[96,22],'background-image-opacity':[.7,1]}}
+    {selector:'node.test-expert',style:{'background-image':['none',badge(color)],'background-width':[212,22],'background-height':[96,22],'background-image-opacity':[.7,1]}}
   ];}
   const cy=cytoscape({headless:true,styleEnabled:true,autoungrabify:false,layout:{name:'preset',fit:false},elements:[
-    {data:{id:'cnp_053',w:156,h:40,bg:'#d4e1eb',border:'#4f6c83'},position:{x:120,y:120},classes:'expert-unlocked current test-expert'},
-    {data:{id:'cnp_054',w:132,h:40,bg:'#e8e0ed',border:'#877491'},position:{x:330,y:300},classes:'expert-unlocked test-passed'},
-    {data:{id:'cnp_055',w:132,h:40,bg:'#e8e0ed',border:'#877491'},position:{x:120,y:330},classes:'test-failed'}
+    {data:{id:'cnp_053',w:156,h:40,bg:'#d4e1eb',border:'#4f6c83'},position:{x:120,y:120},classes:'expert-unlocked current '+(experts?'test-expert':'test-passed')},
+    {data:{id:'cnp_054',w:132,h:40,bg:'#e8e0ed',border:'#877491'},position:{x:330,y:300},classes:'expert-unlocked '+(experts?'test-expert':'test-passed')},
+    {data:{id:'cnp_055',w:132,h:40,bg:'#e8e0ed',border:'#877491'},position:{x:120,y:330},classes:'test-failed'},
+    {data:{id:'cnp_056',w:156,h:42,bg:'#d4e1eb',border:'#4f6c83'},position:{x:350,y:120},classes:'expert-unlocked current test-passed'}
   ],style:styles('#9a7e46')});cy.zoom(1.1);cy.pan({x:5,y:-3});
   const container=target({dataset:{},clientWidth:500,clientHeight:500}),doc=target({hidden:false}),win=target(),media=target({matches:reduced});
   let time=0,serial=0;const frames=new Map(),microtasks=[];
@@ -46,7 +47,9 @@ test('可见专家节点持续扩散呼吸、周期错相，角标不透明，�
   const f=fixture();const start=f.look();const variations=new Set();
   for(let t=0;t<8000;t+=160){f.run(160);const look=f.look();variations.add(look[0].opacity[0].toFixed(3));
     for(const index of [0,1]){assert.equal(look[index].opacity[1],1);assert.equal(look[index].width[1],22);assert.equal(look[index].height[1],22);}
-    assert.deepEqual(look[2],start[2]);assert.deepEqual(f.pose(),f.base);assert.deepEqual({zoom:f.cy.zoom(),pan:{...f.cy.pan()}},f.camera);
+    for(const index of [2,3])assert.deepEqual(look[index],start[index]);
+    for(const property of ['background-width','background-height','background-image-opacity'])assert.ok(!f.node('cnp_056').pstyle(property).bypass,'普通通过不生成动态覆盖');
+    assert.deepEqual(f.pose(),f.base);assert.deepEqual({zoom:f.cy.zoom(),pan:{...f.cy.pan()}},f.camera);
   }
   assert.ok(variations.size>20);assert.notEqual(f.look()[0].opacity[0],f.look()[1].opacity[0]);assert.equal(f.frames.size,1);f.dispose();
 });
@@ -78,12 +81,29 @@ test('失焦、后台与原生grab分别暂停，恢复后不写节点位置',()
     f.run(300);assert.equal(f.api.active(),true,cause);assert.deepEqual(f.pose(),f.base);f.dispose();
   }
 });
-test('进度失去资格后清掉动态bypass，单层失败角标恢复22px；重新通过可续动',()=>{
-  const f=fixture();f.run(300);f.node('cnp_053').removeClass('expert-unlocked');f.flush();
-  assert.equal(f.node('cnp_053').pstyle('background-width').value[0],22);
-  assert.equal(f.node('cnp_053').pstyle('background-image-opacity').value[0],1);
-  f.node('cnp_054').removeClass('expert-unlocked');f.flush();assert.equal(f.frames.size,0);
-  f.node('cnp_053').addClass('expert-unlocked');f.run(300);assert.equal(f.api.active(),true);assert.equal(f.node('cnp_053').pstyle('background-image-opacity').value[1],1);f.dispose();
+test('只有普通通过和失败节点时无光晕、动态bypass或RAF，减少动态效果时也相同',()=>{
+  for(const reduced of [false,true]){
+    const f=fixture({experts:false,reduced}),start=f.look();assert.equal(f.frames.size,0);f.run(1000);assert.deepEqual(f.look(),start);
+    for(const node of f.cy.nodes())for(const property of ['background-width','background-height','background-image-opacity']){
+      assert.deepEqual(node.pstyle(property).value,property==='background-image-opacity'?[1]:[22]);
+      assert.ok(!node.pstyle(property).bypass);
+    }
+    f.node('cnp_053').removeClass('test-passed expert-unlocked').addClass('test-failed');f.flush();
+    assert.equal(f.frames.size,0);assert.deepEqual(f.look(),start,'普通重测失败不遗留光晕');f.dispose();
+  }
+});
+test('撤销专家通过会清掉动态bypass，普通通过仍可挑战；重新通过专家可续动',()=>{
+  for(const status of ['test-passed','test-failed','']){
+    const f=fixture();f.run(300);
+    f.node('cnp_053').removeClass('test-expert').addClass(status);f.flush();
+    assert.ok(f.node('cnp_053').hasClass('expert-unlocked'),'专家状态与挑战资格分别管理');
+    for(const property of ['background-width','background-height','background-image-opacity']){
+      const style=f.node('cnp_053').pstyle(property);
+      assert.deepEqual(style.value,property==='background-image-opacity'?[1]:[22]);assert.ok(!style.bypass);
+    }
+    f.node('cnp_054').removeClass('test-expert').addClass('test-passed');f.flush();assert.equal(f.frames.size,0);
+    f.node('cnp_053').removeClass(status).addClass('test-expert');f.run(300);assert.equal(f.api.active(),true);assert.equal(f.node('cnp_053').pstyle('background-image-opacity').value[1],1);f.dispose();
+  }
 });
 test('多指取消没有free时，最后一个pointer或touch结束会解除原生drag暂停',()=>{
   const f=fixture();f.container.fire('pointerdown',{pointerId:1});f.node('cnp_053').emit('grab');
@@ -123,7 +143,7 @@ test('renderer销毁后安全清理RAF与监听，不访问已经删除的render
 test('批量class事件只安排一次刷新，销毁前的未结微任务不会触碰renderer',()=>{
   const f=fixture();for(let i=0;i<90;i++){f.node('cnp_053').toggleClass('test-expert');f.node('cnp_054').toggleClass('test-passed');}
   assert.equal(f.microtasks.length,1);f.flush();assert.equal(f.microtasks.length,0);
-  f.node('cnp_053').removeClass('expert-unlocked');assert.equal(f.microtasks.length,1);
+  f.node('cnp_053').removeClass('test-expert');assert.equal(f.microtasks.length,1);
   f.cy.destroy();assert.doesNotThrow(f.flush);assert.equal(f.frames.size,0);f.api.destroy();
 });
 test('长时间动画只使用有限的背景样式状态，避免纹理缓存无限增长',()=>{

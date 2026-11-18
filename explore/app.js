@@ -1228,10 +1228,8 @@
       { selector: 'node.test-passed', style: { 'background-image': colors.passedBadge, 'border-color': colors.passedBorder } },
       { selector: 'node.test-failed', style: { 'background-image': colors.failedBadge } },
       { selector: 'node.test-expert', style: { 'background-image': colors.expertBadge, 'border-color': colors.expertBorder } },
-      { selector: 'node.expert-unlocked', style: expertGlowStyle(colors, boxW, 40, colors.passedBadge) },
-      { selector: 'node.expert-unlocked.test-expert', style: expertGlowStyle(colors, boxW, 40, colors.expertBadge) },
-      { selector: 'node.expert-unlocked.current', style: expertGlowStyle(colors, boxW * 1.05, 42, colors.passedBadge) },
-      { selector: 'node.expert-unlocked.test-expert.current', style: expertGlowStyle(colors, boxW * 1.05, 42, colors.expertBadge) },
+      { selector: 'node.test-expert', style: expertGlowStyle(colors, boxW, 40, colors.expertBadge) },
+      { selector: 'node.test-expert.current', style: expertGlowStyle(colors, boxW * 1.05, 42, colors.expertBadge) },
       { selector: 'edge', style: {
         width: 1.6, 'line-color': 'data(color)', 'target-arrow-color': 'data(color)',
         'target-arrow-shape': 'triangle', 'curve-style': dense ? 'straight' : 'bezier',

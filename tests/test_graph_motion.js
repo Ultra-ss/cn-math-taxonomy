@@ -209,7 +209,12 @@ for(const resultGraph of [false,true])test((resultGraph?'检测结果路径':'�
       assert.equal(graph.$id('b').pstyle('border-color').strValue, 'rgb(' + [1,3,5].map(at=>parseInt(colors.expertBorder.slice(at,at+2),16)).join(',') + ')','专家通关在选中和柔光状态下也保留金色边框');
       assert.equal(graph.$id('b').pstyle('background-image').value[1],colors.expertBadge);
       assert.ok(decodeURIComponent(graph.$id('b').pstyle('background-image').value[0]).includes(colors.expertGlow));
-      assert.equal(graph.$id('e').pstyle('background-image').value[1],colors.passedBadge);
+      const passed=graph.$id('e');
+      passed.toggleClass('current',i%2===0);
+      assert.deepEqual(passed.pstyle('background-image').value,[colors.passedBadge],'普通通过包括当前节点仅显示勾角标，不产生静态光晕');
+      assert.deepEqual(passed.pstyle('background-width').value,[22]);assert.deepEqual(passed.pstyle('background-height').value,[22]);
+      assert.equal(passed.pstyle('border-color').strValue, 'rgb(' + [1,3,5].map(at=>parseInt(colors.passedBorder.slice(at,at+2),16)).join(',') + ')');
+      passed.removeClass('current');
     }
   }
   graph.destroy();assert.doesNotThrow(sync);

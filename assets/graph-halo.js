@@ -102,7 +102,7 @@
     function refresh() {
       if (!alive()) { freeze(); return; }
       var next = new Map();
-      cy.nodes('.expert-unlocked').forEach(function (node) {
+      cy.nodes('.test-expert').forEach(function (node) {
         var id = node.id(), old = rows.get(id), seed = hash(id);
         next.set(id, { node: node, width: node.width(), height: node.height(), phase: old ? old.phase : seed / 4294967296 * Math.PI * 2,
           period: old ? old.period : 4500 + seed % 1501, lastKey: old ? old.lastKey : null });
