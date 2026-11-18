@@ -934,6 +934,9 @@ a.site-about {
 }
 a.site-about:hover { color: var(--text); border-color: var(--brand); }
 a.site-about:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+@media (max-width: 900px) {
+  body:not(.page-home) a.site-about { display: none; }
+}
 @media print {
   a.site-about { display: none; }
   .page-home .textbook-card { animation: none !important; transform: none !important; background-image: none; box-shadow: none; }
