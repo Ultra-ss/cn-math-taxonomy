@@ -17,6 +17,10 @@
   var GRADES = ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三'];
   var TEXTBOOKS = ['教科版', '人教版', '其他'];
   var CAT_IDS = ['cat-snow', 'cat-ginger', 'cat-tuxedo', 'cat-blue', 'cat-mocha'];
+  var BOOK_VOLUMES = {
+    physics: ['八上', '八下', '九全', '必修一', '必修二', '必修三', '选必一', '选必二', '选必三'],
+    science: ['一上', '一下', '二上', '二下', '三上', '三下', '四上', '四下', '五上', '五下', '六上', '六下']
+  };
 
   function validCat(value) { return CAT_IDS.indexOf(value) >= 0; }
   // 猫咪属于账号身份。旧账号沿用以前选过的猫，而不重置装扮、拼图或积分。
@@ -69,6 +73,56 @@
     return write(KEY, s);
   }
 
+  function selectionState() {
+    // 教材偏好只修改档案键，不迁移猫咪身份，也不读取/改写检测或积分数据。
+    var raw, s;
+    try {
+      raw = localStorage.getItem(KEY);
+      s = raw === null ? { v: 1, current: null, children: [] } : JSON.parse(raw);
+    } catch (e) { throw new Error('无法读取本机账号，教材选择未改变。'); }
+    checkArchive(s, {}, true);
+    return s;
+  }
+  function selectionOwner(s, childId) {
+    var owner = childId === undefined ? (s.current || 'guest') : (childId === null ? 'guest' : childId);
+    if (owner !== 'guest' && !s.children.some(function (child) { return child.id === owner; })) throw new Error('找不到这个账号。');
+    return owner;
+  }
+  function bookSelection(subject, childId) {
+    if (!own(BOOK_VOLUMES, subject)) return null;
+    try {
+      var s = selectionState(), owner = selectionOwner(s, childId);
+      return s.bookSelections && own(s.bookSelections, owner) && own(s.bookSelections[owner], subject) ? copy(s.bookSelections[owner][subject]) : null;
+    } catch (e) { return null; }
+  }
+  /* 批量保存两科学材选择，先完整校验再一次写入；空数组表示明确移出全部教材。 */
+  function setBookSelections(changes, childId) {
+    try {
+      if (!isObject(changes) || !Object.keys(changes).length) throw new Error('请选择要修改的学科教材。');
+      checkSafeKeys(changes);
+      var subjects = Object.keys(changes), normalized = {};
+      subjects.forEach(function (subject) { normalized[subject] = normalizeBookVolumes(subject, changes[subject]); });
+      var s = selectionState(), owner = selectionOwner(s, childId), at = new Date().toISOString();
+      if (!s.bookSelections) s.bookSelections = {};
+      if (!own(s.bookSelections, owner)) s.bookSelections[owner] = {};
+      var selections = {};
+      subjects.forEach(function (subject) {
+        selections[subject] = { volumes: normalized[subject], at: at };
+        s.bookSelections[owner][subject] = copy(selections[subject]);
+      });
+      if (!write(KEY, s)) return { ok: false, error: '浏览器无法保存教材选择，请检查存储空间后重试。' };
+      return { ok: true, selections: copy(selections) };
+    } catch (e) { return { ok: false, error: e.message || '无法读取本机账号，教材选择未改变。' }; }
+  }
+  function setBookSelection(subject, volumes, childId) {
+    if (!own(BOOK_VOLUMES, subject)) return { ok: false, error: '教材学科不正确。' };
+    var changes = {};
+    changes[subject] = volumes;
+    var result = setBookSelections(changes, childId);
+    if (result.ok) result.selection = copy(result.selections[subject]);
+    return result;
+  }
+
   function clean(f) {
     var name = String(f && f.name || '').replace(/\s+/g, ' ').trim();
     var grade = GRADES.indexOf(f && f.grade) >= 0 ? f.grade : '';
@@ -113,6 +167,7 @@
     var s = state();
     s.children = s.children.filter(function (c) { return c.id !== id; });
     if (s.current === id) s.current = s.children.length ? s.children[0].id : null;
+    if (isObject(s.bookSelections) && own(s.bookSelections, id)) delete s.bookSelections[id];
     if (!write(KEY, s)) return false;
     var r = records();
     delete r[id];
@@ -225,7 +280,8 @@
       return snapshot.learning.wrongbook[id].length;
     }) && !Object.keys(snapshot.learning.blindspots.byId).length && !Object.keys(snapshot.learning.sessions).length &&
         !snapshot.learning.archivedSessions.length && !Object.keys(snapshot.learning.progress.byChild).length &&
-        !Object.keys(snapshot.learning.avatarRewards.byOwner).length) {
+        !Object.keys(snapshot.learning.avatarRewards.byOwner).length &&
+        !Object.keys(snapshot.profiles.bookSelections || {}).some(function (owner) { return Object.keys(snapshot.profiles.bookSelections[owner]).length; })) {
       throw new Error('还没有可导出的档案或学习数据。');
     }
     var backup = {
@@ -257,6 +313,25 @@
       checkSafeKeys(value[key], depth + 1);
     });
   }
+  function normalizeBookVolumes(subject, volumes) {
+    if (!own(BOOK_VOLUMES, subject) || !Array.isArray(volumes)) throw new Error('教材学科或列表不正确。');
+    for (var i = 0; i < volumes.length; i++) {
+      if (!own(volumes, i) || BOOK_VOLUMES[subject].indexOf(volumes[i]) < 0) throw new Error('教材列表中有不支持的册次。');
+    }
+    return BOOK_VOLUMES[subject].filter(function (volume) { return volumes.indexOf(volume) >= 0; });
+  }
+  function checkBookSelections(selections, ids) {
+    if (!isObject(selections)) throw new Error('教材选择数据不正确。');
+    checkSafeKeys(selections);
+    Object.keys(selections).forEach(function (owner) {
+      if ((owner !== 'guest' && !ids.has(owner)) || !isObject(selections[owner])) throw new Error('教材选择没有对应的账号。');
+      Object.keys(selections[owner]).forEach(function (subject) {
+        var selection = selections[owner][subject];
+        if (!isObject(selection) || !own(selection, 'volumes') || !own(selection, 'at') || !validDate(selection.at) || Object.keys(selection).some(function (key) { return key !== 'volumes' && key !== 'at'; })) throw new Error('教材选择的册次或时间不正确。');
+        normalizeBookVolumes(subject, selection.volumes);
+      });
+    });
+  }
   function checkArchive(profiles, history, allowEmpty) {
     if (!isObject(profiles) || profiles.v !== 1 || !Array.isArray(profiles.children) ||
         (!allowEmpty && !profiles.children.length) || profiles.children.length > MAX_CHILDREN || !isObject(history)) {
@@ -273,6 +348,7 @@
       ids.add(c.id);
     });
     if (profiles.current !== null && !ids.has(profiles.current)) throw new Error('当前孩子不在备份档案中。');
+    if (own(profiles, 'bookSelections')) checkBookSelections(profiles.bookSelections, ids);
     Object.keys(history).forEach(function (id) {
       if (!ids.has(id) || !Array.isArray(history[id])) throw new Error('检测记录没有对应的孩子档案。');
       var keys = new Set();
@@ -667,7 +743,20 @@
       summary.children.push({ name: child.name, sourceName: source.name, action: action, records: merged.size });
     });
     if (!before.profiles.children.length) profiles.current = backup.profiles.current;
-    Object.keys(backup.profiles).forEach(function (key) { if (!own(profiles, key)) profiles[key] = copy(backup.profiles[key]); });
+    Object.keys(backup.profiles).forEach(function (key) { if (key !== 'bookSelections' && !own(profiles, key)) profiles[key] = copy(backup.profiles[key]); });
+    if (own(backup.profiles, 'bookSelections')) {
+      if (!profiles.bookSelections) profiles.bookSelections = {};
+      Object.keys(backup.profiles.bookSelections).forEach(function (owner) {
+        if (!own(profiles.bookSelections, owner)) profiles.bookSelections[owner] = {};
+        Object.keys(backup.profiles.bookSelections[owner]).forEach(function (subject) {
+          var sourceSelection = backup.profiles.bookSelections[owner][subject], localSelection = profiles.bookSelections[owner][subject];
+          // 相同时间保留本机，旧备份不会悄悄恢复用户已移出的教材。
+          if (!localSelection || Date.parse(sourceSelection.at) > Date.parse(localSelection.at)) {
+            profiles.bookSelections[owner][subject] = { volumes: normalizeBookVolumes(subject, sourceSelection.volumes), at: sourceSelection.at };
+          }
+        });
+      });
+    }
     var learning = mergeLearning(before.learning, backup.version === 2 ? backup.learning : emptyLearning(), summary);
     return { before: before, profiles: profiles, records: history, learning: learning, summary: summary };
   }
@@ -745,6 +834,7 @@
   window.CnmChildren = {
     GRADES: GRADES, TEXTBOOKS: TEXTBOOKS, CAT_IDS: CAT_IDS.slice(), MAX_CHILDREN: MAX_CHILDREN,
     list: list, get: get, current: current, setCurrent: setCurrent,
+    bookSelection: bookSelection, setBookSelection: setBookSelection, setBookSelections: setBookSelections,
     add: add, update: update, remove: remove,
     recordsOf: recordsOf, saveRecord: saveRecord, hasRecord: hasRecord, moveRecord: moveRecord, removeRecord: removeRecord,
     presentRecord: presentRecord, latestStatus: latestStatus, exportBackup: exportBackup,

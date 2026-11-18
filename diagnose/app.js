@@ -47,7 +47,9 @@
   let startQuery = '';
   let startStage = '';
   let chapterOpen = false;
-  let settingsOpen = false;
+  const SETTINGS_DESKTOP_QUERY = '(min-width: 901px)';
+  let settingsOpen = window.matchMedia(SETTINGS_DESKTOP_QUERY).matches;
+  let challengePreviewOpen = settingsOpen;
   let gradeSel = '一';     // 开始页「按年级整体检测」：年级
   let volSel = '';         // '' 整年级 / '上' / '下'
   let seedParam = null;    // URL 参数 seed：固定选题的随机种子
@@ -660,6 +662,8 @@
   function renderStart(errMsg, keepScroll) {
     const previousSettings = document.getElementById('testing-settings');
     if (previousSettings) settingsOpen = previousSettings.open;
+    const previousPreview = document.getElementById('challenge-preview');
+    if (previousPreview) challengePreviewOpen = previousPreview.open;
     const focusedId = keepScroll && document.activeElement && document.activeElement.id;
     const page = h('div', { class: 'testing-start' });
     const challengeColumn = h('div', { class: 'testing-challenge-column' }, gradeCard());
@@ -729,7 +733,7 @@
         }
       }),
       h('p', { class: 'muted small', id: 'match-count' })));
-    setup.addEventListener('toggle', function () { settingsOpen = setup.open; });
+    setup.addEventListener('toggle', function () { if (setup.isConnected) settingsOpen = setup.open; });
     toolsColumn.append(setup);
     toolsColumn.append(h('div', { class: 'card testing-targets' }, browser));
     page.append(toolsColumn);
@@ -792,6 +796,24 @@
     return '所选范围';
   }
 
+  function challengePreview() {
+    const choice = selectedChallenge();
+    if (!choice) return null;
+    const owner = CC.current();
+    const states = window.CnmProgress ? window.CnmProgress.statuses(owner ? owner.id : null, subject) || {} : {};
+    const ids = new Set(choice.ids);
+    const chapters = ((D.tree[bookSel] || {}).chapters || []).map(function (chapter) {
+      const items = chapter.topics.filter(function (row) { return ids.has(row.t.id); }).map(function (row) {
+        const saved = states[row.t.id];
+        const status = saved && saved.src !== 'inferred' && saved.source !== 'inferred' ? saved.status : 'unknown';
+        return { id: row.t.id, name: row.t.name, status: status, passed: status === 'mastered' };
+      });
+      return { key: chapter.key, label: chapter.label, topics: items, total: items.length,
+        completed: items.filter(function (item) { return item.passed; }).length };
+    }).filter(function (chapter) { return chapter.total; });
+    return { total: ids.size, completed: chapters.reduce(function (sum, chapter) { return sum + chapter.completed; }, 0), chapters: chapters };
+  }
+
   function gradeCard() {
     const choices = VOLUMES.filter(function (v) { return !!D.tree[v[0]]; });
     if (!choices.some(function (v) { return v[0] === bookSel; })) bookSel = choices.length ? choices[0][0] : '';
@@ -802,6 +824,11 @@
       h('label', { for: 'chapter-select' }, '单元／章节'), chapterSelect);
     const info = h('p', { class: 'muted small', id: 'grade-info' });
     const start = h('button', { class: 'primary', id: 'btn-grade-start', onclick: function () { startChallenge(); } });
+    const previewLabel = h('span', { class: 'challenge-preview-count' });
+    const previewBody = h('div', { class: 'challenge-preview-body' });
+    const preview = h('details', { class: 'challenge-preview', id: 'challenge-preview', open: challengePreviewOpen },
+      h('summary', null, h('strong', null, '本次挑战预览'), previewLabel), previewBody);
+    preview.addEventListener('toggle', function () { if (preview.isConnected) challengePreviewOpen = preview.open; });
     const updateInfo = function () {
       const choice = selectedChallenge();
       chapterField.hidden = challengeScope !== 'chapter';
@@ -809,6 +836,42 @@
       start.disabled = !choice;
       info.textContent = choice ? (challengeScope === 'chapter' ? '本单元 ' : '本册 ') + choice.ids.length +
         ' 个知识点，按顺序检测，通过即打钩。' : '这个范围没有可检测的知识点。';
+      const model = challengePreview();
+      previewBody.replaceChildren();
+      preview.hidden = !model;
+      if (!model) return;
+      previewLabel.textContent = (challengeScope === 'chapter' ? '本单元' : model.chapters.length + ' 个章节') + ' · ' + model.total + ' 个知识点';
+      const stats = h('div', { class: 'challenge-preview-stats', id: 'challenge-preview-stats' });
+      [['知识点', model.total], ['已通过', model.completed], ['待完成', model.total - model.completed]].forEach(function (item) {
+        stats.append(h('div', null, h('strong', null, String(item[1])), h('span', null, item[0])));
+      });
+      const meter = h('progress', { class: 'challenge-preview-meter', max: model.total || 1, value: model.completed,
+        'aria-label': '本范围已通过 ' + model.completed + ' 个，共 ' + model.total + ' 个知识点' });
+      previewBody.append(stats, meter);
+      const plan = h('ol', { class: 'challenge-preview-plan', id: 'challenge-preview-list' });
+      model.chapters.forEach(function (chapter) {
+        if (challengeScope === 'chapter') {
+          chapter.topics.forEach(function (topic) {
+            plan.append(h('li', { class: 'challenge-preview-topic' }, h('span', null, topic.name),
+              h('span', { class: 'challenge-preview-state' + (topic.passed ? ' is-passed' : '') },
+                topic.passed ? '✓ 已通过' : topic.status === 'weak' || topic.status === 'shaky' ? '待巩固' : '待检测')));
+          });
+          return;
+        }
+        const selectChapter = h('button', { type: 'button', class: 'challenge-preview-pick', 'data-preview-chapter': chapter.key,
+          'aria-label': '选择' + chapter.label + '进行挑战', onclick: function () {
+            challengeScope = 'chapter'; chapterSel = chapter.key; chapterSelect.value = chapter.key;
+            scope.querySelectorAll('input').forEach(function (input) { input.checked = input.value === 'chapter'; });
+            updateInfo(); start.focus({ preventScroll: true });
+          } }, '挑战本章');
+        plan.append(h('li', { class: 'challenge-preview-chapter' },
+          h('div', { class: 'challenge-preview-chapter-info' }, h('strong', null, chapter.label),
+            h('p', null, chapter.topics.slice(0, 2).map(function (topic) { return topic.name; }).join(' · ') +
+              (chapter.total > 2 ? ' 等 ' + chapter.total + ' 个知识点' : ''))),
+          h('div', { class: 'challenge-preview-chapter-actions' }, h('span', null, '已通过 ' + chapter.completed + '/' + chapter.total), selectChapter)));
+      });
+      previewBody.append(plan, h('p', { class: 'challenge-preview-note' },
+        '知识点通过后会在图谱打勾。普通检测首次通过可获得 1⭐，重复通过不重复计分。'));
     };
     const fillChapters = function () {
       const chapters = ((D.tree[bookSel] || {}).chapters || []).filter(function (ch) { return ch.topics.length; });
@@ -836,7 +899,7 @@
       h('p', { class: 'muted challenge-intro' }, '可以挑战整本教材，也可以只挑战一个单元。'), scope,
       h('label', { for: 'book-select' }, '教材册次'), select, chapterField, info,
       h('p', { class: 'muted small challenge-owner' }, '记录归属：' + (owner ? childLabel(owner) : '本机访客') + '　', h('a', { href: childrenHref(fromQuery()), text: '本地个人中心' })),
-      h('div', { class: 'row challenge-actions' }, start));
+      h('div', { class: 'row challenge-actions' }, start), preview);
   }
 
   function fillList(box) {
@@ -2148,6 +2211,21 @@
 
   window.addEventListener('cnm:theme', syncPathTheme);
   if (window.matchMedia) {
+    const settingsViewport = window.matchMedia(SETTINGS_DESKTOP_QUERY);
+    const syncSettingsViewport = function () {
+      settingsOpen = settingsViewport.matches;
+      challengePreviewOpen = settingsViewport.matches;
+      [['testing-settings', settingsOpen], ['challenge-preview', challengePreviewOpen]].forEach(function (item) {
+        const details = document.getElementById(item[0]);
+        if (!details) return;
+        if (!item[1] && details.contains(document.activeElement) && document.activeElement !== details.querySelector('summary')) {
+          details.querySelector('summary').focus({ preventScroll: true });
+        }
+        details.open = item[1];
+      });
+    };
+    if (settingsViewport.addEventListener) settingsViewport.addEventListener('change', syncSettingsViewport);
+    else if (settingsViewport.addListener) settingsViewport.addListener(syncSettingsViewport);
     const scheme = window.matchMedia('(prefers-color-scheme: dark)');
     const relayout = function () {
       if (!session || !document.getElementById('path-cy')) return;

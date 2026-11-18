@@ -91,7 +91,7 @@ test('浏览器导出的API与CommonJS一致，不访问浏览器存储',()=>{
 });
 test('个人中心沿用图谱多选；无图谱时只采用本档案可验证的最近检测教材',()=>{
   const source=fs.readFileSync(path.join(root,'children/page.js'),'utf8');
-  const a=source.indexOf('  function achievementSelection('),b=source.indexOf('  function achievementTopicHref(',a);
+  const a=source.indexOf('  function achievementSelection('),b=source.indexOf('  function closeBooksEditor(',a);
   assert.ok(a>=0 && b>a);
   let graph=null;
   const saved=new Map(),ctx={achievementTopics:topics,window:{CnmAchievementBooks:Books,CnmLastLocation:{resolve:()=>graph}},
@@ -114,5 +114,15 @@ test('个人中心沿用图谱多选；无图谱时只采用本档案可验证�
   for(const record of [{...physical,volume:'八上'}, {...physical,targets:['cnp_053','cns_p001']}, {...physical,savedAt:'bad'}, {...physical,targets:['missing']}]) {
     saved.set('cnpDiagnose.session.v2',JSON.stringify(record));assert.equal(ctx.achievementSelection('alice'),null);
   }
+  const prefs={alice:{physics:{volumes:['八下','九全'],at:'2026-11-18T10:00:00Z'},science:{volumes:['一上'],at:'2026-11-18T10:00:00Z'}}};
+  ctx.window.CnmChildren={bookSelection(subject,id){return prefs[id]&&prefs[id][subject]||null;}};
+  graph={subject:'physics',volume:'八上',topicId:'cnp_001'};
+  let chosen=ctx.achievementSelection('alice','physics');
+  assert.equal(chosen.from,'selection');assert.deepEqual(Array.from(chosen.record.volumes),['八下','九全']);
+  assert.equal(model(chosen.record).books.length,2,'偏好以真实范围内知识点生成视图，不添加旧教材');
+  assert.equal(ctx.achievementSelection('alice','science').record.subject,'science');
+  prefs.alice.physics.volumes=[];chosen=ctx.achievementSelection('alice','physics');
+  assert.deepEqual(model(chosen.record).books,[],'显式删空不得回退旧图谱或检测教材');
+  assert.equal(ctx.achievementSelection('bob','physics').record.volume,'八上','账号选择不会借给其他账号');
 });
 console.log('test_achievement_books: '+passed+' passed');

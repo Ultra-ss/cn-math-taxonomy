@@ -47,7 +47,7 @@ function load(search, options = {}) {
   let motionChange;
   const motionPreference={matches:!!options.reducedMotion,addEventListener(type,fn){if(type==='change')motionChange=fn;}};
   vm.runInNewContext(source, {
-    window: {__cnmHomeResume: options.resume,matchMedia:()=>motionPreference,CnmBookSelection:bookScope},
+    window: {__cnmHomeResume: options.resume,matchMedia:()=>motionPreference,CnmBookSelection:bookScope,CnmChildren:options.profiles},
     location: {hash:options.hash || '', search:search || ''}, URLSearchParams, fetch,
     document: { title:'', body:{classList:{toggle(){}}}, querySelectorAll(){return [];},
       getElementById(id){return ids[id] || null;}, createElement(tag){return element(tag);} }
@@ -104,6 +104,20 @@ function load(search, options = {}) {
     assert.equal(ids['book-selection-enter'].hidden,true);assert.equal(ids['book-selection-cancel'].hidden,true);
     assert.ok(ids['book-multiselect-toggle'].focused);ids['book-multiselect-toggle'].fire('click');
     assert.equal(ids['textbook-title'].textContent,'请选择教材');assert.equal(ids['book-selection-enter'].href,'');
+  });
+  await test('只有明确进入单册或多选教材才保存选择，切换、取消和数据加载均不写',async()=>{
+    const writes=[];
+    const profiles={setBookSelection(subject,volumes){writes.push([subject,Array.from(volumes)]);return {ok:true};}};
+    const {ids,respond}=load('',{profiles});const grid=ids['textbook-grid'];
+    respond();await flush();assert.deepEqual(writes,[]);
+    grid.fire('click',{target:grid.children[1]});assert.deepEqual(writes,[['physics',['八下']]]);
+    ids['book-multiselect-toggle'].fire('click');grid.fire('click',{target:grid.children[0]});
+    ids['book-selection-cancel'].fire('click');assert.equal(writes.length,1);
+    ids['book-multiselect-toggle'].fire('click');grid.fire('click',{target:grid.children[2]});grid.fire('click',{target:grid.children[0]});
+    assert.equal(writes.length,1);ids['book-selection-enter'].fire('click');
+    assert.deepEqual(writes[1],['physics',['八上','九全']]);
+    const science=load('?subject=science',{profiles});science.ids['textbook-grid'].fire('click',{target:science.ids['textbook-grid'].children[11]});
+    assert.deepEqual(writes[2],['science',['六下']]);
   });
   await test('小学科学也可组合首尾教材，读取失败仍可保留选择进入',async()=>{
     const {ids,calls}=load('?subject=science');ids['book-multiselect-toggle'].fire('click');const grid=ids['textbook-grid'];
@@ -182,7 +196,8 @@ function load(search, options = {}) {
     const main=html.slice(html.indexOf('<main'),html.indexOf('</main>'));
     assert.match(main, /<main[^>]*>\s*<section class="textbooks"/);
     assert.doesNotMatch(html,/图谱里?有什么|本机盲区|id="stats"|id="blind-home"/);
-    assert.doesNotMatch(html,/assets\/(?:blindspots|children|stem-compat)\.js/);
+    assert.doesNotMatch(html,/assets\/(?:blindspots|stem-compat)\.js/);
+    assert.match(html,/<script src="assets\/children\.js"><\/script>[\s\S]*<script src="assets\/home\.js">/, '明确选教材使用同一个档案存储API');
     assert.doesNotMatch(source,/renderBlindHome|data\/(?:questions|dependencies|cn-curriculum-standards)\.json/);
     assert.equal((main.match(/class="textbook-card /g)||[]).length,9);
     assert.match(html,/home-feedback/); assert.match(html,/continue-learning-dialog/);

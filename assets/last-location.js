@@ -1,5 +1,5 @@
 /* 按本地账号保存最近学习和浏览位置。只保存学科、册次与知识点，不保存或信任任意跳转URL。
- * 恢复前必须对照当前知识点数据；显示偏好不属于学习备份。 */
+ * 恢复前必须对照当前知识点数据；明确的教材选择从账号档案读取。 */
 (function (root, factory) {
   var api = factory(root);
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
@@ -112,6 +112,25 @@
     try { var raw = storage().getItem(key); return raw && raw.length <= 12 * 1024 * 1024 ? JSON.parse(raw) : null; }
     catch (error) { return null; }
   }
+  // 首页、个人中心和图谱中的明确选书共用档案偏好；普通浏览只改变位置。
+  function preferredSelection(subject, account) {
+    if (subject !== 'physics' && subject !== 'science') return null;
+    var id = arguments.length > 1 ? owner(account) : owner(), profiles = json('cnmChildren.v1');
+    if (!id || !profiles || !Array.isArray(profiles.children) ||
+        (id !== 'guest' && !profiles.children.some(function (child) { return child && child.id === id; }))) return null;
+    var all = profiles.bookSelections;
+    if (!all || typeof all !== 'object' || Array.isArray(all) || !own(all, id)) return null;
+    var selections = all[id];
+    if (!selections || typeof selections !== 'object' || Array.isArray(selections) || !own(selections, subject)) return null;
+    var selection = selections[subject], books = bookKeys(subject);
+    if (!selection || typeof selection !== 'object' || Array.isArray(selection) ||
+        !own(selection, 'volumes') || !Array.isArray(selection.volumes) || selection.volumes.length > books.length ||
+        typeof selection.at !== 'string' || !Number.isFinite(Date.parse(selection.at))) return null;
+    for (var i = 0; i < selection.volumes.length; i++) {
+      if (!own(selection.volumes, i) || books.indexOf(selection.volumes[i]) < 0) return null;
+    }
+    return {volumes:books.filter(function (book) { return selection.volumes.indexOf(book) >= 0; }), at:selection.at};
+  }
   // 只从归属明确的记录恢复；旧版未绑定账号的全局会话不能借给当前账号。
   function previousStudy(subject, account) {
     var best = null;
@@ -141,8 +160,8 @@
     }
     return best;
   }
-  function resume(topics, subject) {
-    var account = owner(), saved = readAt(subject, true, account);
+  function resumePosition(topics, subject, account) {
+    var saved = readAt(subject, true, account);
     // 一旦保存了新版学习点，它包含确切的题目顺序和图谱上下文，优先于旧汇总推断。
     if (saved) {
       var valid = resolve(topics, saved);
@@ -172,6 +191,49 @@
       }
     }
     return resolve(topics, readAt(subject, false, account));
+  }
+  function resume(topics, subject) {
+    var account = owner(), chosenSubject = subject;
+    if (chosenSubject === undefined) {
+      var latest = readAt(undefined, true, account) || previousStudy(undefined, account) || readAt(undefined, false, account);
+      if (latest) chosenSubject = latest.subject;
+      else {
+        // 尚无学习位置时仍可从已编辑的教材范围进入，不伪造学习存档。
+        ['physics', 'science'].forEach(function (candidate) {
+          var choice = preferredSelection(candidate, account);
+          if (choice && (!chosenSubject || Date.parse(choice.at) > Date.parse(preferredSelection(chosenSubject, account).at))) chosenSubject = candidate;
+        });
+      }
+    }
+    var selection = preferredSelection(chosenSubject, account);
+    if (!selection || !Array.isArray(topics)) return resumePosition(topics, subject, account);
+    // 移出全部教材只清空个人中心的书单，图谱仍可浏览全学科网络。
+    var volumes = selection.volumes.length ? selection.volumes : bookKeys(chosenSubject);
+    function validTopic(id) {
+      return topics.find(function (topic) {
+        return topic && topic.id === id && topic.subject === chosenSubject && !topic.external && volumes.indexOf(volumeOf(topic)) >= 0;
+      });
+    }
+    var saved = readAt(chosenSubject, true, account), inferred = saved ? null : previousStudy(chosenSubject, account);
+    var browse = readAt(chosenSubject, false, account), position = saved && validTopic(saved.topicId) ? saved :
+      inferred && validTopic(inferred.topicId) ? inferred : browse && validTopic(browse.topicId) ? browse : null;
+    var topic = position ? validTopic(position.topicId) : topics.find(function (item) {
+      return item && item.subject === chosenSubject && !item.external && volumes.indexOf(volumeOf(item)) >= 0;
+    });
+    if (!topic) return null;
+    function sameScope(record) {
+      if (!record || record.volume === undefined) return false;
+      var scope = record.volumes || (record.volume ? [record.volume] : bookKeys(chosenSubject));
+      return scope.length === volumes.length && volumes.every(function (book) { return scope.indexOf(book) >= 0; });
+    }
+    var context = sameScope(position) ? position : null;
+    if (browse && validTopic(browse.topicId) && sameScope(browse) && (!context || Date.parse(browse.at) >= Date.parse(context.at))) context = browse;
+    var record = {v:1, subject:chosenSubject, volume:volumes.length === 1 ? volumes[0] : '', topicId:topic.id,
+      view:context ? context.view : 'book', depth:context ? context.depth : position && [1, 2, 3, 'all'].indexOf(position.depth) >= 0 ? position.depth : 2,
+      at:position ? position.at : selection.at};
+    if (volumes.length > 1) record.volumes = volumes.slice();
+    // 这里只构造显示范围，不回写旧学习点、进度或选书时间。
+    return record;
   }
   function volumeOf(topic) {
     return HIGH_BOOKS[topic.grade] || (CN[topic.grade] ? CN[topic.grade] + topic.semester : '');
@@ -311,6 +373,6 @@
     return homePromise;
   }
   if (root.document && typeof root.document.querySelectorAll === 'function') syncNavigation();
-  return {KEY:KEY, SUBJECT_KEY:SUBJECT_KEY, read:read, remember:remember, rememberLearning:rememberLearning, owner:owner, resume:resume, resolve:resolve, shouldResume:shouldResume,
+  return {KEY:KEY, SUBJECT_KEY:SUBJECT_KEY, read:read, remember:remember, rememberLearning:rememberLearning, owner:owner, preferredSelection:preferredSelection, resume:resume, resolve:resolve, shouldResume:shouldResume,
     currentSubject:currentSubject, syncNavigation:syncNavigation, exploreURL:exploreURL, resumeHome:resumeHome};
 });

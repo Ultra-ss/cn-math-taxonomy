@@ -134,4 +134,16 @@ assert.equal(ctx.selected,'cnp_001','全新或错学科记录不产生空白，�
 setSubject('science');ctx.selected=null;ctx.setBookScope([]);ctx.window.CnmLastLocation.resume=()=>null;ctx.chooseBook('');
 assert.equal(ctx.selected,'cns_p001');assert.deepEqual(Array.from(ctx.selectedVolumes),BookSelection.allowed('science'));
 assert.equal(ctx.scopedNodeSet(new Set()).size,ctx.topics.length);assert.equal(ctx.lastCameraRestore,false);
+// 只持久化明确的教材选择，自动开图、普通选点和位置恢复不能覆盖编辑后的书单。
+const bookWrites=[];
+ctx.window.CnmChildren={setBookSelection(subject,volumes){bookWrites.push([subject,Array.from(volumes)]);return {ok:true};}};
+ctx.chooseBook('一上');ctx.select('cns_p002','user');
+assert.deepEqual(bookWrites,[]);
+ctx.chooseBook('一下',true);assert.deepEqual(bookWrites,[['science',['一下']]]);
+ctx.window.CnmLastLocation.resume=()=>{assert.equal(bookWrites.at(-1)[1].length,12,'全部教材先保存新范围再恢复学习点');return {subject:'science',topicId:'cns_p002'};};
+ctx.chooseBook('',true);assert.deepEqual(bookWrites.at(-1),['science',BookSelection.allowed('science')]);
+const count=bookWrites.length;
+ctx.setBookScope([]);ctx.hashValue='';ctx.stage='';ctx.grade='';ctx.domain='';ctx.query='';ctx.bootSelection();
+assert.equal(bookWrites.length,count,'自动全部图不把空选择改成全选');
+assert.match(source,/fGrade'\)\.addEventListener\('change',[^\n]*chooseBook\([^\n]*, true\)/,'原生教材选择器显式保存');
 console.log('test_explore_scope: multi-book union/edges, local scope, selection, URLs, memory/camera and legacy choices passed');

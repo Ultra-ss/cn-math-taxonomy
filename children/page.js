@@ -198,15 +198,41 @@
   }
 
   var topicNames = {}, achievementTopics = null, achievementLoadFailed = false;
+  var achievementViewSubject = null, achievementViewOwner;
+  var booksEditor = document.getElementById('achievement-books-editor');
+  var booksEditButton = document.getElementById('edit-achievement-books');
+  var booksSubject = document.getElementById('achievement-books-subject');
+  var booksOptions = document.getElementById('achievement-books-options');
+  var booksEditStatus = document.getElementById('achievement-books-edit-status');
+  var bookDraft = null;
   function cleanLabel(value) { return String(value || '').replace(/\u8bca\u65ad/g, '检测'); }
-  function achievementSelection(childId) {
+  function achievementSelection(childId, requestedSubject) {
     var memory = window.CnmLastLocation, helper = window.CnmAchievementBooks;
     var record = memory && memory.resolve(achievementTopics);
-    if (record) return { record: record, from: 'graph' };
     if (!helper || !Array.isArray(achievementTopics)) return null;
+    var subject = requestedSubject || (memory && memory.currentSubject ? memory.currentSubject() : record && record.subject) || 'physics';
+    var profiles = window.CnmChildren;
+    var preference = profiles && profiles.bookSelection ? profiles.bookSelection(subject, childId) : null;
+    if (preference) {
+      // 已保存的空选择也有意义，不能再被旧学习位置扩大成全部教材。
+      if (!preference.volumes.length) return { record: {subject:subject, volume:'', volumes:[], topicId:''}, from:'selection' };
+      var recent = memory && memory.read ? memory.resolve(achievementTopics, memory.read(subject)) : record;
+      var first = achievementTopics.find(function (topic) {
+        return !topic.external && topic.subject === subject && preference.volumes.indexOf(helper.bookOf(topic)) >= 0 && recent && topic.id === recent.topicId;
+      }) || achievementTopics.find(function (topic) {
+        return !topic.external && topic.subject === subject && preference.volumes.indexOf(helper.bookOf(topic)) >= 0;
+      });
+      return { record: {subject:subject, volume:'', volumes:preference.volumes.slice(), topicId:first ? first.id : ''}, from:'selection' };
+    }
+    if (record && (!requestedSubject || record.subject === requestedSubject)) return { record: record, from: 'graph' };
+    if (requestedSubject && memory && memory.read) {
+      record = memory.resolve(achievementTopics, memory.read(requestedSubject));
+      if (record) return { record:record, from:'graph' };
+    }
     // 尚未浏览图谱时，沿用本档案最近一次检测所用的教材。
     var latest = null;
     [['physics', 'cnpDiagnose.session.v2'], ['science', 'cnsDiagnose.session.v1']].forEach(function (pair) {
+      if (requestedSubject && pair[0] !== requestedSubject) return;
       try {
         var saved = JSON.parse(localStorage.getItem(pair[1]));
         if (!saved || saved.v !== 2 || saved.progressChildId !== childId ||
@@ -222,6 +248,71 @@
     });
     return latest;
   }
+  function closeBooksEditor(returnFocus) {
+    bookDraft = null;
+    booksEditor.hidden = true;
+    booksEditButton.setAttribute('aria-expanded', 'false');
+    booksEditStatus.hidden = true;
+    if (returnFocus) booksEditButton.focus({preventScroll:true});
+  }
+  function draftVolumes(childId, subject) {
+    var selected = achievementSelection(childId, subject);
+    var model = window.CnmAchievementBooks.build({topics:achievementTopics, selection:selected && selected.record});
+    return model.volumes.slice();
+  }
+  function renderBookDraft() {
+    if (!bookDraft) return;
+    var subject = booksSubject.value;
+    booksOptions.textContent = '';
+    booksOptions.setAttribute('aria-label', (subject === 'physics' ? '初高中物理' : '小学科学') + '教材选择');
+    window.CnmBookSelection.allowed(subject).forEach(function (volume) {
+      var label = el('label', 'achievement-book-choice'), input = el('input');
+      input.type = 'checkbox'; input.value = volume; input.setAttribute('data-volume', volume);
+      input.checked = bookDraft.volumes[subject].indexOf(volume) >= 0;
+      input.addEventListener('change', function () {
+        if (!bookDraft) return;
+        bookDraft.volumes[subject] = window.CnmBookSelection.normalize(subject, Array.from(booksOptions.querySelectorAll('input:checked')).map(function (box) { return box.value; }));
+        booksEditStatus.hidden = true;
+      });
+      var title = window.CnmAchievementBooks.titleOf(subject, volume);
+      label.append(input, el('span', null, title)); booksOptions.appendChild(label);
+    });
+  }
+  booksEditButton.addEventListener('click', function () {
+    if (bookDraft) { closeBooksEditor(true); return; }
+    if (!achievementTopics) return;
+    var current = CC.current(), childId = current ? current.id : null;
+    var volumes = {physics:draftVolumes(childId, 'physics'), science:draftVolumes(childId, 'science')};
+    bookDraft = {owner:childId, volumes:volumes, original:JSON.parse(JSON.stringify(volumes))};
+    booksEditor.hidden = false;
+    booksEditButton.setAttribute('aria-expanded', 'true');
+    booksEditStatus.hidden = true;
+    renderBookDraft();
+    var first = booksOptions.querySelector('input'); if (first) first.focus({preventScroll:true});
+  });
+  booksSubject.addEventListener('change', function () {
+    achievementViewSubject = booksSubject.value;
+    if (window.CnmLastLocation) window.CnmLastLocation.syncNavigation(achievementViewSubject);
+    renderAchievements();
+    renderBookDraft();
+  });
+  document.getElementById('cancel-achievement-books').addEventListener('click', function () { closeBooksEditor(true); });
+  document.getElementById('save-achievement-books').addEventListener('click', function () {
+    if (!bookDraft) return;
+    var current = CC.current(), childId = current ? current.id : null;
+    if (childId !== bookDraft.owner) { closeBooksEditor(false); renderAchievements(); return; }
+    var changes = {};
+    ['physics', 'science'].forEach(function (subject) {
+      if (JSON.stringify(bookDraft.volumes[subject]) !== JSON.stringify(bookDraft.original[subject])) changes[subject] = bookDraft.volumes[subject];
+    });
+    if (Object.keys(changes).length) {
+      var result = CC.setBookSelections(changes, childId);
+      if (!result.ok) { booksEditStatus.textContent = result.error || '教材暂未保存，请重试。'; booksEditStatus.hidden = false; return; }
+    }
+    achievementViewSubject = booksSubject.value;
+    closeBooksEditor(true);
+    renderAchievements();
+  });
   function achievementTopicHref(model, id) {
     var params = new URLSearchParams({ subject: model.subject });
     window.CnmBookSelection.writeParams(params, model.subject, model.volumes);
@@ -235,16 +326,18 @@
       context.textContent = achievementLoadFailed ? '教材进度暂时无法读取，请刷新页面重试。' : '正在读取教材范围…';
       return null;
     }
-    var selected = achievementSelection(childId), helper = window.CnmAchievementBooks, P = window.CnmProgress;
+    var selected = achievementSelection(childId, achievementViewSubject), helper = window.CnmAchievementBooks, P = window.CnmProgress;
+    booksSubject.value = selected ? selected.record.subject : achievementViewSubject || (window.CnmLastLocation && window.CnmLastLocation.currentSubject()) || 'physics';
+    booksEditButton.disabled = false;
     var model = helper && helper.build({ topics: achievementTopics, selection: selected && selected.record,
       normal: selected ? P.statuses(childId, selected.record.subject) : {},
       pro: selected ? P.statuses(childId, selected.record.subject, 'pro') : {} });
     if (!model || !model.books.length) {
-      context.textContent = '尚未选择教材。请从首页选择教材，这里会显示对应知识点的完成情况。';
+      context.textContent = '尚未选择教材。点击“编辑”添加教材，即可查看对应知识点的完成情况。';
       return null;
     }
     context.textContent = (model.subject === 'physics' ? '初高中物理' : '小学科学') + ' · 已选 ' + model.books.length + ' 本教材 · 已通过 ' + model.completed + '/' + model.total +
-      '，待完成 ' + model.remaining + '。' + (selected.from === 'graph' ? '范围与最近一次图谱选择一致。' : '沿用当前档案最近检测的教材。');
+      '，待完成 ' + model.remaining + '。' + (selected.from === 'selection' ? '可点击“编辑”调整教材，学习记录始终保留。' : selected.from === 'graph' ? '范围与最近一次图谱选择一致。' : '沿用当前档案最近检测的教材。');
     function disclosure(className, key, label) {
       var node = el('details', className); node.setAttribute('data-achievement-state', (childId || 'guest') + '|' + model.subject + '|' + key);
       node.open = opened.has(node.getAttribute('data-achievement-state'));
@@ -289,6 +382,7 @@
     var P = window.CnmProgress;
     if (!P || !P.achievements) return;
     var current = CC.current(), id = current ? current.id : null, score = P.achievements(id);
+    if (achievementViewOwner !== id) { closeBooksEditor(false); achievementViewSubject = null; achievementViewOwner = id; }
     var ownerSelect = document.getElementById('achievement-owner'); ownerSelect.textContent = '';
     var guest = el('option', null, '本机访客'); guest.value = ''; ownerSelect.appendChild(guest);
     CC.list().forEach(function (child) { var option = el('option', null, child.name); option.value = child.id; ownerSelect.appendChild(option); });

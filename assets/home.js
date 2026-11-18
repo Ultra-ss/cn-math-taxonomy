@@ -168,17 +168,21 @@
       multiToggle.focus({preventScroll:true});
     });
     cardGrid.addEventListener('click', function (event) {
-      if (!multiMode) return;
       var card = event.target.closest('.textbook-card');
       if (!card || card.parentElement !== cardGrid) return;
-      event.preventDefault();
       var key = card.getAttribute('data-volume');
       if (!bookScope.normalize(subject, [key]).length) return;
+      if (!multiMode) {
+        if (window.CnmChildren && window.CnmChildren.setBookSelection) window.CnmChildren.setBookSelection(subject, [key]);
+        return;
+      }
+      event.preventDefault();
       if (chosenBooks.has(key)) chosenBooks.delete(key); else chosenBooks.add(key);
       syncSelection();
     });
     enterSelection.addEventListener('click', function (event) {
       if (!selectedBooks().length) event.preventDefault();
+      else if (window.CnmChildren && window.CnmChildren.setBookSelection) window.CnmChildren.setBookSelection(subject, selectedBooks());
     });
   }
 

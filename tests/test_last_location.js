@@ -351,6 +351,100 @@ function remember(api, fields = {}) {
     const unknown=load({entries:{'cnmChildren.v1':profile,'cnpDiagnose.session.v2':JSON.stringify({savedAt:'2026-11-17T12:00:00Z',answers:[{id:'cnp_030',result:'correct'}]})}});
     assert.equal(unknown.api.resume(topics,'physics'),null,'未归属旧全局检测不自动写给当前账号');
   });
+  await test('编辑教材范围优先于旧学习范围，范围外位置回退到所选教材且不改真实学习存档',()=>{
+    const study={v:1,subject:'physics',volume:'八上',topicId:'cnp_001',view:'local',depth:2,at:'2026-11-18T08:00:00.000Z'};
+    const browse={...study,volume:'八下',topicId:'cnp_032',at:'2026-11-18T09:00:00.000Z'};
+    const profiles={current:'a',children:[{id:'a'}],bookSelections:{a:{physics:{volumes:['八下','九全'],at:'2026-11-18T10:00:00.000Z'}}}};
+    const app=load({entries:{'cnmChildren.v1':JSON.stringify(profiles),[KEY+'.learning.a']:JSON.stringify(study),[KEY+'.account.a']:JSON.stringify(browse)}});
+    const before=Object.fromEntries(app.store),record=app.api.resume(topics,'physics');
+    assert.equal(record.topicId,browse.topicId);assert.equal(record.view,'book');
+    assert.deepEqual(Array.from(record.volumes),['八下','九全']);
+    assert.deepEqual(Object.fromEntries(app.store),before,'图谱恢复不改位置、学习进度或选书偏好');
+    app.api.remember({subject:'physics',volume:'必修一',topicId:'cnp_h001',view:'local',depth:3});
+    const afterBrowse=Object.fromEntries(app.store),resumed=app.api.resume(topics,'physics');
+    assert.equal(resumed.topicId,'cnp_029','范围内无可用浏览位置时回到所选教材首个知识点');
+    assert.deepEqual(Array.from(resumed.volumes),['八下','九全'],'普通浏览不能盖掉明确选书范围');
+    assert.deepEqual(Object.fromEntries(app.store),afterBrowse);assert.equal(app.store.get(KEY+'.learning.a'),JSON.stringify(study));
+    profiles.bookSelections.a.physics={volumes:['九全'],at:'2026-11-18T11:00:00.000Z'};
+    app.store.set('cnmChildren.v1',JSON.stringify(profiles));
+    const latest=app.api.resume(topics,'physics');assert.equal(latest.volume,'九全');assert.equal(latest.volumes,undefined);
+    assert.equal(topics.find(topic=>topic.id===latest.topicId).grade,9,'新的明确选择立即成为导航范围');
+  });
+  await test('明确多选与全教材选择保留范围内最近学习点，空选择只让图谱显示全网且不重新选书',()=>{
+    const study={v:1,subject:'physics',volume:'八下',topicId:'cnp_032',view:'local',depth:3,at:'2026-11-18T08:00:00.000Z'};
+    for(const selected of [['八下','九全'],BookSelection.allowed('physics'),[]]) {
+      const pref={volumes:selected,at:'2026-11-18T07:00:00.000Z'};
+      const app=load({entries:{'cnmChildren.v1':JSON.stringify({current:null,children:[],bookSelections:{guest:{physics:pref}}}),[KEY+'.learning.guest']:JSON.stringify(study)}});
+      const before=Object.fromEntries(app.store),record=app.api.resume(topics,'physics');
+      assert.equal(record.topicId,study.topicId);assert.equal(record.at,study.at);assert.equal(record.depth,3);
+      assert.equal(record.view,'book');assert.deepEqual(Array.from(record.volumes),selected.length?selected:BookSelection.allowed('physics'));
+      assert.deepEqual(Object.fromEntries(app.store),before,'即使书单为空也不写回all或学习范围');
+      assert.deepEqual(Array.from(app.api.preferredSelection('physics').volumes),selected);
+    }
+  });
+  await test('教材范围一致时保留局部视图，较新浏览只提供视图而不替换真实学习点和时间',()=>{
+    const study={v:1,subject:'physics',volume:'八下',topicId:'cnp_032',view:'local',depth:3,at:'2026-11-18T08:00:00.000Z'};
+    const profiles={current:null,children:[],bookSelections:{guest:{physics:{volumes:['八下'],at:'2026-11-18T07:00:00.000Z'}}}};
+    const app=load({entries:{'cnmChildren.v1':JSON.stringify(profiles),[KEY+'.learning.guest']:JSON.stringify(study)}});
+    let before=Object.fromEntries(app.store),record=app.api.resume(topics,'physics');
+    assert.equal(record.view,'local');assert.equal(record.depth,3);assert.equal(record.topicId,study.topicId);assert.equal(record.at,study.at);
+    assert.deepEqual(Object.fromEntries(app.store),before);
+    const browse={...study,topicId:'cnp_035',view:'book',depth:'all',at:'2026-11-18T09:00:00.000Z'};
+    app.store.set(KEY,JSON.stringify(browse));before=Object.fromEntries(app.store);record=app.api.resume(topics,'physics');
+    assert.equal(record.view,'book');assert.equal(record.depth,'all');assert.equal(record.topicId,study.topicId);assert.equal(record.at,study.at);
+    assert.deepEqual(Object.fromEntries(app.store),before,'同范围恢复不改存储');
+    profiles.bookSelections.guest.physics.volumes=['八下','九全'];
+    app.store.set('cnmChildren.v1',JSON.stringify(profiles));
+    app.store.set(KEY,JSON.stringify({...browse,volume:'',volumes:['八下','九全'],view:'local',depth:2}));
+    before=Object.fromEntries(app.store);record=app.api.resume(topics,'physics');
+    assert.equal(record.view,'local');assert.equal(record.depth,2);assert.equal(record.topicId,study.topicId);assert.equal(record.at,study.at);
+    assert.deepEqual(Object.fromEntries(app.store),before);
+  });
+  await test('编辑成新教材范围时使用全图，旧局部视图不缩小新范围且不改学习记录',()=>{
+    const study={v:1,subject:'physics',volume:'八下',topicId:'cnp_032',view:'local',depth:3,at:'2026-11-18T08:00:00.000Z'};
+    const pref={volumes:['八下','九全'],at:'2026-11-18T10:00:00.000Z'};
+    const app=load({entries:{'cnmChildren.v1':JSON.stringify({current:null,children:[],bookSelections:{guest:{physics:pref}}}),
+      [KEY+'.learning.guest']:JSON.stringify(study),[KEY]:JSON.stringify({...study,topicId:'cnp_035',at:'2026-11-18T09:00:00.000Z'})}});
+    const before=Object.fromEntries(app.store),record=app.api.resume(topics,'physics');
+    assert.equal(record.view,'book');assert.deepEqual(Array.from(record.volumes),pref.volumes);
+    assert.equal(record.topicId,study.topicId);assert.equal(record.at,study.at);assert.deepEqual(Object.fromEntries(app.store),before);
+  });
+  await test('教材偏好按账号与学科隔离，无学习点时进入对应范围首点并保持无学习存档',()=>{
+    const profiles={current:'a',children:[{id:'a'},{id:'b'}],bookSelections:{
+      a:{physics:{volumes:['九全'],at:'2026-11-18T10:00:00.000Z'},science:{volumes:['三下'],at:'2026-11-18T11:00:00.000Z'}},
+      b:{physics:{volumes:['必修一'],at:'2026-11-18T12:00:00.000Z'}},guest:{physics:{volumes:['八上'],at:'2026-11-18T13:00:00.000Z'}}}};
+    const app=load({entries:{'cnmChildren.v1':JSON.stringify(profiles)}}),before=Object.fromEntries(app.store);
+    assert.equal(app.api.resume(topics,'physics').volume,'九全');assert.equal(app.api.resume(topics,'science').volume,'三下');
+    assert.equal(app.api.resume(topics).subject,'science','没有既往学习点时以最近编辑学科为准');
+    assert.equal(app.api.preferredSelection('physics','b').volumes[0],'必修一');
+    assert.equal(app.api.preferredSelection('physics','unknown'),null);
+    assert.deepEqual(Object.fromEntries(app.store),before);
+    profiles.current='b';app.store.set('cnmChildren.v1',JSON.stringify(profiles));
+    assert.equal(app.api.resume(topics,'physics').volume,'必修一');assert.equal(app.api.resume(topics,'science'),null);
+    profiles.current=null;app.store.set('cnmChildren.v1',JSON.stringify(profiles));assert.equal(app.api.resume(topics,'physics').volume,'八上');
+    assert.equal(Array.from(app.store.keys()).some(key=>key.startsWith(KEY)),false,'浏览有效教材首点不伪造学习记录');
+  });
+  await test('损坏教材偏好被忽略，旧位置仍可恢复，合法偏好返回副本',()=>{
+    const study={v:1,subject:'physics',volume:'八下',topicId:'cnp_032',view:'book',depth:2,at:'2026-11-18T08:00:00.000Z'};
+    for(const pref of [null,[],{volumes:'八上',at:study.at},{volumes:['bad'],at:study.at},{volumes:['三下'],at:study.at},
+      {volumes:[null],at:study.at},{volumes:['九全'],at:'bad-date'},{volumes:['九全']},{at:study.at}]) {
+      const app=load({entries:{'cnmChildren.v1':JSON.stringify({current:'a',children:[{id:'a'}],bookSelections:{a:{physics:pref}}}),[KEY+'.learning.a']:JSON.stringify(study)}});
+      const before=Object.fromEntries(app.store);
+      assert.equal(app.api.preferredSelection('physics'),null);assert.equal(app.api.resume(topics,'physics').topicId,study.topicId);
+      assert.deepEqual(Object.fromEntries(app.store),before);
+    }
+    const app=load({entries:{'cnmChildren.v1':JSON.stringify({children:[],bookSelections:{guest:{physics:{volumes:['九全'],at:study.at}}}})}});
+    const selection=app.api.preferredSelection('physics');selection.volumes.push('八上');
+    assert.deepEqual(Array.from(app.api.preferredSelection('physics').volumes),['九全']);
+    assert.equal(app.api.preferredSelection('__proto__'),null);
+  });
+  await test('有教材偏好时从旧作答恢复只构造显示位置，不额外写入迁移学习存档',()=>{
+    const app=load({entries:{'cnmChildren.v1':JSON.stringify({current:'a',children:[{id:'a'}],bookSelections:{a:{physics:{volumes:['八下','九全'],at:'2026-11-18T12:00:00Z'}}}}),
+      'cnpDiagnose.session.v2':JSON.stringify({progressChildId:'a',savedAt:'2026-11-18T08:00:00Z',answers:[{id:'cnp_032',result:'correct'}]})}});
+    const before=Object.fromEntries(app.store),record=app.api.resume(topics,'physics');
+    assert.equal(record.topicId,'cnp_032');assert.deepEqual(Array.from(record.volumes),['八下','九全']);
+    assert.deepEqual(Object.fromEntries(app.store),before);assert.equal(app.api.read('physics'),null);
+  });
   await test('全站品牌与首页链接显式home=1，首页先渲染再启动继续提示',()=>{
     for (const file of ['index.html','explore/index.html','diagnose/index.html','children/index.html','children/history.html','wrongbook/index.html']) {
       const html=fs.readFileSync(path.join(ROOT,file),'utf8');

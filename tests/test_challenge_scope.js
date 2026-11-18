@@ -22,13 +22,14 @@ function context(subject='physics') {
   const ids=new Set(ownTopics.map(t=>t.id));
   const state={E,URLSearchParams,subject,bookSel:'',chapterSel:'',challengeScope:'book',session:null,
     D:{graph:E.buildGraph(ownTopics,dependencies.filter(d=>ids.has(d.topicId)&&ids.has(d.prerequisiteId)),questions),aliases:{}},
+    CC:{current:()=>({id:'preview-owner'})},window:{CnmProgress:{statuses:()=>state.previewStates||{}}},
     location:{search:'',pathname:'/diagnose/'},calls:[],errors:[],urls:[]};
   state.history={replaceState(_state,_title,url){state.urls.push(url);state.location.search=url.slice(url.indexOf('?'));}};
   state.startSession=(...args)=>state.calls.push(args);
   state.renderStart=message=>state.errors.push(message);
   vm.createContext(state);
   const volumes=source.slice(source.indexOf('  const VOLUMES ='),source.indexOf('  const RESULT_LABEL ='));
-  vm.runInContext(volumes+'\n'+['buildTree','nameOf','selectedChallenge','startChallenge','textbookScopeLabel','resolveTargets'].map(production).join('\n'),state);
+  vm.runInContext(volumes+'\n'+['buildTree','nameOf','selectedChallenge','challengePreview','startChallenge','textbookScopeLabel','resolveTargets'].map(production).join('\n'),state);
   state.D.tree=state.buildTree(ownTopics);
   return state;
 }
@@ -38,6 +39,9 @@ for(const subject of ['physics','science']) {
   for(const [volume,book] of Object.entries(c.D.tree)) {
     c.bookSel=volume;c.challengeScope='book';
     const full=c.selectedChallenge();
+    const preview=c.challengePreview();
+    assert.equal(preview.total,full.ids.length);assert.equal(preview.completed,0);
+    assert.deepEqual(Array.from(preview.chapters.flatMap(ch=>Array.from(ch.topics,t=>t.id))),Array.from(full.ids));
     assert.deepEqual(Array.from(full.ids),E.gradeTargets(c.D.graph,volume,subject).ids);
     assert.ok(!full.chapter);
     c.session=E.createSession(c.D.graph,full.ids,{mode:'textbook',volume});
@@ -46,6 +50,11 @@ for(const subject of ['physics','science']) {
       const expected=Array.from(chapter.topics,x=>x.t.id);
       c.chapterSel=chapter.key;c.challengeScope='chapter';
       const choice=c.selectedChallenge();
+      c.previewStates=Object.fromEntries(expected.map((id,i)=>[id,{status:i<2?'mastered':'weak',src:i===1?'inferred':'direct'}]));
+      const unitPreview=c.challengePreview();
+      assert.equal(unitPreview.total,expected.length);assert.equal(unitPreview.completed,expected.length?1:0,'只有直接检测通过才计入预览');
+      assert.deepEqual(Array.from(unitPreview.chapters.flatMap(ch=>Array.from(ch.topics,t=>t.id))),expected);
+      c.previewStates={};
       assert.deepEqual(Array.from(choice.ids),expected);
       assert.equal(choice.chapter,chapter.key);
       const parsed=c.resolveTargets(new URLSearchParams({subject,volume,chapter:chapter.key}));

@@ -277,9 +277,13 @@
   function syncBookQuery() {
     history.replaceState(null, '', graphReturnTo());
   }
-  function chooseBook(key) {
+  function chooseBook(key, rememberChoice) {
     if (key === '__selection__' || key === '__local__') return;
     var book = bookSpec(key), allBooks = !book;
+    // 只有教材选择器的明确操作更新偏好，普通浏览和恢复位置不会覆盖个人中心的选择。
+    if (rememberChoice && window.CnmChildren && window.CnmChildren.setBookSelection) {
+      window.CnmChildren.setBookSelection(subject, book ? [key] : booksForSubject().map(function (item) { return item[0]; }));
+    }
     var focus = null, previous = byId.get(selected);
     if (allBooks) {
       var memory = window.CnmLastLocation, recent = null;
@@ -1716,7 +1720,7 @@
       renderList();
       highlight(false);
     });
-    $('fGrade').addEventListener('change', function () { chooseBook($('fGrade').value); });
+    $('fGrade').addEventListener('change', function () { chooseBook($('fGrade').value, true); });
     $('book-view').addEventListener('click', function () {
       showWholeBook = !showWholeBook;
       rememberLocation();

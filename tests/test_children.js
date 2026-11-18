@@ -1140,4 +1140,149 @@ test('固定profile身份优先于冲突的旧账本和备份，非法新备份�
   }
 });
 
+const BOOK_AT = '2026-11-18T00:00:00.000Z';
+function bookPrefs(volumes, at = BOOK_AT) { return { volumes, at }; }
+function selectionEntries(selections) {
+  return { ...fixture(), [PROFILE_KEY]: JSON.stringify({ ...fixedProfiles(profiles), bookSelections: selections }) };
+}
+
+test('教材选择按账号、访客和学科隔离，规范去重并允许明确选空，返回值不能改写存储', () => {
+  const entries = { ...fixture(), [PROGRESS_KEY]: 'untouched-progress', [AVATAR_KEY]: 'untouched-avatar' };
+  const { api, storage, writes } = load(entries);
+  assert.equal(api.bookSelection('physics'), null);
+  const b = api.setBookSelection('physics', ['九全', '八上', '九全']);
+  assert.equal(b.ok, true);
+  assert.deepStrictEqual(JSON.parse(JSON.stringify(b.selection.volumes)), ['八上', '九全']);
+  api.setBookSelection('science', ['三下', '一上'], 'child-a');
+  api.setBookSelection('physics', [], 'child-a');
+  api.setBookSelection('physics', ['必修一'], 'guest');
+  assert.deepStrictEqual(JSON.parse(JSON.stringify(api.bookSelection('physics', 'child-a').volumes)), []);
+  assert.deepStrictEqual(JSON.parse(JSON.stringify(api.bookSelection('science', 'child-a').volumes)), ['一上', '三下']);
+  assert.deepStrictEqual(JSON.parse(JSON.stringify(api.bookSelection('physics').volumes)), ['八上', '九全']);
+  assert.deepStrictEqual(JSON.parse(JSON.stringify(api.bookSelection('physics', null).volumes)), ['必修一']);
+  assert.equal(api.bookSelection('science', 'child-b'), null);
+  const selection = api.bookSelection('physics'); selection.volumes.push('八下');
+  b.selection.volumes.push('选必一'); b.selections.physics.volumes.push('选必二');
+  assert.deepStrictEqual(JSON.parse(JSON.stringify(api.bookSelection('physics').volumes)), ['八上', '九全']);
+  assert.equal(storage.get(PROGRESS_KEY), entries[PROGRESS_KEY]); assert.equal(storage.get(AVATAR_KEY), entries[AVATAR_KEY]);
+  assert.deepStrictEqual(writes, [PROFILE_KEY, PROFILE_KEY, PROFILE_KEY, PROFILE_KEY]);
+  assert.deepStrictEqual(stored(storage, PROFILE_KEY).children, profiles.children, '保存教材不触发旧猫咪身份迁移');
+  const reloaded = load(Object.fromEntries(storage)).api;
+  assert.deepStrictEqual(JSON.parse(JSON.stringify(reloaded.bookSelection('physics', 'child-a').volumes)), []);
+  api.setCurrent('child-a'); assert.deepStrictEqual(JSON.parse(JSON.stringify(api.bookSelection('physics').volumes)), []);
+  api.setCurrent(null); assert.deepStrictEqual(JSON.parse(JSON.stringify(api.bookSelection('physics').volumes)), ['必修一']);
+});
+
+test('两科教材批量保存只写一次且同一时间，非法科目或册次使整批完全不写入', () => {
+  const entries = selectionEntries({ 'child-b': { physics: bookPrefs(['九全']) } });
+  const { api, storage, writes } = load(entries);
+  const result = api.setBookSelections({ science: ['六下', '一上'], physics: ['八下'] });
+  assert.equal(result.ok, true); assert.equal(result.selections.science.at, result.selections.physics.at);
+  assert.deepStrictEqual(writes, [PROFILE_KEY]);
+  assert.deepStrictEqual(stored(storage, PROFILE_KEY).bookSelections['child-b'].science.volumes, ['一上', '六下']);
+  const after = Object.fromEntries(storage); writes.length = 0;
+  const sparse = []; sparse[1] = '八上';
+  const invalids = [{}, [], null, { physics: ['八上'], science: ['八上'] }, { english: [] }, { physics: sparse },
+    { physics: [null] }, { physics: '八上' }, JSON.parse('{"__proto__":[]}')];
+  for (const changes of invalids) assert.equal(api.setBookSelections(changes).ok, false);
+  for (const owner of ['missing', '__proto__', {}, 1]) assert.equal(api.setBookSelection('physics', ['八上'], owner).ok, false);
+  for (const subject of ['english', '__proto__', '', null]) assert.equal(api.setBookSelection(subject, []).ok, false);
+  assert.deepStrictEqual(Object.fromEntries(storage), after); assert.deepStrictEqual(writes, []);
+  assert.equal(api.bookSelection('physics', 'missing'), null); assert.equal(api.bookSelection('english'), null);
+});
+
+test('教材保存的配额/读取失败保留原始字节，两科不会只保存一科，空档案默认访客', () => {
+  const entries = selectionEntries({ 'child-b': { physics: bookPrefs(['九全']), science: bookPrefs(['三上']) } });
+  const failing = load(entries, null, { failWrite: key => key === PROFILE_KEY });
+  const result = failing.api.setBookSelections({ physics: [], science: ['一上'] });
+  assert.equal(result.ok, false); assert.deepStrictEqual(Object.fromEntries(failing.storage), entries);
+  assert.deepStrictEqual(failing.writes, [PROFILE_KEY]);
+  const unreadable = load(entries, PROFILE_KEY);
+  assert.equal(unreadable.api.setBookSelection('physics', []).ok, false);
+  assert.equal(unreadable.api.bookSelection('physics'), null); assert.deepStrictEqual(unreadable.writes, []);
+  assert.deepStrictEqual(Object.fromEntries(unreadable.storage), entries);
+  const guest = load(); assert.equal(guest.api.setBookSelections({ physics: [], science: ['六下'] }).ok, true);
+  assert.deepStrictEqual(stored(guest.storage, PROFILE_KEY).bookSelections.guest.physics.volumes, []);
+  assert.equal(guest.api.current(), null);
+});
+
+test('移除账号只清除该账号教材偏好，其他账号和访客保留', () => {
+  const entries = selectionEntries({ 'child-a': { physics: bookPrefs(['八上']) }, 'child-b': { physics: bookPrefs([]) }, guest: { science: bookPrefs(['一上']) } });
+  const { api, storage } = load(entries); assert.equal(api.remove('child-a'), true);
+  const remaining = stored(storage, PROFILE_KEY).bookSelections;
+  assert.equal(remaining['child-a'], undefined); assert.deepStrictEqual(remaining['child-b'], { physics: bookPrefs([]) });
+  assert.deepStrictEqual(remaining.guest, { science: bookPrefs(['一上']) });
+  assert.equal(api.bookSelection('physics', 'child-a'), null);
+});
+
+test('教材选择随完整备份往返且预览不写入，空选择和访客保留，旧备份不覆盖本机选择', () => {
+  const selections = { 'child-a': { physics: bookPrefs([]), science: bookPrefs(['一上', '六下']) }, guest: { physics: bookPrefs(['九全']) } };
+  const source = load(selectionEntries(selections)), data = exported(source.api), target = load();
+  assert.deepStrictEqual(data.profiles.bookSelections, selections);
+  const parsed = target.api.parseBackup(JSON.stringify(data)); target.api.previewImport(parsed);
+  assert.deepStrictEqual(target.writes, []); importInto(target.api, parsed);
+  assert.deepStrictEqual(exported(target.api).profiles.bookSelections, selections);
+  const after = Object.fromEntries(target.storage); target.writes.length = 0; importInto(target.api, parsed);
+  assert.deepStrictEqual(Object.fromEntries(target.storage), after); assert.deepStrictEqual(target.writes, []);
+  const old = backup(); delete old.profiles.bookSelections; importInto(target.api, old);
+  assert.deepStrictEqual(exported(target.api).profiles.bookSelections, selections);
+  old.version = 1; delete old.learning; importInto(target.api, old);
+  assert.deepStrictEqual(exported(target.api).profiles.bookSelections, selections);
+  const guest = load(); guest.api.setBookSelection('physics', []); const guestBackup = exported(guest.api);
+  const restored = load(); importInto(restored.api, guestBackup);
+  assert.deepStrictEqual(JSON.parse(JSON.stringify(restored.api.bookSelection('physics').volumes)), []);
+});
+
+test('备份教材按账号和学科较新时间合并，同时间本机优先，身份和学习账本不被教材合并改写', () => {
+  const selections = { 'child-a': { physics: bookPrefs([]), science: bookPrefs(['三上']) }, guest: { physics: bookPrefs(['八上']) } };
+  const entries = { ...learningFixture(), [PROFILE_KEY]: JSON.stringify({ ...fixedProfiles(profiles, { 'child-a': 'cat-blue' }), bookSelections: selections }) };
+  const target = load(entries), data = exported(target.api);
+  data.profiles.children[0].catId = 'cat-tuxedo';
+  data.profiles.bookSelections['child-a'].physics = bookPrefs(['九全'], '2026-11-17T00:00:00.000Z');
+  data.profiles.bookSelections['child-a'].science = bookPrefs(['六下']);
+  data.profiles.bookSelections.guest.physics = bookPrefs([], '2026-11-19T00:00:00.000Z');
+  data.profiles.bookSelections['child-b'] = { physics: bookPrefs(['必修二']) };
+  importInto(target.api, data);
+  assert.deepStrictEqual(exported(target.api).profiles.bookSelections, {
+    ...selections, guest: { physics: bookPrefs([], '2026-11-19T00:00:00.000Z') }, 'child-b': { physics: bookPrefs(['必修二']) }
+  });
+  assert.equal(target.api.get('child-a').catId, 'cat-blue');
+  assert.equal(target.storage.get(PROGRESS_KEY), entries[PROGRESS_KEY]);
+  const after = Object.fromEntries(target.storage); target.writes.length = 0; importInto(target.api, data);
+  assert.deepStrictEqual(Object.fromEntries(target.storage), after); assert.deepStrictEqual(target.writes, []);
+});
+
+test('备份拒绝非法教材owner/学科/册次/时间/毒字段，解析和预览失败均不改写', () => {
+  const invalids = [null, [], { missing: { physics: bookPrefs(['八上']) } }, { 'child-a': [] },
+    { guest: { english: bookPrefs([]) } }, { guest: { physics: bookPrefs(['三上']) } },
+    { guest: { science: bookPrefs(['九全']) } }, { guest: { physics: bookPrefs([null]) } },
+    { guest: { physics: { volumes: [], at: 'bad-date' } } }, { guest: { physics: { volumes: [] } } },
+    { guest: { physics: { at: BOOK_AT } } }, { guest: { physics: { ...bookPrefs([]), extra: true } } },
+    JSON.parse('{"__proto__":{}}'), JSON.parse('{"guest":{"constructor":{}}}')];
+  for (const invalid of invalids) {
+    const data = backup(); data.profiles.bookSelections = invalid;
+    const entries = selectionEntries({ 'child-b': { physics: bookPrefs([]) } });
+    const target = load(entries);
+    assert.throws(() => target.api.parseBackup(JSON.stringify(data)), /教材|不允许/);
+    assert.throws(() => target.api.previewImport(data), /教材|不允许/);
+    assert.deepStrictEqual(Object.fromEntries(target.storage), entries); assert.deepStrictEqual(target.writes, []);
+  }
+  const data = backup(), sparse = []; sparse[1] = '八上';
+  data.profiles.bookSelections = { guest: { physics: bookPrefs(sparse) } };
+  assert.throws(() => load().api.previewImport(data), /教材/);
+});
+
+test('编辑教材令已预览导入token失效，损坏的本机教材偏好不能被表单静默覆盖', () => {
+  const entries = selectionEntries({ 'child-b': { physics: bookPrefs(['九全']) } }), target = load(entries), data = backup();
+  const preview = target.api.previewImport(data);
+  assert.equal(target.api.setBookSelection('physics', []).ok, true);
+  const after = Object.fromEntries(target.storage); target.writes.length = 0;
+  assert.throws(() => target.api.importBackup(data, preview.token), /已发生变化/);
+  assert.deepStrictEqual(Object.fromEntries(target.storage), after); assert.deepStrictEqual(target.writes, []);
+  const bad = selectionEntries({ 'child-b': { physics: bookPrefs(['invalid']) } }), corrupted = load(bad);
+  assert.equal(corrupted.api.setBookSelection('physics', ['八上']).ok, false);
+  assert.equal(corrupted.api.bookSelection('physics'), null);
+  assert.deepStrictEqual(Object.fromEntries(corrupted.storage), bad); assert.deepStrictEqual(corrupted.writes, []);
+});
+
 console.log('\n' + passed + ' passed, 0 failed');

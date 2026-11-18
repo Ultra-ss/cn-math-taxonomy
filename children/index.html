@@ -60,7 +60,16 @@
     <p class="muted small">普通检测首次通过得 1⭐，专家挑战首次通过再得 1⭐；重复通过不重复计分。每 3⭐ 折合 1🌙，累计总积分始终保留，可兑换月亮另扣已使用额度。</p>
     <div class="achievement-books-head">
       <h3 id="achievement-books-title">当前选择的教材</h3>
-      <a class="btn" href="../?home=1">更换教材</a>
+      <div class="achievement-books-actions">
+        <select id="achievement-books-subject" aria-label="教材学科"><option value="physics">初高中物理</option><option value="science">小学科学</option></select>
+        <button type="button" id="edit-achievement-books" class="btn" aria-expanded="false" aria-controls="achievement-books-editor" disabled>编辑</button>
+      </div>
+    </div>
+    <div id="achievement-books-editor" class="achievement-books-editor" hidden>
+      <p class="muted small" id="achievement-books-editor-note">勾选要学习的教材，可切换学科一起编辑。移出教材会保留已有的学习记录、积分和装扮。</p>
+      <div id="achievement-books-options" class="achievement-books-options" role="group" aria-label="选择教材" aria-describedby="achievement-books-editor-note"></div>
+      <div class="achievement-books-editor-actions"><button type="button" id="save-achievement-books" class="primary">保存教材</button><button type="button" id="cancel-achievement-books">取消</button></div>
+      <p id="achievement-books-edit-status" class="small" role="status" hidden></p>
     </div>
     <p class="muted small" id="achievement-books-context">正在读取教材范围…</p>
     <div id="achievement-books" aria-labelledby="achievement-books-title" aria-live="polite"></div>
@@ -104,7 +113,7 @@
   <details class="kid-backup center-disclosure" aria-labelledby="backup-title">
     <summary class="center-disclosure-toggle"><h2 id="backup-title">备份和恢复</h2></summary>
     <div class="center-disclosure-content">
-    <p>备份所有账号的资料、检测记录、错题、进行中检测、薄弱知识点、图谱进度、成就积分，以及猫咪选择、拼图兑换、已解锁服装与穿戴状态。访客的学习进度和装扮也可以迁移。</p>
+    <p>备份所有账号的资料、已选教材、检测记录、错题、进行中检测、薄弱知识点、图谱进度、成就积分，以及猫咪选择、拼图兑换、已解锁服装与穿戴状态。访客的学习进度和装扮也可以迁移。</p>
     <button type="button" id="export-backup">导出全部学习数据</button>
     <p id="export-status" class="small" role="status" hidden></p>
     <div class="kid-import">
@@ -116,7 +125,7 @@
         <h3>导入预览</h3>
         <p id="import-summary"></p>
         <ul id="import-children"></ul>
-        <p class="muted small">相同档案保留本机资料；同一条记录、错题或薄弱知识点采用较新的状态，时间相同保留本机。累计错次取两份数据中的较大值，重复导入不累加。历史不会因合并被截断。</p>
+        <p class="muted small">相同档案保留本机资料；已选教材、同一条记录、错题或薄弱知识点采用较新的状态，时间相同保留本机。累计错次取两份数据中的较大值，重复导入不累加。历史不会因合并被截断。</p>
         <p class="muted small">本机已有同学科的检测进度时会保留，导入的不同进度存入下方“其他检测进度”，可以随时切换。</p>
         <div class="kid-actions">
           <button type="button" id="confirm-import" class="primary" disabled>确认合并导入</button>

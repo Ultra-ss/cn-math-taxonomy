@@ -195,6 +195,19 @@ main.kids { width: min(760px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
 .achievement-books-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; border-top: 1px solid var(--line); margin-top: 16px; padding-top: 12px; }
 .achievement-books-head h3 { margin: 0; color: var(--brand-strong); font-size: 1rem; }
 .achievement-books-head .btn { flex: none; min-height: 40px; padding: 7px 10px; font-size: .85rem; }
+.achievement-books-actions { display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
+.achievement-books-actions select { width: auto; min-height: 38px; max-width: 145px; padding: 6px 26px 6px 9px; font-size: .82rem; }
+.achievement-books-editor { margin: 10px 0 14px; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-muted); }
+.achievement-books-editor[hidden] { display: none; }
+.achievement-books-editor > p { margin: 0 0 10px; }
+.achievement-books-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.achievement-book-choice { display: flex; gap: 8px; align-items: center; min-height: 50px; padding: 9px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg-elev); cursor: pointer; font-size: .86rem; font-weight: 650; overflow-wrap: anywhere; }
+.achievement-book-choice:has(input:checked) { border-color: var(--brand); background: var(--brand-soft); }
+.achievement-book-choice:focus-within { outline: 2px solid var(--focus); outline-offset: 2px; }
+.achievement-book-choice input { flex: none; width: 17px; height: 17px; min-height: 0; margin: 0; accent-color: var(--brand); }
+.achievement-books-editor-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.achievement-books-editor #achievement-books-edit-status { margin: 10px 0 0; }
+@media (max-width: 700px) { .achievement-books-options { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 #achievement-books-context { line-height: 1.55; }
 .achievement-book { margin: 8px 0; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-elev); overflow: hidden; }
 .achievement-book > summary { cursor: pointer; min-height: 64px; padding: 12px; }
@@ -223,6 +236,8 @@ main.kids { width: min(760px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
 .achievement-chapters a { color: var(--brand-strong); font-weight: 650; }
 @media (max-width: 420px) {
   .center-achievements .center-section-head { align-items: flex-start; flex-wrap: wrap; }
+  .achievement-books-head { flex-wrap: wrap; }
+  .achievement-books-actions { margin-left: auto; }
   .achievement-owner-label { margin-left: auto; }
   .achievement-medal { padding: 6px 8px; }
 }
