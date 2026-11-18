@@ -1,11 +1,13 @@
-/* 离线缓存：站点壳（页面、脚本、样式、图标）和图谱数据。
- * 页面和脚本：网络优先，断网时用缓存；数据和图标：先用缓存，同时后台更新。
- * 改了 SHELL 或 DATA 列表、或数据结构变了，就把 VERSION 加一。 */
+/* 当前版本的页面和资源优先使用本地缓存，切页不等待网络。
+ * 安装只缓存核心界面；题库、图谱数据与装扮图片访问时再缓存。
+ * 更新页面、脚本、样式或数据时必须增加 VERSION，避免跨版本混用。 */
 'use strict';
 
-var VERSION = 'v85';
+var VERSION = 'v86';
 var CACHE = 'cnm-pwa-' + VERSION;
 var SCOPE = self.registration.scope;
+var GRAPH_DATA = ['data/topics.json', 'data/dependencies.json', 'data/cn-curriculum-standards.json', 'data/id-aliases.json'];
+var graphWarmup = null;
 
 var SHELL = [
   './',
@@ -35,6 +37,8 @@ var SHELL = [
   'assets/graph-halo.js',
   'assets/graph-springs.js',
   'assets/graph-camera.js',
+  'assets/graph-layout.js',
+  'assets/graph-layout-worker.js',
   'assets/fonts/physicalmap-playful.woff',
   'assets/fonts/OFL-ZCOOL-KuaiLe.txt',
   'assets/home.js',
@@ -45,61 +49,6 @@ var SHELL = [
   'assets/avatar-catalog.js',
   'assets/avatar-rewards.js',
   'assets/avatar-share.js',
-  'assets/avatars/default.svg',
-  'assets/avatars/skin-01.svg',
-  'assets/avatars/skin-02.svg',
-  'assets/avatars/skin-03.svg',
-  'assets/avatars/skin-04.svg',
-  'assets/avatars/skin-05.svg',
-  'assets/avatars/skin-06.svg',
-  'assets/avatars/skin-07.svg',
-  'assets/avatars/skin-08.svg',
-  'assets/avatars/skin-09.svg',
-  'assets/avatars/skin-10.svg',
-  'assets/avatars/ginger/default.svg',
-  'assets/avatars/ginger/skin-01.svg',
-  'assets/avatars/ginger/skin-02.svg',
-  'assets/avatars/ginger/skin-03.svg',
-  'assets/avatars/ginger/skin-04.svg',
-  'assets/avatars/ginger/skin-05.svg',
-  'assets/avatars/ginger/skin-06.svg',
-  'assets/avatars/ginger/skin-07.svg',
-  'assets/avatars/ginger/skin-08.svg',
-  'assets/avatars/ginger/skin-09.svg',
-  'assets/avatars/ginger/skin-10.svg',
-  'assets/avatars/tuxedo/default.svg',
-  'assets/avatars/tuxedo/skin-01.svg',
-  'assets/avatars/tuxedo/skin-02.svg',
-  'assets/avatars/tuxedo/skin-03.svg',
-  'assets/avatars/tuxedo/skin-04.svg',
-  'assets/avatars/tuxedo/skin-05.svg',
-  'assets/avatars/tuxedo/skin-06.svg',
-  'assets/avatars/tuxedo/skin-07.svg',
-  'assets/avatars/tuxedo/skin-08.svg',
-  'assets/avatars/tuxedo/skin-09.svg',
-  'assets/avatars/tuxedo/skin-10.svg',
-  'assets/avatars/blue/default.svg',
-  'assets/avatars/blue/skin-01.svg',
-  'assets/avatars/blue/skin-02.svg',
-  'assets/avatars/blue/skin-03.svg',
-  'assets/avatars/blue/skin-04.svg',
-  'assets/avatars/blue/skin-05.svg',
-  'assets/avatars/blue/skin-06.svg',
-  'assets/avatars/blue/skin-07.svg',
-  'assets/avatars/blue/skin-08.svg',
-  'assets/avatars/blue/skin-09.svg',
-  'assets/avatars/blue/skin-10.svg',
-  'assets/avatars/mocha/default.svg',
-  'assets/avatars/mocha/skin-01.svg',
-  'assets/avatars/mocha/skin-02.svg',
-  'assets/avatars/mocha/skin-03.svg',
-  'assets/avatars/mocha/skin-04.svg',
-  'assets/avatars/mocha/skin-05.svg',
-  'assets/avatars/mocha/skin-06.svg',
-  'assets/avatars/mocha/skin-07.svg',
-  'assets/avatars/mocha/skin-08.svg',
-  'assets/avatars/mocha/skin-09.svg',
-  'assets/avatars/mocha/skin-10.svg',
   'assets/explore-viewport.js',
   'assets/stats-config.js',
   'assets/stats.js',
@@ -121,26 +70,32 @@ var SHELL = [
   'manifest.webmanifest'
 ];
 
-var DATA = [
-  'data/topics.json',
-  'data/dependencies.json',
-  'data/cn-curriculum-standards.json',
-  'data/questions.json',
-  'data/questions-pro.json',
-  'data/pro-sources.json',
-  'data/id-aliases.json'
-];
-
 function abs(path) { return new URL(path, SCOPE).href; }
 
-function fresh(path) { return new Request(abs(path), { cache: 'reload' }); }
+function cacheable(res) {
+  return res && res.status === 200 && res.type === 'basic' && !res.redirected;
+}
+
+async function precache(cache) {
+  // Limited concurrency leaves bandwidth and connections available for the open page.
+  var next = 0, failed = false;
+  async function worker() {
+    while (!failed && next < SHELL.length) {
+      try {
+        var path = SHELL[next++], req = new Request(abs(path), { cache: 'reload' });
+        var res = await fetch(req);
+        if (!cacheable(res)) throw new Error('Core resource could not be cached: ' + path);
+        await cache.put(req, res);
+      } catch (error) { failed = true; throw error; }
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(4, SHELL.length) }, worker));
+}
 
 self.addEventListener('install', function (event) {
   event.waitUntil((async function () {
     var cache = await caches.open(CACHE);
-    // 壳必须齐全；数据尽量缓存，失败不挡安装（之后第一次访问时会补上）
-    await cache.addAll(SHELL.map(fresh));
-    await Promise.all(DATA.map(function (p) { return cache.add(fresh(p)).catch(function () { /* 稍后运行时再缓存 */ }); }));
+    await precache(cache);
     await self.skipWaiting();
   })());
 });
@@ -153,57 +108,70 @@ self.addEventListener('activate', function (event) {
   })());
 });
 
-function cacheable(res) {
-  return res && res.status === 200 && res.type === 'basic' && !res.redirected;
-}
-
-function put(req, res) {
-  if (!cacheable(res)) return;
-  var copy = res.clone();
-  caches.open(CACHE).then(function (c) { return c.put(req, copy); }).catch(function () { /* 空间不足等 */ });
-}
-
-function timeout(ms) {
-  return new Promise(function (_, reject) { setTimeout(function () { reject(new Error('timeout')); }, ms); });
-}
-
-async function networkFirst(req, ignoreSearch, fallbackUrl) {
-  try {
-    var res = await Promise.race([fetch(req), timeout(5000)]);
-    put(req, res);
-    return res;
-  } catch (e) {
-    var hit = await caches.match(req, { ignoreSearch: ignoreSearch });
-    if (hit) return hit;
-    if (fallbackUrl) {
-      var fb = await caches.match(fallbackUrl);
-      if (fb) return fb;
-    }
-    // 超时但没有缓存：再等网络
-    return fetch(req);
+function cacheKey(req) {
+  var url = new URL(req.url);
+  if (req.mode === 'navigate') {
+    // All query/hash combinations use the same static page shell.
+    url.search = ''; url.hash = '';
+    if (/\/index\.html$/.test(url.pathname)) url.pathname = url.pathname.slice(0, -10);
   }
+  return new Request(url.href);
 }
 
-async function staleWhileRevalidate(req) {
-  var hit = await caches.match(req);
-  var update = fetch(req).then(function (res) { put(req, res); return res; });
-  if (hit) { update.catch(function () { /* 断网 */ }); return hit; }
-  return update;
+async function cacheFirst(req, writes) {
+  var cache = null, key = cacheKey(req);
+  try {
+    cache = await caches.open(CACHE);
+    var hit = await cache.match(key);
+    if (hit) return hit;
+  } catch (error) { cache = null; /* Cache API availability must not gate the network. */ }
+  try {
+    var res = await fetch(req);
+    if (cache && cacheable(res)) {
+      // Keep the response path fast, while waitUntil below owns the cache write.
+      try { writes.push(cache.put(key, res.clone()).catch(function () { /* Storage pressure must not block viewing. */ })); }
+      catch (error) { /* The fetched response remains usable if caching is unavailable. */ }
+    }
+    return res;
+  } catch (error) {
+    if (cache && req.mode === 'navigate') {
+      try {
+        var home = await cache.match(abs('./'));
+        if (home) return home;
+      } catch (cacheError) { /* Preserve the original network failure below. */ }
+    }
+    throw error;
+  }
 }
 
 self.addEventListener('fetch', function (event) {
   var req = event.request;
   if (req.method !== 'GET') return;
   var url = new URL(req.url);
-  if (url.origin !== self.location.origin) return;
-  if (url.pathname === '/sw.js') return;
-  if (req.mode === 'navigate') {
-    event.respondWith(networkFirst(req, true, abs('./')));
-    return;
-  }
-  if (/\.(?:json|png|svg|ico|webmanifest)$/.test(url.pathname)) {
-    event.respondWith(staleWhileRevalidate(req));
-    return;
-  }
-  event.respondWith(networkFirst(req, false, null));
+  if (url.origin !== self.location.origin || url.pathname === new URL('sw.js', SCOPE).pathname) return;
+  var writes = [], response = cacheFirst(req, writes);
+  event.respondWith(response);
+  event.waitUntil(response.then(function () { return Promise.all(writes); }, function () { return Promise.all(writes); }));
+});
+
+function warmGraphData() {
+  if (graphWarmup) return graphWarmup;
+  graphWarmup = (async function () {
+    var cache = await caches.open(CACHE);
+    // Optional, sequential work after the page is ready; never prefetch question banks or skins.
+    for (var i = 0; i < GRAPH_DATA.length; i++) {
+      var req = new Request(abs(GRAPH_DATA[i]));
+      if (await cache.match(req)) continue;
+      try {
+        var res = await fetch(req);
+        if (cacheable(res)) await cache.put(req, res);
+      } catch (error) { /* The active page can load a missing file normally when needed. */ }
+    }
+  })().catch(function () { /* Optional cache reads must not create an unhandled message rejection. */ })
+    .finally(function () { graphWarmup = null; });
+  return graphWarmup;
+}
+
+self.addEventListener('message', function (event) {
+  if (event.data && event.data.type === 'CNM_WARM_GRAPH_DATA') event.waitUntil(warmGraphData());
 });

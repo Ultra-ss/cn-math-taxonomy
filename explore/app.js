@@ -1351,6 +1351,7 @@
       pendingCameraTransition = transition || null;
       return;
     }
+    if (window.CnmGraphLayout) window.CnmGraphLayout.cancel();
     if (graphCamera) { graphCamera.destroy(); graphCamera = null; }
     rememberViewport();
     if (graphHalo) { graphHalo.destroy(); graphHalo = null; }
@@ -1412,7 +1413,7 @@
     if (heavy) meta.textContent = '正在排列全部 ' + total + ' 个知识点…';
 
     var kick = heavy ? function (fn) { setTimeout(fn, 40); } : requestAnimationFrame;
-    kick(function () {
+    kick(async function () {
       if (token !== graphToken) return;
       if (!graphIsVisible()) {
         graphNeedsRender = true;
@@ -1429,6 +1430,7 @@
         var cyOptions = {
           container: cyEl,
           elements: elements,
+          layout: { name: 'preset', fit: false },
           // 大图若缩到能塞进一屏，节点只剩几个像素，Cytoscape 会改画整图贴图，画面基本是空的。
           minZoom: heavy ? 0.5 : 0.05,
           maxZoom: 2.8,
@@ -1468,7 +1470,7 @@
           if (event.target === cy) { explicitNodeSelection = null; tipFromTap = false; hideTip(); }
         });
         }
-        var layout = cy.layout({
+        var layoutOptions = {
           name: 'dagre', rankDir: 'TB',
           rankSep: dense ? 48 : 64,
           nodeSep: dense ? 18 : 26,
@@ -1476,7 +1478,16 @@
           ranker: dense ? 'longest-path' : 'network-simplex',
           padding: 16, animate: false, fit: !transition,
           nodeDimensionsIncludeLabels: false, spacingFactor: dense ? 1.02 : 1.05
-        });
+        };
+        var layoutGraph = cy, geometry = null;
+        if (window.CnmGraphLayout) {
+          geometry = await window.CnmGraphLayout.run(layoutGraph, layoutOptions);
+          if (token !== graphToken || cy !== layoutGraph || cy.destroyed()) return;
+        }
+        var layout = cy.layout(geometry ? Object.assign({}, layoutOptions, {
+          name: 'preset', positions: function (node) { return geometry.positions[node.id()]; }
+        }) : layoutOptions);
+        cyEl.dataset.layoutSource = geometry ? geometry.source : 'main';
         layout.one('layoutstop', function () {
           if (token !== graphToken) return;
           var finishLayout = function () {
@@ -1542,6 +1553,7 @@
         });
         layout.run();
       } catch (error) {
+        if (error && error.name === 'AbortError') return;
         cyEl.dataset.ready = 'err';
         meta.textContent = '图没有画出来：' + (error && error.message ? error.message : error);
       }
@@ -1822,6 +1834,9 @@
     window.addEventListener('focus', function () { refreshProgress(); });
     window.addEventListener('cnm:progress', function () { refreshProgress(); });
     window.addEventListener('pagehide', rememberViewport);
+    window.addEventListener('pageshow', function (event) {
+      if (event.persisted && selected && $('cy').dataset.ready !== '1') renderGraph(false);
+    });
     document.addEventListener('visibilitychange', function () { if (document.hidden) rememberViewport(); });
     $('fDomain').addEventListener('change', function () {
       domain = $('fDomain').value;
@@ -1880,25 +1895,17 @@
 
   function prepareGraphFont() {
     if (!document.fonts || typeof document.fonts.load !== 'function') { FONT = PLAYFUL_FONT; return Promise.resolve(false); }
-    return new Promise(function (done) {
-      var finished = false;
-      var timer = setTimeout(function () { finish(false); }, 1000);
-      function finish(loaded) {
-        if (finished) return;
-        finished = true; clearTimeout(timer); done(loaded);
-      }
-      try {
+    try {
         document.fonts.load('14px "Physicalmap Playful"', '物理知识图谱').then(function (faces) {
-          if (!faces || !faces.length) { finish(false); return; }
+          if (!faces || !faces.length) return;
           FONT = PLAYFUL_FONT;
           // 慢网络使用系统字体先显示；字体到达后只换文字，不重新排列节点或移动相机。
           if (cy && !cy.destroyed()) {
             cy.style().selector('node').style('font-family', FONT).update();
           }
-          finish(true);
-        }, function () { finish(false); });
-      } catch (error) { finish(false); }
-    });
+        }, function () { /* 使用系统字体仍可立即浏览图谱。 */ });
+    } catch (error) { /* 字体不影响图谱数据和导航。 */ }
+    return Promise.resolve(false);
   }
 
   async function load() {

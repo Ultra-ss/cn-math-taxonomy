@@ -152,6 +152,12 @@ jobs:
       - name: tests/test_graph_camera.js
         run: node tests/test_graph_camera.js
 
+      - name: tests/test_graph_layout.js
+        run: node tests/test_graph_layout.js
+
+      - name: tests/test_service_worker.js
+        run: node tests/test_service_worker.js
+
       - name: tests/test_avatar_rewards.js
         run: node tests/test_avatar_rewards.js
 
