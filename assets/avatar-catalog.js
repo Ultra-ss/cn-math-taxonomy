@@ -26,8 +26,8 @@
 
     var defaultAvatar = {
         id: 'default',
-        name: '星芽小探员',
-        description: '带着好奇心出发，发现每一天的小小惊喜。',
+        name: '初始小猫',
+        description: '收集拼图，解锁属于你的专属装扮。',
         image: avatarImage('default', DEFAULT_CAT),
         catId: DEFAULT_CAT
     };
