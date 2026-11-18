@@ -63,7 +63,10 @@
 </header>
 <div class="explore" data-mobile-view="graph">
   <div class="explore-mobile-bar" id="mobile-controls">
-    <strong id="mobile-book-title">物理知识图谱</strong>
+    <div class="mobile-book-copy">
+      <strong id="mobile-book-title">物理知识图谱</strong>
+      <small class="mobile-book-challenge-hint" id="mobile-book-challenge-hint" hidden>初中物理阶段，每个知识点可完成两轮挑战，<span class="mobile-expert-phrase">第二次可解锁专家模式</span></small>
+    </div>
     <button type="button" id="list-toggle" class="list-toggle" aria-expanded="false" aria-controls="side" aria-label="展开知识点目录" hidden>目录</button>
     <button type="button" id="mobile-options-toggle" aria-expanded="false" aria-controls="graph-options" aria-label="展开图谱选项">选项</button>
     <button type="button" id="mobile-filter-toggle" aria-expanded="false" aria-controls="directory-filters" aria-label="展开目录筛选">筛选</button>
@@ -99,9 +102,12 @@
   <section id="graph-pane" class="graph-pane" aria-label="教材知识图谱">
     <div id="graph-options" class="graph-options" hidden>
     <div class="book-context" aria-label="当前教材与检测">
-      <div>
+      <div class="book-overview">
         <p class="book-eyebrow" id="progress-owner">检测记录：本机访客</p>
-        <h1 id="book-title">选择一本教材</h1>
+        <div class="book-title-row">
+          <h1 id="book-title">选择一本教材</h1>
+          <span class="book-challenge-hint" id="book-challenge-hint" hidden>初中物理阶段，每个知识点可完成两轮挑战，第二次可解锁专家模式</span>
+        </div>
         <p class="muted" id="book-note">按教材册次浏览知识点，随时查看已通过和待巩固的内容。</p>
       </div>
       <div class="book-actions">
@@ -133,7 +139,7 @@
       </div>
       <div id="node-tip" class="node-tip" role="tooltip" hidden></div>
     </div>
-    <p class="graph-learning-hint" id="graph-learning-hint">点击知识点即可进入检测；初中物理通过普通检测后，第二次挑战可解锁专家模式。</p>
+    <p class="graph-learning-hint" id="graph-learning-hint">点击知识点即可进入检测。</p>
     <ul class="legend">
       <li><i class="swatch sw-p"></i>小学</li>
       <li><i class="swatch sw-j"></i>初中</li>

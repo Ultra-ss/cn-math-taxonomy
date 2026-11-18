@@ -110,9 +110,13 @@ body.page-explore .site-footer { flex: none; }
 .detail-test-state { font-size: 0.9rem; font-weight: 750; }
 .detail-test-state:not(.test-passed):not(.test-failed):not(.test-expert) { color: var(--muted); }
 .progress-note { margin: 0; padding: 5px 12px 0; color: var(--muted); font-size: 0.8rem; }
-.book-context { display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 13px 14px; border-bottom: 1px solid var(--line); background: var(--bg-elev); background-image: var(--header-wash, none); }
+.book-context { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding: 13px 14px; border-bottom: 1px solid var(--line); background: var(--bg-elev); background-image: var(--header-wash, none); }
 .book-context > div { min-width: 0; }
+.book-overview { flex: 1 1 280px; }
 .book-context h1 { font-size: 1.18rem; line-height: 1.4; margin: 0 0 3px; }
+.book-title-row { display: flex; align-items: baseline; flex-wrap: wrap; gap: 3px 10px; margin-bottom: 3px; }
+.book-context .book-title-row h1 { flex: none; margin: 0; white-space: nowrap; }
+.book-challenge-hint { flex: 1 1 16em; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
 .book-context p { margin: 0; font-size: 0.85rem; }
 .book-context .book-eyebrow { color: var(--muted); font-size: 0.75rem; margin-bottom: 4px; }
 .book-context .btn { flex: none; font-size: 0.87rem; }
@@ -346,7 +350,11 @@ body.page-explore .site-footer { flex: none; }
     background: var(--bg-elev);
     background-image: var(--header-wash, none);
   }
-  #mobile-book-title { min-width: 0; margin: 0; font-size: 0.95rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mobile-book-copy { display: flex; flex-direction: column; gap: 2px; min-width: 0; padding: 4px 0; }
+  #mobile-book-title { display: block; min-width: 0; margin: 0; font-size: 0.95rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mobile-book-challenge-hint { display: block; color: var(--muted); font-size: 11px; line-height: 1.45; overflow-wrap: anywhere; }
+  .mobile-expert-phrase { white-space: nowrap; }
+  .book-title-row .book-challenge-hint { display: none; }
   .explore-mobile-bar button { min-width: 56px; min-height: 44px; padding: 6px 10px; font-size: 0.88rem; white-space: nowrap; }
   #list-toggle { display: none; }
   .explore-mobile-bar button[aria-expanded="true"], .mobile-menu-toggle[aria-expanded="true"] { background: var(--brand-soft); color: var(--brand-strong); border-color: var(--brand); }

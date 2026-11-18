@@ -250,9 +250,17 @@
       mobileTitle.textContent = hasBookScope() ? scopeTitle() : subject === 'physics' ? '物理知识图谱' : '科学知识图谱';
       mobileTitle.setAttribute('aria-label', hasBookScope() ? '所选教材：' + selectedVolumes.map(bookTitle).join('、') : mobileTitle.textContent);
     }
+    var juniorPhysics = subject === 'physics' && hasBookScope() && selectedVolumes.every(function (key) {
+      var book = bookSpec(key);
+      return book && book[2] >= 8 && book[2] <= 9;
+    });
+    ['book-challenge-hint', 'mobile-book-challenge-hint'].forEach(function (id) {
+      var hint = $(id);
+      if (hint) hint.hidden = !juniorPhysics;
+    });
     var count = topics.filter(inBookScope).length;
-    $('book-note').textContent = selectedVolumes.length > 1 ? '共 ' + count + ' 个知识点，可在目录中浏览所选教材并逐点检测。'
-      : volume ? '本册 ' + count + ' 个知识点，检测从教材第一个知识点开始。' : '在教材选择器中选择册次，或从首页多选教材进入。';
+    $('book-note').textContent = selectedVolumes.length > 1 ? '所选教材共有 ' + count + ' 个知识点'
+      : volume ? '本册共有 ' + count + ' 个知识点' : '在教材选择器中选择册次，或从首页多选教材进入。';
     action.hidden = !volume;
     action.href = volume ? bookHref() : '#';
     if (volume) action.setAttribute('data-diagnose-return', '../diagnose/?subject=' + subject + '&volume=' + encodeURIComponent(volume) + '&order=book');

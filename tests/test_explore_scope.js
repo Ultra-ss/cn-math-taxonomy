@@ -18,7 +18,7 @@ function element() {
   return {textContent:'',hidden:false,value:'',scrollTop:0,
     setAttribute(k,v){attrs.set(k,String(v));},removeAttribute(k){attrs.delete(k);},getAttribute(k){return attrs.get(k);}};
 }
-const nodes = Object.fromEntries(['q','detail','book-title','book-diagnose','mobile-book-title','book-note','book-view'].map(id=>[id,element()]));
+const nodes = Object.fromEntries(['q','detail','book-title','book-diagnose','mobile-book-title','book-note','book-view','book-challenge-hint','mobile-book-challenge-hint'].map(id=>[id,element()]));
 const records=[], changes=[];
 const ctx = {
   URL, URLSearchParams, Set, Map,
@@ -76,7 +76,8 @@ assert.deepEqual(Array.from(records.at(-1).volumes),['八上','八下']);assert.
 assert.deepEqual(Array.from(ctx.cameraContext().volumes),['八上','八下']);
 ctx.syncBook();assert.equal(nodes['book-diagnose'].hidden,true,'组合图不伪装成仅检测第一本教材');
 assert.equal(nodes['book-view'].hidden,false);assert.equal(nodes['book-title'].textContent,'已选 2 本教材');
-assert.ok(nodes['book-note'].textContent.includes('52'));
+assert.equal(nodes['book-note'].textContent,'所选教材共有 52 个知识点');
+assert.equal(nodes['book-challenge-hint'].hidden,false);assert.equal(nodes['mobile-book-challenge-hint'].hidden,false);
 const back=new URL(ctx.graphReturnTo(),ctx.location.origin);
 assert.equal(back.searchParams.get('volumes'),'八上,八下');assert.ok(!back.searchParams.has('volume'));assert.equal(back.hash,'#cnp_029');
 const diagnosis=new URL(ctx.withReturn('../diagnose/?subject=physics&target=cnp_029&retry=1'),ctx.location.origin);
@@ -85,6 +86,8 @@ assert.equal(new URL(diagnosis.searchParams.get('returnTo'),ctx.location.origin)
 // 只有用户显式跳到组合外的节点，才切换为该节点的教材。
 ctx.select('cnp_053','hash');
 assert.deepEqual(Array.from(ctx.selectedVolumes),['九全']);assert.equal(ctx.volume,'九全');
+assert.equal(nodes['book-note'].textContent,'本册共有 40 个知识点');
+assert.equal(nodes['book-challenge-hint'].hidden,false);assert.equal(nodes['mobile-book-challenge-hint'].hidden,false);
 assert.ok(!('volumes' in records.at(-1)));assert.ok(!('volumes' in ctx.cameraContext()));
 assert.equal(new URL(changes.at(-1),ctx.location.origin).searchParams.get('volume'),'九全');
 assert.ok(!new URL(changes.at(-1),ctx.location.origin).searchParams.has('volumes'));
@@ -94,6 +97,7 @@ ctx.hashValue='cnp_029';ctx.bootSelection();assert.equal(ctx.selected,'cnp_029')
 assert.deepEqual(Array.from(ctx.selectedVolumes),['八上','八下']);assert.equal(ctx.showWholeBook,false);assert.equal(ctx.upDepth,'all');
 ctx.chooseBook('八下');assert.deepEqual(Array.from(ctx.selectedVolumes),['八下']);assert.equal(ctx.selected,'cnp_029');
 ctx.chooseBook('');assert.deepEqual(Array.from(ctx.selectedVolumes),[]);assert.equal(ctx.volume,'');
+assert.equal(nodes['book-challenge-hint'].hidden,true);assert.equal(nodes['mobile-book-challenge-hint'].hidden,true);
 const neighborhood=new Set(['cnp_001','cnp_053']);assert.equal(ctx.scopedNodeSet(neighborhood),neighborhood,'无册次范围仍是原局部图');
 
 setSubject('science');ctx.location.search='?subject=science&volumes=一下,一上,八上';ctx.applyQuery();
@@ -106,4 +110,9 @@ assert.equal(new URL(ctx.graphReturnTo(),ctx.location.origin).searchParams.get('
 setSubject('physics');ctx.setBookScope(BookSelection.allowed('physics'));ctx.showWholeBook=true;
 assert.equal(ctx.hasBookScope(),true);assert.equal(ctx.scopedNodeSet(new Set()).size,269);
 assert.equal(ctx.selectedVolumes.length,9);
+ctx.syncBook();assert.equal(nodes['book-challenge-hint'].hidden,true,'混合初高中教材不显示仅初中适用的两轮说明');
+ctx.setBookScope(['必修一']);ctx.syncBook();assert.equal(nodes['book-note'].textContent,'本册共有 27 个知识点');
+assert.equal(nodes['book-challenge-hint'].hidden,true);assert.equal(nodes['mobile-book-challenge-hint'].hidden,true);
+setSubject('science');ctx.setBookScope(['一上']);ctx.syncBook();assert.equal(nodes['book-note'].textContent,'本册共有 15 个知识点');
+assert.equal(nodes['book-challenge-hint'].hidden,true);assert.equal(nodes['mobile-book-challenge-hint'].hidden,true);
 console.log('test_explore_scope: multi-book union/edges, local scope, selection, URLs, memory/camera and legacy choices passed');
