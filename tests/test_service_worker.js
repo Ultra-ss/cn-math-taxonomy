@@ -8,7 +8,7 @@ const ROOT = path.resolve(__dirname, '..');
 const source = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
 function response(body, options = {}) {
   return { body, status: options.status === undefined ? 200 : options.status,
-    type: options.type || 'basic', redirected: !!options.redirected,
+    type: options.type || 'basic', redirected: !!options.redirected, url: options.url || '',
     clone() { return response(body, options); }, async text() { return body; } };
 }
 function key(req) { return typeof req === 'string' ? req : req.url; }
@@ -82,6 +82,22 @@ async function test(label, fn) { await fn(); passed++; console.log('  ok   ' + l
     assert.equal(await (await nav.event.response).text(), 'cached graph page');
     assert.equal(await (await js.event.response).text(), 'cached graph script');
     await Promise.all([nav.done(), js.done()]); assert.equal(app.calls.length, 0);
+  });
+  await test('Cloudflare canonical HTML redirects install and both URL forms work offline without trusting other redirects', async () => {
+    const base = 'https://physicalmap.pages.dev/';
+    const app = fixture({fetch(req) { return req.url.endsWith('/children/history.html') ?
+      response('history page', {redirected:true,url:base+'children/history'}) : response('core'); }});
+    await app.dispatch('install').done(); assert.equal(app.skipped(),1);
+    assert.equal(app.calls.some(req=>req.url===base+'index.html'),false,'Root index alias must not trigger a redundant canonical redirect');
+    for (const suffix of ['children/history','children/history.html?subject=physics']) {
+      const before=app.calls.length, run=app.dispatch('fetch',request(base+suffix,{mode:'navigate'}));
+      assert.equal(await(await run.event.response).text(),'history page'); await run.done(); assert.equal(app.calls.length,before);
+    }
+    for (const url of [base+'unexpected-page','https://other.test/children/history']) {
+      const unsafe = fixture({fetch(req) {return req.url.endsWith('/children/history.html') ?
+        response('wrong destination',{redirected:true,url}) : response('core'); }});
+      await assert.rejects(unsafe.dispatch('install').done(),/Core resource/); assert.equal(unsafe.skipped(),0);
+    }
   });
   await test('index.html navigation aliases and query combinations reuse the same shell under subdirectory hosting', async () => {
     const app = fixture({scope:'https://example.test/school/'});
