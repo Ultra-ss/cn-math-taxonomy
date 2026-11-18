@@ -1,13 +1,5 @@
 /* 知识图谱浏览：左目录、中局部图、右详情。手机以目录、图谱、详情三个视图切换。 */
 
-@font-face {
-  font-family: 'Physicalmap Playful';
-  src: url('fonts/physicalmap-playful.woff') format('woff');
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-
 :root {
   --node-passed-border: #668774;
   --node-expert-border: #c5a44b;

@@ -1,5 +1,13 @@
 /* 中小学·高中知识图谱：全站配色、字号、导航。浏览页与检测页共用。 */
 
+@font-face {
+  font-family: 'Physicalmap Playful';
+  src: url('fonts/physicalmap-playful.woff') format('woff');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 /* 莫兰迪雾紫、奶油黄与灰蓝：UI 与 Canvas 共用这些语义色值。 */
 :root {
   color-scheme: light;
@@ -912,6 +920,39 @@ body.page-home {
 @media (max-width: 900px), (max-height: 600px) {
   .page-home.subject-physics .textbook-stage { font-size: 0.76rem; line-height: 1.2; }
   .page-home.subject-physics .textbook-card { row-gap: 3px; }
+}
+
+/* 对称留白让教材相对整个桌面窗口居中，左下角反馈入口独立排布。 */
+@media (min-width: 901px) {
+  body.page-home { grid-template-columns: minmax(144px, 1fr) minmax(0, 1120px) minmax(144px, 1fr); }
+  .page-home > .home { padding: clamp(16px, 2.5vh, 28px) clamp(16px, 2.4vw, 36px) clamp(24px, 3.5vh, 40px); }
+  .page-home .brand-kicker { display: block; }
+  .page-home .textbook-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(18px, 2.2vw, 32px); }
+  .page-home .textbook-card { font-family: 'Physicalmap Playful', var(--font); padding: clamp(12px, 1.8vh, 20px) 12px; row-gap: 6px; }
+  .page-home .textbook-card strong { font-size: clamp(1.4rem, min(2.7vw, 3.8vh), 2.5rem); font-weight: 400; line-height: 1.15; letter-spacing: 0; }
+  .page-home .textbook-card[data-volume^="选必"] strong { max-width: 5em; }
+  .page-home .textbook-stage, .page-home.subject-physics .textbook-stage { display: block; font-size: clamp(1rem, 2.5vh, 1.5rem); font-weight: 400; line-height: 1.2; }
+  .page-home .textbook-count { font-size: clamp(.8rem, 1.8vh, 1.05rem); line-height: 1.25; }
+  .page-home .textbook-action { display: none; }
+  .page-home .home-feedback { width: min(184px, 100%); justify-self: start; padding: 12px; text-align: center; }
+  .page-home .feedback-qr-link { margin-inline: auto; }
+}
+@media (min-width: 901px) and (max-width: 1200px) {
+  .page-home > .home { padding: 16px 20px 24px; }
+  .page-home .textbook-intro { margin-bottom: 12px; }
+  .page-home .textbook-intro .eyebrow, .page-home .textbook-intro > p:last-child { display: none; }
+  .page-home .textbook-intro h1 { font-size: 1.5rem; }
+  .page-home .textbook-card { padding-block: 10px; row-gap: 4px; }
+  .page-home .textbook-stage, .page-home.subject-physics .textbook-stage { font-size: 1.05rem; }
+}
+@media (min-width: 901px) and (max-height: 640px) {
+  .page-home .textbook-intro { margin-bottom: 10px; }
+  .page-home .textbook-intro .eyebrow, .page-home .textbook-intro > p:last-child { display: none; }
+  .page-home .textbook-intro h1 { font-size: 1.3rem; }
+  .page-home > .home { padding-block: 12px 24px; }
+  .page-home .textbook-grid { gap: 16px 22px; }
+  .page-home .textbook-card { padding-block: 10px; row-gap: 4px; }
+  .page-home .textbook-card strong { font-size: clamp(1.25rem, 3.8vh, 1.75rem); }
 }
 
 /* 项目说明入口独立于主导航，避让答题区与系统安全区域。 */
