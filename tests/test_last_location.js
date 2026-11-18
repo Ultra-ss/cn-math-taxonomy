@@ -7,6 +7,7 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const source = fs.readFileSync(path.join(ROOT, 'assets/last-location.js'), 'utf8');
 const topics = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/topics.json'), 'utf8'));
+const BookSelection = require('../assets/book-selection.js');
 const KEY = 'cnmLastLocation.v1';
 let passed = 0;
 async function test(name, fn) { await fn();passed++;console.log('  ok   '+name); }
@@ -289,6 +290,53 @@ function remember(api, fields = {}) {
     assert.deepEqual(Array.from(app.api.resume(topics,'physics').volumes),['八下','九全']);
     assert.equal(await app.api.resumeHome(),true);assert.ok(app.nodes['continue-learning-location'].textContent.includes('小学科学'));
     const next=load({entries:Object.fromEntries(app.store)});assert.equal(next.api.owner(),'a');assert.equal(next.api.read('physics').topicId,'cnp_030');
+  });
+  await test('较新或同时间的全教材浏览只恢复范围与视图，保留真实学习点和时间且不写学习记录',()=>{
+    const study={v:1,subject:'physics',volume:'八下',topicId:'cnp_032',view:'book',depth:2,at:'2026-11-18T08:00:00.000Z'};
+    for(const at of [study.at,'2026-11-18T09:00:00.000Z']) {
+      const browse={...study,volume:'',volumes:BookSelection.allowed('physics'),topicId:'cnp_h001',view:'local',depth:'all',at};
+      const app=load({entries:{'cnmChildren.v1':JSON.stringify({current:'a',children:[{id:'a'}]}),
+        [KEY+'.learning.a']:JSON.stringify(study),[KEY+'.learning.a.physics']:JSON.stringify(study),
+        [KEY+'.account.a']:JSON.stringify(browse),[KEY+'.account.a.physics']:JSON.stringify(browse)}});
+      const before=Object.fromEntries(app.store),rec=app.api.resume(topics,'physics');
+      assert.equal(rec.topicId,study.topicId);assert.equal(rec.at,study.at);assert.equal(rec.subject,study.subject);assert.equal(rec.v,study.v);
+      assert.equal(rec.volume,'');assert.deepEqual(Array.from(rec.volumes),BookSelection.allowed('physics'));
+      assert.equal(rec.view,'local');assert.equal(rec.depth,'all');
+      assert.deepEqual(JSON.parse(JSON.stringify(app.api.read('physics'))),study,'真实学习存档的单册上下文没有被浏览改写');
+      assert.deepEqual(Object.fromEntries(app.store),before,'恢复显示范围不产生新写入或伪造学习时间');
+    }
+  });
+  await test('较旧的全教材、部分教材和单册浏览均不覆盖较新的真实学习上下文',()=>{
+    const study={v:1,subject:'physics',volume:'八下',topicId:'cnp_032',view:'book',depth:2,at:'2026-11-18T08:00:00.000Z'};
+    const candidates=[
+      {...study,volume:'',volumes:BookSelection.allowed('physics'),topicId:'cnp_h001',at:'2026-11-18T07:00:00.000Z'},
+      {...study,volume:'',volumes:['八下','九全'],topicId:'cnp_071',at:'2026-11-18T09:00:00.000Z'},
+      {...study,volume:'九全',topicId:'cnp_071',at:'2026-11-18T09:00:00.000Z'}
+    ];
+    for(const candidate of candidates) {
+      const app=load({entries:{[KEY+'.learning.guest']:JSON.stringify(study),[KEY]:JSON.stringify(candidate)}});
+      const before=Object.fromEntries(app.store);
+      assert.deepEqual(JSON.parse(JSON.stringify(app.api.resume(topics,'physics'))),study);
+      assert.deepEqual(Object.fromEntries(app.store),before);
+    }
+  });
+  await test('全教材浏览范围按账号和学科隔离，科学12册与物理9册各自恢复',()=>{
+    const profiles={current:'a',children:[{id:'a'},{id:'b'}]};
+    const study={v:1,subject:'physics',volume:'八下',topicId:'cnp_032',view:'book',depth:2,at:'2026-11-18T08:00:00.000Z'};
+    const science={...study,subject:'science',volume:'三下',topicId:'cns_p086'};
+    const browse={...study,volume:'',volumes:BookSelection.allowed('physics'),topicId:'cnp_h001',view:'local',depth:3,at:'2026-11-18T09:00:00.000Z'};
+    const app=load({entries:{'cnmChildren.v1':JSON.stringify(profiles),
+      [KEY+'.learning.a']:JSON.stringify(study),[KEY+'.learning.a.science']:JSON.stringify(science),
+      [KEY+'.learning.b']:JSON.stringify(study),[KEY+'.account.a']:JSON.stringify(browse)}});
+    assert.deepEqual(Array.from(app.api.resume(topics,'physics').volumes),BookSelection.allowed('physics'));
+    assert.deepEqual(JSON.parse(JSON.stringify(app.api.resume(topics,'science'))),science,'物理全范围不借给科学');
+    app.store.set(KEY+'.account.a.science',JSON.stringify({...science,volume:'',volumes:BookSelection.allowed('science'),view:'local',depth:'all',at:browse.at}));
+    const rec=app.api.resume(topics,'science');assert.equal(rec.topicId,science.topicId);assert.equal(rec.at,science.at);
+    assert.deepEqual(Array.from(rec.volumes),BookSelection.allowed('science'));assert.equal(rec.view,'local');assert.equal(rec.depth,'all');
+    profiles.current='b';app.store.set('cnmChildren.v1',JSON.stringify(profiles));
+    assert.deepEqual(JSON.parse(JSON.stringify(app.api.resume(topics,'physics'))),study,'A的全范围不借给B');
+    assert.equal(app.api.resume(topics,'science'),null);
+    profiles.current=null;app.store.set('cnmChildren.v1',JSON.stringify(profiles));assert.equal(app.api.resume(topics,'physics'),null,'账号全范围不借给访客');
   });
   await test('已有账号从归属明确的最近答题记录恢复，不会认领别人的会话或全局浏览',()=>{
     const profile=JSON.stringify({current:'a',children:[{id:'a'},{id:'b'}]});

@@ -142,13 +142,17 @@
     volume = selectedVolumes.length === 1 ? selectedVolumes[0] : '';
   }
   function hasBookScope() { return selectedVolumes.length > 0; }
+  function isAllBookScope() {
+    var books = booksForSubject();
+    return selectedVolumes.length === books.length && books.every(function (book) { return selectedVolumes.indexOf(book[0]) >= 0; });
+  }
   function inBookScope(topic) { return !hasBookScope() || selectedVolumes.indexOf(volumeOf(topic)) >= 0; }
   function scopedNodeSet(neighborhood) {
     if (!hasBookScope()) return neighborhood;
     if (showWholeBook) return new Set(topics.filter(inBookScope).map(function (topic) { return topic.id; }));
     return new Set(Array.from(neighborhood).filter(function (id) { return byId.has(id) && inBookScope(byId.get(id)); }));
   }
-  function scopeTitle() { return selectedVolumes.length > 1 ? '已选 ' + selectedVolumes.length + ' 本教材' : volume ? bookTitle(volume) : '选择教材'; }
+  function scopeTitle() { return isAllBookScope() ? '全部教材' : selectedVolumes.length > 1 ? '已选 ' + selectedVolumes.length + ' 本教材' : volume ? bookTitle(volume) : '选择教材'; }
   function writeBookScope(params) {
     if (window.CnmBookSelection) return window.CnmBookSelection.writeParams(params, subject, selectedVolumes);
     params.delete('volume'); params.delete('volumes');
@@ -259,7 +263,7 @@
       if (hint) hint.hidden = !juniorPhysics;
     });
     var count = topics.filter(inBookScope).length;
-    $('book-note').textContent = selectedVolumes.length > 1 ? '所选教材共有 ' + count + ' 个知识点'
+    $('book-note').textContent = isAllBookScope() ? '全部教材共有 ' + count + ' 个知识点' : selectedVolumes.length > 1 ? '所选教材共有 ' + count + ' 个知识点'
       : volume ? '本册共有 ' + count + ' 个知识点' : '在教材选择器中选择册次，或从首页多选教材进入。';
     action.hidden = !volume;
     action.href = volume ? bookHref() : '#';
@@ -274,11 +278,23 @@
     history.replaceState(null, '', graphReturnTo());
   }
   function chooseBook(key) {
-    if (key === '__selection__') return;
+    if (key === '__selection__' || key === '__local__') return;
+    var book = bookSpec(key), allBooks = !book;
+    var focus = null, previous = byId.get(selected);
+    if (allBooks) {
+      var memory = window.CnmLastLocation, recent = null;
+      try {
+        if (memory && memory.resume) recent = memory.resume(topics, subject);
+        else if (memory && memory.resolve && memory.read) recent = memory.resolve(topics, memory.read(subject));
+      } catch (error) { /* 本地记录不可用时，仍可从当前知识点浏览完整网络。 */ }
+      var studied = recent && recent.subject === subject && byId.get(recent.topicId);
+      if (studied && !studied.external) focus = studied.id;
+      else if (previous && !previous.external) focus = previous.id;
+    }
     rememberViewport();
     explicitNodeSelection = null;
     closeNodeDiagnosis();
-    setBookScope(bookSpec(key) ? [key] : []);
+    setBookScope(book ? [key] : booksForSubject().map(function (item) { return item[0]; }));
     grade = '';
     stage = '';
     domain = '';
@@ -293,7 +309,7 @@
     syncBookQuery();
     renderList();
     var first = firstScopedTopic();
-    if (first && hasBookScope()) select(first.id, 'user');
+    if (focus || first) select(focus || first.id, 'user', allBooks ? false : undefined);
     else { renderDetail(); renderGraph(); }
   }
 
@@ -427,10 +443,12 @@
     });
     var bookSelect = $('fGrade'), scopeOption = $('selected-books-option');
     if (scopeOption) scopeOption.remove();
-    if (selectedVolumes.length > 1) {
-      bookSelect.insertBefore(el('option', { id: 'selected-books-option', value: '__selection__', text: scopeTitle() }), bookSelect.options[1] || null);
+    var allBooks = isAllBookScope();
+    if (!hasBookScope() || selectedVolumes.length > 1 && !allBooks) {
+      bookSelect.insertBefore(el('option', { id: 'selected-books-option', value: hasBookScope() ? '__selection__' : '__local__',
+        text: hasBookScope() ? scopeTitle() : '局部图谱' }), bookSelect.options[1] || null);
     }
-    bookSelect.value = selectedVolumes.length > 1 ? '__selection__' : volume;
+    bookSelect.value = allBooks ? '' : selectedVolumes.length > 1 ? '__selection__' : volume || '__local__';
     var domainSelect = $('fDomain');
     if (Array.prototype.some.call(domainSelect.options, function (option) { return option.value === domain; })) {
       domainSelect.value = domain;
@@ -1388,7 +1406,7 @@
               framed = true;
             }
             if (!folded) {
-              meta.textContent = (hasBookScope() && showWholeBook ? (selectedVolumes.length > 1 ? '所选教材全图 ' : '本册全图 ') + total + ' 个知识点、' + edgeCount + ' 条先修。可拖动、缩放查看。' : '局部图 ' + total + ' 个知识点、' + edgeCount + ' 条先修。向上 ' + depthLabel + '，向下 1 层。')
+              meta.textContent = (hasBookScope() && showWholeBook ? (isAllBookScope() ? '全网路图谱 ' : selectedVolumes.length > 1 ? '所选教材全图 ' : '本册全图 ') + total + ' 个知识点、' + edgeCount + ' 条先修。可拖动、缩放查看。' : '局部图 ' + total + ' 个知识点、' + edgeCount + ' 条先修。向上 ' + depthLabel + '，向下 1 层。')
                 + (framed ? '已对准当前知识点，可拖动查看其余节点。' : '')
                 + note;
             }
@@ -1439,7 +1457,7 @@
     });
   }
 
-  function select(raw, source) {
+  function select(raw, source, restoreSavedCamera) {
     explicitNodeSelection = null;
     closeNodeDiagnosis();
     var hit = resolveId(raw);
@@ -1481,7 +1499,7 @@
     highlight(true);
     renderDetail();
     if (!same || graphNeedsRender) {
-      if (!focusExistingBook(transition)) renderGraph(undefined, transition);
+      if (!focusExistingBook(transition)) renderGraph(restoreSavedCamera, transition);
     }
   }
 
@@ -1617,6 +1635,7 @@
   function bootSelection() {
     var hash = readHash();
     if (hash && resolveId(hash) && inBookScope(byId.get(resolveId(hash).id))) { select(hash, 'hash'); return; }
+    if (!hash && !hasBookScope() && !grade && !stage && !domain && !query) { chooseBook(''); return; }
     if (hasBookScope() || grade) {
       var first = firstScopedTopic();
       if (first) { select(first.id, 'user'); return; }

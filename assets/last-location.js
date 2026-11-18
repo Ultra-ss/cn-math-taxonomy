@@ -25,12 +25,17 @@
     return typeof value === 'string' && (subject === 'physics' ? PHYSICS_BOOKS.indexOf(value) >= 0 : /^[一二三四五六][上下]$/.test(value));
   }
   function own(value, key) { return Object.prototype.hasOwnProperty.call(value, key); }
+  function bookKeys(subject) {
+    if (subject === 'physics') return PHYSICS_BOOKS.slice();
+    var books = [];
+    if (subject === 'science') CN.slice(1, 7).forEach(function (grade) { books.push(grade + '上', grade + '下'); });
+    return books;
+  }
   function bookScope(subject, volume, values) {
     if (values === undefined) return { volume:volume };
     if (!Array.isArray(values) || !values.length || values.length > 24) return null;
     for (var i = 0; i < values.length; i++) if (!own(values, i) || values[i] === '' || !validVolume(values[i], subject)) return null;
-    var order = subject === 'physics' ? PHYSICS_BOOKS : [];
-    if (subject === 'science') CN.slice(1, 7).forEach(function (grade) { order.push(grade + '上', grade + '下'); });
+    var order = bookKeys(subject);
     var selected = order.filter(function (value) { return values.indexOf(value) >= 0; });
     if (!selected.length || (volume && (selected.length !== 1 || selected[0] !== volume))) return null;
     return selected.length === 1 ? { volume:selected[0] } : { volume:'', volumes:selected };
@@ -139,7 +144,21 @@
   function resume(topics, subject) {
     var account = owner(), saved = readAt(subject, true, account);
     // 一旦保存了新版学习点，它包含确切的题目顺序和图谱上下文，优先于旧汇总推断。
-    if (saved) { var valid = resolve(topics, saved); if (valid) return valid; }
+    if (saved) {
+      var valid = resolve(topics, saved);
+      if (valid) {
+        var browse = resolve(topics, readAt(valid.subject, false, account)), books = bookKeys(valid.subject);
+        // 全教材是显示范围：沿用较新的浏览偏好，但最近学习点及其时间仍取真实答题记录。
+        if (browse && browse.volumes && browse.volumes.length === books.length &&
+            books.every(function (book) { return browse.volumes.indexOf(book) >= 0; }) &&
+            Date.parse(browse.at) >= Date.parse(valid.at)) {
+          return resolve(topics, Object.assign({}, valid, {
+            volume: '', volumes: browse.volumes.slice(), view: browse.view, depth: browse.depth
+          })) || valid;
+        }
+        return valid;
+      }
+    }
     var old = previousStudy(subject, account);
     if (old && Array.isArray(topics)) {
       var topic = topics.find(function (item) { return item && item.id === old.topicId && item.subject === old.subject && !item.external; });

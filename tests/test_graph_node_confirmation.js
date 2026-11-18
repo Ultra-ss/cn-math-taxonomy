@@ -54,7 +54,7 @@ ctx.renderGraph = () => {ctx.rebuilds++;ctx.explicitNodeSelection=null;};
 vm.createContext(ctx);
 vm.runInContext(section('function booksForSubject()', 'function currentChild()')+section('function graphReturnTo()', 'function syncBook()')+
   section('function syncMobileChrome()', 'function recomputeAliasHits()')+
-  section('function select(raw, source)', 'function zoomBy('),ctx);
+  section('function select(raw, source', 'function zoomBy('),ctx);
 ctx.bindNodeConfirmation();
 const dialog=ids['node-diagnose-dialog'], yes=ids['node-dialog-try'];
 

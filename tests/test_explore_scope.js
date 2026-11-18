@@ -33,7 +33,7 @@ const ctx = {
   readHash:()=>ctx.hashValue || '',resolveId:id=>ctx.byId.has(id)?{id,alias:null}:null,
   closeNodeDiagnosis(){},rememberViewport(){},renderList(){},renderDetail(){},syncMobileTopic(){},
   graphCamera:null,
-  syncControls(){},highlight(){},closeDrawerIfMobile(){},writeHash(id){ctx.lastHash=id;},renderGraph(){ctx.rendered=(ctx.rendered||0)+1;},
+  syncControls(){},highlight(){},closeDrawerIfMobile(){},writeHash(id){ctx.lastHash=id;},renderGraph(restoreSavedCamera){ctx.rendered=(ctx.rendered||0)+1;ctx.lastCameraRestore=restoreSavedCamera;},
   history:{replaceState(_a,_b,url){changes.push(url);const parsed=new URL(url,ctx.location.origin);ctx.location.search=parsed.search;ctx.location.href=parsed.href;}}
 };
 function setSubject(subject) {
@@ -46,7 +46,7 @@ vm.createContext(ctx);
 vm.runInContext(section('function booksForSubject()', 'function currentChild()')+
   section('function graphReturnTo()', 'function gradeWord(')+
   section('function passFilter(topic)', 'function chapterProgressKey(')+
-  section('function select(raw, source)', 'function zoomBy(')+
+  section('function select(raw, source', 'function zoomBy(')+
   section('function rememberLocation()', 'function restoreLocation(')+
   section('function applyQuery()', 'function bind()')+
   section('function cameraContext()', 'function captureViewport()')+
@@ -96,8 +96,13 @@ ctx.location.search='?subject=physics&volumes=八下,八上&view=local&depth=all
 ctx.hashValue='cnp_029';ctx.bootSelection();assert.equal(ctx.selected,'cnp_029');
 assert.deepEqual(Array.from(ctx.selectedVolumes),['八上','八下']);assert.equal(ctx.showWholeBook,false);assert.equal(ctx.upDepth,'all');
 ctx.chooseBook('八下');assert.deepEqual(Array.from(ctx.selectedVolumes),['八下']);assert.equal(ctx.selected,'cnp_029');
-ctx.chooseBook('');assert.deepEqual(Array.from(ctx.selectedVolumes),[]);assert.equal(ctx.volume,'');
+ctx.chooseBook('');assert.deepEqual(Array.from(ctx.selectedVolumes),BookSelection.allowed('physics'));assert.equal(ctx.volume,'');
+assert.equal(ctx.selected,'cnp_029','没有学习记录时保留有效的当前知识点');
+assert.equal(ctx.lastCameraRestore,false,'显式全部教材应重新对准目标，不套用拖远的旧相机');
+assert.equal(ctx.isAllBookScope(),true);assert.equal(nodes['book-title'].textContent,'全部教材');
+assert.equal(nodes['book-note'].textContent,'全部教材共有 269 个知识点');
 assert.equal(nodes['book-challenge-hint'].hidden,true);assert.equal(nodes['mobile-book-challenge-hint'].hidden,true);
+ctx.setBookScope([]);
 const neighborhood=new Set(['cnp_001','cnp_053']);assert.equal(ctx.scopedNodeSet(neighborhood),neighborhood,'无册次范围仍是原局部图');
 
 setSubject('science');ctx.location.search='?subject=science&volumes=一下,一上,八上';ctx.applyQuery();
@@ -115,4 +120,18 @@ ctx.setBookScope(['必修一']);ctx.syncBook();assert.equal(nodes['book-note'].t
 assert.equal(nodes['book-challenge-hint'].hidden,true);assert.equal(nodes['mobile-book-challenge-hint'].hidden,true);
 setSubject('science');ctx.setBookScope(['一上']);ctx.syncBook();assert.equal(nodes['book-note'].textContent,'本册共有 15 个知识点');
 assert.equal(nodes['book-challenge-hint'].hidden,true);assert.equal(nodes['mobile-book-challenge-hint'].hidden,true);
+setSubject('physics');
+ctx.window.CnmLastLocation.resume=()=>({subject:'physics',volume:'必修一',topicId:'cnp_h020',view:'local',depth:3});
+ctx.selected='cnp_071';ctx.setBookScope(['九全']);ctx.chooseBook('');
+assert.equal(ctx.selected,'cnp_h020','全教材恢复本账号最近学习点，而不是当前浏览点');
+assert.equal(ctx.isAllBookScope(),true);assert.equal(ctx.showWholeBook,true,'不被学习记录的旧单册/局部视图缩小范围');
+assert.equal(ctx.scopedNodeSet(new Set([ctx.selected])).size,269);
+assert.deepEqual(Array.from(records.at(-1).volumes),BookSelection.allowed('physics'));
+assert.equal(new URL(ctx.graphReturnTo(),ctx.location.origin).searchParams.get('volumes'),BookSelection.allowed('physics').join(','));
+ctx.window.CnmLastLocation.resume=()=>({subject:'science',topicId:'cns_p001'});
+ctx.selected=null;ctx.setBookScope([]);ctx.hashValue='';ctx.stage='';ctx.grade='';ctx.domain='';ctx.query='';ctx.bootSelection();
+assert.equal(ctx.selected,'cnp_001','全新或错学科记录不产生空白，默认全部教材第一点');assert.equal(ctx.isAllBookScope(),true);
+setSubject('science');ctx.selected=null;ctx.setBookScope([]);ctx.window.CnmLastLocation.resume=()=>null;ctx.chooseBook('');
+assert.equal(ctx.selected,'cns_p001');assert.deepEqual(Array.from(ctx.selectedVolumes),BookSelection.allowed('science'));
+assert.equal(ctx.scopedNodeSet(new Set()).size,ctx.topics.length);assert.equal(ctx.lastCameraRestore,false);
 console.log('test_explore_scope: multi-book union/edges, local scope, selection, URLs, memory/camera and legacy choices passed');
