@@ -93,6 +93,18 @@
           <option value="必修一">必修第一册</option><option value="必修二">必修第二册</option><option value="必修三">必修第三册</option>
           <option value="选必一">选择性必修第一册</option><option value="选必二">选择性必修第二册</option><option value="选必三">选择性必修第三册</option>
         </select>
+        <details id="book-picker" class="book-picker" hidden>
+          <summary id="book-picker-toggle" aria-controls="book-picker-panel"><span id="book-picker-label">全部教材</span></summary>
+          <div id="book-picker-panel" class="book-picker-panel">
+            <div class="book-picker-actions">
+              <button type="button" id="book-picker-all">全选</button>
+              <button type="button" id="book-picker-clear">清空</button>
+            </div>
+            <div id="book-picker-options" class="book-picker-options" role="group" aria-label="教材多选" aria-describedby="book-picker-hint"></div>
+            <p id="book-picker-hint" class="book-picker-hint" aria-live="polite">勾选教材后显示所选图谱。</p>
+            <button type="button" id="book-picker-apply" class="primary" disabled>显示所选图谱</button>
+          </div>
+        </details>
         <select id="fDomain" aria-label="领域"><option value="">全部领域</option></select>
       </div>
       <div id="count" class="count">正在加载…</div>

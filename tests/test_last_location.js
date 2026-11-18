@@ -64,6 +64,29 @@ function remember(api, fields = {}) {
       const record=remember(api,fields);assert.equal(api.resolve(topics).topicId,record.topicId);
     }
   });
+  await test('恢复URL从物理教材范围推断学段，跨学段与全部教材保持全部且不改学习存档',()=>{
+    const {api,store}=load();
+    for (const [fields,stage] of [
+      [{volume:'八下',topicId:'cnp_030'},'j'],
+      [{volume:'',volumes:['八上','九全'],topicId:'cnp_071'},'j'],
+      [{volume:'',volumes:['八上','八下','九全'],topicId:'cnp_071'},'j'],
+      [{volume:'必修一',topicId:'cnp_h001'},'h'],
+      [{volume:'',volumes:['必修一','选必三'],topicId:'cnp_h001'},'h'],
+      [{volume:'',volumes:BookSelection.allowed('physics').slice(3),topicId:'cnp_h001'},'h'],
+      [{volume:'',volumes:['八上','必修一'],topicId:'cnp_001'},null],
+      [{volume:'',volumes:BookSelection.allowed('physics'),topicId:'cnp_030'},null],
+      [{volume:'',topicId:'cnp_071'},null],
+      [{subject:'science',volume:'三下',topicId:'cns_p086'},null]
+    ]) {
+      const record=remember(api,fields),before=Object.fromEntries(store);
+      const url=new URL(api.exploreURL(record,'/school/'),'https://physicalmap.pages.dev');
+      assert.equal(url.searchParams.get('stage'),stage,JSON.stringify(fields));
+      assert.equal(url.hash,'#'+record.topicId);assert.equal(url.searchParams.get('view'),record.view);
+      assert.equal(url.searchParams.get('depth'),String(record.depth));
+      assert.deepEqual(Object.fromEntries(store),before,'推断只改变URL，不写回学习或浏览记录');
+      assert.ok(!Object.hasOwn(api.read(),'stage'),'旧存储格式保持不变');
+    }
+  });
   await test('物理和科学分别保留位置，多本范围不会在切科时互相覆盖，兼容旧版唯一存档',()=>{
     const old=load();const physics=remember(old.api);
     const app=load({entries:{[KEY]:old.store.get(KEY)}});

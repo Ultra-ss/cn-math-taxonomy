@@ -29,6 +29,7 @@
   var grade = '';
   var volume = '';
   var selectedVolumes = [];
+  var bookDraft = null;
   var showWholeBook = true;
   var domain = '';
   var query = '';
@@ -130,6 +131,11 @@
     if (topic.grade >= 10) return EN_BOOK[topic.grade] ? EN_BOOK[topic.grade][0] : '';
     return CN[topic.grade] + (topic.semester === '全' ? '全' : topic.semester);
   }
+  function booksForStage(value) {
+    return booksForSubject().filter(function (book) {
+      return !value || value === 'p' && book[2] <= 6 || value === 'j' && book[2] >= 7 && book[2] <= 9 || value === 'h' && book[2] >= 10;
+    });
+  }
   function bookSpec(key) {
     return booksForSubject().find(function (book) { return book[0] === key; }) || null;
   }
@@ -152,7 +158,14 @@
     if (showWholeBook) return new Set(topics.filter(inBookScope).map(function (topic) { return topic.id; }));
     return new Set(Array.from(neighborhood).filter(function (id) { return byId.has(id) && inBookScope(byId.get(id)); }));
   }
-  function scopeTitle() { return isAllBookScope() ? '全部教材' : selectedVolumes.length > 1 ? '已选 ' + selectedVolumes.length + ' 本教材' : volume ? bookTitle(volume) : '选择教材'; }
+  function scopeTitle() {
+    if (isAllBookScope()) return '全部教材';
+    var books = booksForStage(stage);
+    if (stage && selectedVolumes.length === books.length && books.every(function (book) { return selectedVolumes.indexOf(book[0]) >= 0; })) {
+      return stage === 'j' ? '初中全部教材' : stage === 'h' ? '高中全部教材' : '小学全部教材';
+    }
+    return selectedVolumes.length > 1 ? '已选 ' + selectedVolumes.length + ' 本教材' : volume ? bookTitle(volume) : '选择教材';
+  }
   function writeBookScope(params) {
     if (window.CnmBookSelection) return window.CnmBookSelection.writeParams(params, subject, selectedVolumes);
     params.delete('volume'); params.delete('volumes');
@@ -279,28 +292,40 @@
   }
   function chooseBook(key, rememberChoice) {
     if (key === '__selection__' || key === '__local__') return;
-    var book = bookSpec(key), allBooks = !book;
-    // 只有教材选择器的明确操作更新偏好，普通浏览和恢复位置不会覆盖个人中心的选择。
+    var book = bookSpec(key);
+    if (key && !book) return;
+    chooseBooks(book ? [key] : booksForStage(stage).map(function (item) { return item[0]; }), rememberChoice, stage);
+  }
+  function chooseStage(value) {
+    var allowed = subject === 'physics' ? ['', 'j', 'h'] : ['', 'p'];
+    if (allowed.indexOf(value) < 0) return;
+    chooseBooks(booksForStage(value).map(function (book) { return book[0]; }), true, value);
+  }
+  function chooseBooks(keys, rememberChoice, nextStage) {
+    var activeStage = nextStage === undefined ? stage : nextStage;
+    var available = booksForStage(activeStage).map(function (book) { return book[0]; });
+    var chosen = available.filter(function (key) { return Array.isArray(keys) && keys.indexOf(key) >= 0; });
+    // Empty drafts never mean all books. Only an explicit nonempty selection changes the graph.
+    if (!chosen.length) return false;
     if (rememberChoice && window.CnmChildren && window.CnmChildren.setBookSelection) {
-      window.CnmChildren.setBookSelection(subject, book ? [key] : booksForSubject().map(function (item) { return item[0]; }));
+      window.CnmChildren.setBookSelection(subject, chosen);
     }
     var focus = null, previous = byId.get(selected);
-    if (allBooks) {
-      var memory = window.CnmLastLocation, recent = null;
-      try {
-        if (memory && memory.resume) recent = memory.resume(topics, subject);
-        else if (memory && memory.resolve && memory.read) recent = memory.resolve(topics, memory.read(subject));
-      } catch (error) { /* 本地记录不可用时，仍可从当前知识点浏览完整网络。 */ }
-      var studied = recent && recent.subject === subject && byId.get(recent.topicId);
-      if (studied && !studied.external) focus = studied.id;
-      else if (previous && !previous.external) focus = previous.id;
-    }
+    var memory = window.CnmLastLocation, recent = null;
+    try {
+      if (memory && memory.resolve && memory.read) recent = memory.resolve(topics, memory.read(subject));
+      if (!recent && memory && memory.resume) recent = memory.resume(topics, subject);
+    } catch (error) { /* 本地记录不可用时仍可进入所选教材。 */ }
+    function inChoice(topic) { return topic && !topic.external && chosen.indexOf(volumeOf(topic)) >= 0; }
+    var studied = recent && recent.subject === subject && byId.get(recent.topicId);
+    if (inChoice(studied)) focus = studied.id;
+    else if (inChoice(previous)) focus = previous.id;
     rememberViewport();
     explicitNodeSelection = null;
     closeNodeDiagnosis();
-    setBookScope(book ? [key] : booksForSubject().map(function (item) { return item[0]; }));
+    setBookScope(chosen);
     grade = '';
-    stage = '';
+    stage = activeStage;
     domain = '';
     query = '';
     $('q').value = '';
@@ -313,8 +338,9 @@
     syncBookQuery();
     renderList();
     var first = firstScopedTopic();
-    if (focus || first) select(focus || first.id, 'user', allBooks ? false : undefined);
+    if (focus || first) select(focus || first.id, 'user', false);
     else { renderDetail(); renderGraph(); }
+    return true;
   }
 
   function gradeWord(grade) {
@@ -445,18 +471,79 @@
       button.classList.toggle('on', on);
       button.setAttribute('aria-selected', on ? 'true' : 'false');
     });
-    var bookSelect = $('fGrade'), scopeOption = $('selected-books-option');
-    if (scopeOption) scopeOption.remove();
-    var allBooks = isAllBookScope();
+    var bookSelect = $('fGrade'), books = booksForStage(stage);
+    bookSelect.replaceChildren(el('option', { value: '', text: stage === 'j' ? '初中全部教材' : stage === 'h' ? '高中全部教材' : '全部教材' }));
+    books.forEach(function (book) { bookSelect.append(el('option', { value: book[0], text: book[1] })); });
+    var allBooks = selectedVolumes.length === books.length && books.every(function (book) { return selectedVolumes.indexOf(book[0]) >= 0; });
     if (!hasBookScope() || selectedVolumes.length > 1 && !allBooks) {
       bookSelect.insertBefore(el('option', { id: 'selected-books-option', value: hasBookScope() ? '__selection__' : '__local__',
         text: hasBookScope() ? scopeTitle() : '局部图谱' }), bookSelect.options[1] || null);
     }
     bookSelect.value = allBooks ? '' : selectedVolumes.length > 1 ? '__selection__' : volume || '__local__';
+    syncBookPicker();
     var domainSelect = $('fDomain');
     if (Array.prototype.some.call(domainSelect.options, function (option) { return option.value === domain; })) {
       domainSelect.value = domain;
     }
+  }
+
+  function closeBookPicker(returnFocus) {
+    var picker = $('book-picker');
+    if (!picker) return;
+    picker.open = false;
+    bookDraft = null;
+    if (returnFocus) $('book-picker-toggle').focus({ preventScroll: true });
+  }
+  function syncBookDraft() {
+    var picker = $('book-picker');
+    if (!picker) return;
+    var chosen = bookDraft === null ? selectedVolumes : bookDraft;
+    $('book-picker-options').querySelectorAll('input[data-volume]').forEach(function (input) {
+      input.checked = chosen.indexOf(input.value) >= 0;
+    });
+    $('book-picker-hint').textContent = chosen.length ? '已勾选 ' + chosen.length + ' 本教材，点击下方按钮显示。' : '至少勾选一本教材，再显示图谱。';
+    $('book-picker-apply').disabled = !chosen.length;
+  }
+  function syncBookPicker() {
+    var picker = $('book-picker');
+    if (!picker) return;
+    $('fGrade').hidden = true;
+    picker.hidden = false;
+    $('book-picker-label').textContent = hasBookScope() ? scopeTitle() : '选择教材';
+    $('book-picker-toggle').title = selectedVolumes.map(bookTitle).join('、') || '勾选教材后显示图谱';
+    var options = $('book-picker-options');
+    options.replaceChildren();
+    booksForStage(stage).forEach(function (book) {
+      var input = el('input', { type: 'checkbox', value: book[0], 'data-volume': book[0] });
+      options.append(el('label', { class: 'book-picker-choice' }, input, el('span', { text: book[1] })));
+    });
+    syncBookDraft();
+  }
+  function bindBookPicker() {
+    var picker = $('book-picker');
+    if (!picker) return;
+    picker.addEventListener('toggle', function () {
+      bookDraft = picker.open ? selectedVolumes.slice() : null;
+      syncBookDraft();
+    });
+    $('book-picker-options').addEventListener('change', function () {
+      bookDraft = Array.from($('book-picker-options').querySelectorAll('input[data-volume]:checked')).map(function (input) { return input.value; });
+      syncBookDraft();
+    });
+    $('book-picker-all').addEventListener('click', function () {
+      bookDraft = booksForStage(stage).map(function (book) { return book[0]; });
+      syncBookDraft();
+    });
+    $('book-picker-clear').addEventListener('click', function () { bookDraft = []; syncBookDraft(); });
+    $('book-picker-apply').addEventListener('click', function () {
+      var keys = bookDraft === null ? selectedVolumes.slice() : bookDraft.slice();
+      if (!keys.length) return;
+      closeBookPicker(false);
+      chooseBooks(keys, true, stage);
+    });
+    document.addEventListener('click', function (event) {
+      if (picker.open && !picker.contains(event.target)) closeBookPicker(false);
+    });
   }
 
   var SIDE_COLLAPSED_KEY = 'explore.sideCollapsed';
@@ -1627,6 +1714,11 @@
     var stageValue = params.get('stage') || '';
     var allowedStages = subject === 'physics' ? ['', 'j', 'h'] : ['', 'p'];
     stage = allowedStages.indexOf(stageValue) >= 0 ? stageValue : '';
+    if (stage) {
+      var allowedBooks = booksForStage(stage).map(function (book) { return book[0]; });
+      var scopedBooks = selectedVolumes.filter(function (key) { return allowedBooks.indexOf(key) >= 0; });
+      setBookScope(scopedBooks.length ? scopedBooks : allowedBooks);
+    }
     domain = params.get('domain') || '';
     query = (params.get('q') || '').trim().toLowerCase();
     $('q').value = params.get('q') || '';
@@ -1689,7 +1781,10 @@
     $('mobile-filter-toggle').addEventListener('click', function () { setDirectoryFilters(!mobileFiltersOpen); });
     document.addEventListener('keydown', function (event) {
       if (event.key !== 'Escape' || $('node-diagnose-dialog').open) return;
-      if (document.querySelector('.site-header').classList.contains('menu-open')) {
+      if ($('book-picker') && $('book-picker').open) {
+        event.preventDefault();
+        closeBookPicker(true);
+      } else if (document.querySelector('.site-header').classList.contains('menu-open')) {
         setMobileMenu(false);
         $('mobile-menu-toggle').focus({ preventScroll: true });
       } else if (document.querySelector('.explore').classList.contains('options-open')) {
@@ -1711,16 +1806,11 @@
     $('stage-tabs').addEventListener('click', function (event) {
       var button = event.target.closest('[data-stage]');
       if (!button || button.hidden) return;
-      stage = button.getAttribute('data-stage');
-      var current = bookSpec(volume);
-      if (current && ((stage === 'j' && current[2] >= 10) || (stage === 'h' && current[2] <= 9))) setBookScope([]);
-      syncControls();
-      syncBook();
-      syncBookQuery();
-      renderList();
-      highlight(false);
+      closeBookPicker(false);
+      chooseStage(button.getAttribute('data-stage'));
     });
     $('fGrade').addEventListener('change', function () { chooseBook($('fGrade').value, true); });
+    bindBookPicker();
     $('book-view').addEventListener('click', function () {
       showWholeBook = !showWholeBook;
       rememberLocation();

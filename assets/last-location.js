@@ -327,6 +327,12 @@
     params.set('subject', record.subject);
     if (record.volumes) params.set('volumes', record.volumes.join(','));
     else if (record.volume) params.set('volume', record.volume);
+    // Infer the stage only for restored URLs; the saved learning record stays unchanged.
+    var selectedBooks = record.volumes || (record.volume ? [record.volume] : []);
+    if (record.subject === 'physics' && selectedBooks.length) {
+      if (selectedBooks.every(function (book) { return PHYSICS_BOOKS.slice(0, 3).indexOf(book) >= 0; })) params.set('stage', 'j');
+      else if (selectedBooks.every(function (book) { return PHYSICS_BOOKS.slice(3).indexOf(book) >= 0; })) params.set('stage', 'h');
+    }
     params.set('view', record.view);
     params.set('depth', String(record.depth));
     return siteBase(pathname === undefined && root.location ? root.location.pathname : pathname) + 'explore/?' + params.toString() + '#' + encodeURIComponent(record.topicId);

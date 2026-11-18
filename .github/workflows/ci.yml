@@ -116,6 +116,9 @@ jobs:
       - name: tests/test_explore_scope.js
         run: node tests/test_explore_scope.js
 
+      - name: tests/test_stage_book_scope.js
+        run: node tests/test_stage_book_scope.js
+
       - name: tests/test_explore_pro.js
         run: node tests/test_explore_pro.js
 
