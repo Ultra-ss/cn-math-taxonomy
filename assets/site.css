@@ -366,10 +366,13 @@ body:not(.page-explore) .site-header {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end;
   gap: 8px 18px;
+  margin-left: auto;
   min-width: 0;
   max-width: 100%;
 }
+.site-nav > .subject-switch, .site-nav > .home-nav-tools { margin-left: auto; }
 .subject-switch {
   display: inline-flex;
   align-items: center;

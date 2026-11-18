@@ -294,7 +294,14 @@
     try { root.sessionStorage.setItem(SUBJECT_KEY, selected); } catch (error) { /* 链接本身仍保留学科 */ }
     var doc = root.document;
     if (!doc || typeof doc.querySelectorAll !== 'function') return selected;
-    doc.querySelectorAll('.site-nav a:not(.subject-link), a.brand').forEach(function (link) {
+    doc.querySelectorAll('.site-nav a, a.brand').forEach(function (link) {
+      var linkSubject = link.getAttribute('data-subject');
+      if (linkSubject === 'physics' || linkSubject === 'science') {
+        var active = linkSubject === selected;
+        link.classList.toggle('on', active);
+        if (active) link.setAttribute('aria-current', 'true'); else link.removeAttribute('aria-current');
+        return;
+      }
       var href = link.getAttribute('href');
       if (!href || /^(?:[A-Za-z][A-Za-z0-9+.-]*:|\/\/|#)/.test(href) || /[\\\u0000-\u001f]/.test(href)) return;
       var hashAt = href.indexOf('#'), hash = hashAt < 0 ? '' : href.slice(hashAt);
