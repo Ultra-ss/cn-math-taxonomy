@@ -310,15 +310,14 @@
   /* ------------------------------------------------------------ 数据 */
   async function loadData() {
     const urls = ['../data/topics.json', '../data/dependencies.json', '../data/cn-curriculum-standards.json', '../data/id-aliases.json'];
+    const questionRequest = fetch('../data/questions.json').then(function (response) {
+      return response.ok ? response.json() : null;
+    }).catch(function () { return null; });
     const rs = await Promise.all(urls.map(function (u) { return fetch(u); }));
     rs.forEach(function (r, i) { if (!r.ok) throw new Error(urls[i] + ' → HTTP ' + r.status); });
     const js = await Promise.all(rs.map(function (r) { return r.json(); }));
     // 普通题库保留兼容回退；专家题库必须完整可用，绝不借普通题凑数。
-    let questions = null;
-    try {
-      const qr = await fetch('../data/questions.json');
-      if (qr.ok) questions = await qr.json();
-    } catch (e) { questions = null; }
+    let questions = await questionRequest;
     let topics = js[0].filter(function (t) { return E.subjectOf(t) === subject; });
     if (sessionLevel === 'pro') {
       if (subject !== 'physics') throw new Error('专家挑战目前仅开放初中物理。');

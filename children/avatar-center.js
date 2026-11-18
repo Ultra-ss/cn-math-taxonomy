@@ -9,7 +9,9 @@
     return el;
   }
   function picture(src, alt, cls) {
-    var img = node('img', cls); img.src = src || ''; img.alt = alt || ''; img.decoding = 'async';
+    var img = node('img', cls);
+    img.loading = /^(avatar-skin-thumb|avatar-owned-thumb|avatar-piece-art)$/.test(cls || '') ? 'lazy' : 'eager';
+    img.src = src || ''; img.alt = alt || ''; img.decoding = 'async';
     return img;
   }
   function mount(container) {

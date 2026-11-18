@@ -52,7 +52,7 @@
     var radio = el('input'); radio.type = 'radio'; radio.name = 'catId'; radio.value = cat.id;
     radio.required = true; radio.setAttribute('aria-describedby', 'f-cat-note');
     radio.addEventListener('change', syncCatChoices);
-    var image = el('img'); image.src = cat.image; image.alt = ''; image.width = 72; image.height = 72; image.decoding = 'async';
+    var image = el('img'); image.loading = 'lazy'; image.src = cat.image; image.alt = ''; image.width = 72; image.height = 72; image.decoding = 'async';
     choice.append(radio, image, el('strong', null, cat.name)); catOptions.appendChild(choice);
   });
 
@@ -135,7 +135,7 @@
     var head = el('div', 'kid-head');
     var avatar = avatarFor(c.id);
     if (avatar) {
-      var image = el('img', 'kid-avatar'); image.src = avatar.image; image.alt = c.name + '的头像'; image.title = avatar.name;
+      var image = el('img', 'kid-avatar'); image.loading = 'lazy'; image.src = avatar.image; image.alt = c.name + '的头像'; image.title = avatar.name;
       image.width = 48; image.height = 48; image.decoding = 'async'; image.setAttribute('data-avatar-owner', c.id);
       head.appendChild(image);
     }

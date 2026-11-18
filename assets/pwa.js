@@ -16,7 +16,18 @@
   /* ---------- service worker ---------- */
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register(root + 'sw.js', { scope: root }).catch(function () { /* 不支持或被禁用时静默 */ });
+      navigator.serviceWorker.register(root + 'sw.js', { scope: root }).then(function () {
+        navigator.serviceWorker.ready.then(function (registration) {
+          // Let the current page settle before gently preparing offline graph data.
+          window.setTimeout(function () {
+            function warm() {
+              if (document.hidden || !registration.active) return;
+              registration.active.postMessage({ type: 'CNM_WARM_GRAPH_DATA' });
+            }
+            if (window.requestIdleCallback) window.requestIdleCallback(warm, { timeout: 3000 }); else warm();
+          }, 6000);
+        }).catch(function () { /* 离线准备失败不影响浏览。 */ });
+      }).catch(function () { /* 不支持或被禁用时静默 */ });
     });
   }
 

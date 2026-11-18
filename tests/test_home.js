@@ -197,7 +197,7 @@ function load(search, options = {}) {
     assert.match(main, /<main[^>]*>\s*<section class="textbooks"/);
     assert.doesNotMatch(html,/图谱里?有什么|本机盲区|id="stats"|id="blind-home"/);
     assert.doesNotMatch(html,/assets\/(?:blindspots|stem-compat)\.js/);
-    assert.match(html,/<script src="assets\/children\.js"><\/script>[\s\S]*<script src="assets\/home\.js">/, '明确选教材使用同一个档案存储API');
+    assert.match(html,/<script src="assets\/children\.js"[^>]*><\/script>[\s\S]*<script src="assets\/home\.js"[^>]*>/, '明确选教材使用同一个档案存储API');
     assert.doesNotMatch(source,/renderBlindHome|data\/(?:questions|dependencies|cn-curriculum-standards)\.json/);
     assert.equal((main.match(/class="textbook-card /g)||[]).length,9);
     assert.match(html,/home-feedback/); assert.match(html,/continue-learning-dialog/);
