@@ -1,0 +1,66 @@
+.site-header > .promotion-demo-controls {
+  flex: 1 0 100%;
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  padding-top: 3px;
+  border-top: 1px dashed var(--line);
+  font: 500 11px/1.4 var(--font);
+  color: var(--muted);
+}
+.promotion-demo-controls button {
+  flex: none;
+  min-height: 28px;
+  padding: 3px 10px;
+  font: 650 11px/1.4 var(--font);
+  color: var(--brand-strong);
+  background: var(--brand-soft);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.promotion-demo-dialog {
+  width: min(440px, calc(100% - 32px));
+  max-height: calc(100dvh - 48px);
+  overflow: auto;
+  margin: auto;
+  padding: 22px;
+  box-sizing: border-box;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  color: var(--text);
+  background: var(--bg-elev);
+  box-shadow: var(--shadow);
+  font-family: var(--font);
+}
+.promotion-demo-dialog::backdrop { background: rgba(26, 23, 35, .4); }
+.promotion-demo-dialog h2 { margin-top: 0; color: var(--brand-strong); }
+.promotion-demo-dialog p { font-size: 14px; line-height: 1.7; }
+.promotion-demo-stats { padding: 10px; border-radius: 12px; background: var(--brand-soft); }
+.promotion-demo-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.promotion-demo-links a, .promotion-demo-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--brand-strong);
+  background: var(--bg-muted);
+  text-decoration: none;
+  font: 650 13px/1.4 var(--font);
+  text-align: center;
+  cursor: pointer;
+}
+.promotion-demo-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.promotion-demo-actions button { flex: 1; }
+.promotion-demo-dialog a:focus-visible, .promotion-demo-dialog button:focus-visible, .promotion-demo-controls button:focus-visible {
+  outline: 2px solid var(--focus); outline-offset: 3px;
+}
+.promotion-demo-dialog > a { font-size: 12px; color: var(--muted); }
+@media print { .promotion-demo-controls, .promotion-demo-dialog { display: none !important; } }
