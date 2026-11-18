@@ -3,7 +3,7 @@
  * 更新页面、脚本、样式或数据时必须增加 VERSION，避免跨版本混用。 */
 'use strict';
 
-var VERSION = 'v86';
+var VERSION = 'v87';
 var CACHE = 'cnm-pwa-' + VERSION;
 var SCOPE = self.registration.scope;
 var GRAPH_DATA = ['data/topics.json', 'data/dependencies.json', 'data/cn-curriculum-standards.json', 'data/id-aliases.json'];
@@ -11,7 +11,6 @@ var graphWarmup = null;
 
 var SHELL = [
   './',
-  'index.html',
   'explore/',
   'explore/app.js',
   'diagnose/',
@@ -76,6 +75,14 @@ function cacheable(res) {
   return res && res.status === 200 && res.type === 'basic' && !res.redirected;
 }
 
+function pageURL(raw) {
+  var url = new URL(raw);
+  url.search = ''; url.hash = '';
+  if (/\/index\.html$/.test(url.pathname)) url.pathname = url.pathname.slice(0, -10);
+  else if (/\.html$/.test(url.pathname)) url.pathname = url.pathname.slice(0, -5);
+  return url.href;
+}
+
 async function precache(cache) {
   // Limited concurrency leaves bandwidth and connections available for the open page.
   var next = 0, failed = false;
@@ -84,8 +91,13 @@ async function precache(cache) {
       try {
         var path = SHELL[next++], req = new Request(abs(path), { cache: 'reload' });
         var res = await fetch(req);
-        if (!cacheable(res)) throw new Error('Core resource could not be cached: ' + path);
-        await cache.put(req, res);
+        var page = /\/$|\.html$/.test(path);
+        // Pages canonicalizes .html addresses. Trust only that exact, same-origin
+        // canonical page, never arbitrary redirected scripts or external URLs.
+        var canonicalPage = page && res && res.status === 200 && res.type === 'basic' && res.redirected &&
+          res.url === pageURL(req.url) && new URL(res.url).origin === self.location.origin;
+        if (!cacheable(res) && !canonicalPage) throw new Error('Core resource could not be cached: ' + path);
+        await cache.put(cacheKey(req, page), res);
       } catch (error) { failed = true; throw error; }
     }
   }
@@ -108,12 +120,11 @@ self.addEventListener('activate', function (event) {
   })());
 });
 
-function cacheKey(req) {
+function cacheKey(req, page) {
   var url = new URL(req.url);
-  if (req.mode === 'navigate') {
+  if (req.mode === 'navigate' || page) {
     // All query/hash combinations use the same static page shell.
-    url.search = ''; url.hash = '';
-    if (/\/index\.html$/.test(url.pathname)) url.pathname = url.pathname.slice(0, -10);
+    return new Request(pageURL(url.href));
   }
   return new Request(url.href);
 }
