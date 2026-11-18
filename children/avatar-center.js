@@ -145,7 +145,11 @@
       if (sharing[key]) return;
       var person = current(), saved = Rewards.summary(account), activeCat = saved.catId || defaultCat;
       var avatar = get(saved.equipped || 'default', activeCat);
-      var options = { image: imageOf(avatar), username: person ? person.name : '本机访客', createdAt: person && person.createdAt || null };
+      var collectedSkins = skins.filter(function (skin) {
+        return saved.collections && saved.collections[skin.id] && saved.collections[skin.id].unlocked;
+      }).length;
+      var options = { image: imageOf(avatar), username: person ? person.name : '本机访客',
+        createdAt: person && person.createdAt || null, collectedSkins: collectedSkins };
       var label = cat(activeCat).name + (saved.equipped === 'default' ? '默认形象' : ' · ' + avatar.name);
       sharing[key] = true; shareMessages[key] = null; render();
       try {
@@ -360,10 +364,10 @@
       action.disabled = busy || !summary || !summary.ok || col.unlocked && summary.equipped === skin.id || !col.unlocked && summary.availableMoons < 1;
       action.addEventListener('click', function () { if (col.unlocked) wear(skin.id, ownerId); else draw(skin); }); description.appendChild(action);
       var giftNote = node('p', 'avatar-draw-note avatar-gift-note');
-      var feedback = node('a', '', '首页二维码');
+      var feedback = node('a', '', '作者二维码');
       var feedbackSubject = root.CnmLastLocation && root.CnmLastLocation.currentSubject ? root.CnmLastLocation.currentSubject() : 'physics';
       feedback.href = '../?home=1&subject=' + (feedbackSubject === 'science' ? 'science' : 'physics') + '#feedback-title';
-      giftNote.append('集齐十套装扮后，可扫描', feedback, '添加作者，领取彩蛋礼物。');
+      giftNote.append('集齐三套装扮后，可扫描', feedback, '添加好友，领取彩蛋礼物。');
       description.appendChild(giftNote);
       if (!col.unlocked && summary && summary.ok && summary.availableMoons < 1) {
         var earn = node('a', 'avatar-learn-link', '去知识图谱赚取月亮 →');

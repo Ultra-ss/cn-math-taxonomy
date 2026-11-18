@@ -30,7 +30,7 @@ function fixture(flags={}){
   };
   Object.defineProperty(env,'localStorage',{get(){throw Error('must not read storage');}});
   Object.defineProperty(env,'CnmChildren',{get(){throw Error('must not read profile');}});
-  const input={image:'/assets/avatars/skin-01.svg',username:'小满',createdAt:'2026-11-17T12:00:00.000Z'};
+  const input={image:'/assets/avatars/skin-01.svg',username:'小满',createdAt:'2026-11-17T12:00:00.000Z',collectedSkins:3};
   function run(ms){for(const[id,item]of [...timers])if(item.ms<=ms){timers.delete(id);item.fn();}}
   return{api:Share.create(env),env,input,ctx,canvas,text,images,paints,links,downloads,revoked,timers,run};
 }
@@ -48,26 +48,38 @@ await test('用户输入仅作为Canvas文本，安全文件名并限制昵称�
   assert.ok(!/[\\/:*?"<>|\u0000-\u001f\u202a-\u202e]/.test(info.filename));assert.ok(!info.filename.startsWith('.'));
   assert.equal(Share.metadata({username:''}).username,'本机访客');
 });
+await test('皮肤套数接受0到10的整数，旧调用和非法输入安全回退为0且不修改输入',()=>{
+  for(const count of [0,3,10]) {
+    const input={collectedSkins:count},before={...input},info=Share.metadata(input);
+    assert.equal(info.collectedSkins,count);assert.equal(info.collectionLabel,'已收集皮肤：'+count+' 套');assert.deepEqual(input,before);
+  }
+  for(const collectedSkins of [undefined,null,-1,11,1.5,NaN,Infinity,'3']) {
+    assert.equal(Share.metadata({collectedSkins}).collectionLabel,'已收集皮肤：0 套');
+  }
+});
 await test('长昵称标题分为两行，完整标题和用户名仍在图像宽度内',()=>{
   const f=fixture(),info=Share.metadata({username:'春风化雨热爱科学的小朋友'}),layout=Share.titleLayout(f.ctx,info);
   assert.equal(layout.lines.length,2);assert.equal(layout.lines.join(''),info.title);
   f.ctx.font='700 '+layout.size+'px sans-serif';for(const line of layout.lines)assert.ok(f.ctx.measureText(line).width<=layout.maxWidth);
 });
-await test('渲染真实尺寸PNG，形象在中央，标题在上，用户名与注册时间在下',async()=>{
+await test('渲染真实尺寸PNG，用户名下一行显示皮肤套数，再显示注册时间，文字不溢出',async()=>{
   const f=fixture(),blob=await f.api.render(f.input);assert.equal(blob.type,'image/png');assert.ok(blob.size>0);
   assert.deepEqual([f.canvas.width,f.canvas.height],[1200,1600]);
   assert.deepEqual(f.paints[0].slice(1),[143,365,914,914]);
   assert.ok(f.text.some(t=>t.value==='小满的物理图谱个人秀'&&t.y<365));
   assert.ok(f.text.some(t=>t.value==='用户名：小满'&&t.y>1279));
   assert.ok(f.text.some(t=>t.value==='注册时间：2026年11月17日'&&t.y>1376));
+  const name=f.text.find(t=>t.value==='用户名：小满'),count=f.text.find(t=>t.value==='已收集皮肤：3 套'),date=f.text.find(t=>t.value==='注册时间：2026年11月17日');
+  assert.ok(count&&count.y-name.y>=40&&date.y-count.y>=40&&date.y<1482);
   assert.ok(f.text.every(t=>t.width<=952));assert.equal(f.images[0].crossOrigin,'anonymous');assert.equal(f.timers.size,0);
 });
-await test('图片与昵称在请求开始时捕获，await期间修改账号输入不会导错个人秀',async()=>{
+await test('图片、昵称和皮肤套数在请求开始时捕获，await期间修改账号输入不会导错个人秀',async()=>{
   const f=fixture({delayImage:true}),promise=f.api.download(f.input);
-  f.input.username='另一个账号';f.input.image='/assets/avatars/skin-10.svg';f.input.createdAt=null;
+  f.input.username='另一个账号';f.input.image='/assets/avatars/skin-10.svg';f.input.createdAt=null;f.input.collectedSkins=10;
   f.images[0].complete();const result=await promise;
   assert.equal(result.filename,'小满-物理图谱个人秀.png');assert.ok(f.images[0].url.endsWith('/skin-01.svg'));
   assert.ok(f.text.some(t=>t.value==='用户名：小满'));assert.ok(!f.text.some(t=>t.value.includes('另一个账号')));
+  assert.ok(f.text.some(t=>t.value==='已收集皮肤：3 套'));assert.ok(!f.text.some(t=>t.value==='已收集皮肤：10 套'));
 });
 await test('下载通过独立PNG Blob，临时链接移除，URL等待浏览器接管后再释放',async()=>{
   const f=fixture(),result=await f.api.download(f.input);assert.equal(result.ok,true);
@@ -75,8 +87,9 @@ await test('下载通过独立PNG Blob，临时链接移除，URL等待浏览器
   assert.deepEqual(f.revoked,[]);f.run(1000);assert.deepEqual(f.revoked,[]);f.run(1200);assert.deepEqual(f.revoked,['blob:avatar-1']);
 });
 await test('并行下载保持各自昵称和URL生命周期，不读取任何本地账号或存储',async()=>{
-  const f=fixture();await Promise.all([f.api.download({...f.input,username:'甲'}),f.api.download({...f.input,username:'乙'})]);
+  const f=fixture();await Promise.all([f.api.download({...f.input,username:'甲',collectedSkins:0}),f.api.download({...f.input,username:'乙',collectedSkins:10})]);
   assert.deepEqual(f.downloads.map(d=>d.filename),['甲-物理图谱个人秀.png','乙-物理图谱个人秀.png']);
+  assert.ok(f.text.some(t=>t.value==='已收集皮肤：0 套'));assert.ok(f.text.some(t=>t.value==='已收集皮肤：10 套'));
   f.run(1200);assert.deepEqual(f.revoked,['blob:avatar-1','blob:avatar-2']);
 });
 await test('拒绝跨域或执行型图片地址，加载失败和decode失败不得导出空形象',async()=>{

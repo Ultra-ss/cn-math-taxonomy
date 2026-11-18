@@ -12,7 +12,9 @@
     var value = input || {};
     return { image: typeof value.image === 'string' ? value.image : '',
       username: typeof value.username === 'string' ? value.username : '',
-      createdAt: typeof value.createdAt === 'string' ? value.createdAt : null };
+      createdAt: typeof value.createdAt === 'string' ? value.createdAt : null,
+      collectedSkins: Number.isInteger(value.collectedSkins) && value.collectedSkins >= 0 && value.collectedSkins <= 10
+        ? value.collectedSkins : 0 };
   }
   function metadata(input) {
     var value = capture(input);
@@ -25,6 +27,7 @@
     }
     var filename = name.replace(/[\\/:*?"<>|]/g, '_').replace(/^[.\s]+|[.\s]+$/g, '') || '个人形象';
     return { username: name, title: name + '的物理图谱个人秀', registration: registration,
+      collectedSkins: value.collectedSkins, collectionLabel: '已收集皮肤：' + value.collectedSkins + ' 套',
       filename: filename + '-物理图谱个人秀.png', width: WIDTH, height: HEIGHT };
   }
   function round(ctx, x, y, width, height, radius) {
@@ -101,9 +104,10 @@
       ctx.fillStyle = '#f3edf5'; round(ctx, 124, 346, 952, 952, 34); ctx.fill();
       ctx.save(); round(ctx, 143, 365, 914, 914, 24); ctx.clip(); ctx.drawImage(image, 143, 365, 914, 914); ctx.restore();
       ctx.strokeStyle = '#e0d8e4'; ctx.lineWidth = 2; round(ctx, 124, 346, 952, 952, 34); ctx.stroke();
-      ctx.fillStyle = '#4e455a'; ctx.font = '650 41px ' + FONT; ctx.fillText('用户名：' + info.username, WIDTH / 2, 1376);
-      ctx.fillStyle = '#776c80'; ctx.font = '400 32px ' + FONT; ctx.fillText(info.registration, WIDTH / 2, 1434);
-      ctx.strokeStyle = '#ddd6df'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(426, 1470); ctx.lineTo(774, 1470); ctx.stroke();
+      ctx.fillStyle = '#4e455a'; ctx.font = '650 41px ' + FONT; ctx.fillText('用户名：' + info.username, WIDTH / 2, 1356);
+      ctx.fillStyle = '#786685'; ctx.font = '600 32px ' + FONT; ctx.fillText(info.collectionLabel, WIDTH / 2, 1407);
+      ctx.fillStyle = '#776c80'; ctx.font = '400 28px ' + FONT; ctx.fillText(info.registration, WIDTH / 2, 1450);
+      ctx.strokeStyle = '#ddd6df'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(426, 1482); ctx.lineTo(774, 1482); ctx.stroke();
       ctx.fillStyle = '#8a8091'; ctx.font = '400 24px ' + FONT; ctx.fillText('physicalmap.pages.dev', WIDTH / 2, 1513);
     }
     async function render(input) {
