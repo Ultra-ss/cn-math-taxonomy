@@ -28,7 +28,7 @@
     var workshop = node('details', 'avatar-workshop'), compact = node('summary', 'avatar-workshop-summary');
     var compactTitleId = uid + '-compact-title';
     var mobile = root.matchMedia('(max-width: 600px)'), mobileOpen = false, wasMobile = mobile.matches;
-    var galleryScroll = 0;
+    var galleryScroll = 0, ownedScroll = 0;
     var cleanups = [];
     workshop.append(compact, shell); workshop.open = !mobile.matches;
     container.classList.add('avatar-center'); container.textContent = ''; container.append(workshop, dialog);
@@ -38,6 +38,15 @@
     function owner() { var c = current(); return c ? c.id : null; }
     function sameOwner(a, b) { return (a || '') === (b || ''); }
     function ownerKey(id) { return id || 'guest'; }
+    function restoreListScroll(list, value, selectedItem) {
+      if (!list || !list.clientWidth) return;
+      list.scrollLeft = value;
+      if (value) return;
+      var active = list.querySelector(selectedItem);
+      if (!active) return;
+      var frame = list.getBoundingClientRect(), item = active.getBoundingClientRect();
+      if (item.left < frame.left || item.right > frame.right) list.scrollLeft += item.left - frame.left - 8;
+    }
     function syncWorkshop() {
       var toggle = compact.querySelector('.avatar-workshop-toggle');
       if (toggle) toggle.textContent = workshop.open ? '收起' : '展开';
@@ -50,7 +59,15 @@
       workshop.open = mobile.matches ? mobileOpen : true;
       syncWorkshop();
     }
-    on(workshop, 'toggle', function () { if (mobile.matches) mobileOpen = workshop.open; syncWorkshop(); });
+    on(workshop, 'toggle', function () {
+      if (mobile.matches) mobileOpen = workshop.open;
+      syncWorkshop();
+      if (workshop.open) {
+        var owned = shell.querySelector('.avatar-owned-list'), collect = shell.querySelector('.avatar-collect-details');
+        restoreListScroll(owned, ownedScroll, '[aria-pressed="true"]');
+        if (collect && collect.open) restoreListScroll(shell.querySelector('.avatar-gallery'), galleryScroll, '[aria-selected="true"]');
+      }
+    });
     if (mobile.addEventListener) on(mobile, 'change', resizedWorkshop);
     else if (mobile.addListener) { mobile.addListener(resizedWorkshop); cleanups.push(function () { mobile.removeListener(resizedWorkshop); }); }
     function catId() { return summary && summary.catId || defaultCat; }
@@ -86,6 +103,8 @@
     function restoreFocus() {
       if (!mountedAlive || !container.isConnected) return;
       if (!workshop.open) { compact.focus({ preventScroll: true }); return; }
+      var collect = shell.querySelector('.avatar-collect-details');
+      if (collect && !collect.open) { collect.querySelector('summary').focus({ preventScroll: true }); return; }
       var button = shell.querySelector('[data-avatar-action="draw"]:not(:disabled)') || shell.querySelector('[data-avatar-skin][aria-selected="true"]');
       if (button) button.focus({ preventScroll: true });
     }
@@ -138,7 +157,7 @@
         shareMessages[key] = { text: '保存失败：' + String(error && error.message || '请稍后重试。').slice(0, 160), error: true };
       } finally { sharing[key] = false; if (mountedAlive) render(); }
     }
-    async function wear(id, account) {
+    async function wear(id, account, focusSelector) {
       if (busy) return;
       busy = true; busyLabel = '正在保存装扮…'; shareMessages[ownerKey(account)] = null; render();
       try {
@@ -147,7 +166,16 @@
         if ((!result || !result.ok) && sameOwner(owner(), account)) note(explain(result && result.code), true);
         else if (result && result.ok && sameOwner(owner(), account)) note(id === 'default' ? '已恢复默认形象。' : '已穿戴「' + get(id).name + '」。', false);
       } catch (error) { if (mountedAlive && sameOwner(owner(), account)) note('装扮暂时没有保存成功，请稍后重试。', true); }
-      finally { busy = false; busyLabel = ''; if (mountedAlive) render(); }
+      finally {
+        busy = false; busyLabel = '';
+        if (mountedAlive) {
+          render();
+          if (focusSelector && sameOwner(owner(), account) && workshop.open) {
+            var button = shell.querySelector(focusSelector);
+            if (button) button.focus({ preventScroll: true });
+          }
+        }
+      }
     }
     function reveal(result, skin, account, nickname) {
       dialog.textContent = '';
@@ -198,15 +226,18 @@
       if (!mountedAlive) return;
       var c = current(), nextOwner = c ? c.id : null;
       var changedOwner = lastOwner !== null && !sameOwner(ownerId, nextOwner);
-      if (changedOwner) { closeReveal(); note('', false); mobileOpen = false; galleryScroll = 0; }
+      if (changedOwner) { closeReveal(); note('', false); mobileOpen = false; galleryScroll = 0; ownedScroll = 0; }
       else if (mobile.matches) mobileOpen = workshop.open;
       workshop.open = !mobile.matches || mobileOpen;
       ownerId = nextOwner; lastOwner = ownerKey(ownerId);
       summary = Rewards.summary(ownerId);
+      var oldCollect = shell.querySelector('.avatar-collect-details'), collectOpen = !changedOwner && !!(oldCollect && oldCollect.open);
       var oldGallery = shell.querySelector('.avatar-gallery');
-      if (oldGallery && !changedOwner && workshop.open) galleryScroll = oldGallery.scrollLeft;
+      if (oldGallery && !changedOwner && workshop.open && oldCollect && oldCollect.open) galleryScroll = oldGallery.scrollLeft;
+      var oldOwned = shell.querySelector('.avatar-owned-list');
+      if (oldOwned && !changedOwner && workshop.open) ownedScroll = oldOwned.scrollLeft;
       var scroll = changedOwner ? 0 : galleryScroll;
-      var oldRules = shell.querySelector('.avatar-rules'), rulesOpen = !!(oldRules && oldRules.open);
+      var oldRules = shell.querySelector('.avatar-rules'), rulesOpen = !changedOwner && !!(oldRules && oldRules.open);
       shell.textContent = '';
       var heading = node('div', 'avatar-section-heading');
       var titles = node('div'); titles.appendChild(node('span', 'avatar-eyebrow', '学习换来的小惊喜'));
@@ -223,11 +254,11 @@
       compactCopy.appendChild(node('span', 'avatar-workshop-balance', summary && summary.ok ? '可兑换 ' + summary.availableMoons + ' 🌙' : '余额暂不可用'));
       compact.append(compactCopy, node('span', 'avatar-workshop-toggle'));
       syncWorkshop();
+      var overview = node('div', 'avatar-overview');
       var hero = node('div', 'avatar-hero');
       var portrait = node('div', 'avatar-portrait'); portrait.appendChild(picture(imageOf(avatar), avatar.name, 'avatar-portrait-image'));
       var info = node('div', 'avatar-hero-info'); info.appendChild(node('p', 'avatar-owner-name', c ? c.name : '本机访客'));
       info.appendChild(node('p', 'avatar-equipped-name', currentCat.name + (avatar.id === 'default' ? ' · 默认形象' : ' · ' + avatar.name)));
-      info.appendChild(node('p', 'avatar-cat-fixed-note', c ? '猫咪已固定，可更换已解锁的服装。' : '创建账号时选择猫咪，创建后固定。'));
       var heroActions = node('div', 'avatar-hero-actions');
       var share = node('button', 'avatar-share-button', sharing[ownerKey(ownerId)] ? '保存中…' : '晒一晒'); share.type = 'button';
       share.setAttribute('data-avatar-action', 'share'); share.disabled = !!sharing[ownerKey(ownerId)];
@@ -241,25 +272,48 @@
       var shared = shareMessages[ownerKey(ownerId)];
       var shareStatus = node('p', 'avatar-share-status' + (shared && shared.error ? ' is-error' : ''), shared ? shared.text : '');
       shareStatus.setAttribute('role', shared && shared.error ? 'alert' : 'status'); shareStatus.setAttribute('aria-live', 'polite'); shareStatus.hidden = !shared; info.appendChild(shareStatus);
-      hero.append(portrait, info); shell.appendChild(hero);
+      hero.append(portrait, info); overview.appendChild(hero);
       var unlocked = skins.filter(function (skin) { return collection(skin.id).unlocked; }).length;
       var wallet = node('div', 'avatar-wallet');
       var balance = node('div', 'avatar-wallet-main'); balance.appendChild(node('span', '', '可兑换月亮'));
       balance.appendChild(node('strong', '', summary && summary.ok ? summary.availableMoons + ' 🌙' : '暂不可用')); wallet.appendChild(balance);
-      var walletNote = node('div', 'avatar-wallet-meta');
-      walletNote.appendChild(node('span', '', '已解锁 ' + unlocked + ' / ' + skins.length + ' 套'));
-      walletNote.appendChild(node('span', '', '累计使用 ' + (summary && summary.spentMoons || 0) + ' 🌙')); wallet.appendChild(walletNote); shell.appendChild(wallet);
+      overview.appendChild(wallet); shell.appendChild(overview);
+      var wardrobe = node('section', 'avatar-owned-section');
+      var ownedHeading = node('div', 'avatar-owned-heading');
+      var ownedTitle = node('h3', '', '已拥有的皮肤'); ownedTitle.id = uid + '-owned-title';
+      ownedHeading.append(ownedTitle, node('span', '', unlocked + ' 套已解锁')); wardrobe.appendChild(ownedHeading);
+      wardrobe.setAttribute('aria-labelledby', ownedTitle.id);
+      var ownedList = node('div', 'avatar-owned-list'); ownedList.setAttribute('role', 'group'); ownedList.setAttribute('aria-label', '选择已拥有的皮肤穿戴');
+      [get('default')].concat(skins.filter(function (item) { return collection(item.id).unlocked; }).map(function (item) { return get(item.id); })).forEach(function (item) {
+        var active = !!summary && summary.equipped === item.id;
+        var wearButton = node('button', 'avatar-owned-item' + (active ? ' is-equipped' : ''));
+        wearButton.type = 'button'; wearButton.disabled = busy || !summary || !summary.ok;
+        wearButton.setAttribute('data-avatar-owned', item.id); wearButton.setAttribute('aria-pressed', active ? 'true' : 'false');
+        wearButton.setAttribute('aria-label', item.name + (active ? '，已穿戴' : '，点击穿戴'));
+        wearButton.append(picture(imageOf(item), '', 'avatar-owned-thumb'), node('span', 'avatar-owned-name', item.name), node('span', 'avatar-owned-state', active ? '已穿戴' : '穿戴'));
+        wearButton.addEventListener('click', function () { if (!active) wear(item.id, ownerId, '[data-avatar-owned="' + item.id + '"]'); });
+        ownedList.appendChild(wearButton);
+      });
+      wardrobe.appendChild(ownedList); shell.appendChild(wardrobe); restoreListScroll(ownedList, changedOwner ? 0 : ownedScroll, '[aria-pressed="true"]');
+      ownedList.addEventListener('scroll', function () { if (workshop.open && ownedList.isConnected) ownedScroll = ownedList.scrollLeft; });
+      if (!unlocked) wardrobe.appendChild(node('p', 'avatar-owned-empty', '还没有解锁服装，可展开下方收集新装扮。'));
+      var collect = node('details', 'avatar-collect-details'); collect.open = collectOpen;
+      var collectWasOpen = collectOpen;
+      var collectSummary = node('summary', 'avatar-collect-summary', '收集新装扮'); collectSummary.setAttribute('data-avatar-action', 'collect-toggle'); collect.appendChild(collectSummary);
+      var collectContent = node('div', 'avatar-collect-content'); collect.appendChild(collectContent); shell.appendChild(collect);
+      collectContent.appendChild(node('p', 'avatar-cat-fixed-note', c ? '猫咪已固定，可更换已解锁的服装。' : '创建账号时选择猫咪，创建后固定。'));
+      collectContent.appendChild(node('p', 'avatar-collection-stats', '已解锁 ' + unlocked + ' / ' + skins.length + ' 套 · 累计使用 ' + (summary && summary.spentMoons || 0) + ' 🌙'));
       if (!c) {
         var guestNote = node('p', 'avatar-guest-note', '当前使用本机访客记录。添加新账号后，装扮与兑换额度会分别保存，不会自动转入新账号。');
         var create = node('a', '', '添加新账号'); create.href = '#form-card';
         create.addEventListener('click', function () { var form = document.getElementById('form-card'); if (form) form.open = true; });
-        guestNote.appendChild(create); shell.appendChild(guestNote);
+        guestNote.appendChild(create); collectContent.appendChild(guestNote);
       }
       if (!summary || !summary.ok) {
         var error = node('p', 'avatar-status is-error', explain(summary && summary.code)); error.setAttribute('role', 'alert'); shell.appendChild(error);
       }
       var galleryHeading = node('div', 'avatar-gallery-heading'); galleryHeading.appendChild(node('h3', '', '选择想收集的服装'));
-      galleryHeading.appendChild(node('span', '', '左右滑动查看')); shell.appendChild(galleryHeading);
+      galleryHeading.appendChild(node('span', '', '左右滑动查看')); collectContent.appendChild(galleryHeading);
       var skin = chosen(), gallery = node('div', 'avatar-gallery'); gallery.setAttribute('role', 'tablist'); gallery.setAttribute('aria-label', '装扮画册');
       skins.forEach(function (item, index) {
         var col = collection(item.id), tab = node('button', 'avatar-skin-tab' + (item.id === skin.id ? ' is-selected' : ''));
@@ -274,8 +328,13 @@
         });
         gallery.appendChild(tab);
       });
-      shell.appendChild(gallery); gallery.scrollLeft = scroll;
-      gallery.addEventListener('scroll', function () { if (workshop.open) galleryScroll = gallery.scrollLeft; });
+      collectContent.appendChild(gallery); gallery.scrollLeft = scroll;
+      gallery.addEventListener('scroll', function () { if (workshop.open && collect.open && gallery.isConnected) galleryScroll = gallery.scrollLeft; });
+      collect.addEventListener('toggle', function () {
+        if (!collect.isConnected) return;
+        if (collect.open && !collectWasOpen && workshop.open) restoreListScroll(gallery, galleryScroll, '[aria-selected="true"]');
+        collectWasOpen = collect.open;
+      });
       if (changedOwner) { var activeTab = gallery.querySelector('[aria-selected="true"]'); if (activeTab) gallery.scrollLeft = Math.max(0, activeTab.offsetLeft - gallery.offsetLeft - 8); }
       var col = collection(skin.id), owned = Array.isArray(col.pieces) ? col.pieces : [];
       var panel = node('div', 'avatar-collection-panel'); panel.id = 'avatar-collection-panel'; panel.setAttribute('role', 'tabpanel'); panel.setAttribute('aria-label', skin.name + '拼图');
@@ -312,7 +371,7 @@
         earn.href = '../explore/?subject=' + (subject === 'science' ? 'science' : 'physics') + '&resume=1'; earn.setAttribute('data-resume-graph', ''); description.appendChild(earn);
       } else if (col.unlocked) description.appendChild(node('p', 'avatar-unlocked-note', '已集齐，不会再消耗月亮兑换这套拼图。'));
       else description.appendChild(node('p', 'avatar-draw-note', '第 3 次起 ' + duplicateChance() + '% 概率重复；重复本次无效，仍消耗 1🌙。'));
-      panel.appendChild(description); shell.appendChild(panel);
+      panel.appendChild(description); collectContent.appendChild(panel);
       var rules = node('details', 'avatar-rules'), ruleSummary = node('summary', '', '月亮与拼图兑换规则'); rules.open = rulesOpen; rules.appendChild(ruleSummary);
       var ruleList = node('ul');
       ['每累计 3⭐ 产生 1🌙 兑换额度，历史成就与累计总积分保留。',
@@ -320,7 +379,7 @@
         '从第 3 次起，每次有 ' + duplicateChance() + '% 概率抽到重复拼图，' + (100 - duplicateChance()) + '% 概率获得未拥有的新拼图。重复本次无效，仍消耗 1🌙，不增加收集进度。',
         '集齐 9 块不同拼图即可永久解锁服装，可自由更换已解锁的服装或恢复默认穿着。',
         '所有记录按本地账号分别保存。换设备或清理浏览器前，请先在下方导出学习数据备份。'].forEach(function (text) { ruleList.appendChild(node('li', '', text)); });
-      rules.appendChild(ruleList); shell.appendChild(rules);
+      rules.appendChild(ruleList); collectContent.appendChild(rules);
       var status = node('p', 'avatar-status' + (statusError ? ' is-error' : '')); status.setAttribute('role', statusError ? 'alert' : 'status'); status.setAttribute('aria-live', 'polite');
       status.textContent = statusMessage; status.hidden = !statusMessage; shell.appendChild(status);
       syncWorkshop();

@@ -42,10 +42,12 @@
     </div>
   </nav>
 </header>
-<main class="kids" id="root">
+<main class="kids center-page" id="root">
   <h1>本地个人中心</h1>
   <p class="lede">管理本地账号、卡通形象、学习记录与备份。资料只保存在当前浏览器，每个账号分别记录学习成就与装扮。</p>
   <p id="back" class="quiet-link" hidden></p>
+  <div class="center-dashboard">
+  <div class="center-overview">
   <section id="avatar-center" class="avatar-center" aria-label="我的形象与拼图装扮"></section>
   <section class="center-achievements center-learning" id="achievements" aria-labelledby="achievements-title">
     <div class="center-section-head">
@@ -68,6 +70,8 @@
       <ul id="achievement-chapter-list"></ul>
     </details>
   </section>
+  </div>
+  <div class="center-tools">
   <section class="center-wrongbook" aria-labelledby="center-wrongbook-title">
     <div>
       <h2 id="center-wrongbook-title">错题本</h2>
@@ -153,6 +157,8 @@
       </div>
     </form>
   </details>
+  </div>
+  </div>
   <p class="muted small kid-note">本地账号和检测记录保存在当前浏览器中。清除浏览器数据或更换设备前，请先导出备份，再在新浏览器中导入。</p>
 </main>
 <script src="../assets/stem-compat.js"></script>

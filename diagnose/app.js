@@ -662,8 +662,11 @@
     if (previousSettings) settingsOpen = previousSettings.open;
     const focusedId = keepScroll && document.activeElement && document.activeElement.id;
     const page = h('div', { class: 'testing-start' });
-    page.append(gradeCard());
-    if (errMsg) page.append(h('p', { class: 'err', text: errMsg }));
+    const challengeColumn = h('div', { class: 'testing-challenge-column' }, gradeCard());
+    const toolsColumn = h('div', { class: 'testing-tools-column' },
+      h('h2', { class: 'testing-tools-heading', text: '检测选项' }));
+    page.append(challengeColumn);
+    if (errMsg) challengeColumn.append(h('p', { class: 'err', text: errMsg }));
 
     const st = getSettings();
     const limitInput = h('input', { type: 'number', min: LIMIT_MIN, max: LIMIT_MAX, step: 1, value: String(st.limit), id: 'limit-input', 'aria-label': '题量上限' });
@@ -727,9 +730,10 @@
       }),
       h('p', { class: 'muted small', id: 'match-count' })));
     setup.addEventListener('toggle', function () { settingsOpen = setup.open; });
-    page.append(setup);
-    page.append(h('div', { class: 'card' }, browser));
-    page.append(h('p', { class: 'muted small' },
+    toolsColumn.append(setup);
+    toolsColumn.append(h('div', { class: 'card testing-targets' }, browser));
+    page.append(toolsColumn);
+    page.append(h('p', { class: 'muted small testing-privacy-note' },
       '可以检测的知识点：' + D.topics.length + ' 个。进度和出过的题只保存在这台浏览器里。'));
     show(page, !!keepScroll);
     fillList(listBox);

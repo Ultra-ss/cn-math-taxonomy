@@ -1,6 +1,23 @@
 /* 孩子档案、盲区与历史页。配色、字号来自 assets/site.css。 */
 
 main.kids { width: min(760px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
+.center-dashboard, .center-overview, .center-tools { min-width: 0; }
+@media (min-width: 901px) {
+  body.page-kids { min-height: 100dvh; }
+  main.kids.center-page { width: min(1680px, 100%); padding: 28px 24px 64px; }
+  main.kids.center-page > h1 { font-size: 1.8rem; }
+  main.kids.center-page > .lede { max-width: 76ch; margin-bottom: 24px; }
+}
+@media (min-width: 1100px) {
+  .center-dashboard { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 24px; align-items: start; }
+  .center-overview, .center-tools { display: flex; flex-direction: column; gap: 20px; }
+  .center-dashboard > .center-overview > *, .center-dashboard > .center-tools > * { min-width: 0; margin-top: 0; margin-bottom: 0; }
+  .center-tools #list:empty { display: none; }
+}
+@media (min-width: 1500px) {
+  main.kids.center-page { padding-right: 32px; padding-left: 32px; }
+  .center-dashboard { gap: 28px; }
+}
 .kids h1 { margin: 0 0 8px; font-size: 1.5rem; letter-spacing: -0.02em; }
 .kids h2 { margin: 0 0 8px; font-size: 1.15rem; letter-spacing: -0.02em; }
 .kids .lede { margin: 0 0 16px; font-size: 1rem; }
