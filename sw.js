@@ -3,7 +3,7 @@
  * 更新页面、脚本、样式或数据时必须增加 VERSION，避免跨版本混用。 */
 'use strict';
 
-var VERSION = 'v88';
+var VERSION = 'v89';
 var CACHE = 'cnm-pwa-' + VERSION;
 var SCOPE = self.registration.scope;
 var GRAPH_DATA = ['data/topics.json', 'data/dependencies.json', 'data/cn-curriculum-standards.json', 'data/id-aliases.json'];
