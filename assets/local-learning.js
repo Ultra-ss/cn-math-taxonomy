@@ -20,7 +20,7 @@
       Number.isSafeInteger(saved.confirm) && saved.confirm > 0 && saved.confirm <= 10 &&
       typeof saved.seed === 'string' && saved.seed.length <= 256 && typeof saved.label === 'string' && saved.label.length <= 4000 &&
       stamp(saved.savedAt) && (!own(saved, 'level') || saved.level === 'normal' || saved.level === 'pro') &&
-      (saved.level !== 'pro' || (subject === 'physics' && saved.mode === 'target' && saved.targets.length === 1)) && (!own(saved, 'progressChildId') || saved.progressChildId === null ||
+      (saved.level !== 'pro' || (saved.mode === 'target' && saved.targets.length === 1)) && (!own(saved, 'progressChildId') || saved.progressChildId === null ||
         (typeof saved.progressChildId === 'string' && /^[A-Za-z0-9_-]{1,128}$/.test(saved.progressChildId))) &&
       Array.isArray(saved.answers) && saved.answers.length <= 5000 && saved.answers.every(function (a) {
         return object(a) && subjectOf(a.id) === subject &&

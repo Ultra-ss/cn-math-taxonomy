@@ -73,6 +73,20 @@ assert.equal(ownerLabel.textContent, '检测记录：另一个孩子');
 owner = null;
 ctx.refreshProgress();
 assert.equal(ctx.progressMark(ctx.progressOf('cnp_001')), '⭐', '切回访客恢复其专家角标');
+// 新增小学与高中采用同一先普通后专家门槛，不额外预载题库。
+for (const [subjectName,id,grade] of [['science','cns_p001',1],['physics','cnp_h001',10]]) {
+  ctx.subject=subjectName;ctx.byId.set(id,{grade});normal[id]={status:'mastered'};pro[id]={status:'weak'};
+  ctx.refreshProgress(true);
+  assert.equal(ctx.canChallengeExpert(id),true);
+  assert.ok(ctx.nodeDiagnosisHref(id).includes('&level=pro'));
+  assert.ok(ctx.nodeDiagnosisHref(id).includes('subject='+subjectName));
+  assert.equal(ctx.progressMark(ctx.progressOf(id)),'✓');
+  pro[id]={status:'mastered'};ctx.refreshProgress(true);
+  assert.equal(ctx.progressMark(ctx.progressOf(id)),'⭐');
+  normal[id]={status:'shaky'};ctx.refreshProgress(true);
+  assert.equal(ctx.canChallengeExpert(id),false);
+  assert.equal(ctx.progressMark(ctx.progressOf(id)),'×');
+}
 assert.ok(source.includes("selector: 'node.test-expert'"), '图谱画布有独立专家星形图片');
 assert.ok(source.includes("node.removeClass('test-passed test-failed test-expert')"), '刷新先清理旧角标类');
 console.log('test_explore_pro: separate expert state, preserved normal pass, expert star and owner isolation passed');

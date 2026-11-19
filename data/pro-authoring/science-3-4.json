@@ -1,0 +1,8642 @@
+[
+  {
+    "id": "cns_p061_q101",
+    "topicId": "cns_p061",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "上午晴朗、下午下雨，气温相同。两次天气记录应怎样写？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "天气相同，因为气温相同"
+      },
+      {
+        "key": "B",
+        "text": "只写下午气温较低"
+      },
+      {
+        "key": "C",
+        "text": "只写季节，不写降水"
+      },
+      {
+        "key": "D",
+        "text": "天气不同，还要记录降水和云量"
+      }
+    ],
+    "answer": "D",
+    "explanation": "天气由多种要素描述；气温相同并不表示降水、云量等也相同。",
+    "verify": "\"天气不同，还要记录降水和云量\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p061_q102",
+    "topicId": "cns_p061",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小组比较学校和公园今天的天气，哪组资料能直接用于比较？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "学校的面积和公园的树种"
+      },
+      {
+        "key": "B",
+        "text": "只问哪一处更漂亮"
+      },
+      {
+        "key": "C",
+        "text": "同一时段两地测得的气温、云量和风"
+      },
+      {
+        "key": "D",
+        "text": "学校今天的气温和公园去年的照片"
+      }
+    ],
+    "answer": "C",
+    "explanation": "比较同一天两地天气，应在相近时段记录相同的天气要素。",
+    "verify": "\"同一时段两地测得的气温、云量和风\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p061_q103",
+    "topicId": "cns_p061",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "连续三天早晨都晴朗，能据此断言第四天全天不下雨吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能，天气必定每四天重复"
+      },
+      {
+        "key": "B",
+        "text": "能，早晨晴就全天晴"
+      },
+      {
+        "key": "C",
+        "text": "不能，因为晴天无法记录"
+      },
+      {
+        "key": "D",
+        "text": "不能，应继续查看预报和观测"
+      }
+    ],
+    "answer": "D",
+    "explanation": "少量过去记录不能保证未来天气；判断出行天气还要结合最新预报。",
+    "verify": "\"不能，应继续查看预报和观测\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p062_q101",
+    "topicId": "cns_p062",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "气温计0℃到10℃之间分成5个相等小格，液柱在0℃上第3格，应读多少？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "3℃"
+      },
+      {
+        "key": "B",
+        "text": "15℃"
+      },
+      {
+        "key": "C",
+        "text": "30℃"
+      },
+      {
+        "key": "D",
+        "text": "6℃"
+      }
+    ],
+    "answer": "D",
+    "explanation": "每小格表示10÷5=2℃，上方第3格为6℃；须先看清每格代表多少。",
+    "verify": "\"6℃\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p062_q102",
+    "topicId": "cns_p062",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "甲乙读一支气温计，甲俯视读18℃，乙平视读16℃，谁的方法更可靠？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两人取较大的数即可"
+      },
+      {
+        "key": "B",
+        "text": "只选更接近当天最高温的数"
+      },
+      {
+        "key": "C",
+        "text": "乙，视线与液柱顶端齐平"
+      },
+      {
+        "key": "D",
+        "text": "甲，眼睛越高越准确"
+      }
+    ],
+    "answer": "C",
+    "explanation": "读数时应平视液柱顶端，俯视会产生视差，不能用猜测代替正确读数。",
+    "verify": "\"乙，视线与液柱顶端齐平\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p062_q103",
+    "topicId": "cns_p062",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "气温计量程是−10℃至50℃，哪次测量超出它的适用范围？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "测70℃热水的温度"
+      },
+      {
+        "key": "B",
+        "text": "测5℃的室外空气"
+      },
+      {
+        "key": "C",
+        "text": "测−3℃的室外空气"
+      },
+      {
+        "key": "D",
+        "text": "测26℃的教室空气"
+      }
+    ],
+    "answer": "A",
+    "explanation": "70℃超过上限50℃，不能用这支气温计测量；应选择合适量程的温度计。",
+    "verify": "\"测70℃热水的温度\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p063_q101",
+    "topicId": "cns_p063",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两支相同气温计一支晒太阳、一支放树荫下，读数不同。记录当地气温应选哪支？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两支中数字更整齐的一支"
+      },
+      {
+        "key": "B",
+        "text": "随意选一支，位置不影响"
+      },
+      {
+        "key": "C",
+        "text": "树荫下通风处的气温计"
+      },
+      {
+        "key": "D",
+        "text": "阳光下读数更高的一支"
+      }
+    ],
+    "answer": "C",
+    "explanation": "阳光直接加热气温计会影响读数；空气温度应在阴凉、通风的适当位置测量。",
+    "verify": "\"树荫下通风处的气温计\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p063_q102",
+    "topicId": "cns_p063",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "记录一周同一时刻的气温，哪项改变最容易使数据不便比较？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "每天记录日期和天气"
+      },
+      {
+        "key": "B",
+        "text": "每天把仪器放在不同高度和环境"
+      },
+      {
+        "key": "C",
+        "text": "每天由同一人记录"
+      },
+      {
+        "key": "D",
+        "text": "每天等示数稳定后读数"
+      }
+    ],
+    "answer": "B",
+    "explanation": "测量位置、高度和环境尽量一致，才能减少测量条件变化带来的影响。",
+    "verify": "\"每天把仪器放在不同高度和环境\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p063_q103",
+    "topicId": "cns_p063",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "气温计刚从温暖教室移到室外，液柱还在下降，应怎样处理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "摇动气温计直到示数回升"
+      },
+      {
+        "key": "B",
+        "text": "在阴凉通风处等示数稳定再读"
+      },
+      {
+        "key": "C",
+        "text": "立即把最高读数记下"
+      },
+      {
+        "key": "D",
+        "text": "用手握住玻璃泡使液柱停止"
+      }
+    ],
+    "answer": "B",
+    "explanation": "气温计需要时间与周围空气达到接近的温度，示数稳定后读数才较可靠。",
+    "verify": "\"在阴凉通风处等示数稳定再读\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p064_q101",
+    "topicId": "cns_p064",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "直筒雨量器上午收雨8毫米，倒空后下午收雨5毫米，当天这两场雨共多少？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "8毫米"
+      },
+      {
+        "key": "B",
+        "text": "40毫米"
+      },
+      {
+        "key": "C",
+        "text": "13毫米"
+      },
+      {
+        "key": "D",
+        "text": "3毫米"
+      }
+    ],
+    "answer": "C",
+    "explanation": "雨量器两次分别从空容器开始，累计降水量为8+5=13毫米。",
+    "verify": "\"13毫米\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p064_q102",
+    "topicId": "cns_p064",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "甲雨量器放屋檐下，乙放远离遮挡的空地。比较自然降雨量应优先用哪份记录？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两份都只看水的颜色"
+      },
+      {
+        "key": "B",
+        "text": "甲，屋顶面积比雨量器大"
+      },
+      {
+        "key": "C",
+        "text": "乙，避免屋檐遮雨或滴水干扰"
+      },
+      {
+        "key": "D",
+        "text": "甲，屋檐滴水越多越准确"
+      }
+    ],
+    "answer": "C",
+    "explanation": "屋檐可能挡雨或集中滴水，改变收雨条件；雨量器应放在无遮挡的适当地点。",
+    "verify": "\"乙，避免屋檐遮雨或滴水干扰\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p064_q103",
+    "topicId": "cns_p064",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "同场雨中，两只上下一样粗的直筒雨量器粗细不同，放在同一空地。理想情况下应比较什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "容器细的一定测得雨更大"
+      },
+      {
+        "key": "B",
+        "text": "积水深度，两者应接近"
+      },
+      {
+        "key": "C",
+        "text": "积水总量，两者必定相等"
+      },
+      {
+        "key": "D",
+        "text": "容器粗的一定测得雨更大"
+      }
+    ],
+    "answer": "B",
+    "explanation": "直筒容器收雨面积和底面积相同，粗细改变水的总量，但同场雨的积水深度应接近。",
+    "verify": "\"积水深度，两者应接近\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p065_q101",
+    "topicId": "cns_p065",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "旗面被风吹向西方，风向标也稳定指向东方，这时是什么风？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "西风"
+      },
+      {
+        "key": "B",
+        "text": "南风"
+      },
+      {
+        "key": "C",
+        "text": "无法判断任何风向"
+      },
+      {
+        "key": "D",
+        "text": "东风"
+      }
+    ],
+    "answer": "D",
+    "explanation": "风向以风吹来的方向命名；从东向西吹，旗面朝西、风向标指向东。",
+    "verify": "\"东风\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p065_q102",
+    "topicId": "cns_p065",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "在一个固定地点，早晨树叶微动，下午大树枝摇摆。最合理的记录是？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "下午气温一定更高"
+      },
+      {
+        "key": "B",
+        "text": "早晨没有空气流动"
+      },
+      {
+        "key": "C",
+        "text": "下午风力比早晨大"
+      },
+      {
+        "key": "D",
+        "text": "下午风向一定改变"
+      }
+    ],
+    "answer": "C",
+    "explanation": "树木受风后的摇动程度可帮助估计风力；不能仅据此断定风向或气温。",
+    "verify": "\"下午风力比早晨大\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p065_q103",
+    "topicId": "cns_p065",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "风向标轴被胶水粘住，箭头总朝北。能据此把全天记为北风吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能，先让风向标能自由转动"
+      },
+      {
+        "key": "B",
+        "text": "能，箭头指北就是北风"
+      },
+      {
+        "key": "C",
+        "text": "能，胶水使记录更稳定"
+      },
+      {
+        "key": "D",
+        "text": "不能，应把箭头固定朝南"
+      }
+    ],
+    "answer": "A",
+    "explanation": "轴卡住时箭头不能响应风的变化，稳定读数也可能是仪器故障。",
+    "verify": "\"不能，先让风向标能自由转动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p069_q101",
+    "topicId": "cns_p069",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "把天空想象成4份，云遮住约3份，哪份云量记录最接近观察结果？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "天空没有云"
+      },
+      {
+        "key": "B",
+        "text": "只有四分之一有云"
+      },
+      {
+        "key": "C",
+        "text": "云把天空完全遮住"
+      },
+      {
+        "key": "D",
+        "text": "约四分之三的天空有云"
+      }
+    ],
+    "answer": "D",
+    "explanation": "云量表示云遮住天空的比例，遮住3份、共4份，应记约四分之三。",
+    "verify": "\"约四分之三的天空有云\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p069_q102",
+    "topicId": "cns_p069",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小明只看窗外一小块蓝天就记“无云”，怎样改进观察？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "在安全地点观察较完整的天空"
+      },
+      {
+        "key": "B",
+        "text": "直接盯住太阳找云"
+      },
+      {
+        "key": "C",
+        "text": "把楼房当成云计算"
+      },
+      {
+        "key": "D",
+        "text": "只观察最低的一朵云"
+      }
+    ],
+    "answer": "A",
+    "explanation": "一小片天空不能代表整体云量，应避开直视太阳并尽量观察完整天空。",
+    "verify": "\"在安全地点观察较完整的天空\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p069_q103",
+    "topicId": "cns_p069",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "记录显示10时云少，12时云明显增多。哪句话有证据支持？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "云量增加证明气温必定下降"
+      },
+      {
+        "key": "B",
+        "text": "这两小时天空的云量增加了"
+      },
+      {
+        "key": "C",
+        "text": "12时一定已下暴雨"
+      },
+      {
+        "key": "D",
+        "text": "全天云量从未变化"
+      }
+    ],
+    "answer": "B",
+    "explanation": "记录直接支持云量变化；是否降雨或降温，还需相应观测资料。",
+    "verify": "\"这两小时天空的云量增加了\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p066_q101",
+    "topicId": "cns_p066",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "甲地预报12—20℃，乙地预报15—21℃，哪地当天预报温差更大？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "乙地，温差21℃"
+      },
+      {
+        "key": "B",
+        "text": "两地相同，都是6℃"
+      },
+      {
+        "key": "C",
+        "text": "甲地，温差32℃"
+      },
+      {
+        "key": "D",
+        "text": "甲地，温差8℃"
+      }
+    ],
+    "answer": "D",
+    "explanation": "甲地20−12=8℃，乙地21−15=6℃，比较的是最高与最低气温的差。",
+    "verify": "\"甲地，温差8℃\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p066_q102",
+    "topicId": "cns_p066",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "预报“上午多云，傍晚有雨”，小组全天外出，哪项准备最合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "认定傍晚每个地点都同时下雨"
+      },
+      {
+        "key": "B",
+        "text": "带雨具，并临出发查看更新预报"
+      },
+      {
+        "key": "C",
+        "text": "上午没雨就不用再看预报"
+      },
+      {
+        "key": "D",
+        "text": "只按昨天的天气准备"
+      }
+    ],
+    "answer": "B",
+    "explanation": "预报提供时段信息但可能更新；带雨具并关注最新信息更符合全天出行需求。",
+    "verify": "\"带雨具，并临出发查看更新预报\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p066_q103",
+    "topicId": "cns_p066",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "天气预报昨天说今天有雨，今天实际未下雨，应怎样看待预报？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "预报是预测，需与实际观测一起使用"
+      },
+      {
+        "key": "B",
+        "text": "预报没用，所有信息都应丢弃"
+      },
+      {
+        "key": "C",
+        "text": "今天的观测必须改成下雨"
+      },
+      {
+        "key": "D",
+        "text": "一次不同证明以后都不会下雨"
+      }
+    ],
+    "answer": "A",
+    "explanation": "预报不是对每个地点每个时刻的绝对保证；应记录实际天气并关注更新。",
+    "verify": "\"预报是预测，需与实际观测一起使用\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p261_q101",
+    "topicId": "cns_p261",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "连续少雨，花坛土壤很干、叶片萎蔫。哪种处理针对天气带来的主要影响？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "每天往叶片上撒沙"
+      },
+      {
+        "key": "B",
+        "text": "认定所有植物都不需要水"
+      },
+      {
+        "key": "C",
+        "text": "根据土壤情况适量补水"
+      },
+      {
+        "key": "D",
+        "text": "把花坛一直密封起来"
+      }
+    ],
+    "answer": "C",
+    "explanation": "少雨使土壤缺水，适量补水针对这一影响；还应结合植物和土壤实际情况。",
+    "verify": "\"根据土壤情况适量补水\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p261_q102",
+    "topicId": "cns_p261",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "山区预报持续强降雨，小组原计划到溪边活动，怎样调整更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "取消溪边活动，选择安全室内活动"
+      },
+      {
+        "key": "B",
+        "text": "雨越大越适合看溪水"
+      },
+      {
+        "key": "C",
+        "text": "带雨伞就能保证溪边安全"
+      },
+      {
+        "key": "D",
+        "text": "只把活动时间延后五分钟"
+      }
+    ],
+    "answer": "A",
+    "explanation": "强降雨可能使溪水猛涨，雨伞不能消除洪水等风险，应避开危险地点。",
+    "verify": "\"取消溪边活动，选择安全室内活动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p261_q103",
+    "topicId": "cns_p261",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "种植相同品种的蔬菜，寒潮前甲棚做好保温、乙棚未处理。寒潮后甲受损较少，最直接说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "保温措施可能减轻低温影响"
+      },
+      {
+        "key": "B",
+        "text": "所有天气对植物都没有影响"
+      },
+      {
+        "key": "C",
+        "text": "保温能使植物永远不缺水"
+      },
+      {
+        "key": "D",
+        "text": "乙棚一定从未接受阳光"
+      }
+    ],
+    "answer": "A",
+    "explanation": "结果支持保温有助于减轻这次低温伤害，不能据此推出与水或光有关的结论。",
+    "verify": "\"保温措施可能减轻低温影响\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p067_q101",
+    "topicId": "cns_p067",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同样的湿布放在同温环境，甲摊开、乙折成四层。要研究蒸发快慢，应保持哪项相同？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "布的材料和开始含水量"
+      },
+      {
+        "key": "B",
+        "text": "暴露在空气中的面积"
+      },
+      {
+        "key": "C",
+        "text": "最后一定同时晾干"
+      },
+      {
+        "key": "D",
+        "text": "每块布的摆放形状"
+      }
+    ],
+    "answer": "A",
+    "explanation": "研究摊开面积的影响时，应保持材料、初始含水量等条件相同，让面积成为主要差别。",
+    "verify": "\"布的材料和开始含水量\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p067_q102",
+    "topicId": "cns_p067",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "有水的敞口杯放在室内，没有漏水，几天后水位下降。说明蒸发有什么特点？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "必须在太阳直射下才会发生"
+      },
+      {
+        "key": "B",
+        "text": "一定要先把水烧开"
+      },
+      {
+        "key": "C",
+        "text": "常温下也能发生"
+      },
+      {
+        "key": "D",
+        "text": "只在杯底发生"
+      }
+    ],
+    "answer": "C",
+    "explanation": "水不必沸腾也会从表面逐渐变成水蒸气，常温下的蒸发也能使水位下降。",
+    "verify": "\"常温下也能发生\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p067_q103",
+    "topicId": "cns_p067",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "两份等量水置于相同盘中，甲用风扇吹、乙不吹。甲先干，最恰当的结论是？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "所有情况下水一分钟就会蒸干"
+      },
+      {
+        "key": "B",
+        "text": "甲盘的水变成了冰"
+      },
+      {
+        "key": "C",
+        "text": "风扇制造出了新的水"
+      },
+      {
+        "key": "D",
+        "text": "这次实验中通风加快了蒸发"
+      }
+    ],
+    "answer": "D",
+    "explanation": "相同条件下主要改变空气流动，结果支持通风有利于加快蒸发。",
+    "verify": "\"这次实验中通风加快了蒸发\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p068_q101",
+    "topicId": "cns_p068",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "装冰水的密封金属杯外出现水珠，用纸擦干后又出现。杯外水珠主要来自哪里？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "杯外水珠只由杯内冰块融化直接流出"
+      },
+      {
+        "key": "B",
+        "text": "空气里的水蒸气遇冷凝结"
+      },
+      {
+        "key": "C",
+        "text": "杯中的水穿过完好的金属杯壁渗出"
+      },
+      {
+        "key": "D",
+        "text": "外壁原来就有水，擦干后没有新水珠形成"
+      }
+    ],
+    "answer": "B",
+    "explanation": "金属杯外壁低温使周围空气中的水蒸气凝结，密封并不妨碍外壁结露。",
+    "verify": "\"空气里的水蒸气遇冷凝结\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p068_q102",
+    "topicId": "cns_p068",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两块干玻璃放在同一室内，一块先冷藏、一块保持室温。哪块更容易先有小水珠？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "玻璃厚度相同就不会有差别"
+      },
+      {
+        "key": "B",
+        "text": "冷藏后取出的玻璃"
+      },
+      {
+        "key": "C",
+        "text": "室温玻璃一定结更多水"
+      },
+      {
+        "key": "D",
+        "text": "两块都必须先烧到沸腾"
+      }
+    ],
+    "answer": "B",
+    "explanation": "在同一空气环境中，更冷的表面更容易使附近的水蒸气凝结成水珠。",
+    "verify": "\"冷藏后取出的玻璃\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p068_q103",
+    "topicId": "cns_p068",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "水珠形成前，杯壁外没有可见水雾，能说明空气里没有水吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能，空气只能含固体水"
+      },
+      {
+        "key": "B",
+        "text": "不能，因为所有空气都是液态水"
+      },
+      {
+        "key": "C",
+        "text": "不能，水蒸气通常看不见"
+      },
+      {
+        "key": "D",
+        "text": "能，看不见就一定不存在"
+      }
+    ],
+    "answer": "C",
+    "explanation": "水蒸气是通常看不见的气态水；出现可见水珠是凝结后的变化。",
+    "verify": "\"不能，水蒸气通常看不见\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p070_q101",
+    "topicId": "cns_p070",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "普通气压下水已沸腾，教师继续加热。哪组变化最合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "水马上结冰，温度下降"
+      },
+      {
+        "key": "B",
+        "text": "水完全不减少，温度无限上升"
+      },
+      {
+        "key": "C",
+        "text": "水逐渐减少，温度仍约100℃"
+      },
+      {
+        "key": "D",
+        "text": "水不断增多，温度不变"
+      }
+    ],
+    "answer": "C",
+    "explanation": "沸腾时继续吸热主要用于水变成水蒸气，通常气压下沸腾温度约保持100℃。",
+    "verify": "\"水逐渐减少，温度仍约100℃\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p070_q102",
+    "topicId": "cns_p070",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "观察加热水，开始只有容器底少量小泡，后来大量气泡升起破裂。怎样判断更可能已沸腾？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "必须用手试水是否烫"
+      },
+      {
+        "key": "B",
+        "text": "只看容器颜色是否变深"
+      },
+      {
+        "key": "C",
+        "text": "结合持续大量气泡和温度记录判断"
+      },
+      {
+        "key": "D",
+        "text": "只要出现第一个小泡就认定沸腾"
+      }
+    ],
+    "answer": "C",
+    "explanation": "初期小泡不一定表示沸腾，应结合持续明显的沸腾现象与温度记录，不能用手试。",
+    "verify": "\"结合持续大量气泡和温度记录判断\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p070_q103",
+    "topicId": "cns_p070",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "教师演示烧水时，壶口附近一段看不见，稍远处出现白雾，哪种解释合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "所有气态水都应是白色的"
+      },
+      {
+        "key": "B",
+        "text": "水蒸气冷却后形成可见小水滴"
+      },
+      {
+        "key": "C",
+        "text": "看不见处没有任何水"
+      },
+      {
+        "key": "D",
+        "text": "白雾是沸水产生的固体粉末"
+      }
+    ],
+    "answer": "B",
+    "explanation": "气态水蒸气通常不可见，离开壶口遇冷凝结的小水滴使白雾可见。",
+    "verify": "\"水蒸气冷却后形成可见小水滴\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p071_q101",
+    "topicId": "cns_p071",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "把水装在有刻线的透明软容器里冷冻，完全结冰后液面位置所示体积增大，说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "水的质量一定增加了"
+      },
+      {
+        "key": "B",
+        "text": "容器中的水变成了沙"
+      },
+      {
+        "key": "C",
+        "text": "水结冰后体积一定减小"
+      },
+      {
+        "key": "D",
+        "text": "同一份水结冰后占的空间变大"
+      }
+    ],
+    "answer": "D",
+    "explanation": "结冰前后同一份水的质量不因状态改变而增加，但冰占据的体积通常更大。",
+    "verify": "\"同一份水结冰后占的空间变大\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p071_q102",
+    "topicId": "cns_p071",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "教师把纯净水保持在5℃很久，另一份继续冷却到约0℃以下，哪份更可能结冰？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两份水只要不动就一定结冰"
+      },
+      {
+        "key": "B",
+        "text": "继续冷却的一份"
+      },
+      {
+        "key": "C",
+        "text": "5℃的一份一定先结冰"
+      },
+      {
+        "key": "D",
+        "text": "两份都必须加热才会结冰"
+      }
+    ],
+    "answer": "B",
+    "explanation": "一般气压下，水需冷却到接近冰点并继续放热，5℃通常还没有达到结冰条件。",
+    "verify": "\"继续冷却的一份\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p071_q103",
+    "topicId": "cns_p071",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "研究结冰体积变化，用完全装满且拧紧的硬玻璃瓶是否合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "合适，越紧越不可能破裂"
+      },
+      {
+        "key": "B",
+        "text": "合适，玻璃能阻止水结冰"
+      },
+      {
+        "key": "C",
+        "text": "不合适，因为水结冰一定变轻"
+      },
+      {
+        "key": "D",
+        "text": "不合适，膨胀可能使瓶子破裂"
+      }
+    ],
+    "answer": "D",
+    "explanation": "水结冰通常体积增大，密闭满瓶可能被胀破；应选安全容器并留足空间。",
+    "verify": "\"不合适，膨胀可能使瓶子破裂\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p072_q101",
+    "topicId": "cns_p072",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同样大的冰块一块放温暖室内、一块放冰箱冷藏室，为什么前者通常先化？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "室内冰块不需要吸收热量"
+      },
+      {
+        "key": "B",
+        "text": "冷藏室的冰一定质量更大"
+      },
+      {
+        "key": "C",
+        "text": "温度越低冰熔化一定越快"
+      },
+      {
+        "key": "D",
+        "text": "较温暖环境能更快向冰传热"
+      }
+    ],
+    "answer": "D",
+    "explanation": "在其他条件相近时，温暖环境通常使冰更快吸热，因而较快熔化。",
+    "verify": "\"较温暖环境能更快向冰传热\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p072_q102",
+    "topicId": "cns_p072",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "袋子密封无漏水，里面的冰完全化成水后再称量，怎样判断结果？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "水比冰占地小，所以质量必减"
+      },
+      {
+        "key": "B",
+        "text": "袋和内容物总质量应基本不变"
+      },
+      {
+        "key": "C",
+        "text": "冰化水后总质量一定变为零"
+      },
+      {
+        "key": "D",
+        "text": "总质量应翻倍"
+      }
+    ],
+    "answer": "B",
+    "explanation": "密封且没有物质进出时，熔化改变状态和体积，不会使总质量凭空改变。",
+    "verify": "\"袋和内容物总质量应基本不变\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p072_q103",
+    "topicId": "cns_p072",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "两块相同冰，甲用干毛巾包住、乙裸放在温暖室内。甲化得较慢说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "所有包裹都会使冰立即熔化"
+      },
+      {
+        "key": "B",
+        "text": "毛巾减慢了环境向冰传热"
+      },
+      {
+        "key": "C",
+        "text": "毛巾在不断产生新的冰"
+      },
+      {
+        "key": "D",
+        "text": "毛巾使冰不再需要吸热"
+      }
+    ],
+    "answer": "B",
+    "explanation": "毛巾有一定隔热作用，减慢热量从周围传到冰，使冰在这段时间熔化较慢。",
+    "verify": "\"毛巾减慢了环境向冰传热\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p073_q101",
+    "topicId": "cns_p073",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同温的50毫升水中，盐加到20克后仍有少量不溶，充分搅拌也不消失。怎样使其继续溶解更合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只把杯子涂成红色"
+      },
+      {
+        "key": "B",
+        "text": "认定盐已经变成沙子"
+      },
+      {
+        "key": "C",
+        "text": "不停搅拌就能无限溶解"
+      },
+      {
+        "key": "D",
+        "text": "再加入一些同温的水"
+      }
+    ],
+    "answer": "D",
+    "explanation": "一定量、一定温度的水溶解盐有上限，增加水量可以让更多盐溶解。",
+    "verify": "\"再加入一些同温的水\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p073_q102",
+    "topicId": "cns_p073",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "比较盐和小苏打的溶解能力，甲用100毫升水、乙用50毫升水，能直接公平比较吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能，杯子颜色一样就公平"
+      },
+      {
+        "key": "B",
+        "text": "能，只比较颗粒的颜色"
+      },
+      {
+        "key": "C",
+        "text": "不能，因为任何物质都不能比较"
+      },
+      {
+        "key": "D",
+        "text": "不能，应保持水量和温度相同"
+      }
+    ],
+    "answer": "D",
+    "explanation": "水量和温度影响能溶解的量，要公平比较物质本身，需控制这些条件。",
+    "verify": "\"不能，应保持水量和温度相同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p073_q103",
+    "topicId": "cns_p073",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "同温100毫升水中最多约溶36克盐，加入40克后充分搅拌，结果最接近哪种？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "约4克盐仍未溶解"
+      },
+      {
+        "key": "B",
+        "text": "40克都会因搅拌无限溶解"
+      },
+      {
+        "key": "C",
+        "text": "水会全部消失"
+      },
+      {
+        "key": "D",
+        "text": "至少36克盐仍未溶解"
+      }
+    ],
+    "answer": "A",
+    "explanation": "在所给条件下只能溶解约36克，40−36=4克左右会剩下，搅拌不取消溶解限度。",
+    "verify": "\"约4克盐仍未溶解\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p074_q101",
+    "topicId": "cns_p074",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "要单独研究“颗粒大小对溶解快慢的影响”，哪对材料最合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "一杯热水的糖和一杯冷水的盐"
+      },
+      {
+        "key": "B",
+        "text": "一粒糖和一大把糖"
+      },
+      {
+        "key": "C",
+        "text": "等质量的同种整块糖和碎糖"
+      },
+      {
+        "key": "D",
+        "text": "同样大小的糖块和石块"
+      }
+    ],
+    "answer": "C",
+    "explanation": "只改变同种物质颗粒大小，质量、水量、水温等相同，才能把快慢差异与颗粒大小联系起来。",
+    "verify": "\"等质量的同种整块糖和碎糖\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p074_q102",
+    "topicId": "cns_p074",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "等量同温水加等量细盐，甲搅拌、乙静置；两杯最后都溶完。甲先溶完支持什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "搅拌把盐变成了另一种物质"
+      },
+      {
+        "key": "B",
+        "text": "搅拌能加快这次盐的溶解"
+      },
+      {
+        "key": "C",
+        "text": "搅拌使盐最终质量增加"
+      },
+      {
+        "key": "D",
+        "text": "静置的盐永远不能溶解"
+      }
+    ],
+    "answer": "B",
+    "explanation": "两杯最后都溶完，比较时间可见搅拌改变的是溶解快慢，不是把盐变成新物质。",
+    "verify": "\"搅拌能加快这次盐的溶解\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p074_q103",
+    "topicId": "cns_p074",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一杯温水中的糖已完全溶解，看不见糖粒。怎样理解“加快溶解”的结果？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "糖只能藏在杯底"
+      },
+      {
+        "key": "B",
+        "text": "糖全部变成了空气"
+      },
+      {
+        "key": "C",
+        "text": "糖分散在水中，并非糖消失了"
+      },
+      {
+        "key": "D",
+        "text": "糖的质量已经变成零"
+      }
+    ],
+    "answer": "C",
+    "explanation": "溶解后糖仍在水中，只是不再以可见颗粒存在；溶解快慢不能等同于物质消失。",
+    "verify": "\"糖分散在水中，并非糖消失了\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p075_q101",
+    "topicId": "cns_p075",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "盐和细沙的混合物，加适量水搅拌后过滤。滤纸上主要留下什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "已经溶解的盐全部"
+      },
+      {
+        "key": "B",
+        "text": "全部盐水都留在滤纸上"
+      },
+      {
+        "key": "C",
+        "text": "盐与沙都会全部通过滤纸"
+      },
+      {
+        "key": "D",
+        "text": "不溶于水的细沙"
+      }
+    ],
+    "answer": "D",
+    "explanation": "水溶解盐而不溶解沙，过滤可把不溶的沙与盐水分开，不能直接滤出已溶盐。",
+    "verify": "\"不溶于水的细沙\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p075_q102",
+    "topicId": "cns_p075",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "想从沙盐混合物中分别回收沙和盐，哪项顺序完整？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "过滤干混合物→把沙当盐保存"
+      },
+      {
+        "key": "B",
+        "text": "只搅拌→所有物质都分开"
+      },
+      {
+        "key": "C",
+        "text": "加水后把全部混合液一起倒掉"
+      },
+      {
+        "key": "D",
+        "text": "加水溶盐→过滤取沙→让滤液水分蒸发取盐"
+      }
+    ],
+    "answer": "D",
+    "explanation": "利用溶解性差异先分离沙，再从滤液中除去水；两种物质才能分别回收。",
+    "verify": "\"加水溶盐→过滤取沙→让滤液水分蒸发取盐\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p075_q103",
+    "topicId": "cns_p075",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "同学把有盐的清澈滤液认作纯水，哪种证据能反驳？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "过滤前杯子曾装过沙"
+      },
+      {
+        "key": "B",
+        "text": "少量滤液蒸发后留下盐粒"
+      },
+      {
+        "key": "C",
+        "text": "滤液看起来没有颜色"
+      },
+      {
+        "key": "D",
+        "text": "滤液能倒进另一个杯子"
+      }
+    ],
+    "answer": "B",
+    "explanation": "清澈不等于没有溶解物，蒸发后有盐留下可证明滤液中仍含盐；不应靠品尝确认。",
+    "verify": "\"少量滤液蒸发后留下盐粒\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p076_q101",
+    "topicId": "cns_p076",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同车的两名乘客坐着不动，路边人却看到他们向前移动，矛盾吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不矛盾，选择的参照物不同"
+      },
+      {
+        "key": "B",
+        "text": "矛盾，物体只能绝对运动"
+      },
+      {
+        "key": "C",
+        "text": "矛盾，坐着的人不可能移动"
+      },
+      {
+        "key": "D",
+        "text": "不矛盾，因为选任何参照物结论必定相同"
+      }
+    ],
+    "answer": "A",
+    "explanation": "相对座椅乘客位置不变，相对路面位置改变；运动或静止要说明参照物。",
+    "verify": "\"不矛盾，选择的参照物不同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p076_q102",
+    "topicId": "cns_p076",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两人都说“花盆在左边”，却找到不同位置，怎样补充描述最清楚？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只重复“在旁边”"
+      },
+      {
+        "key": "B",
+        "text": "以教室门为起点，向东2米"
+      },
+      {
+        "key": "C",
+        "text": "把声音说得更大"
+      },
+      {
+        "key": "D",
+        "text": "说花盆很漂亮"
+      }
+    ],
+    "answer": "B",
+    "explanation": "位置描述需要明确参照物、方向和距离，单说左右会随观察者朝向而改变。",
+    "verify": "\"以教室门为起点，向东2米\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p076_q103",
+    "topicId": "cns_p076",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "用固定路灯作参照，记录小车在0秒离灯1米、2秒离灯4米，能判断什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "路灯一定跟着小车走"
+      },
+      {
+        "key": "B",
+        "text": "小车每一秒速度都完全相同"
+      },
+      {
+        "key": "C",
+        "text": "小车相对路灯的位置发生变化"
+      },
+      {
+        "key": "D",
+        "text": "小车一定没有运动"
+      }
+    ],
+    "answer": "C",
+    "explanation": "距离变化可说明相对路灯位置改变，但两个时刻的记录不能证明每一秒速度相同。",
+    "verify": "\"小车相对路灯的位置发生变化\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p077_q101",
+    "topicId": "cns_p077",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "玩具车向前走时，观察车身和车轮，哪种描述合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "车身向前移动，车轮同时转动"
+      },
+      {
+        "key": "B",
+        "text": "车轮转动时车身必定不动"
+      },
+      {
+        "key": "C",
+        "text": "车身一定只作上下振动"
+      },
+      {
+        "key": "D",
+        "text": "一个物体不能同时有不同部分运动"
+      }
+    ],
+    "answer": "A",
+    "explanation": "物体的不同部分可有不同运动形式；前进的车轮既随车移动又绕车轴转动。",
+    "verify": "\"车身向前移动，车轮同时转动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p077_q102",
+    "topicId": "cns_p077",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "用手轻拨尺的一端，看到它快速来回颤动，停止后不再颤动，这段主要是什么运动？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "沿直线只向一个方向移动"
+      },
+      {
+        "key": "B",
+        "text": "像球一样在地上滚动"
+      },
+      {
+        "key": "C",
+        "text": "振动"
+      },
+      {
+        "key": "D",
+        "text": "绕一整圈不停转动"
+      }
+    ],
+    "answer": "C",
+    "explanation": "尺在平衡位置附近快速往复是振动，与整体滚动或单向移动不同。",
+    "verify": "\"振动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p077_q103",
+    "topicId": "cns_p077",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "滚动的圆筒和吊着来回晃的重物，看起来都在动，如何区分最有根据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只比较运动快慢，不看运动形式"
+      },
+      {
+        "key": "B",
+        "text": "只看一张静止照片，不观察运动过程"
+      },
+      {
+        "key": "C",
+        "text": "只看总共移动多远，不看是否转动或往复"
+      },
+      {
+        "key": "D",
+        "text": "观察是否一边前进一边转动，或来回摆动"
+      }
+    ],
+    "answer": "D",
+    "explanation": "运动形式依据实际运动特征判断：圆筒滚动，悬挂物来回运动是摆动。",
+    "verify": "\"观察是否一边前进一边转动，或来回摆动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p078_q101",
+    "topicId": "cns_p078",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小车先沿直跑道行进，再转过圆形弯道。怎样描述这两个阶段？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两个阶段都是直线运动"
+      },
+      {
+        "key": "B",
+        "text": "只要朝终点走就一定是直线"
+      },
+      {
+        "key": "C",
+        "text": "两个阶段都只能是振动"
+      },
+      {
+        "key": "D",
+        "text": "先直线运动，再曲线运动"
+      }
+    ],
+    "answer": "D",
+    "explanation": "判断直线或曲线运动要看运动路线；进入弯道后路线弯曲。",
+    "verify": "\"先直线运动，再曲线运动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p078_q102",
+    "topicId": "cns_p078",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两名同学分别画出球经过的连续位置，哪种记录最能判断路线是否弯曲？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只量球的重量"
+      },
+      {
+        "key": "B",
+        "text": "在同一背景上标出多个时刻的位置"
+      },
+      {
+        "key": "C",
+        "text": "只画起点和终点两点"
+      },
+      {
+        "key": "D",
+        "text": "只写球是红色的"
+      }
+    ],
+    "answer": "B",
+    "explanation": "仅连接起终点可能遗漏中途弯曲，多个时刻的位置能更完整反映运动路线。",
+    "verify": "\"在同一背景上标出多个时刻的位置\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p078_q103",
+    "topicId": "cns_p078",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "甲物体走直路很慢，乙物体沿弯路很快。哪项判断正确？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "弯路上的物体不算运动"
+      },
+      {
+        "key": "B",
+        "text": "路线形状与快慢是不同的描述"
+      },
+      {
+        "key": "C",
+        "text": "走得快就一定是直线运动"
+      },
+      {
+        "key": "D",
+        "text": "走得慢就一定是曲线运动"
+      }
+    ],
+    "answer": "B",
+    "explanation": "直线或曲线按路线分类，快慢要结合距离与时间判断，二者不能混为一谈。",
+    "verify": "\"路线形状与快慢是不同的描述\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p079_q101",
+    "topicId": "cns_p079",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小车都走同一条2米跑道，甲三次用时5、6、5秒，乙为8、8、9秒，谁总体更快？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只看次数，三次一样多所以相同"
+      },
+      {
+        "key": "B",
+        "text": "没有同时出发就永远不能比较"
+      },
+      {
+        "key": "C",
+        "text": "甲车"
+      },
+      {
+        "key": "D",
+        "text": "乙车"
+      }
+    ],
+    "answer": "C",
+    "explanation": "同一距离下用时较少的车更快；甲的多次记录均明显少于乙，结论更可靠。",
+    "verify": "\"甲车\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p079_q102",
+    "topicId": "cns_p079",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "甲跑道长10米，乙跑道长15米，两人都用5秒。能直接用“同距离比时间”规则比较吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能，只要出发点在一起"
+      },
+      {
+        "key": "B",
+        "text": "不能，因为任何跑步都无法比较"
+      },
+      {
+        "key": "C",
+        "text": "不能，距离并不相同"
+      },
+      {
+        "key": "D",
+        "text": "能，因为秒数写得一样"
+      }
+    ],
+    "answer": "C",
+    "explanation": "同距离比时间的前提是距离相同；本题距离不同，应换用其他合适方法。",
+    "verify": "\"不能，距离并不相同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p079_q103",
+    "topicId": "cns_p079",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "比较两小球滚完同一斜道的快慢，计时应怎样做？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "都从球开始运动计到到达同一终点"
+      },
+      {
+        "key": "B",
+        "text": "甲提前3秒开始计时"
+      },
+      {
+        "key": "C",
+        "text": "乙到终点后继续多计5秒"
+      },
+      {
+        "key": "D",
+        "text": "只量两只球的颜色深浅"
+      }
+    ],
+    "answer": "A",
+    "explanation": "统一开始与结束的计时标准，才能让同距离的时间比较公平。",
+    "verify": "\"都从球开始运动计到到达同一终点\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p262_q101",
+    "topicId": "cns_p262",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两只玩具车同时启动，8秒后甲走4米、乙走3米；又发现乙晚启动2秒。这次比较公平吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不公平，因为车不能测距离"
+      },
+      {
+        "key": "B",
+        "text": "不公平，应保证实际运动时间相同"
+      },
+      {
+        "key": "C",
+        "text": "公平，因为都在第8秒观察"
+      },
+      {
+        "key": "D",
+        "text": "公平，因为甲走得远"
+      }
+    ],
+    "answer": "B",
+    "explanation": "同时间比距离应保证运动的实际时间相同，晚启动使乙少运动2秒。",
+    "verify": "\"不公平，应保证实际运动时间相同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p262_q102",
+    "topicId": "cns_p262",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同样20秒内，甲爬虫走30厘米、乙走45厘米、丙走40厘米，谁最快？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "乙"
+      },
+      {
+        "key": "B",
+        "text": "甲"
+      },
+      {
+        "key": "C",
+        "text": "丙"
+      },
+      {
+        "key": "D",
+        "text": "三者一样快"
+      }
+    ],
+    "answer": "A",
+    "explanation": "三者运动时间相同，比较通过的距离即可；45厘米最大，所以乙最快。",
+    "verify": "\"乙\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p262_q103",
+    "topicId": "cns_p262",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "比较两名同学走10秒的快慢，地面有弯曲脚印，应量哪种距离？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只量两人终点之间的间距"
+      },
+      {
+        "key": "B",
+        "text": "各自实际走过的路线长度"
+      },
+      {
+        "key": "C",
+        "text": "只量起点到终点的直线距离"
+      },
+      {
+        "key": "D",
+        "text": "只量鞋子的长度"
+      }
+    ],
+    "answer": "B",
+    "explanation": "同时间比较运动快慢应比较实际走过的路程，直线间距可能漏掉绕路的距离。",
+    "verify": "\"各自实际走过的路线长度\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p080_q101",
+    "topicId": "cns_p080",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "用一辆小车分别缓慢和较快撞到相同木块，快车把木块推得更远，支持什么判断？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "慢车一定比快车更重"
+      },
+      {
+        "key": "B",
+        "text": "较快运动的小车能使木块发生更大变化"
+      },
+      {
+        "key": "C",
+        "text": "同一辆车无论快慢，推动效果必定相同"
+      },
+      {
+        "key": "D",
+        "text": "木块越远说明小车没有能量"
+      }
+    ],
+    "answer": "B",
+    "explanation": "同一小车速度不同时推动效果不同，较快运动时通常具有较多运动能量。",
+    "verify": "\"较快运动的小车能使木块发生更大变化\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p080_q102",
+    "topicId": "cns_p080",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "高处释放的小球撞倒积木，声音和碰撞后的小球运动都能观察到。哪种解释合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "小球的能量可传给积木并产生声音等变化"
+      },
+      {
+        "key": "B",
+        "text": "能量在碰撞中凭空全部消失"
+      },
+      {
+        "key": "C",
+        "text": "只有静止积木才有运动能量"
+      },
+      {
+        "key": "D",
+        "text": "撞倒积木证明小球一定会永远运动"
+      }
+    ],
+    "answer": "A",
+    "explanation": "小球运动的能量可转移或转化，碰撞使积木运动并伴随声音等现象。",
+    "verify": "\"小球的能量可传给积木并产生声音等变化\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p080_q103",
+    "topicId": "cns_p080",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "研究释放高度对小车推动效果的影响，为什么每次用同一辆车、同一木块？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "减少其他条件对推动距离的影响"
+      },
+      {
+        "key": "B",
+        "text": "让每次推动距离必须完全一样"
+      },
+      {
+        "key": "C",
+        "text": "证明小车质量无论何时都不重要"
+      },
+      {
+        "key": "D",
+        "text": "为了不记录任何实验数据"
+      }
+    ],
+    "answer": "A",
+    "explanation": "控制车辆和木块等条件，才能较合理地把效果差异与释放高度联系起来。",
+    "verify": "\"减少其他条件对推动距离的影响\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p081_q101",
+    "topicId": "cns_p081",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "设计纸轨道时，小球在接缝处经常停下，优先改哪里更有针对性？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不查停点，先把终点轨道加长"
+      },
+      {
+        "key": "B",
+        "text": "不查接缝，只把远处弯道换位置"
+      },
+      {
+        "key": "C",
+        "text": "把起点每次随机换位置"
+      },
+      {
+        "key": "D",
+        "text": "把接缝对齐并固定平整"
+      }
+    ],
+    "answer": "D",
+    "explanation": "接缝不平可能阻碍小球，平整并固定接缝比改变无关装饰更针对问题。",
+    "verify": "\"把接缝对齐并固定平整\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p081_q102",
+    "topicId": "cns_p081",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小球只靠从高处释放通过轨道，哪种设计更可能成功？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "后续小坡低于起点并留有余量"
+      },
+      {
+        "key": "B",
+        "text": "后续小坡都远高于起点"
+      },
+      {
+        "key": "C",
+        "text": "起点与所有弯道都用尖角连接"
+      },
+      {
+        "key": "D",
+        "text": "先随意拼接而不检查支撑"
+      }
+    ],
+    "answer": "A",
+    "explanation": "小球从起点获得的能量有限，运动中还有损耗；后续坡不能设计得过高。",
+    "verify": "\"后续小坡低于起点并留有余量\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p081_q103",
+    "topicId": "cns_p081",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "两份设计图都能画出路线，哪份信息更有助于实际制作？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只画小球喜欢的颜色"
+      },
+      {
+        "key": "B",
+        "text": "只写“有趣的过山车”"
+      },
+      {
+        "key": "C",
+        "text": "只有终点一个圆点"
+      },
+      {
+        "key": "D",
+        "text": "同时标出轨道高度、弯道和支撑位置"
+      }
+    ],
+    "answer": "D",
+    "explanation": "工程设计需提供可操作的信息，路线、高度和支撑安排能指导材料安装。",
+    "verify": "\"同时标出轨道高度、弯道和支撑位置\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p263_q101",
+    "topicId": "cns_p263",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "测试一条固定轨道，小球在同一弯道三次飞出，怎样改进并检验最合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "调整该弯道护栏后用相同条件再测"
+      },
+      {
+        "key": "B",
+        "text": "每次同时改三个位置却不记录"
+      },
+      {
+        "key": "C",
+        "text": "只删掉失败记录"
+      },
+      {
+        "key": "D",
+        "text": "认定失败是小球不喜欢轨道"
+      }
+    ],
+    "answer": "A",
+    "explanation": "重复故障能帮助定位问题；针对弯道改进并保持测试条件，才便于判断效果。",
+    "verify": "\"调整该弯道护栏后用相同条件再测\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p263_q102",
+    "topicId": "cns_p263",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "甲版轨道成功通过2次、失败3次，乙版成功5次、失败0次，其他测试条件相同，哪项评价有根据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "甲版一定比乙版更可靠"
+      },
+      {
+        "key": "B",
+        "text": "两版成功次数不同所以不能记录"
+      },
+      {
+        "key": "C",
+        "text": "乙版以后任何条件下都不会失败"
+      },
+      {
+        "key": "D",
+        "text": "乙版在本轮测试中更可靠"
+      }
+    ],
+    "answer": "D",
+    "explanation": "相同条件下的重复测试支持乙版本轮更可靠，但不能保证所有未来条件都成功。",
+    "verify": "\"乙版在本轮测试中更可靠\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p263_q103",
+    "topicId": "cns_p263",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "测试者发现小球总在长直道中途停下，哪项数据最有助于寻找原因？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只保留最后一次成功的视频"
+      },
+      {
+        "key": "B",
+        "text": "记录停点、释放高度和轨道接缝情况"
+      },
+      {
+        "key": "C",
+        "text": "只记录终点所在位置，不查中途轨道"
+      },
+      {
+        "key": "D",
+        "text": "只记录最顺利一次的用时"
+      }
+    ],
+    "answer": "B",
+    "explanation": "停点、初始条件和接缝等记录与运动受阻直接相关，能帮助提出针对性的改进。",
+    "verify": "\"记录停点、释放高度和轨道接缝情况\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p082_q101",
+    "topicId": "cns_p082",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "秋分前后，某地早晨太阳从东方升起，小林面向太阳伸开双臂，右手大致指向哪里？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "东方"
+      },
+      {
+        "key": "B",
+        "text": "西方"
+      },
+      {
+        "key": "C",
+        "text": "南方"
+      },
+      {
+        "key": "D",
+        "text": "北方"
+      }
+    ],
+    "answer": "C",
+    "explanation": "面向东方时，左侧为北、右侧为南；太阳方向提供了判断身体左右方向的参照。",
+    "verify": "\"南方\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p082_q102",
+    "topicId": "cns_p082",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "我国北方某地正午太阳在正南，竖直旗杆的影子大致朝哪边？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "北方"
+      },
+      {
+        "key": "B",
+        "text": "南方"
+      },
+      {
+        "key": "C",
+        "text": "太阳所在的同一方向"
+      },
+      {
+        "key": "D",
+        "text": "无法形成影子"
+      }
+    ],
+    "answer": "A",
+    "explanation": "不透明旗杆挡住阳光，影子出现在背向太阳的一侧；太阳在南，影子大致向北。",
+    "verify": "\"北方\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p082_q103",
+    "topicId": "cns_p082",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "天阴看不见太阳，想马上准确确定学校操场的南北，应怎样选择？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "改用放平并远离磁性干扰的指南针"
+      },
+      {
+        "key": "B",
+        "text": "把天空最亮的一片永远当东方"
+      },
+      {
+        "key": "C",
+        "text": "随便把左边当北方"
+      },
+      {
+        "key": "D",
+        "text": "闭眼后凭身体感到的温度判断"
+      }
+    ],
+    "answer": "A",
+    "explanation": "不能看清太阳位置时不宜强行推断；可改用适当工具，并注意正确的使用条件。",
+    "verify": "\"改用放平并远离磁性干扰的指南针\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p083_q101",
+    "topicId": "cns_p083",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一棵树的树干一侧苔藓多，小明据此认定那侧一定是北方。哪种评价更科学？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只能作为线索，还需其他证据核对"
+      },
+      {
+        "key": "B",
+        "text": "一定正确，苔藓从不受环境影响"
+      },
+      {
+        "key": "C",
+        "text": "一定错误，因为树木没有生命"
+      },
+      {
+        "key": "D",
+        "text": "只要树够高就能代替指南针"
+      }
+    ],
+    "answer": "A",
+    "explanation": "苔藓分布还受遮阴、湿度等影响，不能凭单一自然现象绝对判定方位。",
+    "verify": "\"只能作为线索，还需其他证据核对\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p083_q102",
+    "topicId": "cns_p083",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "北半球晴夜找到北极星后，小组知道前方近似北方，向后转身应大致面向哪里？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "北方"
+      },
+      {
+        "key": "B",
+        "text": "东方"
+      },
+      {
+        "key": "C",
+        "text": "西方"
+      },
+      {
+        "key": "D",
+        "text": "南方"
+      }
+    ],
+    "answer": "D",
+    "explanation": "找到北方后，反方向就是南方；北极星可提供北半球夜间定向的线索。",
+    "verify": "\"南方\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p083_q103",
+    "topicId": "cns_p083",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "北方一处无遮挡斜坡，向阳面积雪先化，背阴面后化。记录首先支持什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "所有地方积雪都是北面先化"
+      },
+      {
+        "key": "B",
+        "text": "只靠一处积雪就能确定全球方向"
+      },
+      {
+        "key": "C",
+        "text": "两侧获得的太阳照射和融雪情况不同"
+      },
+      {
+        "key": "D",
+        "text": "向阳面从来没有下过雪"
+      }
+    ],
+    "answer": "C",
+    "explanation": "太阳照射会影响融雪，但地形、遮挡和天气也会影响，单处结果不能推广成绝对定向规则。",
+    "verify": "\"两侧获得的太阳照射和融雪情况不同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p084_q101",
+    "topicId": "cns_p084",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "悬挂条形磁铁，轻轻拨动后再放手，多次都近似回到南北方向，说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只要悬挂任何材料都能指南北"
+      },
+      {
+        "key": "B",
+        "text": "自由转动的磁铁能帮助辨别方向"
+      },
+      {
+        "key": "C",
+        "text": "磁铁被绳子永久固定朝一个方向"
+      },
+      {
+        "key": "D",
+        "text": "磁铁只能转动一次"
+      }
+    ],
+    "answer": "B",
+    "explanation": "反复拨动后仍趋向相近方向，支持磁铁受地球磁场作用而具有指向性。",
+    "verify": "\"自由转动的磁铁能帮助辨别方向\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p084_q102",
+    "topicId": "cns_p084",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "磁铁浮在小泡沫上，但泡沫贴住盆壁不动，能立即用它判断方向吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能，靠墙能使方向更准确"
+      },
+      {
+        "key": "B",
+        "text": "能，只需把盆壁标成北方"
+      },
+      {
+        "key": "C",
+        "text": "不能，因为漂在水上的磁铁没有磁性"
+      },
+      {
+        "key": "D",
+        "text": "不能，应让它离开盆壁自由转动"
+      }
+    ],
+    "answer": "D",
+    "explanation": "接触盆壁会阻碍转动，停下的方向可能由摩擦决定，而不是正常的磁指向。",
+    "verify": "\"不能，应让它离开盆壁自由转动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p084_q103",
+    "topicId": "cns_p084",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "实验中磁铁N端原指北，旁边放了强磁铁后明显转向，应怎样处理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "认定地球的北方已经移动"
+      },
+      {
+        "key": "B",
+        "text": "移开干扰磁铁后重新观察"
+      },
+      {
+        "key": "C",
+        "text": "把新方向直接记成地理北方"
+      },
+      {
+        "key": "D",
+        "text": "将N和S标签随意对调"
+      }
+    ],
+    "answer": "B",
+    "explanation": "邻近磁铁会改变局部磁场，定向应避开这类干扰，不能把偏转当成地理方向改变。",
+    "verify": "\"移开干扰磁铁后重新观察\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p085_q101",
+    "topicId": "cns_p085",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "未知磁铁的一端与已知N极相互排斥，这一端应是什么极？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "仅凭颜色决定"
+      },
+      {
+        "key": "B",
+        "text": "N极"
+      },
+      {
+        "key": "C",
+        "text": "S极"
+      },
+      {
+        "key": "D",
+        "text": "没有磁极"
+      }
+    ],
+    "answer": "B",
+    "explanation": "同名磁极相互排斥，未知端排斥已知N极，可判断它也是N极。",
+    "verify": "\"N极\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p085_q102",
+    "topicId": "cns_p085",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "指南针的N端被一块磁铁吸引过去，能由此判断靠近N端的是该磁铁的什么极吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "一定是没有磁性的中点"
+      },
+      {
+        "key": "B",
+        "text": "S极"
+      },
+      {
+        "key": "C",
+        "text": "N极"
+      },
+      {
+        "key": "D",
+        "text": "任何一端都只会排斥N极"
+      }
+    ],
+    "answer": "B",
+    "explanation": "异名磁极相互吸引；能吸引磁针N端的磁铁端部应为S极。",
+    "verify": "\"S极\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p085_q103",
+    "topicId": "cns_p085",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "把条形磁铁掉转后再次靠近小磁针，磁针转动方向改变。最合理解释是什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "靠近的磁极改变，作用随之改变"
+      },
+      {
+        "key": "B",
+        "text": "磁铁掉转就完全失去磁性"
+      },
+      {
+        "key": "C",
+        "text": "磁针的南北标记必定自动消失"
+      },
+      {
+        "key": "D",
+        "text": "小磁针完全不受旁边磁铁影响"
+      }
+    ],
+    "answer": "A",
+    "explanation": "条形磁铁两端磁极不同，掉转改变靠近磁针的极，吸引或排斥的情况随之变化。",
+    "verify": "\"靠近的磁极改变，作用随之改变\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p264_q101",
+    "topicId": "cns_p264",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "教师用磁铁沿同一方向摩擦钢针后，钢针能吸起小铁屑；摩擦前不能。这表明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "任何材料经过轻擦都一定获得相同磁性"
+      },
+      {
+        "key": "B",
+        "text": "钢针经过处理获得了磁性"
+      },
+      {
+        "key": "C",
+        "text": "钢针只是暂时变热，冷却后一定不能吸铁"
+      },
+      {
+        "key": "D",
+        "text": "钢针只要外形变尖就会产生同样吸铁现象"
+      }
+    ],
+    "answer": "B",
+    "explanation": "处理前后的吸铁现象不同，是钢针获得磁性的证据，但不能推出所有材料都能这样磁化。",
+    "verify": "\"钢针经过处理获得了磁性\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p264_q102",
+    "topicId": "cns_p264",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "做成的磁针装在泡沫上总是翻倒，怎样改进更有利于定向？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "调整承托使其平稳并能自由转动"
+      },
+      {
+        "key": "B",
+        "text": "把钢针两端全粘在桌面上"
+      },
+      {
+        "key": "C",
+        "text": "换成不能浮起的重石块"
+      },
+      {
+        "key": "D",
+        "text": "靠近大磁铁固定它的朝向"
+      }
+    ],
+    "answer": "A",
+    "explanation": "磁针需要稳定承托又能转动；翻倒或被粘死都会影响它正常响应地球磁场。",
+    "verify": "\"调整承托使其平稳并能自由转动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p264_q103",
+    "topicId": "cns_p264",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一根钢针已能吸铁，但不知哪端是N极，应怎样可靠标记？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "凭针尖细就标成N极"
+      },
+      {
+        "key": "B",
+        "text": "按哪端颜色亮就标N极"
+      },
+      {
+        "key": "C",
+        "text": "每次随意贴不同标签"
+      },
+      {
+        "key": "D",
+        "text": "让它自由转动，并用可靠指南针核对"
+      }
+    ],
+    "answer": "D",
+    "explanation": "吸铁只能证明有磁性，不能直接判定端部名称；需利用指向并核对后标记。",
+    "verify": "\"让它自由转动，并用可靠指南针核对\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p265_q101",
+    "topicId": "cns_p265",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两份指南针设计，甲磁针能转但底盘无方向，乙同时有可转磁针和清楚方向盘，哪份更便于使用？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "乙，因为底盘能代替磁性"
+      },
+      {
+        "key": "B",
+        "text": "乙，更便于把磁针指向对应成方位"
+      },
+      {
+        "key": "C",
+        "text": "甲，方向越少越好"
+      },
+      {
+        "key": "D",
+        "text": "两份都必须把磁针焊死"
+      }
+    ],
+    "answer": "B",
+    "explanation": "可转磁针提供指向，方向盘帮助读出方位；二者作用不同，配合才方便。",
+    "verify": "\"乙，更便于把磁针指向对应成方位\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p265_q102",
+    "topicId": "cns_p265",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "设计指南针外壳时，哪种做法更能减少对磁针的干扰？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "选择不带磁性的外壳并避开强磁物"
+      },
+      {
+        "key": "B",
+        "text": "在磁针两旁装强磁铁"
+      },
+      {
+        "key": "C",
+        "text": "用磁铁把磁针吸在底盘上"
+      },
+      {
+        "key": "D",
+        "text": "把外壳紧压住磁针尖端"
+      }
+    ],
+    "answer": "A",
+    "explanation": "外壳不应提供明显磁干扰，也不应阻碍转动；强磁铁会使磁针偏离正常指向。",
+    "verify": "\"选择不带磁性的外壳并避开强磁物\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p265_q103",
+    "topicId": "cns_p265",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "设计评价要求“放到不同朝向仍能找北”，怎样试验最对应这项要求？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把磁针固定后看是否不动"
+      },
+      {
+        "key": "B",
+        "text": "转动整个底盘，待磁针稳定后与已知北方比较"
+      },
+      {
+        "key": "C",
+        "text": "只检查底盘颜色是否漂亮"
+      },
+      {
+        "key": "D",
+        "text": "只量指南针包装盒长度"
+      }
+    ],
+    "answer": "B",
+    "explanation": "改变底盘朝向后仍能给出一致的北方，才是检验定向功能而不是检验外观。",
+    "verify": "\"转动整个底盘，待磁针稳定后与已知北方比较\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p086_q101",
+    "topicId": "cns_p086",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "制作好的指南针，轻拨磁针后它碰到透明盖而停下，应怎样修整？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "留出转动间隙，避免磁针碰盖"
+      },
+      {
+        "key": "B",
+        "text": "再把盖子压得更低"
+      },
+      {
+        "key": "C",
+        "text": "把N标签贴在任意方向上"
+      },
+      {
+        "key": "D",
+        "text": "在盖子上贴更多磁铁"
+      }
+    ],
+    "answer": "A",
+    "explanation": "磁针应有足够转动空间；与盖碰擦会阻碍其指向，不能靠改标签解决。",
+    "verify": "\"留出转动间隙，避免磁针碰盖\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p086_q102",
+    "topicId": "cns_p086",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "指南针底盘写了北方，磁针N端却没有与底盘北字对齐，读方向前应怎样做？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "用手强扭磁针使它贴住北字"
+      },
+      {
+        "key": "B",
+        "text": "直接把所有方向按纸上位置读出"
+      },
+      {
+        "key": "C",
+        "text": "拆掉磁针，只保留方向盘"
+      },
+      {
+        "key": "D",
+        "text": "保持放平，转动底盘使北字对准稳定的N端"
+      }
+    ],
+    "answer": "D",
+    "explanation": "方向盘需要与真实磁针指向对齐；应转盘而不是人为强迫磁针改变指向。",
+    "verify": "\"保持放平，转动底盘使北字对准稳定的N端\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p086_q103",
+    "topicId": "cns_p086",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "自制指南针第一次指向东北，移开旁边铁盒后接近已知北方，说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "铁盒能永久改变地球南北"
+      },
+      {
+        "key": "B",
+        "text": "没有外壳的指南针永远不能用"
+      },
+      {
+        "key": "C",
+        "text": "磁针只能在第一次指方向"
+      },
+      {
+        "key": "D",
+        "text": "铁盒附近的磁性干扰可能影响了读数"
+      }
+    ],
+    "answer": "D",
+    "explanation": "铁制或带磁物品可能使磁针偏转，比较移开前后结果可帮助发现干扰。",
+    "verify": "\"铁盒附近的磁性干扰可能影响了读数\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p266_q101",
+    "topicId": "cns_p266",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "寻宝路线从起点向北走10步，再向东走5步，最后一段应如何确定？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "在新位置放平并校准指南针后找东方"
+      },
+      {
+        "key": "B",
+        "text": "永远把身体右手边当东方"
+      },
+      {
+        "key": "C",
+        "text": "把指南针竖起来读数"
+      },
+      {
+        "key": "D",
+        "text": "直接跟着附近汽车的方向走"
+      }
+    ],
+    "answer": "A",
+    "explanation": "移动和转身会改变身体朝向，每段路线都应按正确校准的指南针确定地理方向。",
+    "verify": "\"在新位置放平并校准指南针后找东方\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p266_q102",
+    "topicId": "cns_p266",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "寻宝时指南针放在金属长椅上，两次读向差别很大，应先怎样检查？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "移到远离金属和磁铁处重新测"
+      },
+      {
+        "key": "B",
+        "text": "直接选第一次读数，不检查测量环境"
+      },
+      {
+        "key": "C",
+        "text": "把两次差异很大的读数简单平均后就继续"
+      },
+      {
+        "key": "D",
+        "text": "只转动方向盘标签，不移动或检查指南针"
+      }
+    ],
+    "answer": "A",
+    "explanation": "金属或磁性物体可能影响方向，先移除这种测量干扰，再判断路线。",
+    "verify": "\"移到远离金属和磁铁处重新测\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p266_q103",
+    "topicId": "cns_p266",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "任务写“学校大门以南约20步”，为什么还需要知道出发点是学校大门？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "方向和距离都必须相对于明确起点"
+      },
+      {
+        "key": "B",
+        "text": "任何地点向南20步都会到同一处"
+      },
+      {
+        "key": "C",
+        "text": "指南针可以自动显示宝藏名字"
+      },
+      {
+        "key": "D",
+        "text": "南方不需要任何参照地点"
+      }
+    ],
+    "answer": "A",
+    "explanation": "指南针只能帮助找方向；要到指定位置，还需明确起点并按要求移动一定距离。",
+    "verify": "\"方向和距离都必须相对于明确起点\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p087_q101",
+    "topicId": "cns_p087",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "企鹅会游泳、不会飞，但身体有羽毛，分类时应怎样看待？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不会飞就一定不是鸟"
+      },
+      {
+        "key": "B",
+        "text": "会游泳就一定是鱼"
+      },
+      {
+        "key": "C",
+        "text": "生活在寒冷地方就没有脊椎"
+      },
+      {
+        "key": "D",
+        "text": "不能只凭会不会飞，应结合羽毛等特征"
+      }
+    ],
+    "answer": "D",
+    "explanation": "分类依据一组稳定身体特征，而非单一运动方式；企鹅仍属于鸟类。",
+    "verify": "\"不能只凭会不会飞，应结合羽毛等特征\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p087_q102",
+    "topicId": "cns_p087",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "鲸在水中生活，却用肺呼吸、用乳汁喂幼崽，最合理的分类是？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "鱼类，因为所有水中动物都是鱼"
+      },
+      {
+        "key": "B",
+        "text": "昆虫，因为会游泳"
+      },
+      {
+        "key": "C",
+        "text": "鸟类，因为需要空气"
+      },
+      {
+        "key": "D",
+        "text": "哺乳动物"
+      }
+    ],
+    "answer": "D",
+    "explanation": "鲸的呼吸与哺乳等特征表明它属于哺乳动物，生活环境不能代替分类特征。",
+    "verify": "\"哺乳动物\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p087_q103",
+    "topicId": "cns_p087",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "蚯蚓与蛇外形都细长，哪项证据最能帮助区分是否为脊椎动物？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "爬行时会不会转弯"
+      },
+      {
+        "key": "B",
+        "text": "是否生活在地面附近"
+      },
+      {
+        "key": "C",
+        "text": "体内有没有由脊椎骨组成的脊柱"
+      },
+      {
+        "key": "D",
+        "text": "身体是不是细长"
+      }
+    ],
+    "answer": "C",
+    "explanation": "体型和行动相似不等于类别相同；有无脊柱是划分脊椎动物的重要依据。",
+    "verify": "\"体内有没有由脊椎骨组成的脊柱\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p088_q101",
+    "topicId": "cns_p088",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "观察记录写“幼体从亲体外的卵中孵出”，能首先判断哪件事？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "它一定会用乳汁哺育幼体"
+      },
+      {
+        "key": "B",
+        "text": "它一定没有脊椎"
+      },
+      {
+        "key": "C",
+        "text": "该次繁殖属于卵生"
+      },
+      {
+        "key": "D",
+        "text": "它一定是鸟类"
+      }
+    ],
+    "answer": "C",
+    "explanation": "从卵中孵出是卵生的直接证据，但卵生动物不只有鸟类，不能由此判断全部类别。",
+    "verify": "\"该次繁殖属于卵生\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p088_q102",
+    "topicId": "cns_p088",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "海豚妈妈生下活的幼崽并哺乳，与母鸡孵蛋相比，哪项区别有根据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两者都不需要繁殖"
+      },
+      {
+        "key": "B",
+        "text": "母鸡一定没有生命活动"
+      },
+      {
+        "key": "C",
+        "text": "海豚幼崽不会再生长"
+      },
+      {
+        "key": "D",
+        "text": "幼体出生的方式不同"
+      }
+    ],
+    "answer": "D",
+    "explanation": "海豚与母鸡幼体出生方式不同，分别表现为胎生和卵生，但都要继续生长。",
+    "verify": "\"幼体出生的方式不同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p088_q103",
+    "topicId": "cns_p088",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一群动物逐渐死亡，长期没有后代出生，数量会怎样变化？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "每只动物都会变成植物"
+      },
+      {
+        "key": "B",
+        "text": "没有繁殖也必定永远保持原数量"
+      },
+      {
+        "key": "C",
+        "text": "一般会逐渐减少，繁殖有助于延续种群"
+      },
+      {
+        "key": "D",
+        "text": "一定会自动增加"
+      }
+    ],
+    "answer": "C",
+    "explanation": "个体有寿命，繁殖产生新个体，使生命得以一代代延续。",
+    "verify": "\"一般会逐渐减少，繁殖有助于延续种群\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p089_q101",
+    "topicId": "cns_p089",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小蚕陆续孵出，小组准备较嫩桑叶并保持饲养盒清洁，主要满足什么需要？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "获得适合的食物和较卫生的生长环境"
+      },
+      {
+        "key": "B",
+        "text": "让小蚕永远不再长大"
+      },
+      {
+        "key": "C",
+        "text": "让蚕卵立刻变成蚕蛾"
+      },
+      {
+        "key": "D",
+        "text": "使盒内没有任何空气"
+      }
+    ],
+    "answer": "A",
+    "explanation": "刚孵出的小蚕需要适当食物和清洁环境，饲养盒也应注意通风。",
+    "verify": "\"获得适合的食物和较卫生的生长环境\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p089_q102",
+    "topicId": "cns_p089",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两盒同批蚕卵孵化时间不同，能马上认定其中一盒没有生命吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能，应检查条件并持续观察"
+      },
+      {
+        "key": "B",
+        "text": "能，只要一天没孵化就没有生命"
+      },
+      {
+        "key": "C",
+        "text": "能，所有卵必须同一分钟孵出"
+      },
+      {
+        "key": "D",
+        "text": "不能，因为蚕不从卵中出生"
+      }
+    ],
+    "answer": "A",
+    "explanation": "孵化时间会受温度和个体差异影响；不能以短时间未孵化就直接判定无生命。",
+    "verify": "\"不能，应检查条件并持续观察\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p089_q103",
+    "topicId": "cns_p089",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "要记录蚕从卵到幼蚕的变化，哪份资料更有价值？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "同一批蚕卵分日期的照片和孵化数量"
+      },
+      {
+        "key": "B",
+        "text": "只拍一次空盒子"
+      },
+      {
+        "key": "C",
+        "text": "只记录桑叶的购买价格"
+      },
+      {
+        "key": "D",
+        "text": "只写“很可爱”而没有日期"
+      }
+    ],
+    "answer": "A",
+    "explanation": "连续、带日期的观察可以呈现孵化过程与时间变化，比单次印象更有证据价值。",
+    "verify": "\"同一批蚕卵分日期的照片和孵化数量\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p090_q101",
+    "topicId": "cns_p090",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "幼蚕一段时间不吃叶、身体较静，旁边后来留下旧皮，怎样解释更合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "证明它一定已经死亡"
+      },
+      {
+        "key": "B",
+        "text": "说明幼蚕从此不需要食物"
+      },
+      {
+        "key": "C",
+        "text": "表示它已经直接变成了卵"
+      },
+      {
+        "key": "D",
+        "text": "可能正在经历蜕皮，应轻柔观察"
+      }
+    ],
+    "answer": "D",
+    "explanation": "幼蚕蜕皮前后行为会变化，旧皮是重要证据，应结合后续观察而不是贸然判定死亡。",
+    "verify": "\"可能正在经历蜕皮，应轻柔观察\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p090_q102",
+    "topicId": "cns_p090",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两次照片中幼蚕看起来长度不同，拍摄距离也不同，怎样改进体长记录？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "每次换不同大小的尺子却不看单位"
+      },
+      {
+        "key": "B",
+        "text": "用相同方法和尺度测量并注明日期"
+      },
+      {
+        "key": "C",
+        "text": "只选看起来更长的照片"
+      },
+      {
+        "key": "D",
+        "text": "把远处照片当成体长缩小的证据"
+      }
+    ],
+    "answer": "B",
+    "explanation": "照片大小会受拍摄距离影响；固定测量方式、尺度和日期更便于比较真实生长。",
+    "verify": "\"用相同方法和尺度测量并注明日期\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p090_q103",
+    "topicId": "cns_p090",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "饲养盒里积了许多残叶和粪便，哪项处理兼顾观察与幼蚕健康？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "轻柔清理并补充新鲜适宜桑叶"
+      },
+      {
+        "key": "B",
+        "text": "不停翻动幼蚕让它运动"
+      },
+      {
+        "key": "C",
+        "text": "用香味很重的清洁剂直接喷蚕"
+      },
+      {
+        "key": "D",
+        "text": "封死盒盖不再通风"
+      }
+    ],
+    "answer": "A",
+    "explanation": "清理污物和提供适宜食物可改善环境；强刺激、粗暴操作或缺少通风可能伤害幼蚕。",
+    "verify": "\"轻柔清理并补充新鲜适宜桑叶\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p267_q101",
+    "topicId": "cns_p267",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "幼蚕吐丝结茧后，不再像以前那样吃桑叶，茧中观察到蛹。应怎样理解？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "蛹是另一种突然钻进茧的动物"
+      },
+      {
+        "key": "B",
+        "text": "进入了新的发育阶段"
+      },
+      {
+        "key": "C",
+        "text": "蚕只是在把食物装进茧"
+      },
+      {
+        "key": "D",
+        "text": "只要不吃叶就一定没有生命"
+      }
+    ],
+    "answer": "B",
+    "explanation": "幼蚕可在茧内变成蛹，这是同一只蚕的发育阶段变化，不是换成另一种动物。",
+    "verify": "\"进入了新的发育阶段\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p267_q102",
+    "topicId": "cns_p267",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "想知道结茧后是否还有变化，哪项方案既能获得信息又较少伤害？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把茧完全撕碎再比较"
+      },
+      {
+        "key": "B",
+        "text": "参考教师提供的观察材料并持续记录出蛾时间"
+      },
+      {
+        "key": "C",
+        "text": "把所有茧用力压开"
+      },
+      {
+        "key": "D",
+        "text": "每天把茧浸在热水中"
+      }
+    ],
+    "answer": "B",
+    "explanation": "蛹期仍有生命，应采用适当观察方式，避免破坏或高温处理影响其发育。",
+    "verify": "\"参考教师提供的观察材料并持续记录出蛾时间\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p267_q103",
+    "topicId": "cns_p267",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "记录出现“幼蚕→结茧→蛹”，哪句话最符合这些证据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "茧内永远不会再发生变化"
+      },
+      {
+        "key": "B",
+        "text": "所有动物都会吐丝形成蚕茧"
+      },
+      {
+        "key": "C",
+        "text": "结茧把蚕发育过程中的蛹期保护在内部"
+      },
+      {
+        "key": "D",
+        "text": "茧就是蚕长出的硬骨头"
+      }
+    ],
+    "answer": "C",
+    "explanation": "茧是蚕吐丝形成的保护结构，蛹是茧内的发育阶段，不能把二者混为一物。",
+    "verify": "\"结茧把蚕发育过程中的蛹期保护在内部\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p268_q101",
+    "topicId": "cns_p268",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一只蚕的连续观察记录从茧内的蛹到钻出的有翅蚕蛾，支持什么结论？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "身体形态会在发育过程中明显改变"
+      },
+      {
+        "key": "B",
+        "text": "蚕蛾是从外面偶然钻入的"
+      },
+      {
+        "key": "C",
+        "text": "所有有翅动物都来自蚕茧"
+      },
+      {
+        "key": "D",
+        "text": "蛹与蚕蛾必定是不同种类动物"
+      }
+    ],
+    "answer": "A",
+    "explanation": "连续记录把蛹和蚕蛾联系起来，可说明同一动物在不同阶段的形态差异。",
+    "verify": "\"身体形态会在发育过程中明显改变\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p268_q102",
+    "topicId": "cns_p268",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "蚕蛾交配后产卵，这些卵以后孵出幼蚕，最能表现哪种关系？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "卵只是没有生命的包装"
+      },
+      {
+        "key": "B",
+        "text": "蛹只能从桑叶中长出"
+      },
+      {
+        "key": "C",
+        "text": "上一代与下一代通过繁殖相联系"
+      },
+      {
+        "key": "D",
+        "text": "幼蚕是蚕蛾身体直接缩小成的"
+      }
+    ],
+    "answer": "C",
+    "explanation": "蚕蛾繁殖产生卵，卵发育成下一代幼蚕，使生命周期能够延续。",
+    "verify": "\"上一代与下一代通过繁殖相联系\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p268_q103",
+    "topicId": "cns_p268",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "同学把出蛾日期写在记录卡上，还保留先前结茧日期，能够进一步了解什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "所有蚕卵的实际孵化时间"
+      },
+      {
+        "key": "B",
+        "text": "结茧到出蛾经过的大致时间"
+      },
+      {
+        "key": "C",
+        "text": "蚕蛾成虫阶段完整的寿命"
+      },
+      {
+        "key": "D",
+        "text": "幼蚕一生吃掉的桑叶总质量"
+      }
+    ],
+    "answer": "B",
+    "explanation": "两个阶段的日期可以计算间隔，帮助认识这一批蚕的发育过程，但不能代表所有昆虫。",
+    "verify": "\"结茧到出蛾经过的大致时间\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p091_q101",
+    "topicId": "cns_p091",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "观察甲昆虫有卵、幼虫、蛹、成虫，乙有卵、若虫、成虫，哪项比较正确？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "甲乙都一定有同样的蛹期"
+      },
+      {
+        "key": "B",
+        "text": "乙不属于动物"
+      },
+      {
+        "key": "C",
+        "text": "甲从来不需要经历生长"
+      },
+      {
+        "key": "D",
+        "text": "甲有蛹期，乙没有观察到蛹期"
+      }
+    ],
+    "answer": "D",
+    "explanation": "完整阶段记录显示两种发育过程的差异，是否有蛹期是区分完全变态与不完全变态的要点。",
+    "verify": "\"甲有蛹期，乙没有观察到蛹期\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p091_q102",
+    "topicId": "cns_p091",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "蝴蝶幼虫与成虫外形差别很大，而蝗虫若虫与成虫较相似，这能说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "蝴蝶幼虫一定不是昆虫"
+      },
+      {
+        "key": "B",
+        "text": "蝗虫从出生起就完全不变"
+      },
+      {
+        "key": "C",
+        "text": "昆虫发育过程中的形态变化方式可能不同"
+      },
+      {
+        "key": "D",
+        "text": "所有昆虫小时候都一模一样"
+      }
+    ],
+    "answer": "C",
+    "explanation": "不同昆虫形态变化方式不同；不能因幼虫不像成虫就把它排除在同一种昆虫的发育过程外。",
+    "verify": "\"昆虫发育过程中的形态变化方式可能不同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p091_q103",
+    "topicId": "cns_p091",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "只观察到一只昆虫的成虫，能断定它一生是否有蛹期吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能，还需该种昆虫发育过程的证据"
+      },
+      {
+        "key": "B",
+        "text": "能，有翅就必定有蛹期"
+      },
+      {
+        "key": "C",
+        "text": "能，六条腿就一定没有蛹期"
+      },
+      {
+        "key": "D",
+        "text": "能，颜色深就一定是完全变态"
+      }
+    ],
+    "answer": "A",
+    "explanation": "成虫的单次外观不能完整展示发育过程，需要连续记录或可靠的生命周期资料。",
+    "verify": "\"不能，还需该种昆虫发育过程的证据\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p092_q101",
+    "topicId": "cns_p092",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两种动物的记录都包括出生、生长、繁殖和死亡，但经历时间不同，说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "寿命短的动物一定没有后代"
+      },
+      {
+        "key": "B",
+        "text": "生命周期有共同阶段，寿命可以不同"
+      },
+      {
+        "key": "C",
+        "text": "阶段名称相同就必须同一天死亡"
+      },
+      {
+        "key": "D",
+        "text": "寿命长的动物不需要生长"
+      }
+    ],
+    "answer": "B",
+    "explanation": "不同动物都经历生命阶段，但发育速度和寿命长短可相差很大。",
+    "verify": "\"生命周期有共同阶段，寿命可以不同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p092_q102",
+    "topicId": "cns_p092",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "池塘里有卵、蝌蚪和青蛙，小组想确认它们的联系，哪项记录最有帮助？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只数池边石头数量"
+      },
+      {
+        "key": "B",
+        "text": "把个体混在一起后只拍一次照"
+      },
+      {
+        "key": "C",
+        "text": "在适宜条件下连续观察同批个体的变化"
+      },
+      {
+        "key": "D",
+        "text": "只比较三者谁颜色深"
+      }
+    ],
+    "answer": "C",
+    "explanation": "连续追踪同批个体可建立阶段联系，比仅看一次不同形态更能说明生命周期。",
+    "verify": "\"在适宜条件下连续观察同批个体的变化\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p092_q103",
+    "topicId": "cns_p092",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "小猫长大后生下小猫，应该怎样在生命周期图中连接？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "成年猫繁殖产生下一代，下一代从出生开始"
+      },
+      {
+        "key": "B",
+        "text": "把成年猫直接画成又变回幼猫"
+      },
+      {
+        "key": "C",
+        "text": "删去生长阶段，只剩死亡"
+      },
+      {
+        "key": "D",
+        "text": "把新生小猫当作没有来源的物体"
+      }
+    ],
+    "answer": "A",
+    "explanation": "生命周期的循环是通过产生下一代延续，不是一个个体倒退回自己的幼年。",
+    "verify": "\"成年猫繁殖产生下一代，下一代从出生开始\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p093_q101",
+    "topicId": "cns_p093",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "宇航照片显示地球大致呈球形，地面附近却看起来较平，哪种解释合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "地面看起来平就推翻所有地球照片"
+      },
+      {
+        "key": "B",
+        "text": "地球每到白天都会变成平板"
+      },
+      {
+        "key": "C",
+        "text": "照片中的地球没有陆地"
+      },
+      {
+        "key": "D",
+        "text": "人能看到的地面只是大球表面很小的一部分"
+      }
+    ],
+    "answer": "D",
+    "explanation": "地球尺度很大，局部曲率不容易直接察觉；局部看似平与整体近似球形不矛盾。",
+    "verify": "\"人能看到的地面只是大球表面很小的一部分\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p093_q102",
+    "topicId": "cns_p093",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "比较地球和月球的生命条件，哪组信息与地球适合许多生命更相关？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "有液态水、适宜温度和较丰富空气"
+      },
+      {
+        "key": "B",
+        "text": "表面有字母形的山脉"
+      },
+      {
+        "key": "C",
+        "text": "只有地球会被阳光照到"
+      },
+      {
+        "key": "D",
+        "text": "所有地方温度永远相同"
+      }
+    ],
+    "answer": "A",
+    "explanation": "液态水、适宜温度与空气等条件共同支持生命，不能用无关外形代替生命条件。",
+    "verify": "\"有液态水、适宜温度和较丰富空气\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p093_q103",
+    "topicId": "cns_p093",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "班级讨论保护地球，哪项行动与维护共同生存环境直接相关？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把生活垃圾都倒入河里"
+      },
+      {
+        "key": "B",
+        "text": "只保护自己桌面，其他地方随便污染"
+      },
+      {
+        "key": "C",
+        "text": "认为地球大，任何污染都不用管"
+      },
+      {
+        "key": "D",
+        "text": "减少随意丢弃垃圾并保护水源"
+      }
+    ],
+    "answer": "D",
+    "explanation": "人类与其他生物共享地球环境，减少垃圾和水污染有助于保护共同家园。",
+    "verify": "\"减少随意丢弃垃圾并保护水源\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p094_q101",
+    "topicId": "cns_p094",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "地球表面大部分是水，为什么仍可能出现饮用水短缺？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "海洋面积大就不需要水处理"
+      },
+      {
+        "key": "B",
+        "text": "淡水只能存在于课本图片中"
+      },
+      {
+        "key": "C",
+        "text": "大部分水是海水，适合直接利用的淡水有限"
+      },
+      {
+        "key": "D",
+        "text": "所有海水都能直接当饮用水"
+      }
+    ],
+    "answer": "C",
+    "explanation": "水多不等于可直接饮用的淡水多；海水含盐，淡水分布和利用也受条件影响。",
+    "verify": "\"大部分水是海水，适合直接利用的淡水有限\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p094_q102",
+    "topicId": "cns_p094",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "用100个同样小格表示地球表面积，约71格涂蓝表示海洋，剩余约多少格表示陆地？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "29格"
+      },
+      {
+        "key": "B",
+        "text": "71格"
+      },
+      {
+        "key": "C",
+        "text": "100格"
+      },
+      {
+        "key": "D",
+        "text": "171格"
+      }
+    ],
+    "answer": "A",
+    "explanation": "100−71=29，海洋与陆地面积比例的模型不能把两部分重复计算。",
+    "verify": "\"29格\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p094_q103",
+    "topicId": "cns_p094",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "海报把“海洋约占地表71%”写成“地球全部体积71%是海水”，应怎样修改？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把比较对象改回地球表面积"
+      },
+      {
+        "key": "B",
+        "text": "只把71改成100，其他不变"
+      },
+      {
+        "key": "C",
+        "text": "改成地球上71%的动物都在海里"
+      },
+      {
+        "key": "D",
+        "text": "两句话完全等义，不必改"
+      }
+    ],
+    "answer": "A",
+    "explanation": "表面积比例和体积比例不是同一概念，原数据只能说明地表海洋覆盖面积的大致比例。",
+    "verify": "\"把比较对象改回地球表面积\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p095_q101",
+    "topicId": "cns_p095",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "月球能被我们看到，是否说明它像太阳一样自己发出可见光？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不是，因为月球完全不接受阳光"
+      },
+      {
+        "key": "B",
+        "text": "不是，月球主要反射太阳光"
+      },
+      {
+        "key": "C",
+        "text": "是，所有亮的天体都会自己发光"
+      },
+      {
+        "key": "D",
+        "text": "是，月球每晚都在燃烧"
+      }
+    ],
+    "answer": "B",
+    "explanation": "月球自身不是像太阳那样发光的恒星，月面被太阳照亮并反射光进入我们的眼睛。",
+    "verify": "\"不是，月球主要反射太阳光\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p095_q102",
+    "topicId": "cns_p095",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "在地球附近运动的月球，与围绕太阳运动的地球，哪句描述更准确？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "月球从不绕任何天体运动"
+      },
+      {
+        "key": "B",
+        "text": "月球是地球的天然卫星"
+      },
+      {
+        "key": "C",
+        "text": "地球是月球唯一的卫星"
+      },
+      {
+        "key": "D",
+        "text": "月球是太阳系中最大的恒星"
+      }
+    ],
+    "answer": "B",
+    "explanation": "天然卫星围绕行星运行，月球是地球的天然卫星，不能把它称为恒星。",
+    "verify": "\"月球是地球的天然卫星\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p095_q103",
+    "topicId": "cns_p095",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "月球表面几乎没有空气，这与在月面直接听到远处敲击声有何关系？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "没有空气会让声音一定更响"
+      },
+      {
+        "key": "B",
+        "text": "声音不需要任何物质就能传到耳边"
+      },
+      {
+        "key": "C",
+        "text": "月球上任何物体都不可能振动"
+      },
+      {
+        "key": "D",
+        "text": "声音不能像在地球空气中那样传来"
+      }
+    ],
+    "answer": "D",
+    "explanation": "声音传播需要介质；几乎没有空气时，不能像地球上那样靠空气传播远处声音。",
+    "verify": "\"声音不能像在地球空气中那样传来\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p269_q101",
+    "topicId": "cns_p269",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "研究落下高度对模拟坑大小的影响，哪组做法更公平？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "同时改变小球大小、高度和面粉厚度"
+      },
+      {
+        "key": "B",
+        "text": "一次用面粉一次用石板"
+      },
+      {
+        "key": "C",
+        "text": "每次都用不同重量不同大小的球"
+      },
+      {
+        "key": "D",
+        "text": "同一小球从不同高度落入相同厚度面粉"
+      }
+    ],
+    "answer": "D",
+    "explanation": "要研究高度的影响，应控制小球和被撞材料等条件，避免多种因素同时变化。",
+    "verify": "\"同一小球从不同高度落入相同厚度面粉\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p269_q102",
+    "topicId": "cns_p269",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "让一个小球分别从不同高度自由落入相同厚度的面粉，较高处通常砸出较大的坑，这次结果可以说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "撞击条件会影响模拟坑的大小"
+      },
+      {
+        "key": "B",
+        "text": "坑的大小与撞击条件完全无关"
+      },
+      {
+        "key": "C",
+        "text": "面粉与月球表面的材料完全相同"
+      },
+      {
+        "key": "D",
+        "text": "只凭这个结果就能知道每个真实环形山的历史"
+      }
+    ],
+    "answer": "A",
+    "explanation": "模型实验支持撞击条件影响坑形，但模型材料和真实月表不同，不能扩大成其他结论。",
+    "verify": "\"撞击条件会影响模拟坑的大小\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p269_q103",
+    "topicId": "cns_p269",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "面粉模拟实验出现撞击坑，能证明月球每一个环形山的成因完全相同吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能，因为模拟实验完全没有学习价值"
+      },
+      {
+        "key": "B",
+        "text": "不能，模型只帮助理解一种形成机制"
+      },
+      {
+        "key": "C",
+        "text": "能，一次模拟即可证明每个环形山历史"
+      },
+      {
+        "key": "D",
+        "text": "能，面粉与月球材料完全相同"
+      }
+    ],
+    "answer": "B",
+    "explanation": "模型可展示撞击形成坑的过程，但不能单凭一次模拟确定每个真实地形的全部历史。",
+    "verify": "\"不能，模型只帮助理解一种形成机制\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p096_q101",
+    "topicId": "cns_p096",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同样的水分别放在阳光下和阴凉处，阳光下水温升得更多，主要支持什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "太阳照射能向物体传递能量使其变暖"
+      },
+      {
+        "key": "B",
+        "text": "阳光使水凭空增加质量"
+      },
+      {
+        "key": "C",
+        "text": "阴凉处永远没有任何热量"
+      },
+      {
+        "key": "D",
+        "text": "太阳只能给地球带来声音"
+      }
+    ],
+    "answer": "A",
+    "explanation": "控制其他条件后，水温变化可帮助认识太阳辐射带来的加热作用。",
+    "verify": "\"太阳照射能向物体传递能量使其变暖\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p096_q102",
+    "topicId": "cns_p096",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "准备观察太阳外观，哪项安排符合安全要求？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "用普通放大镜直接对着太阳看"
+      },
+      {
+        "key": "B",
+        "text": "用普通墨镜就长时间直视太阳"
+      },
+      {
+        "key": "C",
+        "text": "觉得不刺眼时用望远镜直接看"
+      },
+      {
+        "key": "D",
+        "text": "利用教师准备的安全观测资料或专用安全设备"
+      }
+    ],
+    "answer": "D",
+    "explanation": "直视或经普通放大镜、望远镜看太阳可损伤眼睛；应使用经确认的安全方法。",
+    "verify": "\"利用教师准备的安全观测资料或专用安全设备\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p096_q103",
+    "topicId": "cns_p096",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "有人说“月亮和太阳都很亮，所以都是恒星”，应怎样纠正？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "太阳只反射月亮的光"
+      },
+      {
+        "key": "B",
+        "text": "月球一定比太阳温度高"
+      },
+      {
+        "key": "C",
+        "text": "太阳自身发光发热，月球主要反射太阳光"
+      },
+      {
+        "key": "D",
+        "text": "只要晚上能看见就是恒星"
+      }
+    ],
+    "answer": "C",
+    "explanation": "亮度的外观不足以分类；太阳能自身发光发热，月球主要靠反射光被看见。",
+    "verify": "\"太阳自身发光发热，月球主要反射太阳光\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p097_q101",
+    "topicId": "cns_p097",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一根固定竖直杆，上午影长90厘米、正午35厘米、下午80厘米，哪项结论有根据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "影子越短说明杆越长"
+      },
+      {
+        "key": "B",
+        "text": "下午的影子一定不存在"
+      },
+      {
+        "key": "C",
+        "text": "这三次中正午太阳位置较高"
+      },
+      {
+        "key": "D",
+        "text": "这三次中正午太阳位置最低"
+      }
+    ],
+    "answer": "C",
+    "explanation": "同杆同地时，太阳在天空中较高，影子通常较短；这组三次记录支持正午较高。",
+    "verify": "\"这三次中正午太阳位置较高\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p097_q102",
+    "topicId": "cns_p097",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "要比较一天中影长变化，为什么不能上午用短杆、下午换成长杆？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "更换杆子能保证太阳不移动"
+      },
+      {
+        "key": "B",
+        "text": "只有长杆能有影子"
+      },
+      {
+        "key": "C",
+        "text": "杆长也影响影长，会干扰比较"
+      },
+      {
+        "key": "D",
+        "text": "所有杆子影长都完全一样"
+      }
+    ],
+    "answer": "C",
+    "explanation": "研究太阳位置与影长关系，应尽量保持杆长、位置与竖直状态相同。",
+    "verify": "\"杆长也影响影长，会干扰比较\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p097_q103",
+    "topicId": "cns_p097",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "某时太阳在西南方，一根竖直杆的影子大致指向哪里？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "始终指向南方"
+      },
+      {
+        "key": "B",
+        "text": "东北方"
+      },
+      {
+        "key": "C",
+        "text": "西南方"
+      },
+      {
+        "key": "D",
+        "text": "正上方"
+      }
+    ],
+    "answer": "B",
+    "explanation": "影子通常出现在背向光源的一侧，西南的相反方向是东北。",
+    "verify": "\"东北方\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p098_q101",
+    "topicId": "cns_p098",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "按照从太阳向外的顺序，水星、金星、地球之后是火星。地球与火星相比怎样？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "火星是地球的天然卫星"
+      },
+      {
+        "key": "B",
+        "text": "地球与火星是同一颗行星"
+      },
+      {
+        "key": "C",
+        "text": "地球的轨道更靠近太阳"
+      },
+      {
+        "key": "D",
+        "text": "地球一定比火星更远离太阳"
+      }
+    ],
+    "answer": "C",
+    "explanation": "所给顺序表达轨道距太阳的先后位置，地球位于火星内侧，但二者都是行星。",
+    "verify": "\"地球的轨道更靠近太阳\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p098_q102",
+    "topicId": "cns_p098",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "模型中太阳放中央，八颗行星沿各自轨道排列，月球应怎样表示更符合关系？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "替代太阳放在中央"
+      },
+      {
+        "key": "B",
+        "text": "与地球用同一个球表示"
+      },
+      {
+        "key": "C",
+        "text": "在地球附近表示它绕地球运行"
+      },
+      {
+        "key": "D",
+        "text": "作为第九颗行星单列在最外层"
+      }
+    ],
+    "answer": "C",
+    "explanation": "太阳系八颗行星中不包含月球；月球是地球的天然卫星，应体现这种从属运行关系。",
+    "verify": "\"在地球附近表示它绕地球运行\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p098_q103",
+    "topicId": "cns_p098",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "太阳系模型把所有行星画得一样大，但标注“不按大小比例”，怎样正确阅读？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "模型未按比例所以任何信息都无用"
+      },
+      {
+        "key": "B",
+        "text": "认为标注能证明地球最大"
+      },
+      {
+        "key": "C",
+        "text": "可以看排列关系，不能据球大小比较真实大小"
+      },
+      {
+        "key": "D",
+        "text": "据模型相同大小认定真实行星一样大"
+      }
+    ],
+    "answer": "C",
+    "explanation": "模型会简化某些特征，应按说明使用；不按大小比例时不能据图形尺寸推断真实大小。",
+    "verify": "\"可以看排列关系，不能据球大小比较真实大小\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p099_q101",
+    "topicId": "cns_p099",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "制作地球海报，资料甲来自科学馆并标明日期，乙是没有来源的聊天截图，怎样选择更可靠？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两份都不用看来源"
+      },
+      {
+        "key": "B",
+        "text": "优先核对甲，并查找可靠资料交叉确认"
+      },
+      {
+        "key": "C",
+        "text": "只选字最多的乙"
+      },
+      {
+        "key": "D",
+        "text": "只选颜色最鲜艳的一份"
+      }
+    ],
+    "answer": "B",
+    "explanation": "科普内容应重视资料来源和可核查性，可靠出处与交叉核对比篇幅或配色更重要。",
+    "verify": "\"优先核对甲，并查找可靠资料交叉确认\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p099_q102",
+    "topicId": "cns_p099",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "海报要比较地球与月球大小，怎样防止读者误解图形？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "删除名称，让读者猜"
+      },
+      {
+        "key": "B",
+        "text": "注明是否按比例，并配上清楚说明"
+      },
+      {
+        "key": "C",
+        "text": "随意画后声称图上尺寸就是真实比例"
+      },
+      {
+        "key": "D",
+        "text": "只把月球画得比地球大"
+      }
+    ],
+    "answer": "B",
+    "explanation": "比较图需要清楚说明比例；示意图不按比例时必须注明，避免把图形大小当真实数据。",
+    "verify": "\"注明是否按比例，并配上清楚说明\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p099_q103",
+    "topicId": "cns_p099",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "同伴发现海报把“地球约71%表面被海洋覆盖”写成“71%是淡水”，应怎么做？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "因为已经排版就不改"
+      },
+      {
+        "key": "B",
+        "text": "把71%换成任意更大数字"
+      },
+      {
+        "key": "C",
+        "text": "删去所有图文而不核查"
+      },
+      {
+        "key": "D",
+        "text": "核对原资料后修改，并标注准确含义"
+      }
+    ],
+    "answer": "D",
+    "explanation": "科学表达要准确对应数据对象；发现含义错误时应核对并修正，不能只看版面效果。",
+    "verify": "\"核对原资料后修改，并标注准确含义\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p100_q101",
+    "topicId": "cns_p100",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "空塑料袋张开后迅速扎紧，轻压会鼓起。袋子里主要是什么支撑着袋壁？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "袋中没有任何物质，只有袋壁自己支撑"
+      },
+      {
+        "key": "B",
+        "text": "必须有液态水，袋子才可能鼓起"
+      },
+      {
+        "key": "C",
+        "text": "袋口扎紧就证明里面不可能有空气"
+      },
+      {
+        "key": "D",
+        "text": "被装进袋里的空气"
+      }
+    ],
+    "answer": "D",
+    "explanation": "日常所谓空袋中仍可有空气；空气虽然通常看不见，也能占据空间并对袋壁产生作用。",
+    "verify": "\"被装进袋里的空气\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p100_q102",
+    "topicId": "cns_p100",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两间大小不同的空房间都有空气，空气分别充满房间，说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "空气可随容器空间改变形状"
+      },
+      {
+        "key": "B",
+        "text": "空气只能保持正方体形状"
+      },
+      {
+        "key": "C",
+        "text": "小房间里必定没有空气"
+      },
+      {
+        "key": "D",
+        "text": "空气只有被看见时才存在"
+      }
+    ],
+    "answer": "A",
+    "explanation": "空气没有固定形状，可以充满不同形状和大小的空间。",
+    "verify": "\"空气可随容器空间改变形状\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p100_q103",
+    "topicId": "cns_p100",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "走过花坛闻到花香，能说“空气本身就是花香味”吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能，花香说明周围没有空气"
+      },
+      {
+        "key": "B",
+        "text": "不能，因为气味只能在水中传播"
+      },
+      {
+        "key": "C",
+        "text": "不能，气味来自混在空气中的花香物质"
+      },
+      {
+        "key": "D",
+        "text": "能，所有洁净空气天生都是花香味"
+      }
+    ],
+    "answer": "C",
+    "explanation": "空气可携带花香等其他物质；这些气味不能当作洁净空气本身的固有气味。",
+    "verify": "\"不能，气味来自混在空气中的花香物质\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p101_q101",
+    "topicId": "cns_p101",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "纸团固定在杯底，杯口朝下竖直压入水中纸仍干；倾斜后冒泡、纸湿，怎样解释？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "纸团能永远阻止水进入"
+      },
+      {
+        "key": "B",
+        "text": "杯子倾斜使水不再占空间"
+      },
+      {
+        "key": "C",
+        "text": "空气跑出后，水进入原先被空气占据的地方"
+      },
+      {
+        "key": "D",
+        "text": "空气一碰水就变成纸"
+      }
+    ],
+    "answer": "C",
+    "explanation": "竖直时杯内空气阻碍水进入；倾斜释放空气后，水可进入相应空间并弄湿纸团。",
+    "verify": "\"空气跑出后，水进入原先被空气占据的地方\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p101_q102",
+    "topicId": "cns_p101",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "向瓶中灌水，漏斗与瓶口密封很紧，水流得慢；留一条通气缝后变快，原因更可能是？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "通气缝把水变成了油"
+      },
+      {
+        "key": "B",
+        "text": "瓶内原来装满了固体"
+      },
+      {
+        "key": "C",
+        "text": "瓶内空气有了排出的通道"
+      },
+      {
+        "key": "D",
+        "text": "空气不占空间所以不影响进水"
+      }
+    ],
+    "answer": "C",
+    "explanation": "进水需要排出瓶内原有空气，通气通道能帮助水替代空气占据瓶内空间。",
+    "verify": "\"瓶内空气有了排出的通道\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p101_q103",
+    "topicId": "cns_p101",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "把倒扣杯压入水中没有气泡冒出，能直接认定杯内没有空气吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能，因为杯内必须全是水"
+      },
+      {
+        "key": "B",
+        "text": "不能，空气可能被留在杯中"
+      },
+      {
+        "key": "C",
+        "text": "能，没有气泡就没有空气"
+      },
+      {
+        "key": "D",
+        "text": "能，水会把空气变成玻璃"
+      }
+    ],
+    "answer": "B",
+    "explanation": "是否出现气泡取决于空气是否逃出；被困在杯中的空气仍存在并占据空间。",
+    "verify": "\"不能，空气可能被留在杯中\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p102_q101",
+    "topicId": "cns_p102",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "无针注射器装空气并封住出口，推活塞后松手它回弹，这说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "空气被推一下就永远消失"
+      },
+      {
+        "key": "B",
+        "text": "推活塞使空气质量变为零"
+      },
+      {
+        "key": "C",
+        "text": "空气只能被拉长不能压缩"
+      },
+      {
+        "key": "D",
+        "text": "空气被压缩后对活塞有反作用"
+      }
+    ],
+    "answer": "D",
+    "explanation": "封闭空气的体积可被压小，松手回弹反映压缩空气有恢复原体积的趋势。",
+    "verify": "\"空气被压缩后对活塞有反作用\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p102_q102",
+    "topicId": "cns_p102",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同样无针注射器，甲装空气、乙装满水，均封口轻推。通常哪支更容易明显压缩？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两者都能轻易压成零体积"
+      },
+      {
+        "key": "B",
+        "text": "只取决于注射器外壳颜色"
+      },
+      {
+        "key": "C",
+        "text": "装空气的甲"
+      },
+      {
+        "key": "D",
+        "text": "装水的乙"
+      }
+    ],
+    "answer": "C",
+    "explanation": "空气比液态水容易被明显压缩；比较时应使用相同器材并避免过大用力。",
+    "verify": "\"装空气的甲\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p102_q103",
+    "topicId": "cns_p102",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "封住出口压缩空气，活塞从20毫升推到12毫升，空气占据空间怎样变化？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "减少8毫升，但空气并未被排走"
+      },
+      {
+        "key": "B",
+        "text": "增加8毫升"
+      },
+      {
+        "key": "C",
+        "text": "质量必定减少8克"
+      },
+      {
+        "key": "D",
+        "text": "全部空气穿过封口消失"
+      }
+    ],
+    "answer": "A",
+    "explanation": "刻度差20−12=8毫升表示体积减少；出口封闭时没有空气被主动排出。",
+    "verify": "\"减少8毫升，但空气并未被排走\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p103_q101",
+    "topicId": "cns_p103",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "教师用精密天平称同一外形不变的硬容器，充入更多空气后质量增加，说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "增加的读数一定全部来自容器材料变重"
+      },
+      {
+        "key": "B",
+        "text": "看不见的物质不可能影响天平读数"
+      },
+      {
+        "key": "C",
+        "text": "进入的空气有质量"
+      },
+      {
+        "key": "D",
+        "text": "外形不变就不可能增加任何物质"
+      }
+    ],
+    "answer": "C",
+    "explanation": "容器本身和外形不变时，充气后的质量增加可作为空气有质量的证据。",
+    "verify": "\"进入的空气有质量\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p103_q102",
+    "topicId": "cns_p103",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "测空气质量，称量前容器外有水滴、称量后擦干，这会带来什么问题？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "水滴一定让空气失去质量"
+      },
+      {
+        "key": "B",
+        "text": "只要空气看不见就无需控制条件"
+      },
+      {
+        "key": "C",
+        "text": "擦干后所有物体质量都相同"
+      },
+      {
+        "key": "D",
+        "text": "水滴质量变化会干扰比较"
+      }
+    ],
+    "answer": "D",
+    "explanation": "要把差异归因于空气，容器和其他附着物应保持一致，水滴变化会混入额外影响。",
+    "verify": "\"水滴质量变化会干扰比较\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p103_q103",
+    "topicId": "cns_p103",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一个硬瓶外形不变，教师增加充气量后质量从200克变为203克，差值表示什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "瓶子材料一定增加3克"
+      },
+      {
+        "key": "B",
+        "text": "空气被压缩后必定没有质量"
+      },
+      {
+        "key": "C",
+        "text": "主要是多充入空气的质量约3克"
+      },
+      {
+        "key": "D",
+        "text": "瓶内全部空气恰好只有3克"
+      }
+    ],
+    "answer": "C",
+    "explanation": "差值对应新增的空气，而不是瓶内原有空气与新增空气的总质量。",
+    "verify": "\"主要是多充入空气的质量约3克\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p104_q101",
+    "topicId": "cns_p104",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小风车在风扇开启后转动，关掉后慢慢停下，哪种解释合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "空气只有静止时才能推动风车"
+      },
+      {
+        "key": "B",
+        "text": "流动的空气可推动风车"
+      },
+      {
+        "key": "C",
+        "text": "静止空气能使风车永远自行转动"
+      },
+      {
+        "key": "D",
+        "text": "风车一旦转动就完全不受空气作用"
+      }
+    ],
+    "answer": "B",
+    "explanation": "风车启动与空气流动相关，说明流动的空气可以对物体产生推动作用。",
+    "verify": "\"流动的空气可推动风车\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p104_q102",
+    "topicId": "cns_p104",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "比较两种纸帆，想看哪种更易被风推动，应怎样测试？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "给一种帆用大风，另一种用小风"
+      },
+      {
+        "key": "B",
+        "text": "一种车装石块，另一种空载"
+      },
+      {
+        "key": "C",
+        "text": "只比较帆上图案谁更好看"
+      },
+      {
+        "key": "D",
+        "text": "用同一小车、相同风源和距离比较"
+      }
+    ],
+    "answer": "D",
+    "explanation": "保持小车、风源和位置相近，才能较公平地比较帆本身对运动效果的影响。",
+    "verify": "\"用同一小车、相同风源和距离比较\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p104_q103",
+    "topicId": "cns_p104",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "充气气球松口后，空气向后喷、气球向前跑，哪项观察最重要？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "气球没有喷气也一定同速前进"
+      },
+      {
+        "key": "B",
+        "text": "喷气方向与气球主要运动方向相反"
+      },
+      {
+        "key": "C",
+        "text": "气球一定向空气喷出的同方向跑"
+      },
+      {
+        "key": "D",
+        "text": "喷气只产生声音，不可能影响气球运动"
+      }
+    ],
+    "answer": "B",
+    "explanation": "喷出空气产生推动作用，气球可沿与喷气大致相反的方向运动。",
+    "verify": "\"喷气方向与气球主要运动方向相反\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p105_q101",
+    "topicId": "cns_p105",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "教师用安全热风演示轻薄袋上升，停止送热后袋慢慢落下，主要原因是什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "停止供热后，袋内空气会永远保持原温度"
+      },
+      {
+        "key": "B",
+        "text": "袋子一上升就不再受重力"
+      },
+      {
+        "key": "C",
+        "text": "空气冷却后还能保持完全相同的上升作用"
+      },
+      {
+        "key": "D",
+        "text": "内部空气冷却后，上升条件减弱"
+      }
+    ],
+    "answer": "D",
+    "explanation": "内部空气受热形成有利于上升的条件，冷却后这种条件减弱，袋可能落下。",
+    "verify": "\"内部空气冷却后，上升条件减弱\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p105_q102",
+    "topicId": "cns_p105",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两个大小相近的演示袋，一个厚重、一个轻薄，都装入热空气，哪个更容易升起？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "厚重袋一定更容易，因为更重"
+      },
+      {
+        "key": "B",
+        "text": "两袋一定完全不受材料质量影响"
+      },
+      {
+        "key": "C",
+        "text": "只看哪只袋子图案更多"
+      },
+      {
+        "key": "D",
+        "text": "在其他条件相近时轻薄袋更容易"
+      }
+    ],
+    "answer": "D",
+    "explanation": "热空气提供的上升作用需克服袋等物体的重量，材料较轻有利于升起。",
+    "verify": "\"在其他条件相近时轻薄袋更容易\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p105_q103",
+    "topicId": "cns_p105",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "小组想把热气球实验带到室外，哪项决定更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "越靠近电线放飞越方便观察"
+      },
+      {
+        "key": "B",
+        "text": "采用教师指导的安全演示，不放飞明火灯具"
+      },
+      {
+        "key": "C",
+        "text": "自行点燃纸灯并任其飘走"
+      },
+      {
+        "key": "D",
+        "text": "在窗帘旁点火加热塑料袋"
+      }
+    ],
+    "answer": "B",
+    "explanation": "实验目的可用安全演示实现，明火放飞可能引发火灾和其他危险，不宜作为自行活动。",
+    "verify": "\"采用教师指导的安全演示，不放飞明火灯具\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p106_q101",
+    "topicId": "cns_p106",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "教室一侧空气受热上升，附近较冷空气流过去补充，能帮助解释什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "风只能由树叶摇动制造"
+      },
+      {
+        "key": "B",
+        "text": "冷暖空气永远不能相互流动"
+      },
+      {
+        "key": "C",
+        "text": "空气受热后就不占空间"
+      },
+      {
+        "key": "D",
+        "text": "冷热不均可以引起空气流动"
+      }
+    ],
+    "answer": "D",
+    "explanation": "局部空气受热上升，其他空气补入，可形成流动；风与空气受热不均有关。",
+    "verify": "\"冷热不均可以引起空气流动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p106_q102",
+    "topicId": "cns_p106",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "研究风形成的模拟装置，教师先不加热，再只加热一侧，观察示踪物运动，比较目的是什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把所有烟雾都当作空气本身"
+      },
+      {
+        "key": "B",
+        "text": "判断受热不均是否影响空气流动"
+      },
+      {
+        "key": "C",
+        "text": "证明空气从来不会移动"
+      },
+      {
+        "key": "D",
+        "text": "只看加热器颜色是否鲜艳"
+      }
+    ],
+    "answer": "B",
+    "explanation": "有无局部加热的对照可帮助把空气流动的变化与受热不均联系起来。",
+    "verify": "\"判断受热不均是否影响空气流动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p106_q103",
+    "topicId": "cns_p106",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "某海边白天地面比海面升温快，陆地上方空气较易上升，近地面空气可能怎样补充？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只会从陆地流向海面"
+      },
+      {
+        "key": "B",
+        "text": "完全停止流动直到夜晚"
+      },
+      {
+        "key": "C",
+        "text": "变成固体后从天上掉下"
+      },
+      {
+        "key": "D",
+        "text": "由海面流向陆地"
+      }
+    ],
+    "answer": "D",
+    "explanation": "陆地上方较暖空气上升，邻近海面上方相对较冷的空气可在近地面补入，形成海风。",
+    "verify": "\"由海面流向陆地\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p224_q101",
+    "topicId": "cns_p224",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "自制打气筒推活塞时，空气却从活塞旁大量漏出，最需要改进哪里？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只加长出气管，不处理活塞漏气"
+      },
+      {
+        "key": "B",
+        "text": "只加大出气口，不检查密封"
+      },
+      {
+        "key": "C",
+        "text": "把活塞与筒壁间隙留得更大"
+      },
+      {
+        "key": "D",
+        "text": "活塞与筒壁的密封配合"
+      }
+    ],
+    "answer": "D",
+    "explanation": "漏气使压缩和输送空气效果变差，应针对密封处改进，而不是改变无关装饰。",
+    "verify": "\"活塞与筒壁的密封配合\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p224_q102",
+    "topicId": "cns_p224",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "打气筒按下能送气，松开时又把轮胎气吸回来，怎样看待这个问题？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只要手推得快就永久解决"
+      },
+      {
+        "key": "B",
+        "text": "还需能限制空气单向流动的结构"
+      },
+      {
+        "key": "C",
+        "text": "轮胎不需要任何空气"
+      },
+      {
+        "key": "D",
+        "text": "所有打气筒必须让气来回倒流"
+      }
+    ],
+    "answer": "B",
+    "explanation": "有效打气需要把空气送入并尽量防止回流，可考虑合适的单向通气结构。",
+    "verify": "\"还需能限制空气单向流动的结构\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p224_q103",
+    "topicId": "cns_p224",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "比较改进前后打气筒，哪项指标最直接反映实际效果？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只比较筒身容积，不检验实际输出"
+      },
+      {
+        "key": "B",
+        "text": "相同条件下推相同次数后送入的空气量"
+      },
+      {
+        "key": "C",
+        "text": "只看手柄往返快慢，不管是否送气"
+      },
+      {
+        "key": "D",
+        "text": "只记录推压次数，不记录送气结果"
+      }
+    ],
+    "answer": "B",
+    "explanation": "打气筒的功能是输送空气，在相同推压条件下比较实际送气效果比外观更有依据。",
+    "verify": "\"相同条件下推相同次数后送入的空气量\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p107_q101",
+    "topicId": "cns_p107",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "跑步后呼吸加快，随后吃饭获得营养，哪项说明两种活动的作用较准确？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "吃饭后人体永远不需要呼吸"
+      },
+      {
+        "key": "B",
+        "text": "呼吸获得所需氧气，消化帮助获得可吸收的营养"
+      },
+      {
+        "key": "C",
+        "text": "呼吸可代替所有食物，永远不用吃饭"
+      },
+      {
+        "key": "D",
+        "text": "消化只为让食物改变颜色"
+      }
+    ],
+    "answer": "B",
+    "explanation": "呼吸与消化作用不同，人体活动既需要氧气参与利用营养，也需要食物提供营养物质。",
+    "verify": "\"呼吸获得所需氧气，消化帮助获得可吸收的营养\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p107_q102",
+    "topicId": "cns_p107",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "把“食物直接进入肺”和“空气进入胃完成呼吸”写在图上，应怎样纠正？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两条路线完全相同，不需修改"
+      },
+      {
+        "key": "B",
+        "text": "只交换肺和胃的位置，保留原错误路线"
+      },
+      {
+        "key": "C",
+        "text": "删去气管，但仍把食物路线指向肺"
+      },
+      {
+        "key": "D",
+        "text": "区分呼吸通道与消化通道的主要路线"
+      }
+    ],
+    "answer": "D",
+    "explanation": "空气主要经呼吸道到肺，食物沿消化道通过；混淆二者会误解各器官的作用。",
+    "verify": "\"区分呼吸通道与消化通道的主要路线\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p107_q103",
+    "topicId": "cns_p107",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一口食物没有嚼碎就吞下，身体是否能只靠肺把它磨碎消化？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能，空气越多食物就不用消化"
+      },
+      {
+        "key": "B",
+        "text": "不能，因为所有食物都不需要消化"
+      },
+      {
+        "key": "C",
+        "text": "不能，肺主要用于呼吸，消化需要消化器官参与"
+      },
+      {
+        "key": "D",
+        "text": "能，肺是人体最主要的磨碎食物器官"
+      }
+    ],
+    "answer": "C",
+    "explanation": "不同器官有不同功能，肺不是磨碎和消化食物的器官，食物需经过相应消化过程。",
+    "verify": "\"不能，肺主要用于呼吸，消化需要消化器官参与\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p108_q101",
+    "topicId": "cns_p108",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "图示把鼻直接连到肺，漏掉中间通路，哪组补充更合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "牙齿、食道和肛门"
+      },
+      {
+        "key": "B",
+        "text": "骨骼、指甲和头发"
+      },
+      {
+        "key": "C",
+        "text": "咽、喉、气管和支气管等"
+      },
+      {
+        "key": "D",
+        "text": "胃、小肠和大肠"
+      }
+    ],
+    "answer": "C",
+    "explanation": "空气经鼻进入后，还需经过呼吸道的相应通路到达肺，不是通过消化道到肺。",
+    "verify": "\"咽、喉、气管和支气管等\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p108_q102",
+    "topicId": "cns_p108",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "鼻腔中的鼻毛和湿润表面对吸入空气有什么帮助？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能代替肺完成全部气体交换"
+      },
+      {
+        "key": "B",
+        "text": "能拦住部分灰尘并有助于湿润空气"
+      },
+      {
+        "key": "C",
+        "text": "能过滤掉所有有害物质，任何空气都安全"
+      },
+      {
+        "key": "D",
+        "text": "能把所有氧气变成水"
+      }
+    ],
+    "answer": "B",
+    "explanation": "鼻腔能提供一定过滤、温暖和湿润作用，但不能保证污染空气完全无害。",
+    "verify": "\"能拦住部分灰尘并有助于湿润空气\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p108_q103",
+    "topicId": "cns_p108",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "安静吸气时，观察胸部围度增大，呼气时减小，能支持什么判断？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "呼吸伴随胸部容积的变化"
+      },
+      {
+        "key": "B",
+        "text": "肺是骨头，体积永远不变"
+      },
+      {
+        "key": "C",
+        "text": "吸气只发生在胃里"
+      },
+      {
+        "key": "D",
+        "text": "胸部变化与呼吸必定毫无关系"
+      }
+    ],
+    "answer": "A",
+    "explanation": "胸部变化有助于空气进出肺，是观察呼吸运动的一个外部证据。",
+    "verify": "\"呼吸伴随胸部容积的变化\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p109_q101",
+    "topicId": "cns_p109",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "记录小明安静时每分钟呼吸18次，慢跑后每分钟30次，能直接比较这两数吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能，因为运动后不再属于呼吸"
+      },
+      {
+        "key": "B",
+        "text": "能，计数时间和对象相同，活动状态不同"
+      },
+      {
+        "key": "C",
+        "text": "不能，数字不同就无法比较"
+      },
+      {
+        "key": "D",
+        "text": "能，并能断言所有人永远都是这些次数"
+      }
+    ],
+    "answer": "B",
+    "explanation": "同对象、同计数时长的数据可用于比较该次运动前后变化，但不能推广为所有人的固定次数。",
+    "verify": "\"能，计数时间和对象相同，活动状态不同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p109_q102",
+    "topicId": "cns_p109",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "甲记录“吸气一次算1次，呼气一次又算1次”，与同学数据比较前应怎样修正？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把所有数字都乘以十"
+      },
+      {
+        "key": "B",
+        "text": "一次完整吸气和呼气合计一次呼吸"
+      },
+      {
+        "key": "C",
+        "text": "两次吸气才算一次呼吸"
+      },
+      {
+        "key": "D",
+        "text": "只数说话次数就能代替"
+      }
+    ],
+    "answer": "B",
+    "explanation": "呼吸次数需统一计数标准，一吸一呼是一个完整呼吸周期。",
+    "verify": "\"一次完整吸气和呼气合计一次呼吸\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p109_q103",
+    "topicId": "cns_p109",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "运动后立即、休息2分钟、休息5分钟分别测得呼吸32、25、20次每分钟，说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "休息过程中呼吸逐渐接近安静水平"
+      },
+      {
+        "key": "B",
+        "text": "休息越久呼吸必定越来越快"
+      },
+      {
+        "key": "C",
+        "text": "三个数证明以后不会再运动"
+      },
+      {
+        "key": "D",
+        "text": "20次证明所有人呼吸都一样"
+      }
+    ],
+    "answer": "A",
+    "explanation": "连续记录显示本次休息过程中呼吸变慢，符合身体从运动状态逐渐恢复的现象。",
+    "verify": "\"休息过程中呼吸逐渐接近安静水平\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p225_q101",
+    "topicId": "cns_p225",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "肺活量测量时从吹嘴边漏气，仪器读数可能怎样？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "与是否漏气完全无关"
+      },
+      {
+        "key": "B",
+        "text": "会直接变成身高数据"
+      },
+      {
+        "key": "C",
+        "text": "偏小，因为部分呼出气体未进入仪器"
+      },
+      {
+        "key": "D",
+        "text": "一定偏大两倍"
+      }
+    ],
+    "answer": "C",
+    "explanation": "肺活量仪应记录呼出的气量，漏气会使一部分气体未被计入，因此结果可能偏小。",
+    "verify": "\"偏小，因为部分呼出气体未进入仪器\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p225_q102",
+    "topicId": "cns_p225",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小林两次测试，第二次只浅吸气就吹，能据较小读数断言肺功能突然变差吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能，因为肺活量与呼气毫无关系"
+      },
+      {
+        "key": "B",
+        "text": "不能，吸气和吹气方法不同会影响结果"
+      },
+      {
+        "key": "C",
+        "text": "能，只看哪个数字小就足够"
+      },
+      {
+        "key": "D",
+        "text": "能，一次测量可说明所有健康情况"
+      }
+    ],
+    "answer": "B",
+    "explanation": "比较前应按相同规范测量，方法变化可能导致读数不同，不能由一次读数作健康诊断。",
+    "verify": "\"不能，吸气和吹气方法不同会影响结果\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p225_q103",
+    "topicId": "cns_p225",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "班级轮流测肺活量，哪项安排既便于比较又注意卫生？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "谁愿意吹多久都算同一种测法"
+      },
+      {
+        "key": "B",
+        "text": "只把吹嘴颜色相同当作卫生保证"
+      },
+      {
+        "key": "C",
+        "text": "按同一方法测量，并使用个人洁净吹嘴"
+      },
+      {
+        "key": "D",
+        "text": "大家轮用同一未清洁吹嘴"
+      }
+    ],
+    "answer": "C",
+    "explanation": "规范方法有助于比较，个人洁净吹嘴可减少卫生风险，不能仅靠外观判断清洁。",
+    "verify": "\"按同一方法测量，并使用个人洁净吹嘴\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p110_q101",
+    "topicId": "cns_p110",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "吃馒头时充分咀嚼，为什么有利于后续消化？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "牙齿把全部养料直接吸收到血液"
+      },
+      {
+        "key": "B",
+        "text": "嚼碎后食物不必经过胃和小肠"
+      },
+      {
+        "key": "C",
+        "text": "咀嚼会让食物完全不接触唾液"
+      },
+      {
+        "key": "D",
+        "text": "更细碎并与唾液充分接触"
+      }
+    ],
+    "answer": "D",
+    "explanation": "咀嚼增大食物与消化液接触机会，唾液也参与初步消化，但后续消化仍需其他器官。",
+    "verify": "\"更细碎并与唾液充分接触\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p110_q102",
+    "topicId": "cns_p110",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "吃饭时哪种行为最能发挥牙齿和唾液在口腔中的共同作用？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "尽量不让食物碰到牙齿"
+      },
+      {
+        "key": "B",
+        "text": "一边大声笑一边吞整块"
+      },
+      {
+        "key": "C",
+        "text": "把所有食物不嚼就吞下"
+      },
+      {
+        "key": "D",
+        "text": "细嚼后再咽下"
+      }
+    ],
+    "answer": "D",
+    "explanation": "牙齿使食物变碎，唾液湿润并开始消化部分食物，细嚼有助于二者作用。",
+    "verify": "\"细嚼后再咽下\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p110_q103",
+    "topicId": "cns_p110",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "面包充分咀嚼后出现甜味，能认定“牙齿本身制造了糖”吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能，牙齿只在吃面包时释放糖块"
+      },
+      {
+        "key": "B",
+        "text": "不能，因为面包从不含淀粉"
+      },
+      {
+        "key": "C",
+        "text": "不能，唾液参与使部分淀粉发生变化"
+      },
+      {
+        "key": "D",
+        "text": "能，所有甜味都是牙齿材料掉落"
+      }
+    ],
+    "answer": "C",
+    "explanation": "甜味与唾液对淀粉的初步消化有关，牙齿主要起切断和磨碎等机械作用。",
+    "verify": "\"不能，唾液参与使部分淀粉发生变化\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p111_q101",
+    "topicId": "cns_p111",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "有人把小肠的主要作用写为“储存所有未消化垃圾”，应怎样改正？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "小肠只是牙齿的另一种名称"
+      },
+      {
+        "key": "B",
+        "text": "小肠参与消化，是吸收营养的主要场所"
+      },
+      {
+        "key": "C",
+        "text": "小肠只负责把空气送到肺"
+      },
+      {
+        "key": "D",
+        "text": "小肠完全不接触食物"
+      }
+    ],
+    "answer": "B",
+    "explanation": "小肠有消化和吸收作用，不能把它只看作废物储存处。",
+    "verify": "\"小肠参与消化，是吸收营养的主要场所\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p111_q102",
+    "topicId": "cns_p111",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "食物到胃里后被搅拌并与消化液混合，接下来还需经过哪里进一步消化和吸收？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "气管"
+      },
+      {
+        "key": "B",
+        "text": "鼻腔"
+      },
+      {
+        "key": "C",
+        "text": "指甲"
+      },
+      {
+        "key": "D",
+        "text": "小肠"
+      }
+    ],
+    "answer": "D",
+    "explanation": "胃并非完成全部消化吸收的终点；食物随后进入小肠，进一步消化并吸收营养。",
+    "verify": "\"小肠\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p111_q103",
+    "topicId": "cns_p111",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "在消化道模型中，小肠做成长而弯曲的管道，比短直管更能表示哪项特点？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "小肠由很多真正的绳子组成"
+      },
+      {
+        "key": "B",
+        "text": "小肠只在模型里存在"
+      },
+      {
+        "key": "C",
+        "text": "弯曲说明食物永远不会向前走"
+      },
+      {
+        "key": "D",
+        "text": "小肠较长，为消化吸收提供较大空间"
+      }
+    ],
+    "answer": "D",
+    "explanation": "模型用长度和弯曲帮助表示小肠较长的结构特点，但模型材料不是真实器官。",
+    "verify": "\"小肠较长，为消化吸收提供较大空间\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p112_q101",
+    "topicId": "cns_p112",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "消化路线卡片写“口腔→食道→胃→大肠→小肠”，主要应改哪里？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把小肠排在胃后、大肠前"
+      },
+      {
+        "key": "B",
+        "text": "把肺排在胃后"
+      },
+      {
+        "key": "C",
+        "text": "删去口腔，食物从鼻开始"
+      },
+      {
+        "key": "D",
+        "text": "把食道放到大肠之后"
+      }
+    ],
+    "answer": "A",
+    "explanation": "食物一般由口腔经食道到胃，再进入小肠和大肠，不能把大小肠顺序颠倒。",
+    "verify": "\"把小肠排在胃后、大肠前\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p112_q102",
+    "topicId": "cns_p112",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "给消化道模型加箭头，为什么一般从口腔指向肛门方向？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "表示空气只能从肛门进入"
+      },
+      {
+        "key": "B",
+        "text": "表示食物只在牙齿间旅行"
+      },
+      {
+        "key": "C",
+        "text": "表示食物及残渣在消化道中的主要通过方向"
+      },
+      {
+        "key": "D",
+        "text": "表示所有器官都能相互随意交换位置"
+      }
+    ],
+    "answer": "C",
+    "explanation": "箭头帮助表达消化道的连通与通常通过顺序，不是各器官随意换位。",
+    "verify": "\"表示食物及残渣在消化道中的主要通过方向\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p112_q103",
+    "topicId": "cns_p112",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "用软袋表示胃、长软管表示小肠，模型可以帮助什么，不能代替什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "软袋和软管本身已经具备所有消化吸收功能"
+      },
+      {
+        "key": "B",
+        "text": "可展示结构联系，不能代替真实器官的全部消化功能"
+      },
+      {
+        "key": "C",
+        "text": "可完整代替人体真实的消化过程"
+      },
+      {
+        "key": "D",
+        "text": "只要管道长度相同，模型就具有全部人体功能"
+      }
+    ],
+    "answer": "B",
+    "explanation": "模型有助于理解器官位置和连接，但简化材料不能完整再现真实生命功能。",
+    "verify": "\"可展示结构联系，不能代替真实器官的全部消化功能\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p113_q101",
+    "topicId": "cns_p113",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "跑步后想补充水分，怎样做更注意呼吸和消化的舒适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "边猛烈喘气边快速吞大口水"
+      },
+      {
+        "key": "B",
+        "text": "立即躺着吃整块食物"
+      },
+      {
+        "key": "C",
+        "text": "认定运动后永远不能喝水"
+      },
+      {
+        "key": "D",
+        "text": "先调整呼吸，再适量饮水"
+      }
+    ],
+    "answer": "D",
+    "explanation": "调整呼吸、适量饮水较稳妥，避免喘息时急吞，以免呛咳等不适。",
+    "verify": "\"先调整呼吸，再适量饮水\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p113_q102",
+    "topicId": "cns_p113",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "教室有人喷很浓的香味来“遮住”烟味，这是否等于保护了呼吸器官？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "是，闻不到烟味就证明污染全消失"
+      },
+      {
+        "key": "B",
+        "text": "是，香味越浓空气越洁净"
+      },
+      {
+        "key": "C",
+        "text": "不是，因为任何教室都不能通风"
+      },
+      {
+        "key": "D",
+        "text": "不是，应减少污染来源并改善空气条件"
+      }
+    ],
+    "answer": "D",
+    "explanation": "用气味掩盖不等于消除污染，应关注污染来源和合适的通风等措施。",
+    "verify": "\"不是，应减少污染来源并改善空气条件\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p113_q103",
+    "topicId": "cns_p113",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "哪种做法同时有利于消化器官与日常健康？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "吃饭规律，食物卫生，细嚼慢咽"
+      },
+      {
+        "key": "B",
+        "text": "长期不吃早餐后一次暴食"
+      },
+      {
+        "key": "C",
+        "text": "不洗手就抓食物吃"
+      },
+      {
+        "key": "D",
+        "text": "为省时间经常吞未嚼碎的大块食物"
+      }
+    ],
+    "answer": "A",
+    "explanation": "规律适量饮食、注意卫生与充分咀嚼有助于保护消化器官，暴食或不卫生行为会增加负担和风险。",
+    "verify": "\"吃饭规律，食物卫生，细嚼慢咽\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p114_q101",
+    "topicId": "cns_p114",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "橡皮筋被拨动时发声，轻轻制止它振动后声音停止，最支持什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只有金属才能因振动发声"
+      },
+      {
+        "key": "B",
+        "text": "发声与橡皮筋振动有关"
+      },
+      {
+        "key": "C",
+        "text": "橡皮筋只要移动位置就发声，与往复振动无关"
+      },
+      {
+        "key": "D",
+        "text": "橡皮筋不振动时声音一定更大"
+      }
+    ],
+    "answer": "B",
+    "explanation": "在其他条件基本不变时，振动停止与声音停止对应，是振动产生声音的证据。",
+    "verify": "\"发声与橡皮筋振动有关\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p114_q102",
+    "topicId": "cns_p114",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "鼓发声时看不清鼓面振动，放上轻小纸屑后纸屑跳动，这样做的作用是什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "使鼓面变成完全不动的固体"
+      },
+      {
+        "key": "B",
+        "text": "把不易看见的振动转成较明显的现象"
+      },
+      {
+        "key": "C",
+        "text": "让纸屑代替鼓皮成为唯一声源"
+      },
+      {
+        "key": "D",
+        "text": "证明没有纸屑时鼓不会发声"
+      }
+    ],
+    "answer": "B",
+    "explanation": "纸屑跳动能帮助观察鼓面振动，属于利用明显现象反映较难直接看到的变化。",
+    "verify": "\"把不易看见的振动转成较明显的现象\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p114_q103",
+    "topicId": "cns_p114",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "蜜蜂飞行有嗡声，翅膀停止快速扇动后相应声音减弱，哪项解释更合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "声音不需要物体的任何振动"
+      },
+      {
+        "key": "B",
+        "text": "快速振动与嗡声产生有关"
+      },
+      {
+        "key": "C",
+        "text": "所有嗡声都一定由蜜蜂用嘴发出"
+      },
+      {
+        "key": "D",
+        "text": "翅膀越静止，相应嗡声一定越强"
+      }
+    ],
+    "answer": "B",
+    "explanation": "翅膀快速振动可引起周围空气振动并发声，声音不一定来自动物的嘴。",
+    "verify": "\"快速振动与嗡声产生有关\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p115_q101",
+    "topicId": "cns_p115",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "对一面鼓以相同节奏轻敲和较用力敲，后者更响，主要比较的是什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "是否有空气，轻敲时空气消失"
+      },
+      {
+        "key": "B",
+        "text": "声音强弱，较大振动幅度通常更响"
+      },
+      {
+        "key": "C",
+        "text": "声音高低，用力大就必定音调高很多"
+      },
+      {
+        "key": "D",
+        "text": "声音传播方向，轻敲只向左"
+      }
+    ],
+    "answer": "B",
+    "explanation": "同一鼓在这种比较中主要表现响度变化；振幅较大通常声音较强，不应把强弱当作音高。",
+    "verify": "\"声音强弱，较大振动幅度通常更响\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p115_q102",
+    "topicId": "cns_p115",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一个固定声源发声不变，两人远近不同，远处听着较轻，能认定声源振幅变小了吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能，距离也会影响听到的强弱"
+      },
+      {
+        "key": "B",
+        "text": "能，任何人离远声源就停止振动"
+      },
+      {
+        "key": "C",
+        "text": "能，听者越远鼓皮一定越紧"
+      },
+      {
+        "key": "D",
+        "text": "不能，因为声音完全不会变弱"
+      }
+    ],
+    "answer": "A",
+    "explanation": "听到的声音强弱还受距离等影响，不能单据远处较轻就认定声源振动幅度变化。",
+    "verify": "\"不能，距离也会影响听到的强弱\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p115_q103",
+    "topicId": "cns_p115",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "研究振幅与声音强弱，比较时最好怎样设置听音位置？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "每次把声源放远，再把声音变轻都归于振幅"
+      },
+      {
+        "key": "B",
+        "text": "相同声源与听音距离，主要改变振幅"
+      },
+      {
+        "key": "C",
+        "text": "一个贴耳听，一个站十米外"
+      },
+      {
+        "key": "D",
+        "text": "每次换一种乐器且距离随意"
+      }
+    ],
+    "answer": "B",
+    "explanation": "控制声源、位置等条件，才能更合理地把听到强弱的变化归因于振幅变化。",
+    "verify": "\"相同声源与听音距离，主要改变振幅\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p116_q101",
+    "topicId": "cns_p116",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "把一把钢尺伸出桌边的长度缩短，拨动后振动更快，声音通常怎样变化？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "振动加快使声音传播速度也必定按相同比例增加"
+      },
+      {
+        "key": "B",
+        "text": "音调升高"
+      },
+      {
+        "key": "C",
+        "text": "音调降低"
+      },
+      {
+        "key": "D",
+        "text": "只改变响度，音调一定不变"
+      }
+    ],
+    "answer": "B",
+    "explanation": "音高与振动快慢有关；伸出段缩短时通常振动更快，音调相应较高。",
+    "verify": "\"音调升高\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p116_q102",
+    "topicId": "cns_p116",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "甲声源每秒振动300次，乙每秒振动150次，其他情况适宜，哪种声音音调较高？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "乙"
+      },
+      {
+        "key": "B",
+        "text": "只看哪种声音更响"
+      },
+      {
+        "key": "C",
+        "text": "振动次数与音高无关"
+      },
+      {
+        "key": "D",
+        "text": "甲"
+      }
+    ],
+    "answer": "D",
+    "explanation": "每秒振动次数越多，振动越快，声音音调通常越高；音高与响度应区分。",
+    "verify": "\"甲\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p116_q103",
+    "topicId": "cns_p116",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "对一根固定的弦先轻拨再重拨，听到主要是声音变响。能仅据“更响”断言音调一定升高吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能，声音强弱和音高不是同一概念"
+      },
+      {
+        "key": "B",
+        "text": "能，所有响声都是高音"
+      },
+      {
+        "key": "C",
+        "text": "能，轻声必定没有振动"
+      },
+      {
+        "key": "D",
+        "text": "不能，因为重拨一定使弦停止"
+      }
+    ],
+    "answer": "A",
+    "explanation": "强弱主要与振幅有关，音高主要与振动快慢有关，单凭更响不足以判断音调升高。",
+    "verify": "\"不能，声音强弱和音高不是同一概念\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p226_q101",
+    "topicId": "cns_p226",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同长度同材料的两根琴弦，一根绷得较紧，拨动时音调较高，原因更可能是？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "紧弦完全不振动"
+      },
+      {
+        "key": "B",
+        "text": "琴弦越紧振动越慢，所以音调越高"
+      },
+      {
+        "key": "C",
+        "text": "琴弦较紧就不需要任何振动来发声"
+      },
+      {
+        "key": "D",
+        "text": "紧弦振动较快"
+      }
+    ],
+    "answer": "D",
+    "explanation": "在其他条件相近时，弦更紧通常振动更快、音调更高，不是没有振动。",
+    "verify": "\"紧弦振动较快\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p226_q102",
+    "topicId": "cns_p226",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同样的空瓶，用嘴吹瓶口和用棒轻敲瓶身，能直接认为声音一定相同吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能，两种发声方式中主要振动部分可不同"
+      },
+      {
+        "key": "B",
+        "text": "能，只要瓶子相同就永远同音"
+      },
+      {
+        "key": "C",
+        "text": "能，任何瓶子都只能发一个音"
+      },
+      {
+        "key": "D",
+        "text": "不能，因为玻璃一定不能振动"
+      }
+    ],
+    "answer": "A",
+    "explanation": "吹气和敲击的主要振动系统不同，不能仅凭使用同一瓶子就断定音调或音色相同。",
+    "verify": "\"不能，两种发声方式中主要振动部分可不同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p226_q103",
+    "topicId": "cns_p226",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "排箫想排出由低到高的音，其他条件相同的管子应怎样排列？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "通常由长管逐渐排到短管"
+      },
+      {
+        "key": "B",
+        "text": "所有管长相同，仅逐根增大吹气力度"
+      },
+      {
+        "key": "C",
+        "text": "通常由最短管排到最长管"
+      },
+      {
+        "key": "D",
+        "text": "只按吹气强弱排列，认为管长不影响音高"
+      }
+    ],
+    "answer": "A",
+    "explanation": "相近条件下，较长空气柱通常对应较低音，较短空气柱通常对应较高音。",
+    "verify": "\"通常由长管逐渐排到短管\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p117_q101",
+    "topicId": "cns_p117",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "设计三根橡皮筋的琴，要研究长度怎样影响音高，哪种方案更有针对性？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "长度相同，材料粗细松紧全不同"
+      },
+      {
+        "key": "B",
+        "text": "每次同时改变长度、材料和粗细，不作区分"
+      },
+      {
+        "key": "C",
+        "text": "每根橡皮筋都贴住盒面不能振动"
+      },
+      {
+        "key": "D",
+        "text": "同材料、同粗细、松紧接近，改变振动段长度"
+      }
+    ],
+    "answer": "D",
+    "explanation": "让振动段长度成为主要差别，才能较清楚比较长度与音高的关系。",
+    "verify": "\"同材料、同粗细、松紧接近，改变振动段长度\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p117_q102",
+    "topicId": "cns_p117",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "设计纸盒橡皮筋琴时，为什么需要用支撑使橡皮筋与盒面留有间隙？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "让盒子没有任何空气"
+      },
+      {
+        "key": "B",
+        "text": "使橡皮筋永远不会改变形状"
+      },
+      {
+        "key": "C",
+        "text": "让橡皮筋能够较自由地振动"
+      },
+      {
+        "key": "D",
+        "text": "让橡皮筋完全不动"
+      }
+    ],
+    "answer": "C",
+    "explanation": "发声需要振动，留出适当间隙可以减少接触对橡皮筋振动的妨碍。",
+    "verify": "\"让橡皮筋能够较自由地振动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p117_q103",
+    "topicId": "cns_p117",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "设计敲击乐器，想既有较高音又有较低音，下一步最有价值的是？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "用越大力敲击代替所有结构设计"
+      },
+      {
+        "key": "B",
+        "text": "先用几种结构试音，记录高低再确定组合"
+      },
+      {
+        "key": "C",
+        "text": "只把“高音”“低音”贴在完全相同物体上"
+      },
+      {
+        "key": "D",
+        "text": "只选择最漂亮的包装不试音"
+      }
+    ],
+    "answer": "B",
+    "explanation": "设计应通过实际试音验证不同结构的音高，标签或用力大小不能替代音高测试。",
+    "verify": "\"先用几种结构试音，记录高低再确定组合\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p227_q101",
+    "topicId": "cns_p227",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "自制橡皮筋琴一根弦碰着盒边、声音发闷，改进首先应针对什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只改变听者距离，不调整碰擦部位"
+      },
+      {
+        "key": "B",
+        "text": "不检查故障弦，先把所有弦都拧松"
+      },
+      {
+        "key": "C",
+        "text": "把整根橡皮筋粘牢不能振动"
+      },
+      {
+        "key": "D",
+        "text": "调整固定位置，减少对振动的阻碍"
+      }
+    ],
+    "answer": "D",
+    "explanation": "接触可能妨碍正常振动，应解决结构问题，而不是改变与发声无关的装饰。",
+    "verify": "\"调整固定位置，减少对振动的阻碍\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p227_q102",
+    "topicId": "cns_p227",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "改进前后都弹同一段曲子，想判断音高是否更稳定，应怎样比较？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只挑最好听的一次不记其他结果"
+      },
+      {
+        "key": "B",
+        "text": "改进后只看照片不试奏"
+      },
+      {
+        "key": "C",
+        "text": "同时换演奏者和所有部件却不记录"
+      },
+      {
+        "key": "D",
+        "text": "用相同方式多次试奏并记录是否跑调"
+      }
+    ],
+    "answer": "D",
+    "explanation": "重复、尽量同条件的试奏更能判断结构改进后的稳定性，而非偶然一次表现。",
+    "verify": "\"用相同方式多次试奏并记录是否跑调\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p227_q103",
+    "topicId": "cns_p227",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "乐器改进后声音更大，但三根弦音高完全相同，是否已经满足“有三个不同音”的目标？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "没有，还需调整使各弦音高有区别"
+      },
+      {
+        "key": "B",
+        "text": "已经，声音大就等于三个音高"
+      },
+      {
+        "key": "C",
+        "text": "已经，弦数足够就无须听音"
+      },
+      {
+        "key": "D",
+        "text": "没有，因为乐器不能同时有多个部件"
+      }
+    ],
+    "answer": "A",
+    "explanation": "评价应对应设计目标；更响只改善强弱，不等于已得到三个不同音高。",
+    "verify": "\"没有，还需调整使各弦音高有区别\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p118_q101",
+    "topicId": "cns_p118",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "纸杯电话同样轻声说话，棉线拉直绷紧时比松垮时更清楚，说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "棉线完全不参与声音传播"
+      },
+      {
+        "key": "B",
+        "text": "声音只能通过液体传来"
+      },
+      {
+        "key": "C",
+        "text": "绷紧只影响音高，不可能影响振动传递"
+      },
+      {
+        "key": "D",
+        "text": "线的状态会影响振动传递"
+      }
+    ],
+    "answer": "D",
+    "explanation": "纸杯振动可经棉线传递，松紧状态会影响这种传声效果。",
+    "verify": "\"线的状态会影响振动传递\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p118_q102",
+    "topicId": "cns_p118",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "教师把响着的电铃放入可抽气罩，空气逐渐减少，铃仍振动但声音变弱，支持什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "声音只要存在就不用物质传播"
+      },
+      {
+        "key": "B",
+        "text": "空气是传播声音的一种介质"
+      },
+      {
+        "key": "C",
+        "text": "铃不振动也一定能发同样声音"
+      },
+      {
+        "key": "D",
+        "text": "真空中声音一定最响"
+      }
+    ],
+    "answer": "B",
+    "explanation": "在铃仍振动的条件下，空气减少使外界听到声音变弱，支持声音传播需要介质。",
+    "verify": "\"空气是传播声音的一种介质\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p118_q103",
+    "topicId": "cns_p118",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "教师排除空气传声干扰后，轻敲长桌一端，另一端仍检测到相应振动，支持什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "桌面只反射空气声，不会传递振动"
+      },
+      {
+        "key": "B",
+        "text": "声音遇到任何固体都会完全消失"
+      },
+      {
+        "key": "C",
+        "text": "固体只有变成气体以后才能传声"
+      },
+      {
+        "key": "D",
+        "text": "固体桌面也能传递声音的振动"
+      }
+    ],
+    "answer": "D",
+    "explanation": "排除空气传声干扰后，桌面仍能传递振动，支持固体可以传声；应轻敲，避免噪声。",
+    "verify": "\"固体桌面也能传递声音的振动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p119_q101",
+    "topicId": "cns_p119",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "装修现场声音很大，先减少停留时间并远离声源，这属于怎样的保护？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "使噪声变成不需要介质的声音"
+      },
+      {
+        "key": "B",
+        "text": "把音调高低与耳朵安全视为同一件事"
+      },
+      {
+        "key": "C",
+        "text": "降低耳朵接触强声的程度"
+      },
+      {
+        "key": "D",
+        "text": "让装修工具从此完全不振动"
+      }
+    ],
+    "answer": "C",
+    "explanation": "减少接触强声的时间、增大距离可帮助保护听力，不能仅凭音调判断是否有害。",
+    "verify": "\"降低耳朵接触强声的程度\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p119_q102",
+    "topicId": "cns_p119",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "学校在道路旁设置隔声屏障，与要求司机少鸣笛相比，作用环节有什么区别？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "屏障和少鸣笛都只在耳朵内减噪"
+      },
+      {
+        "key": "B",
+        "text": "屏障直接使所有汽车不再发声"
+      },
+      {
+        "key": "C",
+        "text": "少鸣笛仅在传播路径上阻挡声音"
+      },
+      {
+        "key": "D",
+        "text": "屏障主要阻隔传播，少鸣笛从声源减少噪声"
+      }
+    ],
+    "answer": "D",
+    "explanation": "减噪可从声源、传播路径和接收者等环节考虑，两种措施针对的环节不同。",
+    "verify": "\"屏障主要阻隔传播，少鸣笛从声源减少噪声\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p119_q103",
+    "topicId": "cns_p119",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "耳机音量开得大，摘下后耳朵不舒服，哪项处理更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只换耳机颜色不改音量和时间"
+      },
+      {
+        "key": "B",
+        "text": "认为年轻人听力不需要保护"
+      },
+      {
+        "key": "C",
+        "text": "停止强声暴露，调低音量并适当休息"
+      },
+      {
+        "key": "D",
+        "text": "继续加大音量让耳朵适应"
+      }
+    ],
+    "answer": "C",
+    "explanation": "较长时间大音量可能伤害听力，应降低强声暴露；持续不适应向家长、教师或医生求助。",
+    "verify": "\"停止强声暴露，调低音量并适当休息\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p120_q101",
+    "topicId": "cns_p120",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两粒同样饱满的蚕豆种子，一粒胚完整、一粒胚被破坏，条件相同且适宜，哪粒更可能正常长成幼苗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "胚完整的一粒"
+      },
+      {
+        "key": "B",
+        "text": "只要种皮颜色深就一定能长成"
+      },
+      {
+        "key": "C",
+        "text": "胚被破坏的一粒一定更容易"
+      },
+      {
+        "key": "D",
+        "text": "两粒都只靠外面的种皮长出新植株"
+      }
+    ],
+    "answer": "A",
+    "explanation": "胚是能发育成新植物的部分，营养储备和外表完整不能替代完整、有活力的胚。",
+    "verify": "\"胚完整的一粒\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p120_q102",
+    "topicId": "cns_p120",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "剥开浸软的蚕豆，看到小小的胚芽和肥厚子叶，二者关系怎样理解更合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "子叶提供储备营养，有助于胚芽等结构生长"
+      },
+      {
+        "key": "B",
+        "text": "子叶只是装饰，没有任何作用"
+      },
+      {
+        "key": "C",
+        "text": "胚芽只负责保护种皮颜色"
+      },
+      {
+        "key": "D",
+        "text": "两者都是没有生命的石粒"
+      }
+    ],
+    "answer": "A",
+    "explanation": "蚕豆子叶储藏营养，萌发时为胚芽等结构生长提供支持；子叶本身也是胚的一部分。",
+    "verify": "\"子叶提供储备营养，有助于胚芽等结构生长\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p120_q103",
+    "topicId": "cns_p120",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "种子还没发芽时外表安静，能据此说它没有生命吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能，生命只能通过叫声判断"
+      },
+      {
+        "key": "B",
+        "text": "不能，因为每一粒破损种子必定能萌发"
+      },
+      {
+        "key": "C",
+        "text": "不能，适宜条件下有活力的种子可萌发生长"
+      },
+      {
+        "key": "D",
+        "text": "能，所有不移动的物体都没有生命"
+      }
+    ],
+    "answer": "C",
+    "explanation": "安静外表不等于无生命，需结合萌发能力和内部结构判断，也不能保证每粒种子都能发芽。",
+    "verify": "\"不能，适宜条件下有活力的种子可萌发生长\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p228_q101",
+    "topicId": "cns_p228",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "研究浇水多少对凤仙花幼苗的影响，哪种比较更合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "一盆晒太阳，一盆放暗柜，同时改变浇水量"
+      },
+      {
+        "key": "B",
+        "text": "一盆凤仙花，一盆石头"
+      },
+      {
+        "key": "C",
+        "text": "每次换不同土壤却不作记录"
+      },
+      {
+        "key": "D",
+        "text": "同批相似幼苗，其他条件相近，只改变浇水量"
+      }
+    ],
+    "answer": "D",
+    "explanation": "只改变主要研究因素，控制幼苗、土壤和光照等条件，结果才较便于解释。",
+    "verify": "\"同批相似幼苗，其他条件相近，只改变浇水量\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p228_q102",
+    "topicId": "cns_p228",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "播种后想记录凤仙花生长，哪张观察表最有助于后续比较？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "等开花后才回忆全部日期"
+      },
+      {
+        "key": "B",
+        "text": "日期、株高、叶片数和照顾情况"
+      },
+      {
+        "key": "C",
+        "text": "每天只画一个笑脸"
+      },
+      {
+        "key": "D",
+        "text": "只记录盆上贴纸颜色"
+      }
+    ],
+    "answer": "B",
+    "explanation": "连续记录可比较生长过程，照顾情况也有助于解释不同阶段的变化。",
+    "verify": "\"日期、株高、叶片数和照顾情况\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p228_q103",
+    "topicId": "cns_p228",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "凤仙花幼苗长期放在缺光角落，茎细长、叶色淡，调整首先应考虑什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "移到适宜光照处并继续合理照顾"
+      },
+      {
+        "key": "B",
+        "text": "只往盆里放更多彩色石头"
+      },
+      {
+        "key": "C",
+        "text": "完全停止一切浇水"
+      },
+      {
+        "key": "D",
+        "text": "认定幼苗不需要阳光"
+      }
+    ],
+    "answer": "A",
+    "explanation": "光照是绿色植物生长的重要条件，应根据状态调整到适宜环境，而不是改变无关装饰。",
+    "verify": "\"移到适宜光照处并继续合理照顾\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p121_q101",
+    "topicId": "cns_p121",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "把已萌发种子转半圈，原来向下的根朝了上方；继续观察后根尖又弯向下，这说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "根和茎永远朝同一方向伸长"
+      },
+      {
+        "key": "B",
+        "text": "根的生长方向会对环境方向作出反应"
+      },
+      {
+        "key": "C",
+        "text": "根只会沿原方向永远直线生长"
+      },
+      {
+        "key": "D",
+        "text": "转动一次就证明种子已死亡"
+      }
+    ],
+    "answer": "B",
+    "explanation": "新生根尖可重新向下生长，说明根的生长方向并非只由种子最初摆放方向决定。",
+    "verify": "\"根的生长方向会对环境方向作出反应\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p121_q102",
+    "topicId": "cns_p121",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "透明杯侧能看到许多细根，小组发现浇水后植株逐渐恢复挺立，根的重要作用是什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "代替叶片接收全部阳光"
+      },
+      {
+        "key": "B",
+        "text": "只改变花盆的重量"
+      },
+      {
+        "key": "C",
+        "text": "从土壤中吸收水分"
+      },
+      {
+        "key": "D",
+        "text": "把土壤全部吃掉变成叶片"
+      }
+    ],
+    "answer": "C",
+    "explanation": "根是植物吸收水分的重要器官，吸收的水分可运送到植株其他部分。",
+    "verify": "\"从土壤中吸收水分\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p121_q103",
+    "topicId": "cns_p121",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "观察幼根时，为什么不应把根毛反复搓洗掉？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "搓洗能使所有根永远不生长"
+      },
+      {
+        "key": "B",
+        "text": "只要叶子还在，根怎样损伤都无所谓"
+      },
+      {
+        "key": "C",
+        "text": "根毛有助于吸收，操作应减少损伤"
+      },
+      {
+        "key": "D",
+        "text": "根毛只是脏东西，去掉越多越好"
+      }
+    ],
+    "answer": "C",
+    "explanation": "细小根毛增加与水分接触的机会，粗暴操作可能损伤吸收结构。",
+    "verify": "\"根毛有助于吸收，操作应减少损伤\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p122_q101",
+    "topicId": "cns_p122",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "带叶芹菜插入染色水，过一段时间茎内出现连续染色通路，最支持什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "染色说明茎只储水，完全不会运输"
+      },
+      {
+        "key": "B",
+        "text": "水只靠叶片表面颜色向下流"
+      },
+      {
+        "key": "C",
+        "text": "茎内有运输水分的通路"
+      },
+      {
+        "key": "D",
+        "text": "全部水只停在根中，没有进入茎"
+      }
+    ],
+    "answer": "C",
+    "explanation": "染色水进入茎的通路，可作为茎运输水分的可观察证据，不应把颜色变化解释成矿化。",
+    "verify": "\"茎内有运输水分的通路\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p122_q102",
+    "topicId": "cns_p122",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一株绿色植物缺水时叶片萎蔫，根吸水后水如何到叶片更合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "水从根直接到叶，不经过任何茎内通路"
+      },
+      {
+        "key": "B",
+        "text": "只能由叶片从花盆底直接拉取"
+      },
+      {
+        "key": "C",
+        "text": "根和叶之间没有物质联系"
+      },
+      {
+        "key": "D",
+        "text": "通过茎的运输通路到达叶片"
+      }
+    ],
+    "answer": "D",
+    "explanation": "根吸收的水可经茎运输到叶片，植物各部分在维持生命活动中相互配合。",
+    "verify": "\"通过茎的运输通路到达叶片\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p122_q103",
+    "topicId": "cns_p122",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "小组说“叶片只用来让植物好看”，哪项事实最能纠正？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "绿色叶片能利用光等条件制造养料"
+      },
+      {
+        "key": "B",
+        "text": "叶只蒸发水分，完全不参与制造养料"
+      },
+      {
+        "key": "C",
+        "text": "叶只支撑茎，完全不参与制造养料"
+      },
+      {
+        "key": "D",
+        "text": "叶能制造养料就不需要任何光照"
+      }
+    ],
+    "answer": "A",
+    "explanation": "叶不只是外观结构，绿色叶片能进行光合作用制造养料，支持植物生长。",
+    "verify": "\"绿色叶片能利用光等条件制造养料\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p123_q101",
+    "topicId": "cns_p123",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "在同一种花上看到昆虫沾着花粉到另一朵花，可能帮助发生什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把所有花变成同一种颜色"
+      },
+      {
+        "key": "B",
+        "text": "把花粉送到合适花的柱头上"
+      },
+      {
+        "key": "C",
+        "text": "直接把花瓣变成根"
+      },
+      {
+        "key": "D",
+        "text": "让花从此不需要水和光"
+      }
+    ],
+    "answer": "B",
+    "explanation": "昆虫可在花间携带花粉，有助于传粉；传粉是后续结实过程的重要环节。",
+    "verify": "\"把花粉送到合适花的柱头上\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p123_q102",
+    "topicId": "cns_p123",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "观察凤仙花，花瓣凋落后基部逐渐膨大，为什么还应继续记录？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "可以追踪花与果实形成的联系"
+      },
+      {
+        "key": "B",
+        "text": "花瓣凋落就证明整株立即死亡"
+      },
+      {
+        "key": "C",
+        "text": "花一凋落以后绝不会再变化"
+      },
+      {
+        "key": "D",
+        "text": "只要花瓣不在就没有研究对象"
+      }
+    ],
+    "answer": "A",
+    "explanation": "花后相关结构仍可能继续发育，追踪能帮助认识从开花到结果的联系。",
+    "verify": "\"可以追踪花与果实形成的联系\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p123_q103",
+    "topicId": "cns_p123",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一张花结构图把产生花粉的部位标成柱头，应怎样检查？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "柱头和花药完全相同，不需区分"
+      },
+      {
+        "key": "B",
+        "text": "只要图画漂亮就无需看标注"
+      },
+      {
+        "key": "C",
+        "text": "应核对雄蕊的花药与雌蕊柱头的不同作用"
+      },
+      {
+        "key": "D",
+        "text": "把所有结构都统一标成花瓣"
+      }
+    ],
+    "answer": "C",
+    "explanation": "花药产生花粉，柱头接受合适花粉；标注应对应各结构的实际功能。",
+    "verify": "\"应核对雄蕊的花药与雌蕊柱头的不同作用\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p124_q101",
+    "topicId": "cns_p124",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "剖开一个成熟豆荚，看到多粒豆子，豆荚和豆子在植物繁殖中分别是什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "种子和土壤"
+      },
+      {
+        "key": "B",
+        "text": "果实和种子"
+      },
+      {
+        "key": "C",
+        "text": "两者都是根"
+      },
+      {
+        "key": "D",
+        "text": "两者都是花瓣"
+      }
+    ],
+    "answer": "B",
+    "explanation": "豆荚整体是果实，内部的豆子是种子，观察时要区分包裹结构与内部种子。",
+    "verify": "\"果实和种子\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p124_q102",
+    "topicId": "cns_p124",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "某种植物的两朵花，子房内胚珠数不同，其他过程正常，果实中种子数可能怎样？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "种子全部由花瓣变成"
+      },
+      {
+        "key": "B",
+        "text": "只有果实外壳才由胚珠变成"
+      },
+      {
+        "key": "C",
+        "text": "可能不同，种子由胚珠发育而来"
+      },
+      {
+        "key": "D",
+        "text": "一定完全相同，与胚珠无关"
+      }
+    ],
+    "answer": "C",
+    "explanation": "胚珠有形成种子的可能，数目不同可影响种子数，但并非每个胚珠都一定成为成熟种子。",
+    "verify": "\"可能不同，种子由胚珠发育而来\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p124_q103",
+    "topicId": "cns_p124",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "花图中要用箭头表示发育关系，哪组较准确？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "子房→果实，胚珠→种子"
+      },
+      {
+        "key": "B",
+        "text": "胚珠→果实，子房→种子"
+      },
+      {
+        "key": "C",
+        "text": "花瓣→果实，花药→种子"
+      },
+      {
+        "key": "D",
+        "text": "子房→种子，柱头→果实"
+      }
+    ],
+    "answer": "A",
+    "explanation": "果实主要由子房发育，种子由胚珠发育，不能把花瓣、根等任意连为种子来源。",
+    "verify": "\"子房→果实，胚珠→种子\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p125_q101",
+    "topicId": "cns_p125",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一种果实带钩刺，经过动物身体后容易挂在毛上，这种结构有何作用？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "所有带刺果实都只能在水里传播"
+      },
+      {
+        "key": "B",
+        "text": "有利于借动物把种子带到别处"
+      },
+      {
+        "key": "C",
+        "text": "能证明它只靠风飞行"
+      },
+      {
+        "key": "D",
+        "text": "能让种子不再需要萌发条件"
+      }
+    ],
+    "answer": "B",
+    "explanation": "钩刺可附着在动物体表，随着动物移动，有助于把果实和其中种子带远。",
+    "verify": "\"有利于借动物把种子带到别处\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p125_q102",
+    "topicId": "cns_p125",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "轻小种子带有伞状绒毛，与没有绒毛的相似种子相比，可能更适合什么传播方式？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只靠地下根搬运"
+      },
+      {
+        "key": "B",
+        "text": "只能依靠火烧"
+      },
+      {
+        "key": "C",
+        "text": "只能靠人把它切开"
+      },
+      {
+        "key": "D",
+        "text": "借风飘散"
+      }
+    ],
+    "answer": "D",
+    "explanation": "轻小结构与绒毛有利于被空气流动带动，是推测风传播的重要形态证据。",
+    "verify": "\"借风飘散\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p125_q103",
+    "topicId": "cns_p125",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "凤仙花果实裂开，把种子弹到较远处，为什么这对下一代可能有利？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "保证所有种子同时长成大树"
+      },
+      {
+        "key": "B",
+        "text": "使种子从此不需水"
+      },
+      {
+        "key": "C",
+        "text": "让种子变成了动物"
+      },
+      {
+        "key": "D",
+        "text": "使部分种子离开母株，减少过于拥挤"
+      }
+    ],
+    "answer": "D",
+    "explanation": "把种子散开可能减少幼苗与母株及其他幼苗的竞争，但不能保证每粒都成功生长。",
+    "verify": "\"使部分种子离开母株，减少过于拥挤\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p126_q101",
+    "topicId": "cns_p126",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两株凤仙花播种日期相同，开花日期不同，应怎样记录才科学？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "认定晚开花的不是凤仙花"
+      },
+      {
+        "key": "B",
+        "text": "分别保留真实日期，并比较环境和生长情况"
+      },
+      {
+        "key": "C",
+        "text": "把日期改成一样，显得整齐"
+      },
+      {
+        "key": "D",
+        "text": "只保留早开花的一株资料"
+      }
+    ],
+    "answer": "B",
+    "explanation": "同种植物也有个体与环境差异，真实记录差异比强行统一结果更有研究价值。",
+    "verify": "\"分别保留真实日期，并比较环境和生长情况\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p126_q102",
+    "topicId": "cns_p126",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一株凤仙花结出种子后逐渐枯萎，种子来年萌发，怎样理解这个过程？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "个体生命结束，后代延续了生命周期"
+      },
+      {
+        "key": "B",
+        "text": "原来那株完整植株变回一粒种子"
+      },
+      {
+        "key": "C",
+        "text": "植物一结种子就从来没有过生命"
+      },
+      {
+        "key": "D",
+        "text": "新幼苗与前一代完全没有联系"
+      }
+    ],
+    "answer": "A",
+    "explanation": "同一个体会经历衰老死亡，种子形成下一代，从而使生命过程一代代延续。",
+    "verify": "\"个体生命结束，后代延续了生命周期\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p126_q103",
+    "topicId": "cns_p126",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "给凤仙花的一生排图，哪条连续记录能显示繁殖已发生？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "开花后结果，并在果实中形成新种子"
+      },
+      {
+        "key": "B",
+        "text": "只有一张土壤照片"
+      },
+      {
+        "key": "C",
+        "text": "只量了花盆周长"
+      },
+      {
+        "key": "D",
+        "text": "只有幼苗叶片变大"
+      }
+    ],
+    "answer": "A",
+    "explanation": "新种子是下一代的起点，开花、结果到形成种子的记录可显示繁殖过程。",
+    "verify": "\"开花后结果，并在果实中形成新种子\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p127_q101",
+    "topicId": "cns_p127",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小组用干电池点亮灯泡做模型，能直接换成家庭插座来“让灯更亮”吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能，只要用手扶住裸导线"
+      },
+      {
+        "key": "B",
+        "text": "不能，因为家庭电源从来没有电"
+      },
+      {
+        "key": "C",
+        "text": "不能，课堂器材不能直接接家庭电源"
+      },
+      {
+        "key": "D",
+        "text": "能，电压越高任何器材都越安全"
+      }
+    ],
+    "answer": "C",
+    "explanation": "家庭电源具有危险电压，课堂干电池器材不能随意接入；电路实验应遵照教师指导。",
+    "verify": "\"不能，课堂器材不能直接接家庭电源\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p127_q102",
+    "topicId": "cns_p127",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "充电台灯能发光，电风扇能转动，说明电的作用怎样？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "可在不同器材中转化为光、运动等形式"
+      },
+      {
+        "key": "B",
+        "text": "电在不同器材中只能产生同一种效果"
+      },
+      {
+        "key": "C",
+        "text": "电器只消耗电能，不发生任何能量形式转化"
+      },
+      {
+        "key": "D",
+        "text": "电风扇转动与输入电能没有关系"
+      }
+    ],
+    "answer": "A",
+    "explanation": "不同电器把电能转化为不同形式，实现照明、运动等功能。",
+    "verify": "\"可在不同器材中转化为光、运动等形式\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p127_q103",
+    "topicId": "cns_p127",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "家中电线外皮破损露出金属，儿童应怎样处理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不触碰，提醒成人停止使用并请专业人员处理"
+      },
+      {
+        "key": "B",
+        "text": "用湿手试试有没有电"
+      },
+      {
+        "key": "C",
+        "text": "自己把裸线接回去继续使用"
+      },
+      {
+        "key": "D",
+        "text": "只在旁边贴张漂亮贴纸"
+      }
+    ],
+    "answer": "A",
+    "explanation": "破损可能让人体接触带电部分，应避免接触并由成人和专业人员安全处理。",
+    "verify": "\"不触碰，提醒成人停止使用并请专业人员处理\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p128_q101",
+    "topicId": "cns_p128",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一节干电池和完好的小灯泡，灯泡侧面金属壳与底部金属点都接到电池同一极，通常怎样？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只需把电池倒放，不改接法就一定能发光"
+      },
+      {
+        "key": "B",
+        "text": "不能构成经过灯丝的有效闭合回路"
+      },
+      {
+        "key": "C",
+        "text": "会更亮，因为两个接点接在同一极"
+      },
+      {
+        "key": "D",
+        "text": "能够持续发光，只要灯泡碰到电池任意一极就行"
+      }
+    ],
+    "answer": "B",
+    "explanation": "点亮需让电池两极经灯泡不同接点形成有效通路，都接同一极不能达到这个要求。",
+    "verify": "\"不能构成经过灯丝的有效闭合回路\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p128_q102",
+    "topicId": "cns_p128",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "干电池电路里，导线接在灯泡玻璃上而不是金属接点，灯不亮，首先应改哪里？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把导线接到正确的金属接点"
+      },
+      {
+        "key": "B",
+        "text": "只交换电池两极，仍把导线接在玻璃上"
+      },
+      {
+        "key": "C",
+        "text": "把玻璃擦亮后继续接玻璃"
+      },
+      {
+        "key": "D",
+        "text": "只换更长的导线，不改变接触位置"
+      }
+    ],
+    "answer": "A",
+    "explanation": "玻璃不能作为该灯泡正常接电位置，应利用底部金属点和金属壳等设计接点。",
+    "verify": "\"把导线接到正确的金属接点\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p128_q103",
+    "topicId": "cns_p128",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "想用一根导线把电池两极直接相连来检查电池，是否合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "合适，导线越粗电池越凉"
+      },
+      {
+        "key": "B",
+        "text": "不合适，因为电池内部从来没有能量"
+      },
+      {
+        "key": "C",
+        "text": "不合适，会造成短路，应避免"
+      },
+      {
+        "key": "D",
+        "text": "合适，这是唯一安全检测方法"
+      }
+    ],
+    "answer": "C",
+    "explanation": "直接连两极可能使电流过大、器材发热，应使用适当检测方法而非短路试验。",
+    "verify": "\"不合适，会造成短路，应避免\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p129_q101",
+    "topicId": "cns_p129",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "电池、灯泡和开关串成一个完好回路，导线中间断开一处，会有什么结果？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只要电池新就无需完整回路"
+      },
+      {
+        "key": "B",
+        "text": "断开的导线仍能让干电池电流正常通过"
+      },
+      {
+        "key": "C",
+        "text": "断开只会降低一点亮度，不可能使灯灭"
+      },
+      {
+        "key": "D",
+        "text": "回路被断开，灯泡不能持续发光"
+      }
+    ],
+    "answer": "D",
+    "explanation": "简单电路中持续发光需要完整通路，一处断开就不能形成正常闭合回路。",
+    "verify": "\"回路被断开，灯泡不能持续发光\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p129_q102",
+    "topicId": "cns_p129",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同样的干电池小灯电路，甲把灯座接牢、乙接点松动，乙时亮时灭说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "正常干电池会按固定节奏自动接通和断开"
+      },
+      {
+        "key": "B",
+        "text": "完好灯泡必须不断交换电池两极才会亮"
+      },
+      {
+        "key": "C",
+        "text": "接触不良可能使回路时通时断"
+      },
+      {
+        "key": "D",
+        "text": "接点松动只影响固定，完全不影响通路"
+      }
+    ],
+    "answer": "C",
+    "explanation": "松动接点可能导致通路不稳定，应检查连接，而不是只把闪烁归因于电池性质。",
+    "verify": "\"接触不良可能使回路时通时断\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p129_q103",
+    "topicId": "cns_p129",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "把两只小灯串联后拆掉其中一只，另一只不亮；最合理的解释是？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "串联电路每盏灯都拥有完全独立通路"
+      },
+      {
+        "key": "B",
+        "text": "只把电池反接就能补上拆灯造成的缺口"
+      },
+      {
+        "key": "C",
+        "text": "共同的串联通路被断开"
+      },
+      {
+        "key": "D",
+        "text": "拧下的灯泡把电池电能立刻全部耗尽"
+      }
+    ],
+    "answer": "C",
+    "explanation": "串联器材在同一条通路上，拆掉一只会断开整个回路，另一只也无法正常发光。",
+    "verify": "\"共同的串联通路被断开\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p130_q101",
+    "topicId": "cns_p130",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "用干电池检测器测三根导线，三次都不亮，能立刻判断三根全坏吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能，因为任何导线都永远不会损坏"
+      },
+      {
+        "key": "B",
+        "text": "不能，应先短接检测头确认检测器本身正常"
+      },
+      {
+        "key": "C",
+        "text": "能，只要不亮就必定全坏"
+      },
+      {
+        "key": "D",
+        "text": "能，不必检查电池和灯泡"
+      }
+    ],
+    "answer": "B",
+    "explanation": "检测工具自身故障会让所有测试失效，应先按规范自检，确认工具正常后再判断被测件。",
+    "verify": "\"不能，应先短接检测头确认检测器本身正常\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p130_q102",
+    "topicId": "cns_p130",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "已知干电池、导线完好，更换新灯泡后电路恢复发光，这条证据首先指向什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "电池从未参与电路"
+      },
+      {
+        "key": "B",
+        "text": "原灯泡可能有故障"
+      },
+      {
+        "key": "C",
+        "text": "全部导线必定都坏了"
+      },
+      {
+        "key": "D",
+        "text": "更换灯泡一定改变了季节"
+      }
+    ],
+    "answer": "B",
+    "explanation": "逐项替换能帮助定位原因，新灯泡恢复工作支持原灯泡存在问题，但仍应注意连接条件。",
+    "verify": "\"原灯泡可能有故障\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p130_q103",
+    "topicId": "cns_p130",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "排查课堂小灯电路故障，每次只换一个器材并记录，为什么比一次全换更有用？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "更便于判断哪项改变与恢复发光相关"
+      },
+      {
+        "key": "B",
+        "text": "保证永远不需要检测器"
+      },
+      {
+        "key": "C",
+        "text": "使灯泡无需形成回路"
+      },
+      {
+        "key": "D",
+        "text": "让所有器材都有相同颜色"
+      }
+    ],
+    "answer": "A",
+    "explanation": "一次只改一项可缩小原因范围；全部同时换掉，即使恢复也难判断原来是哪一件出了问题。",
+    "verify": "\"更便于判断哪项改变与恢复发光相关\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p132_q101",
+    "topicId": "cns_p132",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "密盒里只有导线，检测器正常，A与B相通、B与C相通，A与C应怎样？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只能靠看盒子颜色判断"
+      },
+      {
+        "key": "B",
+        "text": "只有把盒子倒过来才相通"
+      },
+      {
+        "key": "C",
+        "text": "也应相通"
+      },
+      {
+        "key": "D",
+        "text": "一定不相通"
+      }
+    ],
+    "answer": "C",
+    "explanation": "仅由导线连接的网络具有连通关系：A能经B到C，所以A与C也在同一连通组。",
+    "verify": "\"也应相通\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p132_q102",
+    "topicId": "cns_p132",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "密盒只有导线，A与B相通，A与C不通，哪项推断有根据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "A与C之间必定有一节电池"
+      },
+      {
+        "key": "B",
+        "text": "C不在A和B所属的连通组"
+      },
+      {
+        "key": "C",
+        "text": "A与B一定没有连接"
+      },
+      {
+        "key": "D",
+        "text": "C必定与盒外所有物体相连"
+      }
+    ],
+    "answer": "B",
+    "explanation": "测试可判断连通组，但不能凭这些记录推断不存在于题设中的电池等结构。",
+    "verify": "\"C不在A和B所属的连通组\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p132_q103",
+    "topicId": "cns_p132",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "A、B、C三个接线柱两两相通，能唯一确定盒内每根导线的走法吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能，因为这些结果没有任何价值"
+      },
+      {
+        "key": "B",
+        "text": "不能，不同内部接法可能给出相同连通结果"
+      },
+      {
+        "key": "C",
+        "text": "能，必定只用一根直线"
+      },
+      {
+        "key": "D",
+        "text": "能，每次测试都会显示完整内部照片"
+      }
+    ],
+    "answer": "B",
+    "explanation": "连通结果能约束内部结构，但多种导线网络可能具有相同连通性，不能过度推断唯一走线。",
+    "verify": "\"不能，不同内部接法可能给出相同连通结果\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p131_q101",
+    "topicId": "cns_p131",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "检测电线材料时，塑料皮处不亮、剥开的铜芯处亮，说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "铜芯易导电，外皮起绝缘保护作用"
+      },
+      {
+        "key": "B",
+        "text": "塑料一定比铜更易导电"
+      },
+      {
+        "key": "C",
+        "text": "整根电线任何部位都不可能导电"
+      },
+      {
+        "key": "D",
+        "text": "导电只取决于电线颜色"
+      }
+    ],
+    "answer": "A",
+    "explanation": "不同材料导电性能不同，金属芯负责传电，外层绝缘材料帮助减少接触风险。",
+    "verify": "\"铜芯易导电，外皮起绝缘保护作用\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p131_q102",
+    "topicId": "cns_p131",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "用完好的低压检测器测干木棒不亮，能保证湿木棒接家庭电源也绝对安全吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能，低压测试不能保证接家庭电源也安全"
+      },
+      {
+        "key": "B",
+        "text": "能，测一次就适用于所有环境"
+      },
+      {
+        "key": "C",
+        "text": "能，所有湿物体都是可靠绝缘体"
+      },
+      {
+        "key": "D",
+        "text": "不能，因为干木棒在任何情况下都是良好导体"
+      }
+    ],
+    "answer": "A",
+    "explanation": "低压下的测试不能作为接触家庭电源的安全保证；潮湿等条件也会改变导电情况。",
+    "verify": "\"不能，低压测试不能保证接家庭电源也安全\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p131_q103",
+    "topicId": "cns_p131",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "比较铁片和塑料片的导电性，哪项最有利于获得可靠证据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "一次碰不到金属也直接记绝缘"
+      },
+      {
+        "key": "B",
+        "text": "使用同一正常低压检测器并保证接触良好"
+      },
+      {
+        "key": "C",
+        "text": "给铁片用坏电池、给塑料用新电池"
+      },
+      {
+        "key": "D",
+        "text": "只比较哪块材料更大"
+      }
+    ],
+    "answer": "B",
+    "explanation": "检测器与接触条件应一致，否则接触不良可能把导体误判成不导电材料。",
+    "verify": "\"使用同一正常低压检测器并保证接触良好\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p229_q101",
+    "topicId": "cns_p229",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "低压小灯回路中，开关闭合时金属片互相接触、断开时分开，控制依据是什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "断开只能降低亮度，不会切断回路"
+      },
+      {
+        "key": "B",
+        "text": "改变回路是否连通"
+      },
+      {
+        "key": "C",
+        "text": "每闭合一次开关，都由开关制造新的电能"
+      },
+      {
+        "key": "D",
+        "text": "仅使电池消耗变慢，与通断无关"
+      }
+    ],
+    "answer": "B",
+    "explanation": "开关通过接通或断开导电通路来控制电路，不是制造电能或改变器材材料。",
+    "verify": "\"改变回路是否连通\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p229_q102",
+    "topicId": "cns_p229",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "开关闭合后灯仍不亮，能据此断定“开关闭合没有作用”吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能，所有开关都是装饰"
+      },
+      {
+        "key": "B",
+        "text": "能，闭合后任何其他故障都无关"
+      },
+      {
+        "key": "C",
+        "text": "不能，因为灯泡不需要电池"
+      },
+      {
+        "key": "D",
+        "text": "不能，还要检查电池、灯泡和其他连接"
+      }
+    ],
+    "answer": "D",
+    "explanation": "闭合开关只是形成回路的一个条件，其他器材或接点故障仍可能导致不亮。",
+    "verify": "\"不能，还要检查电池、灯泡和其他连接\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p229_q103",
+    "topicId": "cns_p229",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "制作低压开关，手接触的把手用塑料、连通位置用金属，设计目的是什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "兼顾操作部位绝缘与接点导电"
+      },
+      {
+        "key": "B",
+        "text": "使手接触的部分更容易导电"
+      },
+      {
+        "key": "C",
+        "text": "让接点绝缘，阻止一切电流通过"
+      },
+      {
+        "key": "D",
+        "text": "只为改变开关大小，与材料性能无关"
+      }
+    ],
+    "answer": "A",
+    "explanation": "导电接点完成连通，绝缘把手便于操作，材料选择要对应不同功能。",
+    "verify": "\"兼顾操作部位绝缘与接点导电\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p230_q101",
+    "topicId": "cns_p230",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "干电池照明模型有两条灯的支路，要只关一盏，开关应放在哪里？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "放在任何地方都一定单独控制"
+      },
+      {
+        "key": "B",
+        "text": "放在该灯所在支路上"
+      },
+      {
+        "key": "C",
+        "text": "只放在两条支路共同经过的总路上"
+      },
+      {
+        "key": "D",
+        "text": "用导线直接跨接电池两极"
+      }
+    ],
+    "answer": "B",
+    "explanation": "单灯支路的开关可只断开该支路；共同总路上的开关可能同时控制两盏灯。",
+    "verify": "\"放在该灯所在支路上\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p230_q102",
+    "topicId": "cns_p230",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两个灯并联的低压模型，一灯支路断开、另一支路完好，正常电源下另一灯可怎样？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "必定随另一灯一起永久损坏"
+      },
+      {
+        "key": "B",
+        "text": "只能在没有电池时发光"
+      },
+      {
+        "key": "C",
+        "text": "因为并联而不再需要导线"
+      },
+      {
+        "key": "D",
+        "text": "仍可发光，因为有自己的完整通路"
+      }
+    ],
+    "answer": "D",
+    "explanation": "并联支路可以具有各自的通路，一条支路断开不必切断另一条完好的支路。",
+    "verify": "\"仍可发光，因为有自己的完整通路\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p230_q103",
+    "topicId": "cns_p230",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "模拟家庭照明的课堂活动为什么使用干电池，而不让儿童接家用插座？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "干电池能完全复制家庭所有危险情况"
+      },
+      {
+        "key": "B",
+        "text": "家用插座不包含任何电能"
+      },
+      {
+        "key": "C",
+        "text": "模型只要画出插座就无需真实电路"
+      },
+      {
+        "key": "D",
+        "text": "用安全低压模型学习连接关系"
+      }
+    ],
+    "answer": "D",
+    "explanation": "学习连接原理可以用低压模型完成，模型并不意味着可以自行操作有危险电压的家庭电路。",
+    "verify": "\"用安全低压模型学习连接关系\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p231_q101",
+    "topicId": "cns_p231",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "校园花坛植物扎根土壤，旁边石板铺成道路，这组观察说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "植物必须直接长在所有石板上"
+      },
+      {
+        "key": "B",
+        "text": "岩石和土壤以不同方式参与生活"
+      },
+      {
+        "key": "C",
+        "text": "岩石只会出现在无人居住的地方"
+      },
+      {
+        "key": "D",
+        "text": "土壤只能用于制作金属"
+      }
+    ],
+    "answer": "B",
+    "explanation": "土壤支持植物生长，岩石可作建筑铺路材料，二者都与生活密切相关。",
+    "verify": "\"岩石和土壤以不同方式参与生活\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p231_q102",
+    "topicId": "cns_p231",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小组比较坡顶和坡下土壤，发现颗粒组成有差别，下一步怎样做较有依据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "继续观察地形、流水等线索并记录样品位置"
+      },
+      {
+        "key": "B",
+        "text": "直接宣布所有土壤都来自人工购买"
+      },
+      {
+        "key": "C",
+        "text": "只按土壤颜色决定完整形成过程"
+      },
+      {
+        "key": "D",
+        "text": "把差别全擦去不记录"
+      }
+    ],
+    "answer": "A",
+    "explanation": "土壤形成与搬运受多种过程影响，位置和环境线索有助于提出解释，而非单凭颜色作绝对判断。",
+    "verify": "\"继续观察地形、流水等线索并记录样品位置\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p231_q103",
+    "topicId": "cns_p231",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "有人说“岩石永远不变化”，哪种长期现象能提示这一说法需修改？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "石头被放在同一种颜色的纸上"
+      },
+      {
+        "key": "B",
+        "text": "岩石表面逐渐出现裂缝和碎屑"
+      },
+      {
+        "key": "C",
+        "text": "岩石标本贴上了标签"
+      },
+      {
+        "key": "D",
+        "text": "老师给石头取了名字"
+      }
+    ],
+    "answer": "B",
+    "explanation": "风化等过程可使岩石逐渐破碎，裂缝与碎屑是变化线索，命名或贴标签不是岩石自身变化。",
+    "verify": "\"岩石表面逐渐出现裂缝和碎屑\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p133_q101",
+    "topicId": "cns_p133",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两块岩石颜色相近，一块有明显颗粒、一块有清楚薄层，怎样辨认较可靠？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只凭哪块更漂亮决定名称"
+      },
+      {
+        "key": "B",
+        "text": "只要质量相等就是同种岩石"
+      },
+      {
+        "key": "C",
+        "text": "结合颗粒、层理和其他特征比较"
+      },
+      {
+        "key": "D",
+        "text": "只要颜色相同就一定是同种岩石"
+      }
+    ],
+    "answer": "C",
+    "explanation": "颜色可能相同而组成结构不同，辨认岩石应结合多种可观察特征。",
+    "verify": "\"结合颗粒、层理和其他特征比较\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p133_q102",
+    "topicId": "cns_p133",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "岩石标本出现清晰一层层结构，沿层面较易分开，这项特征首先提示什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "一定由单一金属做成"
+      },
+      {
+        "key": "B",
+        "text": "证明所有岩石都有同样薄层"
+      },
+      {
+        "key": "C",
+        "text": "只说明它曾被贴过标签"
+      },
+      {
+        "key": "D",
+        "text": "具有明显层理，应与对应岩石资料核对"
+      }
+    ],
+    "answer": "D",
+    "explanation": "层理及沿层面的表现是辨认线索，但仍应结合其他特征和可靠资料核对。",
+    "verify": "\"具有明显层理，应与对应岩石资料核对\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p133_q103",
+    "topicId": "cns_p133",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "花岗岩新鲜断面能看到颜色、形态不同的颗粒，这最能说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "岩石里面必定都是同一种颜色"
+      },
+      {
+        "key": "B",
+        "text": "所有颗粒都是人为涂上的颜料"
+      },
+      {
+        "key": "C",
+        "text": "每一颗都能直接判断为动物化石"
+      },
+      {
+        "key": "D",
+        "text": "同一岩石可以包含多种矿物颗粒"
+      }
+    ],
+    "answer": "D",
+    "explanation": "不同颗粒反映岩石内部物质组成的多样性，不能简单把颜色差异都看成涂色或化石。",
+    "verify": "\"同一岩石可以包含多种矿物颗粒\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p134_q101",
+    "topicId": "cns_p134",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一种矿物表面颜色有变化，但在瓷板上的条痕较稳定，辨认时应怎样利用？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "条痕颜色永远等于所有岩石的颜色"
+      },
+      {
+        "key": "B",
+        "text": "只要条痕相同就不需其他信息"
+      },
+      {
+        "key": "C",
+        "text": "把条痕与硬度等特征一起作为证据"
+      },
+      {
+        "key": "D",
+        "text": "只按表面最亮的颜色决定全部性质"
+      }
+    ],
+    "answer": "C",
+    "explanation": "矿物辨认可结合条痕、硬度、光泽等，单一特征通常不够可靠。",
+    "verify": "\"把条痕与硬度等特征一起作为证据\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p134_q102",
+    "topicId": "cns_p134",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "教师安全测试发现甲能在乙表面留下真正刻痕，反过来不能，通常怎样比较硬度？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两者一定同样硬"
+      },
+      {
+        "key": "B",
+        "text": "只取决于哪块体积大"
+      },
+      {
+        "key": "C",
+        "text": "甲比乙硬"
+      },
+      {
+        "key": "D",
+        "text": "乙比甲硬"
+      }
+    ],
+    "answer": "C",
+    "explanation": "相互刻划可比较相对硬度，应确认是真正刻痕而非表面留下的粉末。",
+    "verify": "\"甲比乙硬\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p134_q103",
+    "topicId": "cns_p134",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "把岩石中的闪亮薄片误认成“所有岩石的全部成分”，应怎样纠正？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "闪亮就证明岩石一定是塑料"
+      },
+      {
+        "key": "B",
+        "text": "岩石可由一种或多种矿物组成，需观察整体"
+      },
+      {
+        "key": "C",
+        "text": "所有岩石都只能由一种闪亮物质组成"
+      },
+      {
+        "key": "D",
+        "text": "岩石与矿物没有任何联系"
+      }
+    ],
+    "answer": "B",
+    "explanation": "一种颗粒只能表示观察到的组成部分，岩石可包含不同矿物，不能以偏概全。",
+    "verify": "\"岩石可由一种或多种矿物组成，需观察整体\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p232_q101",
+    "topicId": "cns_p232",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同种岩石收了三块，分别写采集地点和日期，有何研究价值？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "有三块就不用观察内部结构"
+      },
+      {
+        "key": "B",
+        "text": "只为让盒子更重"
+      },
+      {
+        "key": "C",
+        "text": "保留来源，便于比较不同地点的样品"
+      },
+      {
+        "key": "D",
+        "text": "标签能自动改变岩石种类"
+      }
+    ],
+    "answer": "C",
+    "explanation": "地点、日期等信息把样品与观察背景联系起来，日后才可追溯和比较来源。",
+    "verify": "\"保留来源，便于比较不同地点的样品\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p232_q102",
+    "topicId": "cns_p232",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两块标本标签脱落混在一起，哪项处理最科学？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "随意贴回并假装绝对正确"
+      },
+      {
+        "key": "B",
+        "text": "只选更好听的岩石名"
+      },
+      {
+        "key": "C",
+        "text": "把所有观察记录都删去"
+      },
+      {
+        "key": "D",
+        "text": "依据原记录和特征核对，不确定时注明待确认"
+      }
+    ],
+    "answer": "D",
+    "explanation": "标本资料应真实可追溯，无法确定时保留不确定性，比随意命名更可靠。",
+    "verify": "\"依据原记录和特征核对，不确定时注明待确认\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p232_q103",
+    "topicId": "cns_p232",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "学校制作标本，哪些采集方式更恰当？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不论地点都可敲下建筑石材"
+      },
+      {
+        "key": "B",
+        "text": "在允许地点少量采集，并保护遗迹和环境"
+      },
+      {
+        "key": "C",
+        "text": "看到保护区化石就随意挖走"
+      },
+      {
+        "key": "D",
+        "text": "为使样品多而破坏整片植被"
+      }
+    ],
+    "answer": "B",
+    "explanation": "标本学习应遵守地点管理要求并减少环境破坏，不能以学习为由任意采挖。",
+    "verify": "\"在允许地点少量采集，并保护遗迹和环境\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p135_q101",
+    "topicId": "cns_p135",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "把等体积沙和黏土加少量水揉捏，黏土较易成团，说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "是否成团与材料本身完全无关"
+      },
+      {
+        "key": "B",
+        "text": "它们的颗粒和黏结等特性不同"
+      },
+      {
+        "key": "C",
+        "text": "沙和黏土只是名字不同"
+      },
+      {
+        "key": "D",
+        "text": "颗粒特性相同，表现只由水的颜色决定"
+      }
+    ],
+    "answer": "B",
+    "explanation": "沙和黏土颗粒大小与性质有差别，加水揉捏的表现可帮助比较，不能把它们视为完全相同。",
+    "verify": "\"它们的颗粒和黏结等特性不同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p135_q102",
+    "topicId": "cns_p135",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "岩石表面碎裂形成较小颗粒，这些颗粒进一步变化可与哪些材料的形成有关？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只能形成新的完整硬岩块，不会产生细颗粒"
+      },
+      {
+        "key": "B",
+        "text": "岩石只会变色，不会形成碎屑"
+      },
+      {
+        "key": "C",
+        "text": "沙和黏土等颗粒"
+      },
+      {
+        "key": "D",
+        "text": "沙和黏土只可能由人工制造"
+      }
+    ],
+    "answer": "C",
+    "explanation": "岩石风化破碎及后续变化可形成不同粗细颗粒，是沙和黏土等来源的一部分。",
+    "verify": "\"沙和黏土等颗粒\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p135_q103",
+    "topicId": "cns_p135",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "同样层厚、相近装填方式的沙与黏土，浇等量水后沙渗得较快，能得出什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "黏土完全不含颗粒"
+      },
+      {
+        "key": "B",
+        "text": "渗水快证明沙一定没有质量"
+      },
+      {
+        "key": "C",
+        "text": "这次条件下沙比黏土更易让水通过"
+      },
+      {
+        "key": "D",
+        "text": "任何情况下所有沙都永远没有水"
+      }
+    ],
+    "answer": "C",
+    "explanation": "比较需限定实验条件，记录支持本次渗水差别，但不能扩大为所有环境下的绝对说法。",
+    "verify": "\"这次条件下沙比黏土更易让水通过\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p136_q101",
+    "topicId": "cns_p136",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "干土团浸入水中冒出许多气泡，最直接说明土团里原来可能含有什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "土团内部完全没有孔隙"
+      },
+      {
+        "key": "B",
+        "text": "土团原来全部是液态水"
+      },
+      {
+        "key": "C",
+        "text": "被水逐渐替出的空气"
+      },
+      {
+        "key": "D",
+        "text": "土粒遇水必定产生的一种新气体"
+      }
+    ],
+    "answer": "C",
+    "explanation": "水进入土壤孔隙时，原有空气可能排出形成气泡，表明土壤并非完全实心。",
+    "verify": "\"被水逐渐替出的空气\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p136_q102",
+    "topicId": "cns_p136",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "观察土壤时只看到沙粒，就说“土壤完全是沙”，怎样补充调查更合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把看不到的成分一律认定不存在"
+      },
+      {
+        "key": "B",
+        "text": "用适当方法继续寻找黏土、腐殖质、水和空气等"
+      },
+      {
+        "key": "C",
+        "text": "只把沙粒涂得更黑"
+      },
+      {
+        "key": "D",
+        "text": "不必观察，因为所有土壤都相同"
+      }
+    ],
+    "answer": "B",
+    "explanation": "土壤组成复杂，肉眼一次观察可能遗漏细颗粒、水和空气等，需多种证据。",
+    "verify": "\"用适当方法继续寻找黏土、腐殖质、水和空气等\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p136_q103",
+    "topicId": "cns_p136",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "土壤中有腐烂叶片形成的深色成分，这与什么过程相关？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "任何土壤颜色变深，都说明全部成分已变成腐殖质"
+      },
+      {
+        "key": "B",
+        "text": "动植物残体分解形成腐殖质"
+      },
+      {
+        "key": "C",
+        "text": "只有岩石机械磨细，完全没有生物残体参与"
+      },
+      {
+        "key": "D",
+        "text": "泥沙被流水搬运就必定形成腐殖质"
+      }
+    ],
+    "answer": "B",
+    "explanation": "土壤中的腐殖质与生物残体分解有关，是土壤组成中与生命活动联系密切的部分。",
+    "verify": "\"动植物残体分解形成腐殖质\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p137_q101",
+    "topicId": "cns_p137",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "比较三种土壤渗水，甲装一厘米厚、乙装十厘米厚，直接比较漏水快慢有什么问题？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只要土壤颜色不同就无需控制厚度"
+      },
+      {
+        "key": "B",
+        "text": "十厘米土层一定没有孔隙"
+      },
+      {
+        "key": "C",
+        "text": "所有土壤都应一滴水也不漏"
+      },
+      {
+        "key": "D",
+        "text": "土层厚度不同会干扰土壤种类的比较"
+      }
+    ],
+    "answer": "D",
+    "explanation": "层厚影响水通过的过程，研究土壤种类时应尽量保持土层厚度和其他条件相近。",
+    "verify": "\"土层厚度不同会干扰土壤种类的比较\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p137_q102",
+    "topicId": "cns_p137",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "相同条件下，土样A很快漏出大部分水，B较慢且留水较多，哪项判断较有根据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "A渗水较快，B在这次实验中保水较多"
+      },
+      {
+        "key": "B",
+        "text": "A一定最适合所有植物"
+      },
+      {
+        "key": "C",
+        "text": "B完全不需要空气"
+      },
+      {
+        "key": "D",
+        "text": "两份数据不能用于描述任何差别"
+      }
+    ],
+    "answer": "A",
+    "explanation": "渗水和保水可根据实际记录比较，但适合哪种植物还要结合植物需求和其他土壤条件。",
+    "verify": "\"A渗水较快，B在这次实验中保水较多\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p137_q103",
+    "topicId": "cns_p137",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "仙人掌适合排水较好的环境，若一种土壤长期积水、透气差，能仅凭“保水多”说最适合它吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能，因为植物不能种在土壤中"
+      },
+      {
+        "key": "B",
+        "text": "不能，土壤选择应结合植物需要"
+      },
+      {
+        "key": "C",
+        "text": "能，保水越多对任何植物都越好"
+      },
+      {
+        "key": "D",
+        "text": "能，植物根从来不需要空气"
+      }
+    ],
+    "answer": "B",
+    "explanation": "保水、排水和通气需相互协调，不同植物需求不同，不能用单一指标判断所有植物。",
+    "verify": "\"不能，土壤选择应结合植物需要\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p233_q101",
+    "topicId": "cns_p233",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "坡面暴雨后，裸地冲出较多泥沙，有草地泥沙较少，哪项解释更合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "有草的土壤完全不再含沙"
+      },
+      {
+        "key": "B",
+        "text": "草能让雨滴从来不落地"
+      },
+      {
+        "key": "C",
+        "text": "裸地没有土壤可被冲走"
+      },
+      {
+        "key": "D",
+        "text": "植被有助于减轻土壤被水冲走"
+      }
+    ],
+    "answer": "D",
+    "explanation": "植物覆盖和根系可帮助固定土壤、减缓冲刷，结果支持保护植被有助于保土。",
+    "verify": "\"植被有助于减轻土壤被水冲走\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p233_q102",
+    "topicId": "cns_p233",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "有人把废机油倒进花坛，哪项做法更有助于保护土壤？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "用更多土盖住后继续倒"
+      },
+      {
+        "key": "B",
+        "text": "换成晚上倒就不会污染"
+      },
+      {
+        "key": "C",
+        "text": "让雨水把机油全部冲进河里"
+      },
+      {
+        "key": "D",
+        "text": "停止倾倒，并按规定收集处理废物"
+      }
+    ],
+    "answer": "D",
+    "explanation": "污染物可能损害土壤并随水扩散，应从来源减少并按规定处理，掩盖或转移不能消除污染。",
+    "verify": "\"停止倾倒，并按规定收集处理废物\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p233_q103",
+    "topicId": "cns_p233",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "修建道路需要石材，同时要保护附近土壤，哪种安排更合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "认为石材有用就可随意破坏所有山坡"
+      },
+      {
+        "key": "B",
+        "text": "把所有表土永久丢进河道"
+      },
+      {
+        "key": "C",
+        "text": "只关心道路颜色，不记录环境变化"
+      },
+      {
+        "key": "D",
+        "text": "合理取材并做好植被恢复和水土保护"
+      }
+    ],
+    "answer": "D",
+    "explanation": "合理利用岩石资源应兼顾环境，减少扰动并恢复植被、保护表土有助于可持续利用。",
+    "verify": "\"合理取材并做好植被恢复和水土保护\"",
+    "level": "pro",
+    "origin": "original"
+  }
+]

@@ -309,6 +309,53 @@
 
   /* ------------------------------------------------------------ 数据 */
   async function loadData() {
+    if (sessionLevel === 'pro') {
+      const params = new URLSearchParams(location.search);
+      const saved = params.get('resume') === '1' ? lsGet(sessionKey()) : null;
+      const explicit = params.get('target');
+      const hasOwner = saved && Object.prototype.hasOwnProperty.call(saved, 'progressChildId');
+      const cur = CC.current();
+      let owner = cur ? cur.id : null;
+      const target = explicit ? explicit.trim() : saved && saved.level === 'pro' && Array.isArray(saved.targets) && saved.targets.length === 1 ? saved.targets[0] : '';
+      const path = window.CnmProChallenge.topicURL(target, subject);
+      if (!path || params.has('chapter') || params.get('order') === 'book' ||
+          (!explicit && (!hasOwner || saved.subject !== undefined && saved.subject !== subject))) {
+        throw new Error('请从当前账号已通过普通检测的知识点进入专家挑战。');
+      }
+      if (!explicit) {
+        // 个人中心的“继续”属于存档账号，切换过页面账号也不借用新账号的普通通过记录。
+        owner = saved.progressChildId;
+        if (owner !== null && (typeof owner !== 'string' || !/^[A-Za-z0-9_-]{1,128}$/.test(owner) ||
+            ['__proto__', 'constructor', 'prototype'].indexOf(owner) >= 0 || !CC.get(owner))) {
+          throw new Error('这份专家检测没有对应的账号，请到本地个人中心查看。');
+        }
+      }
+      const passed = window.CnmProgress && window.CnmProgress.statuses(owner, subject);
+      if (!passed || !passed[target] || passed[target].status !== 'mastered') {
+        throw new Error('请先通过这个知识点的普通检测，再挑战专家水平。');
+      }
+      // 只读取本次知识点：不下载普通总题库、专家总题库、其他知识点题包或先修关系。
+      // 图谱页通常已缓存 topics.json；两个请求并行，首次进入也只增加几KB题目。
+      const payload = await Promise.all([
+        fetch('../data/topics.json').then(function (response) {
+          if (!response.ok) throw new Error('知识点信息暂时无法加载，请稍后重试。');
+          return response.json();
+        }),
+        fetch(path).then(function (response) {
+          if (!response.ok) throw new Error('专家题库暂时无法加载，请稍后重试。');
+          return response.json();
+        }).catch(function () { throw new Error('专家题库暂时无法加载，请稍后重试。'); })
+      ]);
+      const topics = Array.isArray(payload[0]) ? payload[0].filter(function (topic) {
+        return topic && topic.id === target && topic.subject === subject && window.CnmProChallenge.isSupported(topic);
+      }) : [];
+      if (topics.length !== 1 || !window.CnmProChallenge.validateBank(topics, null, payload[1])) {
+        throw new Error('专家题库校验未通过，请稍后重试。');
+      }
+      const graph = E.buildGraph(topics, [], payload[1]);
+      D = { topics: topics, deps: [], stdById: {}, graph: graph, tree: buildTree(topics), aliases: {}, level: 'pro' };
+      return;
+    }
     const urls = ['../data/topics.json', '../data/dependencies.json', '../data/cn-curriculum-standards.json', '../data/id-aliases.json'];
     const questionRequest = fetch('../data/questions.json').then(function (response) {
       return response.ok ? response.json() : null;
@@ -316,23 +363,12 @@
     const rs = await Promise.all(urls.map(function (u) { return fetch(u); }));
     rs.forEach(function (r, i) { if (!r.ok) throw new Error(urls[i] + ' → HTTP ' + r.status); });
     const js = await Promise.all(rs.map(function (r) { return r.json(); }));
-    // 普通题库保留兼容回退；专家题库必须完整可用，绝不借普通题凑数。
+    // 普通检测保持既有加载与兼容回退；不读取任何专家题包。
     let questions = await questionRequest;
     let topics = js[0].filter(function (t) { return E.subjectOf(t) === subject; });
-    if (sessionLevel === 'pro') {
-      if (subject !== 'physics') throw new Error('专家挑战目前仅开放初中物理。');
-      const qr = await fetch('../data/questions-pro.json');
-      if (!qr.ok) throw new Error('专家题库暂时无法加载，请稍后重试。');
-      const expertQuestions = await qr.json();
-      if (!window.CnmProChallenge.validateBank(topics, questions, expertQuestions)) {
-        throw new Error('专家题库校验未通过，请稍后重试。');
-      }
-      topics = topics.filter(window.CnmProChallenge.isJunior);
-      questions = expertQuestions;
-    }
     const allow = {};
     topics.forEach(function (t) { allow[t.id] = true; });
-    const deps = sessionLevel === 'pro' ? [] : js[1].filter(function (d) { return allow[d.topicId] && allow[d.prerequisiteId]; });
+    const deps = js[1].filter(function (d) { return allow[d.topicId] && allow[d.prerequisiteId]; });
     if (questions) questions = questions.filter(function (q) { return allow[q.topicId]; });
     const stdById = {};
     js[2].items.forEach(function (x) { stdById[x.id] = x; });
@@ -461,7 +497,7 @@
     if (sessionLevel === 'pro') {
       const passed = window.CnmProgress && window.CnmProgress.statuses(cur ? cur.id : null, subject);
       if (mode && mode !== 'target' || !window.CnmProChallenge.eligible(D.graph.byId, targets, passed)) {
-        showProError('请先通过这个初中物理知识点的普通检测，再挑战专家水平。');
+        showProError('请先通过这个知识点的普通检测，再挑战专家水平。');
         return;
       }
       label = '专家挑战 · ' + targets.map(nameOf).join('、');
@@ -485,9 +521,12 @@
       if ((saved.level === 'pro') !== (D.level === 'pro')) return false;
       if (saved.level !== undefined && saved.level !== 'normal' && saved.level !== 'pro') return false;
       if (saved.level === 'pro') {
-        const passed = window.CnmProgress && window.CnmProgress.statuses(saved.progressChildId, subject);
         if (!Object.prototype.hasOwnProperty.call(saved, 'progressChildId') || saved.mode && saved.mode !== 'target' ||
-            !window.CnmProChallenge.eligible(D.graph.byId, saved.targets, passed) ||
+            saved.subject !== undefined && saved.subject !== subject || saved.progressChildId !== null &&
+            (typeof saved.progressChildId !== 'string' || !/^[A-Za-z0-9_-]{1,128}$/.test(saved.progressChildId) ||
+              ['__proto__', 'constructor', 'prototype'].indexOf(saved.progressChildId) >= 0 || !CC.get(saved.progressChildId))) return false;
+        const passed = window.CnmProgress && window.CnmProgress.statuses(saved.progressChildId, subject);
+        if (!window.CnmProChallenge.eligible(D.graph.byId, saved.targets, passed) ||
             !window.CnmProChallenge.validAnswers(D.graph, saved)) return false;
       }
       const parts = window.StemCompat
@@ -2138,7 +2177,7 @@
       showProError('无法识别这份挑战，请从知识图谱重新进入。');
       return;
     }
-    if (sessionLevel === 'pro') document.title = '专家挑战 · 初中物理';
+    if (sessionLevel === 'pro') document.title = '专家挑战 · ' + (subject === 'science' ? '小学科学' : '初高中物理');
     try { await loadData(); } catch (e) {
       if (sessionLevel === 'pro') { showProError(String(e.message || e)); return; }
       clearRoot();
@@ -2196,7 +2235,7 @@
       }
       return;
     }
-    if (sessionLevel === 'pro') { showProError('请从已通过的初中物理知识点进入专家挑战。'); return; }
+    if (sessionLevel === 'pro') { showProError('请从已通过普通检测的知识点进入专家挑战。'); return; }
     renderStart();
   }
 

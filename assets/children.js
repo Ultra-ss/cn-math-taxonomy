@@ -204,7 +204,7 @@
   /* 按 rec.key 覆盖：同一次检测反复打开结果页、更正答案，只会更新这一条 */
   function saveRecord(childId, rec) {
     if (!childId || !rec || !rec.key || (rec.subject !== 'science' && rec.subject !== 'physics') ||
-        (own(rec, 'level') && rec.level !== 'normal' && rec.level !== 'pro') || (rec.level === 'pro' && rec.subject !== 'physics')) return false;
+        (own(rec, 'level') && rec.level !== 'normal' && rec.level !== 'pro')) return false;
     var all = records();
     var arr = Array.isArray(all[childId]) ? all[childId] : [];
     var keepImportedHistory = arr.length > MAX_RECORDS;
@@ -356,7 +356,7 @@
         if (!isObject(r) || typeof r.key !== 'string' || !r.key || keys.has(r.key) ||
             ['science', 'physics'].indexOf(r.subject) < 0 || !validDate(r.savedAt) ||
             (own(r, 'updatedAt') && !validDate(r.updatedAt)) ||
-            (own(r, 'level') && r.level !== 'normal' && r.level !== 'pro') || (r.level === 'pro' && r.subject !== 'physics')) throw new Error('检测记录的标识、学科或时间不正确。');
+            (own(r, 'level') && r.level !== 'normal' && r.level !== 'pro')) throw new Error('检测记录的标识、学科或时间不正确。');
         keys.add(r.key);
         ['weak', 'roots', 'shaky', 'mastered', 'targets'].forEach(function (field) {
           if (!own(r, field) || (field === 'targets' && r[field] === null)) return;
@@ -427,7 +427,7 @@
           return shortText(qid, 160) && /^cn[a-z]_[A-Za-z0-9]+_q[1-9][0-9]*$/.test(qid);
         })))) throw new Error('进行中检测的范围、设置或时间不正确。');
     if ((own(session, 'level') && session.level !== 'normal' && session.level !== 'pro') ||
-        (session.level === 'pro' && (subject !== 'physics' || session.mode !== 'target' || session.targets.length !== 1)) ||
+        (session.level === 'pro' && (session.mode !== 'target' || session.targets.length !== 1)) ||
         (own(session, 'progressChildId') && session.progressChildId !== null && !validId(session.progressChildId)) ||
         (own(session, 'volume') && !shortText(session.volume, 100)) ||
         (own(session, 'order') && session.order !== 'book') ||
@@ -492,14 +492,14 @@
       if (!validId(bucket) || !isObject(box) || !Array.isArray(box.runs)) throw new Error('图谱进度分组不正确。');
       if (own(box, 'earned') && (!isObject(box.earned) || Object.keys(box.earned).some(function (level) {
         return ['normal', 'pro'].indexOf(level) < 0 || !isObject(box.earned[level]) || Object.keys(box.earned[level]).some(function (id) {
-          return !subjectOfTopic(id) || (level === 'pro' && subjectOfTopic(id) !== 'physics') || !validDate(box.earned[level][id]);
+          return !subjectOfTopic(id) || !validDate(box.earned[level][id]);
         });
       }))) throw new Error('成就积分数据不正确。');
       var keys = new Set();
       box.runs.forEach(function (run) {
         if (!isObject(run) || !shortText(run.key, 20000) || !run.key || !validDate(run.at) ||
             ['science', 'physics'].indexOf(run.subject) < 0 || !isObject(run.states) ||
-            (own(run, 'level') && run.level !== 'normal' && run.level !== 'pro') || (run.level === 'pro' && run.subject !== 'physics') ||
+            (own(run, 'level') && run.level !== 'normal' && run.level !== 'pro') ||
             keys.has(progressRunKey(run))) throw new Error('图谱检测记录的标识或时间不正确。');
         keys.add(progressRunKey(run));
         Object.keys(run.states).forEach(function (id) {
