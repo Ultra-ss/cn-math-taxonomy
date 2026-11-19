@@ -55,13 +55,13 @@
       if (bucketId(bucket) !== bucket || !object(box) || !Array.isArray(box.runs)) return false;
       if (own(box, 'earned') && (!object(box.earned) || Object.keys(box.earned).some(function (level) {
         return ['normal', 'pro'].indexOf(level) < 0 || !object(box.earned[level]) || Object.keys(box.earned[level]).some(function (id) {
-          return !subjectOf(id) || (level === 'pro' && subjectOf(id) !== 'physics') || !validDate(box.earned[level][id]);
+          return !subjectOf(id) || !validDate(box.earned[level][id]);
         });
       }))) return false;
       var keys = new Set();
       return box.runs.every(function (run) {
         if (!object(run) || typeof run.key !== 'string' || !run.key || run.key.length > 20000 ||
-            !validDate(run.at) || !validLevel(run) || (run.level === 'pro' && run.subject !== 'physics') ||
+            !validDate(run.at) || !validLevel(run) ||
             ['science', 'physics'].indexOf(run.subject) < 0 || !object(run.states) || keys.has(runId(run))) return false;
         keys.add(runId(run));
         return Object.keys(run.states).every(function (id) {
@@ -101,7 +101,7 @@
     return earned;
   }
   function recordSession(payload) {
-    if (!payload || payload.demo || !validLevel(payload) || (payload.level === 'pro' && payload.subject !== 'physics') || ['science', 'physics'].indexOf(payload.subject) < 0 ||
+    if (!payload || payload.demo || !validLevel(payload) || ['science', 'physics'].indexOf(payload.subject) < 0 ||
         typeof payload.key !== 'string' || !payload.key || payload.key.length > 20000 ||
         !object(payload.session) || !object(payload.session.status) || !Array.isArray(payload.session.answers)) return false;
     var bucket = bucketId(payload.childId), data = readStore();

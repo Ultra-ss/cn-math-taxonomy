@@ -1,0 +1,5492 @@
+[
+  {
+    "id": "cns_p001_q101",
+    "topicId": "cns_p001",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "阳台上有一盆豆苗和一盆塑料花。过了几天，豆苗长出了新叶。哪条记录最能说明豆苗是有生命的？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "豆苗会生长并长出新叶"
+      },
+      {
+        "key": "B",
+        "text": "豆苗和塑料花都放在花盆里"
+      },
+      {
+        "key": "C",
+        "text": "塑料花一直很鲜艳"
+      },
+      {
+        "key": "D",
+        "text": "豆苗比塑料花矮"
+      }
+    ],
+    "answer": "A",
+    "explanation": "长出新叶是生长的表现。是否有生命不能只看颜色、大小或摆放位置。",
+    "verify": "\"豆苗会生长并长出新叶\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p001_q102",
+    "topicId": "cns_p001",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "池塘边有荷花、金鱼和石头。哪种分类更合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只要长在水里，荷花和金鱼都是动物"
+      },
+      {
+        "key": "B",
+        "text": "三样都在池塘边，所以都是植物"
+      },
+      {
+        "key": "C",
+        "text": "石头不会走，所以石头和荷花都是植物"
+      },
+      {
+        "key": "D",
+        "text": "荷花是植物，金鱼是动物，石头不是生物"
+      }
+    ],
+    "answer": "D",
+    "explanation": "荷花会生长，是植物；金鱼是动物；石头没有生命。不能只凭在水里还是在岸上、会不会走来分类。",
+    "verify": "\"荷花是植物，金鱼是动物，石头不是生物\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p001_q103",
+    "topicId": "cns_p001",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "两棵小苗一棵开花，一棵还没开花。小安说没开花的就不是植物，哪条证据能帮助他改正？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两棵小苗旁边都有石头"
+      },
+      {
+        "key": "B",
+        "text": "没开花的小苗颜色较浅"
+      },
+      {
+        "key": "C",
+        "text": "没开花的小苗也有茎叶，而且一直在生长"
+      },
+      {
+        "key": "D",
+        "text": "开花的小苗花盆更漂亮"
+      }
+    ],
+    "answer": "C",
+    "explanation": "植物不必每时每刻都开花。有茎叶并持续生长的小苗也可以是植物。",
+    "verify": "\"没开花的小苗也有茎叶，而且一直在生长\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p002_q101",
+    "topicId": "cns_p002",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小林记录一株小草：根在土里，细茎向上，叶子连在茎上。为了核对记录，又不伤害小草，哪种做法合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把整片草地拔光再比较"
+      },
+      {
+        "key": "B",
+        "text": "只凭叶子的颜色猜根的位置"
+      },
+      {
+        "key": "C",
+        "text": "把每片叶子都掰下来"
+      },
+      {
+        "key": "D",
+        "text": "看茎叶连接的位置，结合老师展示的根部图片"
+      }
+    ],
+    "answer": "D",
+    "explanation": "观察要核对各部分的位置关系，并尽量不伤害植物；不必为了看根破坏草地。",
+    "verify": "\"看茎叶连接的位置，结合老师展示的根部图片\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p002_q102",
+    "topicId": "cns_p002",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两片叶子颜色相同，一片边缘光滑，一片边缘有小齿。哪种记录能保留这个区别？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只量两片叶子的长度"
+      },
+      {
+        "key": "B",
+        "text": "只记录叶子连在茎上的位置"
+      },
+      {
+        "key": "C",
+        "text": "画出叶片外形，并标出边缘是否有小齿"
+      },
+      {
+        "key": "D",
+        "text": "只写“两片都是绿色”，不画边缘"
+      }
+    ],
+    "answer": "C",
+    "explanation": "相同颜色不能表现边缘差异。外形图和边缘说明可以记录真正观察到的不同。",
+    "verify": "\"画出叶片外形，并标出边缘是否有小齿\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p002_q103",
+    "topicId": "cns_p002",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "小朋友轻摸一种已确认无刺、无刺激性的叶子，发现它很粗糙。这个发现主要来自什么观察？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只闻叶子有没有气味"
+      },
+      {
+        "key": "B",
+        "text": "用皮肤感觉叶面的粗糙程度"
+      },
+      {
+        "key": "C",
+        "text": "只看叶子的绿色有多深"
+      },
+      {
+        "key": "D",
+        "text": "只比较叶子的外形大小"
+      }
+    ],
+    "answer": "B",
+    "explanation": "粗糙或光滑可以通过安全的触摸来感受；颜色、名字不能代替这个观察结果。",
+    "verify": "\"用皮肤感觉叶面的粗糙程度\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p003_q101",
+    "topicId": "cns_p003",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "池塘里有荷花，岸边有小草。调查时怎样记录，才能比较它们生活的地方？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把所有植物都写成“长在土里”"
+      },
+      {
+        "key": "B",
+        "text": "只记当天来了几个人"
+      },
+      {
+        "key": "C",
+        "text": "把植物名称和“水中”或“岸边土地上”一起记下"
+      },
+      {
+        "key": "D",
+        "text": "只比较哪种植物开花更漂亮"
+      }
+    ],
+    "answer": "C",
+    "explanation": "把植物与所在环境对应记录，才能看出水中和陆地上都有不同的植物。",
+    "verify": "\"把植物名称和“水中”或“岸边土地上”一起记下\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p003_q102",
+    "topicId": "cns_p003",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一株水生植物原来长在池塘里。小文想把它放到干燥石板上长期养着，为什么不能只凭“植物都一样”这样做？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "水里只有动物，没有植物"
+      },
+      {
+        "key": "B",
+        "text": "不同植物适合的生活环境不同"
+      },
+      {
+        "key": "C",
+        "text": "只要叶子是绿色就不需要水"
+      },
+      {
+        "key": "D",
+        "text": "所有植物离开泥土都会马上死去"
+      }
+    ],
+    "answer": "B",
+    "explanation": "植物的生活需要与适合环境不同，不能不加了解就随意改变；也不是所有植物都必须长在陆地泥土中。",
+    "verify": "\"不同植物适合的生活环境不同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p003_q103",
+    "topicId": "cns_p003",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "同学在墙缝发现一株小草。哪条记录最准确？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "这株小草长在有少量土的墙缝中"
+      },
+      {
+        "key": "B",
+        "text": "所有植物都只能长在花盆里"
+      },
+      {
+        "key": "C",
+        "text": "墙缝里不可能有植物"
+      },
+      {
+        "key": "D",
+        "text": "小草只要有石头就不需要水"
+      }
+    ],
+    "answer": "A",
+    "explanation": "应当如实记录实际发现。墙缝有少量土和水等条件时，也可能生长植物。",
+    "verify": "\"这株小草长在有少量土的墙缝中\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p004_q101",
+    "topicId": "cns_p004",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "给一株已经开花的小苗画像时，小宁画了花和叶，却漏了连接它们的茎。怎样补画更符合观察？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "多画几朵没有见到的花"
+      },
+      {
+        "key": "B",
+        "text": "按实物位置补上茎，并画清叶和花与茎的连接"
+      },
+      {
+        "key": "C",
+        "text": "把花直接画在土中"
+      },
+      {
+        "key": "D",
+        "text": "用更鲜艳的颜色遮住空处"
+      }
+    ],
+    "answer": "B",
+    "explanation": "科学画像要表达各部分及连接位置，不能用装饰或想象代替缺失的观察内容。",
+    "verify": "\"按实物位置补上茎，并画清叶和花与茎的连接\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p004_q102",
+    "topicId": "cns_p004",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两张画像都很整齐：甲画了实物的四片叶，乙画了想象中的八片叶。哪张更适合作为这株植物的观察记录？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "甲，因为叶片数量符合实物"
+      },
+      {
+        "key": "B",
+        "text": "乙，因为叶子更多更热闹"
+      },
+      {
+        "key": "C",
+        "text": "乙，因为想象比观察更可靠"
+      },
+      {
+        "key": "D",
+        "text": "两张都能证明实物有八片叶"
+      }
+    ],
+    "answer": "A",
+    "explanation": "观察画像的价值在于忠实记录。真实数量比画面热闹或装饰多少更重要。",
+    "verify": "\"甲，因为叶片数量符合实物\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p004_q103",
+    "topicId": "cns_p004",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "小苗的根没有露出土面，老师也没有提供根部资料。给它画像时怎样处理更诚实？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "随便画一个很大的根，说是亲眼看到的"
+      },
+      {
+        "key": "B",
+        "text": "把茎涂黑当成根"
+      },
+      {
+        "key": "C",
+        "text": "写“这株植物一定没有根”"
+      },
+      {
+        "key": "D",
+        "text": "画出看得到的部分，并注明根部还没观察到"
+      }
+    ],
+    "answer": "D",
+    "explanation": "看不到不等于没有，也不能假装看见；应区分已经观察到和还没有观察到的部分。",
+    "verify": "\"画出看得到的部分，并注明根部还没观察到\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p005_q101",
+    "topicId": "cns_p005",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "连续三周记录同一株小苗，发现叶片从两片变成四片，再变成六片。记录支持哪种说法？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "这株小苗在生长，长出了新叶"
+      },
+      {
+        "key": "B",
+        "text": "所有植物每天都长两片叶"
+      },
+      {
+        "key": "C",
+        "text": "叶子越多，植物就越不需要水"
+      },
+      {
+        "key": "D",
+        "text": "只要有六片叶就会马上开花"
+      }
+    ],
+    "answer": "A",
+    "explanation": "连续记录能说明这株苗叶片增加，但不能推出所有植物都按同样速度生长或马上开花。",
+    "verify": "\"这株小苗在生长，长出了新叶\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p005_q102",
+    "topicId": "cns_p005",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小禾想比较一棵树春天和秋天的样子，哪组资料最有帮助？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两棵不同的树在同一天的照片"
+      },
+      {
+        "key": "B",
+        "text": "只拍秋天树旁的石头"
+      },
+      {
+        "key": "C",
+        "text": "一张没有日期的卡通树画"
+      },
+      {
+        "key": "D",
+        "text": "同一棵树在两个季节、标明日期的照片"
+      }
+    ],
+    "answer": "D",
+    "explanation": "比较季节变化要尽量观察同一对象，并知道记录时间，才不会把不同树的差异误认为季节变化。",
+    "verify": "\"同一棵树在两个季节、标明日期的照片\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p005_q103",
+    "topicId": "cns_p005",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一盆小苗一周没有明显长高，但新长出了一片叶。哪种判断最合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "新叶只会出现在塑料花上"
+      },
+      {
+        "key": "B",
+        "text": "所有植物都必须每天明显长高"
+      },
+      {
+        "key": "C",
+        "text": "它仍有变化，长新叶也是生长的表现"
+      },
+      {
+        "key": "D",
+        "text": "没有长高就一定不是活植物"
+      }
+    ],
+    "answer": "C",
+    "explanation": "生长不只有长高一种表现，长出新叶也是变化；观察不应只看一个指标。",
+    "verify": "\"它仍有变化，长新叶也是生长的表现\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p006_q101",
+    "topicId": "cns_p006",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "调查校园植物时，同一棵树上午记了一次，下午又经过它。怎样避免把它当成两棵树？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "上午写大树，下午写绿树，就算两种"
+      },
+      {
+        "key": "B",
+        "text": "每经过一次就多记一棵"
+      },
+      {
+        "key": "C",
+        "text": "只记叶子多的树"
+      },
+      {
+        "key": "D",
+        "text": "给位置或树木做记录，核对后不重复计数"
+      }
+    ],
+    "answer": "D",
+    "explanation": "名称、位置等记录可以帮助确认是否为同一株，避免重复统计。",
+    "verify": "\"给位置或树木做记录，核对后不重复计数\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p006_q102",
+    "topicId": "cns_p006",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "校园有花坛、池塘和草坪。想了解不同地方的植物，哪种调查安排更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只记录自己喜欢的植物"
+      },
+      {
+        "key": "B",
+        "text": "踩进花坛把花都摘来比较"
+      },
+      {
+        "key": "C",
+        "text": "在老师带领下分别观察这三个地方并记录"
+      },
+      {
+        "key": "D",
+        "text": "只看教室窗台的一盆花就代表全校"
+      }
+    ],
+    "answer": "C",
+    "explanation": "多地点观察能获得更完整的校园植物信息，同时要遵守安全和爱护植物的要求。",
+    "verify": "\"在老师带领下分别观察这三个地方并记录\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p006_q103",
+    "topicId": "cns_p006",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "小组不认识校园里一种植物，怎样记录才便于以后查认？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只记“很漂亮”，不记录其他特点"
+      },
+      {
+        "key": "B",
+        "text": "拍下叶、茎等特点并记位置，再请老师帮助辨认"
+      },
+      {
+        "key": "C",
+        "text": "随便写一个熟悉的名字当作确定答案"
+      },
+      {
+        "key": "D",
+        "text": "因为不认识就把它从记录中删掉"
+      }
+    ],
+    "answer": "B",
+    "explanation": "暂时不认识也能如实保留特征和位置，之后用这些线索请老师核对名称。",
+    "verify": "\"拍下叶、茎等特点并记位置，再请老师帮助辨认\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p007_q101",
+    "topicId": "cns_p007",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "给萝卜苗浇水后，水先进入土里，再由植物的一部分吸收。这里主要是哪一部分在吸水？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "叶尖上的颜色"
+      },
+      {
+        "key": "B",
+        "text": "花盆的边沿"
+      },
+      {
+        "key": "C",
+        "text": "根"
+      },
+      {
+        "key": "D",
+        "text": "花瓣"
+      }
+    ],
+    "answer": "C",
+    "explanation": "根通常在土中吸收水，水再通过茎运送到植物其他部分。",
+    "verify": "\"根\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p007_q102",
+    "topicId": "cns_p007",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一株小苗根和叶都完好，但中间的茎折断了。为什么不能只说“叶子还在就没关系”？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "茎只有支撑作用，不参与把水送到叶片"
+      },
+      {
+        "key": "B",
+        "text": "茎连接根和叶，还承担输送水等作用"
+      },
+      {
+        "key": "C",
+        "text": "叶子只要还在，水就能从空气中直接补足所有需要"
+      },
+      {
+        "key": "D",
+        "text": "根能吸水，所以茎断了完全不影响水到叶片"
+      }
+    ],
+    "answer": "B",
+    "explanation": "茎不只是支撑，还联系根和叶；茎折断可能影响水等物质的输送。",
+    "verify": "\"茎连接根和叶，还承担输送水等作用\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p007_q103",
+    "topicId": "cns_p007",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "观察大树和小草，发现树干粗、小草的茎细。哪种比较是正确的？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两者都有茎，粗细不同不等于作用完全不同"
+      },
+      {
+        "key": "B",
+        "text": "小草没有粗树干，所以没有茎"
+      },
+      {
+        "key": "C",
+        "text": "只有能开花的植物才有茎"
+      },
+      {
+        "key": "D",
+        "text": "大树的茎只在土里，小草的茎只在空中"
+      }
+    ],
+    "answer": "A",
+    "explanation": "大树的树干和小草细细的茎都是茎，外形虽不同，都能起支撑、输送等作用。",
+    "verify": "\"两者都有茎，粗细不同不等于作用完全不同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p008_q101",
+    "topicId": "cns_p008",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "做“转头、抬腿”两个动作，记录主要活动部位，哪组配对正确？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "转头和抬腿都对应上肢"
+      },
+      {
+        "key": "B",
+        "text": "转头对应颈部，抬腿对应下肢"
+      },
+      {
+        "key": "C",
+        "text": "转头对应上肢，抬腿对应下肢"
+      },
+      {
+        "key": "D",
+        "text": "转头对应颈部，抬腿对应上肢"
+      }
+    ],
+    "answer": "B",
+    "explanation": "颈部连接头和躯干，帮助头转动；腿属于下肢。动作还可能需要其他部位配合。",
+    "verify": "\"转头对应颈部，抬腿对应下肢\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p008_q102",
+    "topicId": "cns_p008",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "画图记录动作：甲用手把球投出去，乙用脚把球踢出去。伸手投球和伸脚踢球主要分别用到什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "甲的上肢、乙的下肢"
+      },
+      {
+        "key": "B",
+        "text": "甲的下肢、乙的上肢"
+      },
+      {
+        "key": "C",
+        "text": "甲和乙都主要用上肢"
+      },
+      {
+        "key": "D",
+        "text": "甲和乙都主要用下肢"
+      }
+    ],
+    "answer": "A",
+    "explanation": "手和手臂属于上肢，腿和脚属于下肢。这里比较的是题目指定的伸手、伸脚动作部位。",
+    "verify": "\"甲的上肢、乙的下肢\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p008_q103",
+    "topicId": "cns_p008",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "把书从桌上拿起并放进书包时，哪种说法更符合身体实际的配合？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只有头部工作，四肢完全不动"
+      },
+      {
+        "key": "B",
+        "text": "拿书只需要脚趾，不需要手"
+      },
+      {
+        "key": "C",
+        "text": "躯干与四肢永远不会一起活动"
+      },
+      {
+        "key": "D",
+        "text": "眼睛看位置，手臂和手完成拿放动作"
+      }
+    ],
+    "answer": "D",
+    "explanation": "日常活动常需要多个部位配合，不能把一个完整动作都归给单一部位。",
+    "verify": "\"眼睛看位置，手臂和手完成拿放动作\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p009_q101",
+    "topicId": "cns_p009",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小明穿鞋测身高，小红脱鞋测身高。想把小明今天的结果与去年的脱鞋记录比较，应该怎样做？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "让小明脱鞋，用相同方法重新测量"
+      },
+      {
+        "key": "B",
+        "text": "直接把鞋底的高度当成生长的高度"
+      },
+      {
+        "key": "C",
+        "text": "今天穿的鞋越高，说明长得越多"
+      },
+      {
+        "key": "D",
+        "text": "用小红的身高代替小明去年的身高"
+      }
+    ],
+    "answer": "A",
+    "explanation": "比较同一个人的生长要尽量保持测量条件相同，鞋底可能使结果偏高。",
+    "verify": "\"让小明脱鞋，用相同方法重新测量\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p009_q102",
+    "topicId": "cns_p009",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "相册里有同一个孩子两年前和现在站在同一门框边的照片。哪条信息最有助于比较生长？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "照片上穿的外套宽不宽"
+      },
+      {
+        "key": "B",
+        "text": "两次照片中孩子站得离镜头远近是否被忽略"
+      },
+      {
+        "key": "C",
+        "text": "照片裁成一样大后头部图像是否更大"
+      },
+      {
+        "key": "D",
+        "text": "照片日期及孩子头顶相对门框的位置"
+      }
+    ],
+    "answer": "D",
+    "explanation": "记录时间和稳定的参照物，有助于判断同一孩子是否长高；衣服颜色不能说明身高变化。",
+    "verify": "\"照片日期及孩子头顶相对门框的位置\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p009_q103",
+    "topicId": "cns_p009",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "小雨一天内换了两件不同大小的外套，就说自己一天长高很多。为什么这个证据不可靠？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只要换外套就一定会长高"
+      },
+      {
+        "key": "B",
+        "text": "穿较大的外套能立刻让身体变高"
+      },
+      {
+        "key": "C",
+        "text": "不同外套本来尺码就可能不同，要比较实际身高记录"
+      },
+      {
+        "key": "D",
+        "text": "衣服永远不能提供任何生长线索"
+      }
+    ],
+    "answer": "C",
+    "explanation": "不同衣服的尺码差异不等于身体变化。要结合一段时间内可靠的测量记录判断。",
+    "verify": "\"不同外套本来尺码就可能不同，要比较实际身高记录\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p010_q101",
+    "topicId": "cns_p010",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "找不同游戏中，两张图的花朵颜色相同，花瓣数量不同。怎样观察更容易找到这处差别？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只比较两朵花的颜色"
+      },
+      {
+        "key": "B",
+        "text": "先看左图整体，再完全凭记忆猜右图"
+      },
+      {
+        "key": "C",
+        "text": "只检查两幅图下面的花盆"
+      },
+      {
+        "key": "D",
+        "text": "按相同位置逐一数花瓣"
+      }
+    ],
+    "answer": "D",
+    "explanation": "按位置有顺序地看，并比较花瓣数量，能找到这处视觉差异。",
+    "verify": "\"按相同位置逐一数花瓣\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p010_q102",
+    "topicId": "cns_p010",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "盒子里有红球和蓝球，摸起来一样。只靠手摸不能可靠地按颜色分开，最应该补用什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只比较两种球的轻重"
+      },
+      {
+        "key": "B",
+        "text": "闭上眼反复摸大小后猜颜色"
+      },
+      {
+        "key": "C",
+        "text": "眼睛看颜色"
+      },
+      {
+        "key": "D",
+        "text": "只摸两种球表面是否光滑"
+      }
+    ],
+    "answer": "C",
+    "explanation": "当触摸特征相同而颜色不同，应利用视觉获得颜色信息。",
+    "verify": "\"眼睛看颜色\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p010_q103",
+    "topicId": "cns_p010",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "同学观察快速滚动的小球后，想核对它是否经过了桌上的红线。哪种资料最有帮助？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只看小球最后停下的位置就认定它的全部路线"
+      },
+      {
+        "key": "B",
+        "text": "能看清红线和小球运动的录像"
+      },
+      {
+        "key": "C",
+        "text": "小球静止时从上面拍的照片"
+      },
+      {
+        "key": "D",
+        "text": "只记小球运动前距离红线多远"
+      }
+    ],
+    "answer": "B",
+    "explanation": "录像保留了位置随时间的变化，可以帮助核对快速动作中的视觉信息。",
+    "verify": "\"能看清红线和小球运动的录像\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p011_q101",
+    "topicId": "cns_p011",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "老师准备了已确认安全的橘皮和一杯清水，只允许用鼻子区分。哪种做法既安全又有用？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "先尝一口再说是闻出来的"
+      },
+      {
+        "key": "B",
+        "text": "把两样东西都塞进鼻孔"
+      },
+      {
+        "key": "C",
+        "text": "保持适当距离，用手轻扇气味到鼻前"
+      },
+      {
+        "key": "D",
+        "text": "把鼻子伸进杯底猛吸"
+      }
+    ],
+    "answer": "C",
+    "explanation": "对老师确认安全的材料也应轻闻，不深吸、不品尝、不把物品塞入鼻孔。",
+    "verify": "\"保持适当距离，用手轻扇气味到鼻前\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p011_q102",
+    "topicId": "cns_p011",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小朋友闻见从没闻过的实验液体气味，旁边没有老师。下一步应怎样做？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把瓶盖盖在鼻子上闻"
+      },
+      {
+        "key": "B",
+        "text": "停止靠近，请老师确认是否安全"
+      },
+      {
+        "key": "C",
+        "text": "因为不熟悉就一定要多闻几次"
+      },
+      {
+        "key": "D",
+        "text": "马上尝味道判断是什么"
+      }
+    ],
+    "answer": "B",
+    "explanation": "不了解的物质不能自行闻或尝，应由成人确认安全，气味不是冒险接触的理由。",
+    "verify": "\"停止靠近，请老师确认是否安全\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p011_q103",
+    "topicId": "cns_p011",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "两朵外形相似的花，一朵有清香，一朵几乎没有闻到气味。哪条记录最恰当？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "在相同安全闻法下，一朵闻到清香，另一朵没有明显气味"
+      },
+      {
+        "key": "B",
+        "text": "没有闻到气味的花一定是塑料花"
+      },
+      {
+        "key": "C",
+        "text": "只要闻到香味就一定能食用"
+      },
+      {
+        "key": "D",
+        "text": "两朵颜色相同，所以气味记录必然相同"
+      }
+    ],
+    "answer": "A",
+    "explanation": "应记录实际闻到的结果；没闻到气味不能直接断定材质，有香味也不代表可以食用。",
+    "verify": "\"在相同安全闻法下，一朵闻到清香，另一朵没有明显气味\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p012_q101",
+    "topicId": "cns_p012",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同学说“这个熟苹果又红又光滑”。这句话至少用了哪两种感官得到信息？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只闻香味就能确定表面很光滑"
+      },
+      {
+        "key": "B",
+        "text": "眼睛看颜色，手摸光滑程度"
+      },
+      {
+        "key": "C",
+        "text": "眼睛同时直接看出颜色和光滑程度"
+      },
+      {
+        "key": "D",
+        "text": "只摸苹果就直接知道它是红色"
+      }
+    ],
+    "answer": "B",
+    "explanation": "颜色主要由眼睛观察，表面光滑程度可由安全触摸来感受。",
+    "verify": "\"眼睛看颜色，手摸光滑程度\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p012_q102",
+    "topicId": "cns_p012",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两个不透明盒子中，一个装铃铛，一个装同样重的棉球。不开盒，哪种方法最有助于区分？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "轻轻摇动，听声音的不同"
+      },
+      {
+        "key": "B",
+        "text": "只比较两个盒子的大小"
+      },
+      {
+        "key": "C",
+        "text": "只掂一掂两个同样重的盒子"
+      },
+      {
+        "key": "D",
+        "text": "不摇动，直接把没有响声的盒子判为棉球盒"
+      }
+    ],
+    "answer": "A",
+    "explanation": "铃铛受到摇动可能发声，轻摇并倾听能提供线索，外形相同不代表内容物相同。",
+    "verify": "\"轻轻摇动，听声音的不同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p012_q103",
+    "topicId": "cns_p012",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "桌上有不明液体。小宁想“把五种感官全用上”来观察，哪种做法需要纠正？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "看清容器上的安全说明"
+      },
+      {
+        "key": "B",
+        "text": "先向老师询问是什么材料"
+      },
+      {
+        "key": "C",
+        "text": "站在安全位置观察颜色"
+      },
+      {
+        "key": "D",
+        "text": "不经确认就用舌头尝液体"
+      }
+    ],
+    "answer": "D",
+    "explanation": "综合使用感官不等于每次都要五种全用。未知液体不能自行品尝。",
+    "verify": "\"不经确认就用舌头尝液体\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p013_q101",
+    "topicId": "cns_p013",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "比较两根纸条的长度，小禾把它们左端对齐，发现甲右端伸得更远。能说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "甲比乙长"
+      },
+      {
+        "key": "B",
+        "text": "甲一定比乙重"
+      },
+      {
+        "key": "C",
+        "text": "乙的颜色一定更深"
+      },
+      {
+        "key": "D",
+        "text": "甲一定比乙更厚"
+      }
+    ],
+    "answer": "A",
+    "explanation": "一端对齐后，另一端伸得更远的纸条更长；不能由长度推出轻重、颜色或厚度。",
+    "verify": "\"甲比乙长\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p013_q102",
+    "topicId": "cns_p013",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两只积木颜色相同，一只方、一只圆。按观察结果，哪句话最完整？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "它们所有特征都相同"
+      },
+      {
+        "key": "B",
+        "text": "它们颜色不同，形状相同"
+      },
+      {
+        "key": "C",
+        "text": "圆的积木一定比方的重"
+      },
+      {
+        "key": "D",
+        "text": "它们颜色相同，形状不同"
+      }
+    ],
+    "answer": "D",
+    "explanation": "比较时既要记录相同，也要记录不同；不能由形状直接猜轻重。",
+    "verify": "\"它们颜色相同，形状不同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p013_q103",
+    "topicId": "cns_p013",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "小组比较两片叶子的大小，却把一片折起来，另一片摊开。怎样改进比较方法？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只看哪片拿得高"
+      },
+      {
+        "key": "B",
+        "text": "把颜色深的直接判作更大"
+      },
+      {
+        "key": "C",
+        "text": "把两片叶都平展，再比较轮廓或长宽"
+      },
+      {
+        "key": "D",
+        "text": "把两片都藏起来再猜"
+      }
+    ],
+    "answer": "C",
+    "explanation": "叶片展开程度不同会影响看到的大小，保持同样状态再比较更可靠。",
+    "verify": "\"把两片叶都平展，再比较轮廓或长宽\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p014_q101",
+    "topicId": "cns_p014",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "时间胶囊里要放“现在的我”的资料，哪组最方便一年后比较？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "一袋会腐烂的水果"
+      },
+      {
+        "key": "B",
+        "text": "没有姓名和日期的空白纸"
+      },
+      {
+        "key": "C",
+        "text": "网上另一个孩子的照片"
+      },
+      {
+        "key": "D",
+        "text": "带日期的身高记录和手掌轮廓图"
+      }
+    ],
+    "answer": "D",
+    "explanation": "姓名、日期和可比较的身体记录能与将来的同一孩子对应；水果等也不适合长期密封保存。",
+    "verify": "\"带日期的身高记录和手掌轮廓图\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p014_q102",
+    "topicId": "cns_p014",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "打开胶囊后发现去年的身高记录写“120”，却没有单位。为什么需要补查原记录的方法？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "所有数字120都表示一样长"
+      },
+      {
+        "key": "B",
+        "text": "身高的单位只能是千克"
+      },
+      {
+        "key": "C",
+        "text": "120厘米和120毫米代表的长度不同"
+      },
+      {
+        "key": "D",
+        "text": "没有单位就能证明身高没变"
+      }
+    ],
+    "answer": "C",
+    "explanation": "数值需要配上单位才有明确含义；比较前应确认记录的测量方法和单位。",
+    "verify": "\"120厘米和120毫米代表的长度不同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p014_q103",
+    "topicId": "cns_p014",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "去年画手掌时五指张开，今年却把五指并拢。想比较手是否长大，应该怎样做？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只要轮廓不同就认定长大很多"
+      },
+      {
+        "key": "B",
+        "text": "把手按去年的姿势放好，再描轮廓比较"
+      },
+      {
+        "key": "C",
+        "text": "把手掌压成任意形状都一样"
+      },
+      {
+        "key": "D",
+        "text": "只比较纸张颜色"
+      }
+    ],
+    "answer": "B",
+    "explanation": "姿势变化也会改变轮廓。尽量保持相同姿势，才便于判断身体本身的变化。",
+    "verify": "\"把手按去年的姿势放好，再描轮廓比较\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p015_q101",
+    "topicId": "cns_p015",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "看书一段时间后眼睛发酸，小明还想接着玩屏幕游戏。更合适的安排是什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "关掉所有灯，在黑暗中继续看"
+      },
+      {
+        "key": "B",
+        "text": "用手用力揉眼睛后立刻继续玩"
+      },
+      {
+        "key": "C",
+        "text": "先休息一会儿，看看远处，再合理安排用眼"
+      },
+      {
+        "key": "D",
+        "text": "把屏幕贴到眼前继续玩"
+      }
+    ],
+    "answer": "C",
+    "explanation": "长时间近距离用眼后应适当休息、远眺，不能通过贴近屏幕、关灯或用力揉眼来解决。",
+    "verify": "\"先休息一会儿，看看远处，再合理安排用眼\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p015_q102",
+    "topicId": "cns_p015",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "耳机里的声音盖过了旁边同学正常说话的声音，怎样调整更能保护耳朵？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "整晚不摘耳机练习听力"
+      },
+      {
+        "key": "B",
+        "text": "调低音量，并控制使用时间"
+      },
+      {
+        "key": "C",
+        "text": "再调大，直到完全听不到外面"
+      },
+      {
+        "key": "D",
+        "text": "把耳机塞得越深越好"
+      }
+    ],
+    "answer": "B",
+    "explanation": "过大的声音和过长的使用时间都可能伤害听力，应降低音量并安排休息。",
+    "verify": "\"调低音量，并控制使用时间\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p015_q103",
+    "topicId": "cns_p015",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "沙子不小心进了眼睛，哪种做法更安全？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "先不揉眼，及时请成人帮助处理"
+      },
+      {
+        "key": "B",
+        "text": "用脏手反复揉眼"
+      },
+      {
+        "key": "C",
+        "text": "让同学用铅笔挑出沙子"
+      },
+      {
+        "key": "D",
+        "text": "对着强光一直睁眼"
+      }
+    ],
+    "answer": "A",
+    "explanation": "揉眼或用尖物挑会增加伤害，应停止揉眼并请成人按正确方法处理。",
+    "verify": "\"先不揉眼，及时请成人帮助处理\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p016_q101",
+    "topicId": "cns_p016",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "把一块海绵轻轻压扁后松手，它又变回原来的样子。最能说明海绵的什么特征？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "完全不会发生形状变化"
+      },
+      {
+        "key": "B",
+        "text": "较软，并能在轻压后恢复形状"
+      },
+      {
+        "key": "C",
+        "text": "一定是红色"
+      },
+      {
+        "key": "D",
+        "text": "一定比所有金属都重"
+      }
+    ],
+    "answer": "B",
+    "explanation": "轻压时变形、松手后恢复，提供了软硬和恢复形状的线索，不能据此判断颜色或所有物体的轻重。",
+    "verify": "\"较软，并能在轻压后恢复形状\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p016_q102",
+    "topicId": "cns_p016",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两颗球在照片中一样大，要知道哪颗表面更粗糙，最好补充哪种观察？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "确认安全后，分别轻摸两颗球的表面"
+      },
+      {
+        "key": "B",
+        "text": "只比较两颗球的直径"
+      },
+      {
+        "key": "C",
+        "text": "只根据球在照片中的颜色深浅判断"
+      },
+      {
+        "key": "D",
+        "text": "只比较两颗球的轻重"
+      }
+    ],
+    "answer": "A",
+    "explanation": "表面粗糙程度可以用安全触摸比较，照片大小或价格并不能直接提供这种感觉。",
+    "verify": "\"确认安全后，分别轻摸两颗球的表面\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p016_q103",
+    "topicId": "cns_p016",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "记录一块橡皮时，小红写“好看”，小蓝写“白色、长方体、轻压会稍变形”。哪条更方便别人核对？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "小红的记录，因为人人对“好看”的感受都一定相同"
+      },
+      {
+        "key": "B",
+        "text": "两条同样具体，都写清了橡皮的形状"
+      },
+      {
+        "key": "C",
+        "text": "两条同样具体，都写清了轻压后的变化"
+      },
+      {
+        "key": "D",
+        "text": "小蓝的记录，因为描述了可观察的具体特征"
+      }
+    ],
+    "answer": "D",
+    "explanation": "具体的颜色、形状和受压表现便于别人复查，“好看”主要表达个人感受。",
+    "verify": "\"小蓝的记录，因为描述了可观察的具体特征\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p017_q101",
+    "topicId": "cns_p017",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "盒里有红色圆积木、红色方积木、蓝色圆积木和蓝色方积木。若按颜色分成两组，红色圆积木应和谁在同组？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "红色方积木"
+      },
+      {
+        "key": "B",
+        "text": "蓝色圆积木"
+      },
+      {
+        "key": "C",
+        "text": "蓝色方积木"
+      },
+      {
+        "key": "D",
+        "text": "只要是圆形就都放在红色组"
+      }
+    ],
+    "answer": "A",
+    "explanation": "同一次按颜色分类，就应把颜色相同的放一起，不应中途改用形状标准。",
+    "verify": "\"红色方积木\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p017_q102",
+    "topicId": "cns_p017",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "第一轮按形状分类，第二轮按材料分类，同一块木质圆积木所在的小组变了。这说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "这块积木一定变成了塑料"
+      },
+      {
+        "key": "B",
+        "text": "只能有一种分类方法"
+      },
+      {
+        "key": "C",
+        "text": "第一轮的圆形一定观察错了"
+      },
+      {
+        "key": "D",
+        "text": "分类标准改变，分组结果也可能改变"
+      }
+    ],
+    "answer": "D",
+    "explanation": "同一物体有多种特征，使用不同标准会得到不同分组，并不表示物体改变了。",
+    "verify": "\"分类标准改变，分组结果也可能改变\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p017_q103",
+    "topicId": "cns_p017",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "小林说按材料分类，却把所有“红色物体”放在一起。怎样检查他的分类是否合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "看同组物体是不是外形相同"
+      },
+      {
+        "key": "B",
+        "text": "看同组物体是不是一样大"
+      },
+      {
+        "key": "C",
+        "text": "看同组物体是不是同一种材料，而不只看颜色"
+      },
+      {
+        "key": "D",
+        "text": "看同组物体是不是颜色相同"
+      }
+    ],
+    "answer": "C",
+    "explanation": "分类是否正确要与约定的标准核对；按材料分类时，颜色不能代替材料。",
+    "verify": "\"看同组物体是不是同一种材料，而不只看颜色\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p018_q101",
+    "topicId": "cns_p018",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "简易天平空着时两边一样高。左边放一个苹果，右边放两个相同木块后平衡。哪种说法有依据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "苹果和一个木块一样重"
+      },
+      {
+        "key": "B",
+        "text": "苹果和三个木块一样重"
+      },
+      {
+        "key": "C",
+        "text": "两个木块分别都和苹果一样重"
+      },
+      {
+        "key": "D",
+        "text": "这个苹果和这两个木块合起来一样重"
+      }
+    ],
+    "answer": "D",
+    "explanation": "天平平衡比较的是两边放置物品的总轻重；这里苹果对应两个木块，而不是一个。",
+    "verify": "\"这个苹果和这两个木块合起来一样重\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p018_q102",
+    "topicId": "cns_p018",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "天平空着时左边就比右边低。直接放上两个物体比较，可能有什么问题？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "因为空盘左低，放物体后左边的物体一定更重"
+      },
+      {
+        "key": "B",
+        "text": "交换两个物体一次后，只保留自己喜欢的结果"
+      },
+      {
+        "key": "C",
+        "text": "天平本来不平衡，不能直接把偏向全归给物体"
+      },
+      {
+        "key": "D",
+        "text": "不检查空盘，只把较大的物体放在较高的一边"
+      }
+    ],
+    "answer": "C",
+    "explanation": "比较前要先检查简易天平是否能平衡，否则器具原有偏差会影响判断。",
+    "verify": "\"天平本来不平衡，不能直接把偏向全归给物体\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p018_q103",
+    "topicId": "cns_p018",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "天平已调平。甲和乙比较时甲下沉；乙和丙比较时乙下沉。把甲和丙比较，哪种情况最有可能？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两边一定始终一样高"
+      },
+      {
+        "key": "B",
+        "text": "甲一边下沉"
+      },
+      {
+        "key": "C",
+        "text": "丙一边下沉"
+      },
+      {
+        "key": "D",
+        "text": "因为没放乙所以无法比较轻重"
+      }
+    ],
+    "answer": "B",
+    "explanation": "甲比乙重、乙又比丙重，因此甲比丙重，放在正常天平上甲侧会下沉。",
+    "verify": "\"甲一边下沉\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p019_q101",
+    "topicId": "cns_p019",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小球和方盒都放在同一斜板上，轻轻松手，小球容易滚、方盒不容易滚。哪种解释更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "所有轻的物体都能像球一样滚"
+      },
+      {
+        "key": "B",
+        "text": "方盒完全不可能移动"
+      },
+      {
+        "key": "C",
+        "text": "小球有连续弯曲的表面，方盒放着的一面是平的"
+      },
+      {
+        "key": "D",
+        "text": "小球一定是空心的，方盒一定是实心的"
+      }
+    ],
+    "answer": "C",
+    "explanation": "形状会影响滚动方式，但不能仅凭滚动判断是否空心，也不能说方盒绝不移动。",
+    "verify": "\"小球有连续弯曲的表面，方盒放着的一面是平的\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p019_q102",
+    "topicId": "cns_p019",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "想让几块积木叠起来不容易滑开，哪种摆法更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把最下面的积木斜着悬空"
+      },
+      {
+        "key": "B",
+        "text": "让较大的平面相互接触，底部放稳"
+      },
+      {
+        "key": "C",
+        "text": "把球放在最下面让它随意滚"
+      },
+      {
+        "key": "D",
+        "text": "每块只用一个尖角支撑"
+      }
+    ],
+    "answer": "B",
+    "explanation": "平面接触和稳定底部有利于堆放；会滚或支撑很小的位置容易使上面的积木不稳。",
+    "verify": "\"让较大的平面相互接触，底部放稳\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p019_q103",
+    "topicId": "cns_p019",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一个圆柱形罐子，横放时能滚，竖放在平底上时较稳。可以得出什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "同一物体的摆放方式会影响它是否容易滚动"
+      },
+      {
+        "key": "B",
+        "text": "横放时罐子的材料变得更软了"
+      },
+      {
+        "key": "C",
+        "text": "只有重量变化才能使物体更容易滚"
+      },
+      {
+        "key": "D",
+        "text": "圆柱只有竖放时才有弯曲表面"
+      }
+    ],
+    "answer": "A",
+    "explanation": "罐子的曲面和平底与桌面接触时表现不同，形状没变，摆放方式改变了。",
+    "verify": "\"同一物体的摆放方式会影响它是否容易滚动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p020_q101",
+    "topicId": "cns_p020",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "把一杯清水倒进宽碗后，水看起来更矮、更宽。哪种说法正确？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "水没有形状变化，只是人的眼睛看错了"
+      },
+      {
+        "key": "B",
+        "text": "水的外形随容器改变，仍然是水"
+      },
+      {
+        "key": "C",
+        "text": "水面更低，说明水一定比原来少"
+      },
+      {
+        "key": "D",
+        "text": "水一定变成了和碗一样坚硬的固体"
+      }
+    ],
+    "answer": "B",
+    "explanation": "水能流动，会随容器改变形状；只看液面高度不能断定水全消失。",
+    "verify": "\"水的外形随容器改变，仍然是水\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p020_q102",
+    "topicId": "cns_p020",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一杯水放在蓝色背景前看着有点蓝。怎样核对水本身有没有颜色？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把水放到白色背景前再观察"
+      },
+      {
+        "key": "B",
+        "text": "仍放蓝背景前，只把杯子转一圈"
+      },
+      {
+        "key": "C",
+        "text": "再加一层蓝色透明片后判断"
+      },
+      {
+        "key": "D",
+        "text": "只看水面反射出的背景颜色"
+      }
+    ],
+    "answer": "A",
+    "explanation": "背景和容器会影响看到的颜色，换成白色背景、使用无色透明容器更便于判断。",
+    "verify": "\"把水放到白色背景前再观察\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p020_q103",
+    "topicId": "cns_p020",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "透明杯中有清水和一小块石头，轻轻倾斜杯子，发现水流向低处，石头仍是一整块。这个观察主要比较了什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "水和石头一定一样重"
+      },
+      {
+        "key": "B",
+        "text": "水和石头都没有固定形状"
+      },
+      {
+        "key": "C",
+        "text": "石头一定能溶解在水里"
+      },
+      {
+        "key": "D",
+        "text": "水会流动，石头保持块状的特点"
+      }
+    ],
+    "answer": "D",
+    "explanation": "倾斜时水和石头的表现不同，体现了液体会流动、石头是块状固体的区别。",
+    "verify": "\"水会流动，石头保持块状的特点\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p021_q101",
+    "topicId": "cns_p021",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两组比较水和蜂蜜流得快慢，甲组用一样长、一样斜的光滑板，乙组给水用陡板、蜂蜜用平板。哪组更便于公平比较？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "甲组，因为除了液体不同，板的条件相同"
+      },
+      {
+        "key": "B",
+        "text": "乙组，因为条件差别越大越准确"
+      },
+      {
+        "key": "C",
+        "text": "只要蜂蜜颜色深就不用实验"
+      },
+      {
+        "key": "D",
+        "text": "两组都能证明任何温度下水一定最快"
+      }
+    ],
+    "answer": "A",
+    "explanation": "比较液体本身流动快慢时，应尽量保持板的长度、倾斜等条件相同。",
+    "verify": "\"甲组，因为除了液体不同，板的条件相同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p021_q102",
+    "topicId": "cns_p021",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同样条件下，把相同量的甲液体和乙液体同时放到两条相同斜槽上，甲先到终点。这次实验支持什么结论？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "甲在所有条件下都一定比乙快"
+      },
+      {
+        "key": "B",
+        "text": "乙一定是固体"
+      },
+      {
+        "key": "C",
+        "text": "甲一定比乙更重"
+      },
+      {
+        "key": "D",
+        "text": "这次条件下甲流到终点较快"
+      }
+    ],
+    "answer": "D",
+    "explanation": "这次观察能比较本次条件下的流动快慢，不能直接推广到所有温度和所有条件。",
+    "verify": "\"这次条件下甲流到终点较快\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p021_q103",
+    "topicId": "cns_p021",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "比较两种液体时，一种先放出，另一种过了一会儿才放出，只记谁先到终点。主要需要改进什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只观察哪个杯子更大"
+      },
+      {
+        "key": "B",
+        "text": "把较慢液体的名称改掉"
+      },
+      {
+        "key": "C",
+        "text": "同时放出，或分别准确记录各自流动用时"
+      },
+      {
+        "key": "D",
+        "text": "把终点涂成不同颜色"
+      }
+    ],
+    "answer": "C",
+    "explanation": "起点、终点相同仍不够，还要使开始时间可比较，才能判断流动用时的长短。",
+    "verify": "\"同时放出，或分别准确记录各自流动用时\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p022_q101",
+    "topicId": "cns_p022",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "白糖放入水中搅拌后看不见了，杯里的水还是清亮的。哪种说法更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "糖只是看不见，水里一定完全没有糖"
+      },
+      {
+        "key": "B",
+        "text": "糖全都沉在杯底，因此上面的水必不含糖"
+      },
+      {
+        "key": "C",
+        "text": "只要液体清亮，里面就只能有水"
+      },
+      {
+        "key": "D",
+        "text": "糖可以分散到水中，看不见不等于没有了"
+      }
+    ],
+    "answer": "D",
+    "explanation": "溶解后的糖可以在水中分散，肉眼看不到颗粒不代表糖离开了杯子。",
+    "verify": "\"糖可以分散到水中，看不见不等于没有了\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p022_q102",
+    "topicId": "cns_p022",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同样两杯水，一杯加少量盐，一杯加少量沙子，充分搅拌后静放。哪种观察更能帮助区分？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只比较两杯水在相同搅拌前的高度"
+      },
+      {
+        "key": "B",
+        "text": "只比较两杯使用的搅拌棒是否一样长"
+      },
+      {
+        "key": "C",
+        "text": "沙子仍能看见并可能沉下，盐可以溶解在水中"
+      },
+      {
+        "key": "D",
+        "text": "只看两份颗粒放入水前的颜色"
+      }
+    ],
+    "answer": "C",
+    "explanation": "少量盐可溶于水；沙子不因搅拌而溶解，静放后颗粒通常仍可辨认。",
+    "verify": "\"沙子仍能看见并可能沉下，盐可以溶解在水中\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p022_q103",
+    "topicId": "cns_p022",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一小杯水加了很多盐，搅拌后杯底仍有盐粒。下一步怎样做更能观察“加水是否有帮助”？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只把杯子换成另一种颜色"
+      },
+      {
+        "key": "B",
+        "text": "继续加一些水，再搅拌并记录盐粒变化"
+      },
+      {
+        "key": "C",
+        "text": "不加水，却说已经证明水越多越难溶"
+      },
+      {
+        "key": "D",
+        "text": "把剩下盐粒叫作沙子"
+      }
+    ],
+    "answer": "B",
+    "explanation": "水量有限时，不是加入多少盐都能溶解；增加水后再观察，才能检验水量改变的影响。",
+    "verify": "\"继续加一些水，再搅拌并记录盐粒变化\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p023_q101",
+    "topicId": "cns_p023",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "要给装泥土的盆做一个短时间防水底托，哪种材料在一般情况下更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "没有粘合的干沙"
+      },
+      {
+        "key": "B",
+        "text": "容易被水浸软的薄纸"
+      },
+      {
+        "key": "C",
+        "text": "完整的塑料片"
+      },
+      {
+        "key": "D",
+        "text": "普通吸水纸巾"
+      }
+    ],
+    "answer": "C",
+    "explanation": "完整塑料片一般不易透水，适合作为简单防水底托；纸巾和薄纸通常容易吸水。",
+    "verify": "\"完整的塑料片\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p023_q102",
+    "topicId": "cns_p023",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一把椅子的坐面是木头、椅腿是金属。怎样描述它的材料最准确？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只看椅子外面的涂漆颜色就能确定全部材料"
+      },
+      {
+        "key": "B",
+        "text": "同一件物品的不同部分可以用不同材料"
+      },
+      {
+        "key": "C",
+        "text": "只要有木坐面，整把椅子的所有部分就都是木头"
+      },
+      {
+        "key": "D",
+        "text": "物品必须先选一种材料，所有部分不能再换"
+      }
+    ],
+    "answer": "B",
+    "explanation": "常见物品可以组合不同材料，各部分的材料应分别观察，不能只看其中一部分。",
+    "verify": "\"同一件物品的不同部分可以用不同材料\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p023_q103",
+    "topicId": "cns_p023",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "两把勺子外形和颜色很像，一把塑料、一把金属。下列哪种判断不可靠？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只凭颜色相同，就认定材料相同"
+      },
+      {
+        "key": "B",
+        "text": "分别查看安全的材料标识"
+      },
+      {
+        "key": "C",
+        "text": "观察弯曲、光泽等多种特征"
+      },
+      {
+        "key": "D",
+        "text": "请老师帮助辨认材料"
+      }
+    ],
+    "answer": "A",
+    "explanation": "颜色可以通过加工做得相似，不能只凭颜色确定材料；应结合更多可靠线索。",
+    "verify": "\"只凭颜色相同，就认定材料相同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p024_q101",
+    "topicId": "cns_p024",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "水边看到一只小鸟和一个会转动的风车。哪条记录最能把小鸟与风车区分开？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只要停下来不动就都不是动物"
+      },
+      {
+        "key": "B",
+        "text": "小鸟会取食、生长，风车的转动不是生命活动"
+      },
+      {
+        "key": "C",
+        "text": "风车会转，小鸟也会动，所以都是动物"
+      },
+      {
+        "key": "D",
+        "text": "风车颜色鲜艳，所以比小鸟更像动物"
+      }
+    ],
+    "answer": "B",
+    "explanation": "物体会动不一定有生命；取食、生长等生命活动能帮助辨认动物。",
+    "verify": "\"小鸟会取食、生长，风车的转动不是生命活动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p024_q102",
+    "topicId": "cns_p024",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "冬天观察到一只蜗牛长时间缩在壳里没爬动，小朋友能马上认定它不是动物吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能，暂时不活动不代表不是动物"
+      },
+      {
+        "key": "B",
+        "text": "能，所有动物每一刻都必须走动"
+      },
+      {
+        "key": "C",
+        "text": "能，只有会飞的才是动物"
+      },
+      {
+        "key": "D",
+        "text": "不能，因为石头缩在壳里也会生长"
+      }
+    ],
+    "answer": "A",
+    "explanation": "动物有时会休息或因环境变化减少活动，不能只凭一小段时间没动就否定它是动物。",
+    "verify": "\"不能，暂时不活动不代表不是动物\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p024_q103",
+    "topicId": "cns_p024",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "调查身边动物时，哪组对象和记录相符？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "小狗、石头、小鱼：都记录为需要取食的动物"
+      },
+      {
+        "key": "B",
+        "text": "自行车、玩具熊、皮球：都记录为会自己生长的动物"
+      },
+      {
+        "key": "C",
+        "text": "小草、花盆、树叶：都按会不会走归入动物"
+      },
+      {
+        "key": "D",
+        "text": "蚂蚁、麻雀、小鱼：都记录了观察到的身体或活动"
+      }
+    ],
+    "answer": "D",
+    "explanation": "蚂蚁、麻雀和小鱼都是动物；记录应符合对象真实的身体和生命活动。",
+    "verify": "\"蚂蚁、麻雀、小鱼：都记录了观察到的身体或活动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p025_q101",
+    "topicId": "cns_p025",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "观察蜗牛时，想知道触角有没有变化，哪种方法更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "从侧面安静观察，画下伸出和缩回的样子"
+      },
+      {
+        "key": "B",
+        "text": "用针刺触角让它动"
+      },
+      {
+        "key": "C",
+        "text": "把蜗牛壳敲开看内部"
+      },
+      {
+        "key": "D",
+        "text": "用强光长时间照它"
+      }
+    ],
+    "answer": "A",
+    "explanation": "安静观察能记录触角伸缩，又能避免伤害蜗牛；不能为看变化而刺、敲或长时间强光照射。",
+    "verify": "\"从侧面安静观察，画下伸出和缩回的样子\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p025_q102",
+    "topicId": "cns_p025",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小明画了一只观察中的蜗牛：背上有壳，身体贴着玻璃缓慢向前。画图时还想补“六条腿”，应该先怎么做？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "参考蚂蚁的六条腿，认为蜗牛也应完全一样"
+      },
+      {
+        "key": "B",
+        "text": "只画看到的壳，就认定壳下面没有任何身体"
+      },
+      {
+        "key": "C",
+        "text": "根据蜗牛爬得慢，推定它一定有很多很短的腿"
+      },
+      {
+        "key": "D",
+        "text": "再次仔细观察，不把想象中的腿当成看到的特征"
+      }
+    ],
+    "answer": "D",
+    "explanation": "不同动物的身体构造不同。观察画像要有实际证据，蜗牛不是靠六条腿行走。",
+    "verify": "\"再次仔细观察，不把想象中的腿当成看到的特征\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p025_q103",
+    "topicId": "cns_p025",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一只蜗牛先后爬过干净玻璃的两个位置，都留下发亮的痕迹。哪种记录更有依据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "蜗牛的壳会在玻璃上变成线"
+      },
+      {
+        "key": "B",
+        "text": "所有发亮的痕迹一定都是雨水"
+      },
+      {
+        "key": "C",
+        "text": "痕迹与蜗牛爬行经过的位置相连"
+      },
+      {
+        "key": "D",
+        "text": "玻璃里本来住着另一只动物"
+      }
+    ],
+    "answer": "C",
+    "explanation": "爬行路径与痕迹的位置相对应，为痕迹来自蜗牛爬行时的黏液提供了线索。",
+    "verify": "\"痕迹与蜗牛爬行经过的位置相连\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p026_q101",
+    "topicId": "cns_p026",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "给陆生蜗牛布置饲养盒，小组放了少量湿润土和叶片，却把盖子完全封死。应先改进哪一点？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把土换成深水，让蜗牛一直泡着"
+      },
+      {
+        "key": "B",
+        "text": "把盒子放到强烈阳光下晒干"
+      },
+      {
+        "key": "C",
+        "text": "再包几层塑料膜完全隔绝空气"
+      },
+      {
+        "key": "D",
+        "text": "在安全盖子上留合适通气孔，防逃又通气"
+      }
+    ],
+    "answer": "D",
+    "explanation": "陆生蜗牛需要空气，饲养盒要适当湿润、通气且防逃，不能完全密封或长时间浸在深水里。",
+    "verify": "\"在安全盖子上留合适通气孔，防逃又通气\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p026_q102",
+    "topicId": "cns_p026",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两只陆生蜗牛原来生活在潮湿阴凉处。哪个饲养位置更接近它们的生活需要？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "中午阳光直晒、完全干燥的窗台"
+      },
+      {
+        "key": "B",
+        "text": "装满水并扣紧盖子的瓶底"
+      },
+      {
+        "key": "C",
+        "text": "通风、阴凉且保持适当湿润的位置"
+      },
+      {
+        "key": "D",
+        "text": "密封的干热透明盒里"
+      }
+    ],
+    "answer": "C",
+    "explanation": "应参考它们原来的环境，保持适当湿润并通气，避免暴晒、干热和深水淹没。",
+    "verify": "\"通风、阴凉且保持适当湿润的位置\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p026_q103",
+    "topicId": "cns_p026",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "盒里给蜗牛放了食物，多日后剩菜已经发霉。怎样处理更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把变质残食抹到蜗牛身体上"
+      },
+      {
+        "key": "B",
+        "text": "请成人协助清理变质残食，换少量合适的新鲜食物"
+      },
+      {
+        "key": "C",
+        "text": "因为还有食物，就一直不清理"
+      },
+      {
+        "key": "D",
+        "text": "加入大量盐让蜗牛吃得更快"
+      }
+    ],
+    "answer": "B",
+    "explanation": "饲养不仅要供食，还应保持清洁；应清理变质残食，不使用会伤害蜗牛的盐等材料。",
+    "verify": "\"请成人协助清理变质残食，换少量合适的新鲜食物\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p027_q101",
+    "topicId": "cns_p027",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "观察小鱼游动，发现尾部左右摆动，身体向前；两侧的鳍也会调整。哪种记录更准确？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "鱼鳍只负责好看，不参与游动和转向"
+      },
+      {
+        "key": "B",
+        "text": "尾巴一摆动就一定阻止身体前进"
+      },
+      {
+        "key": "C",
+        "text": "游动常需要身体、尾和鳍配合"
+      },
+      {
+        "key": "D",
+        "text": "小鱼只靠嘴一张一合推动身体"
+      }
+    ],
+    "answer": "C",
+    "explanation": "鱼游动时身体和尾部常提供推进作用，鳍也帮助保持平衡和调整方向。",
+    "verify": "\"游动常需要身体、尾和鳍配合\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p027_q102",
+    "topicId": "cns_p027",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "鱼缸里有小鱼。清洁鱼缸时，怎样做更符合鱼的生活需要？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把鱼放到热水里等候"
+      },
+      {
+        "key": "B",
+        "text": "请成人帮助，把鱼暂放在合适的水中，避免长时间离水"
+      },
+      {
+        "key": "C",
+        "text": "把鱼放在干毛巾上直到鱼缸干透"
+      },
+      {
+        "key": "D",
+        "text": "把鱼装进没有水的密封盒"
+      }
+    ],
+    "answer": "B",
+    "explanation": "鱼通常要在合适的水中生活和用鳃呼吸，清洁时也应避免长时间离水或受到温度剧变影响。",
+    "verify": "\"请成人帮助，把鱼暂放在合适的水中，避免长时间离水\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p027_q103",
+    "topicId": "cns_p027",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "海豚和金鱼都能在水中游动，小朋友因此说“水里的动物全都是鱼”。哪条事实能帮助纠正？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "海豚要到水面换气，不能只按生活地点认成鱼"
+      },
+      {
+        "key": "B",
+        "text": "金鱼有尾巴，所以所有有尾巴的都是鱼"
+      },
+      {
+        "key": "C",
+        "text": "海豚能游，所以一定用鳃呼吸"
+      },
+      {
+        "key": "D",
+        "text": "只要生活在同一个池子，身体构造就都相同"
+      }
+    ],
+    "answer": "A",
+    "explanation": "生活在水中不等于就是鱼。海豚是用肺呼吸、需要到水面换气的水生动物。",
+    "verify": "\"海豚要到水面换气，不能只按生活地点认成鱼\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p028_q101",
+    "topicId": "cns_p028",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "观察记录写着：甲吃草叶，乙捕食小虫，丙吃谷粒也吃小虫。哪种比较有依据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "甲吃草，说明它不需要水"
+      },
+      {
+        "key": "B",
+        "text": "甲主要吃植物，乙吃动物，丙两类都吃"
+      },
+      {
+        "key": "C",
+        "text": "三种动物都只吃植物"
+      },
+      {
+        "key": "D",
+        "text": "丙吃小虫，所以不可能吃谷粒"
+      }
+    ],
+    "answer": "B",
+    "explanation": "应根据观察到的食物判断，吃植物和动物的情况可以同时出现在一种动物身上。",
+    "verify": "\"甲主要吃植物，乙吃动物，丙两类都吃\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p028_q102",
+    "topicId": "cns_p028",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "给动物选食物时，小明想把自己喜欢的糖果喂给所有动物。为什么不合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不同动物需要的食物不同，人喜欢的食物未必适合它们"
+      },
+      {
+        "key": "B",
+        "text": "所有动物都只能吃青草"
+      },
+      {
+        "key": "C",
+        "text": "糖果能代替所有动物需要的水"
+      },
+      {
+        "key": "D",
+        "text": "只要颜色鲜艳，动物就一定能吃"
+      }
+    ],
+    "answer": "A",
+    "explanation": "喂养要了解动物的食性和需要，不能把人的喜好当作动物是否适合食用的依据。",
+    "verify": "\"不同动物需要的食物不同，人喜欢的食物未必适合它们\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p028_q103",
+    "topicId": "cns_p028",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "鸟在草地上啄食，小雨没看清吃下的东西。为了判断它吃什么，下一步哪种记录最有帮助？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只看鸟嘴的颜色就确定食物"
+      },
+      {
+        "key": "B",
+        "text": "只看鸟在草地上就认定它吃草叶"
+      },
+      {
+        "key": "C",
+        "text": "只看鸟停在树上就认定它只吃树叶"
+      },
+      {
+        "key": "D",
+        "text": "保持距离继续观察，辨认被啄起的是草籽还是小虫等"
+      }
+    ],
+    "answer": "D",
+    "explanation": "判断食物需要观察实际取食对象，不能只凭羽毛颜色或没有看清的印象下结论。",
+    "verify": "\"保持距离继续观察，辨认被啄起的是草籽还是小虫等\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p030_q101",
+    "topicId": "cns_p030",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "动物联欢会要表演“有羽毛、用两足走动、常用翅膀活动”的动物。下列哪个角色最符合这些线索？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "小鸡"
+      },
+      {
+        "key": "B",
+        "text": "小猫"
+      },
+      {
+        "key": "C",
+        "text": "金鱼"
+      },
+      {
+        "key": "D",
+        "text": "蜗牛"
+      }
+    ],
+    "answer": "A",
+    "explanation": "小鸡有羽毛、两足和翅膀。表演角色要根据多条真实特征来判断，不必假定有翅膀就一定善于飞翔。",
+    "verify": "\"小鸡\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p030_q102",
+    "topicId": "cns_p030",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小组扮演青蛙和兔子，都表演了跳跃。想让大家进一步区分，哪种做法更有帮助？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只表现共同的跳跃，不补充其他身体特征"
+      },
+      {
+        "key": "B",
+        "text": "把两种角色都加上同样的长耳朵"
+      },
+      {
+        "key": "C",
+        "text": "只把两种动物都说成会跳的动物"
+      },
+      {
+        "key": "D",
+        "text": "再表现兔子的长耳和青蛙不同的身体外形"
+      }
+    ],
+    "answer": "D",
+    "explanation": "共同动作不足以区分两种动物，还应结合耳、足和身体外形等不同特征。",
+    "verify": "\"再表现兔子的长耳和青蛙不同的身体外形\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p030_q103",
+    "topicId": "cns_p030",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "联欢会介绍词写“我扮演乌龟，背上有硬壳，遇到危险时能保护身体”。哪种评价更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "介绍说明所有动物都长硬壳"
+      },
+      {
+        "key": "B",
+        "text": "动物特征不能用在角色介绍中"
+      },
+      {
+        "key": "C",
+        "text": "介绍把身体特征和保护作用联系起来了"
+      },
+      {
+        "key": "D",
+        "text": "只要说有壳，就一定证明乌龟会飞"
+      }
+    ],
+    "answer": "C",
+    "explanation": "角色介绍可以把观察到的身体特征与作用联系起来，但不能把一种动物的特征推广到所有动物。",
+    "verify": "\"介绍把身体特征和保护作用联系起来了\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p029_q101",
+    "topicId": "cns_p029",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小猫的身体有毛，小鸟有羽毛，乌龟有硬壳。若按身体外部覆盖物分类，哪种分法合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只因都能移动就把覆盖物写成相同"
+      },
+      {
+        "key": "B",
+        "text": "把三种动物都写成有鱼鳞"
+      },
+      {
+        "key": "C",
+        "text": "用叫声大小代替身体覆盖物分类"
+      },
+      {
+        "key": "D",
+        "text": "分别归入有毛、有羽毛、有硬壳的组"
+      }
+    ],
+    "answer": "D",
+    "explanation": "分类标准是外部覆盖物，应按实际特征归组，不能用运动或叫声代替。",
+    "verify": "\"分别归入有毛、有羽毛、有硬壳的组\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p029_q102",
+    "topicId": "cns_p029",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "照片只拍到一小块有鳞片的身体。小安说这一定是金鱼，哪种想法更合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "所有有鳞片的动物都叫金鱼"
+      },
+      {
+        "key": "B",
+        "text": "鳞片可以直接说明这只动物的年龄"
+      },
+      {
+        "key": "C",
+        "text": "还需看更多特征，因为不只金鱼有鳞片"
+      },
+      {
+        "key": "D",
+        "text": "只要有鳞片，就一定生活在鱼缸里"
+      }
+    ],
+    "answer": "C",
+    "explanation": "一个外部特征常不足以确定具体动物，需要结合身体整体、生活方式等更多线索。",
+    "verify": "\"还需看更多特征，因为不只金鱼有鳞片\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p029_q103",
+    "topicId": "cns_p029",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "蜗牛和乌龟都有壳，小朋友把它们说成同一种动物。应怎样比较才能发现区别？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只因都在地上爬，就认定身体各部分都相同"
+      },
+      {
+        "key": "B",
+        "text": "继续观察头、足、身体形状和运动方式"
+      },
+      {
+        "key": "C",
+        "text": "只看都有壳，就不再观察其他部位"
+      },
+      {
+        "key": "D",
+        "text": "只比较两个壳的颜色是否相同"
+      }
+    ],
+    "answer": "B",
+    "explanation": "动物可以有共同特征，也有重要差异；综合观察更多身体部位和运动方式才能区分。",
+    "verify": "\"继续观察头、足、身体形状和运动方式\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p031_q101",
+    "topicId": "cns_p031",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "看到树上的鸟巢里有鸟蛋，小朋友想把鸟巢带回教室。更合适的做法是什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "摇树检验鸟巢是否牢固"
+      },
+      {
+        "key": "B",
+        "text": "堵住鸟巢看小鸟怎么回来"
+      },
+      {
+        "key": "C",
+        "text": "保持距离观察，不拿走鸟巢或鸟蛋"
+      },
+      {
+        "key": "D",
+        "text": "把鸟蛋当石头取出来比较"
+      }
+    ],
+    "answer": "C",
+    "explanation": "鸟巢是一些鸟繁殖、保护后代的地方，观察时应减少打扰，不拿走或破坏。",
+    "verify": "\"保持距离观察，不拿走鸟巢或鸟蛋\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p031_q102",
+    "topicId": "cns_p031",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小组把“蜂巢、蚁穴、鸟巢”画在不同位置，想讨论它们的作用。哪种说法更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "动物有了家就不再需要食物"
+      },
+      {
+        "key": "B",
+        "text": "样子和位置可不同，都能为相应动物提供一定保护"
+      },
+      {
+        "key": "C",
+        "text": "动物的家都必须建在树枝上"
+      },
+      {
+        "key": "D",
+        "text": "所有动物的家都只用木头做"
+      }
+    ],
+    "answer": "B",
+    "explanation": "不同动物居住或繁殖的场所各有特点，不能把一种动物的筑巢方式当作统一标准。",
+    "verify": "\"样子和位置可不同，都能为相应动物提供一定保护\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p031_q103",
+    "topicId": "cns_p031",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "参观时发现一处蚁穴入口有蚂蚁进出。怎样观察最不容易破坏蚂蚁的生活？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "站在旁边观察、画图，不堵住入口"
+      },
+      {
+        "key": "B",
+        "text": "把入口灌满水再等蚂蚁出来"
+      },
+      {
+        "key": "C",
+        "text": "踩平洞口，让蚂蚁重新建家"
+      },
+      {
+        "key": "D",
+        "text": "用小石子堵住所有入口"
+      }
+    ],
+    "answer": "A",
+    "explanation": "不堵入口、不灌水、不踩踏，可以观察动物活动并保护它们的生活场所。",
+    "verify": "\"站在旁边观察、画图，不堵住入口\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p032_q101",
+    "topicId": "cns_p032",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小房子模型有墙和门，却用一张漏了洞的薄纸当屋顶。模拟下雨时水滴进屋，最应该检查哪项功能？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "屋里模型家具是否足够多"
+      },
+      {
+        "key": "B",
+        "text": "屋顶能否遮雨，接缝是否漏水"
+      },
+      {
+        "key": "C",
+        "text": "墙的颜色是否相同"
+      },
+      {
+        "key": "D",
+        "text": "门开的方向是否好看"
+      }
+    ],
+    "answer": "B",
+    "explanation": "已经观察到雨水进入屋内，应首先检查遮雨部分及其连接处，装饰不能解决漏水问题。",
+    "verify": "\"屋顶能否遮雨，接缝是否漏水\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p032_q102",
+    "topicId": "cns_p032",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一间模型房子里面很暗，小组想让白天的光进来，又保留完整的屋顶。哪种改进更合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "在合适位置增加透光窗户"
+      },
+      {
+        "key": "B",
+        "text": "把所有窗都用不透光纸封住"
+      },
+      {
+        "key": "C",
+        "text": "只把地板涂成黑色"
+      },
+      {
+        "key": "D",
+        "text": "把门口堵得更严"
+      }
+    ],
+    "answer": "A",
+    "explanation": "窗户能帮助采光；只换地板颜色或堵住开口，并不能让更多室外光进入房间。",
+    "verify": "\"在合适位置增加透光窗户\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p032_q103",
+    "topicId": "cns_p032",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "观察两座房子，一座有斜屋顶，一座屋顶很平。想知道哪座排水顺畅，应该怎样比较？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只看哪座屋顶颜色更亮"
+      },
+      {
+        "key": "B",
+        "text": "只量门把手有多大"
+      },
+      {
+        "key": "C",
+        "text": "没有观察就说平屋顶永远不能排水"
+      },
+      {
+        "key": "D",
+        "text": "在相同条件下模拟下雨，观察水流走和积留的情况"
+      }
+    ],
+    "answer": "D",
+    "explanation": "屋顶结构和排水安排都会影响排水，应通过相同条件的测试观察，而不是只凭外观下绝对结论。",
+    "verify": "\"在相同条件下模拟下雨，观察水流走和积留的情况\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p033_q101",
+    "topicId": "cns_p033",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小锅的锅身要把热传给食物，握柄要方便安全拿取。哪种材料安排更合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "金属锅身配适合做隔热握柄的材料"
+      },
+      {
+        "key": "B",
+        "text": "锅身和握柄都只用薄纸"
+      },
+      {
+        "key": "C",
+        "text": "把金属握柄烧热后用手直接握"
+      },
+      {
+        "key": "D",
+        "text": "用遇水就散的材料做锅身"
+      }
+    ],
+    "answer": "A",
+    "explanation": "同一物品的不同部分承担不同任务，材料要分别匹配用途；热锅也应由成人安全操作。",
+    "verify": "\"金属锅身配适合做隔热握柄的材料\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p033_q102",
+    "topicId": "cns_p033",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一块擦桌子的布和一张防水桌垫要完成不同任务。哪种配对更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两样都越容易漏水越好"
+      },
+      {
+        "key": "B",
+        "text": "桌垫必须把水立刻吸到桌下"
+      },
+      {
+        "key": "C",
+        "text": "擦桌布必须完全不能沾上水"
+      },
+      {
+        "key": "D",
+        "text": "擦桌子的布容易吸水，桌垫表面不容易透水"
+      }
+    ],
+    "answer": "D",
+    "explanation": "吸水有利于擦拭；不易透水有利于保护桌面。不同用途需要的材料特点可以不同。",
+    "verify": "\"擦桌子的布容易吸水，桌垫表面不容易透水\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p033_q103",
+    "topicId": "cns_p033",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "家里一种塑料杯标明“不适用于开水”。小安说塑料都一样，可以装开水。怎样判断更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "颜色浅的塑料一定适合装开水"
+      },
+      {
+        "key": "B",
+        "text": "杯子漂亮就能忽略说明"
+      },
+      {
+        "key": "C",
+        "text": "遵守这只杯子的使用说明，不能把所有塑料当成相同"
+      },
+      {
+        "key": "D",
+        "text": "只要是塑料就永远不怕热"
+      }
+    ],
+    "answer": "C",
+    "explanation": "同类材料也可能有不同的耐热性能，选择家用品应核对具体说明，不能一概而论。",
+    "verify": "\"遵守这只杯子的使用说明，不能把所有塑料当成相同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p034_q101",
+    "topicId": "cns_p034",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "设计纸房子前，老师要求“能放进一个玩具人，门可以打开”。哪张设计图更有用？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只有屋顶花纹，没有门的图"
+      },
+      {
+        "key": "B",
+        "text": "把门画得比玩具人的脚还小的图"
+      },
+      {
+        "key": "C",
+        "text": "只画一只与房子无关的小鸟的图"
+      },
+      {
+        "key": "D",
+        "text": "标出玩具人、门的大小及开门方向的图"
+      }
+    ],
+    "answer": "D",
+    "explanation": "设计图要回应使用要求，门能否让玩具人通过、能否打开，都需要考虑尺寸和位置。",
+    "verify": "\"标出玩具人、门的大小及开门方向的图\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p034_q102",
+    "topicId": "cns_p034",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小组想做一个能挡住少量模拟雨水的小房子。选择材料前最应该先明确什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "先把材料全剪成小块，再看能否挡水"
+      },
+      {
+        "key": "B",
+        "text": "先决定屋里摆多少家具，再考虑是否漏水"
+      },
+      {
+        "key": "C",
+        "text": "哪些部位要挡水，材料大小和连接方式有什么要求"
+      },
+      {
+        "key": "D",
+        "text": "先按最喜欢的颜色选材料，再决定要挡哪处的水"
+      }
+    ],
+    "answer": "C",
+    "explanation": "材料选择服务于房子的要求，明确挡水部位、尺寸和连接需求后才便于选择和制作。",
+    "verify": "\"哪些部位要挡水，材料大小和连接方式有什么要求\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p034_q103",
+    "topicId": "cns_p034",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "设计图上门能打开，做纸模型测试时却被屋檐挡住了。接下来怎样处理更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "宣布设计图不能修改"
+      },
+      {
+        "key": "B",
+        "text": "记录问题，调整门或屋檐的位置后再测试"
+      },
+      {
+        "key": "C",
+        "text": "把原来的使用要求偷偷删掉"
+      },
+      {
+        "key": "D",
+        "text": "只涂颜色，不再检查门"
+      }
+    ],
+    "answer": "B",
+    "explanation": "设计需要通过测试改进；根据真实问题调整结构，再验证是否满足要求。",
+    "verify": "\"记录问题，调整门或屋檐的位置后再测试\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p035_q101",
+    "topicId": "cns_p035",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小组按图组装小房子，发现一块墙板放反后窗户被挡住。应该怎么做？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只在屋顶再画一个窗，不核对原要求"
+      },
+      {
+        "key": "B",
+        "text": "把其他同学的材料都藏起来"
+      },
+      {
+        "key": "C",
+        "text": "暂停组装，对照图纸调整墙板再连接"
+      },
+      {
+        "key": "D",
+        "text": "直接继续，把看不见的窗当作完成"
+      }
+    ],
+    "answer": "C",
+    "explanation": "制作中要对照设计检查位置，发现放反应及时调整，避免把问题留到后面。",
+    "verify": "\"暂停组装，对照图纸调整墙板再连接\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p035_q102",
+    "topicId": "cns_p035",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "纸房子的屋顶需要两人扶住才能粘好。哪种分工更有利于安全完成？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "谁都不配合，只各做各的"
+      },
+      {
+        "key": "B",
+        "text": "先约定扶稳和粘贴的分工，等连接稳定再松手"
+      },
+      {
+        "key": "C",
+        "text": "两人同时突然松手去拿别的材料"
+      },
+      {
+        "key": "D",
+        "text": "一边推倒墙一边贴屋顶"
+      }
+    ],
+    "answer": "B",
+    "explanation": "按连接步骤分工能减少移动和倒塌，扶稳到接缝稳定再松手更有利于完成结构。",
+    "verify": "\"先约定扶稳和粘贴的分工，等连接稳定再松手\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p035_q103",
+    "topicId": "cns_p035",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "刚粘好的屋顶还没固定稳，小组想立刻用力摇房子展示。更合适的做法是什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "按胶的使用要求等连接稳定，再轻轻检查"
+      },
+      {
+        "key": "B",
+        "text": "越用力摇越能让胶立刻牢固"
+      },
+      {
+        "key": "C",
+        "text": "屋顶没掉就能直接压上很重的东西"
+      },
+      {
+        "key": "D",
+        "text": "用手指伸进未收好的剪刀里扶屋顶"
+      }
+    ],
+    "answer": "A",
+    "explanation": "连接尚未稳定时猛烈摇动或加重容易损坏，应按材料说明等待并安全检查。",
+    "verify": "\"按胶的使用要求等连接稳定，再轻轻检查\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p036_q101",
+    "topicId": "cns_p036",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "展示会上，两座纸房子都满足尺寸要求，但甲屋顶漏水、乙不漏。哪种评价有证据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "甲既然漏水，就不值得记录任何优点"
+      },
+      {
+        "key": "B",
+        "text": "在这次相同淋水测试中，乙的挡水表现更好"
+      },
+      {
+        "key": "C",
+        "text": "甲颜色好看，所以一定完全不漏水"
+      },
+      {
+        "key": "D",
+        "text": "乙一定在所有测试中都最好"
+      }
+    ],
+    "answer": "B",
+    "explanation": "评价应联系要求和实际测试，挡水测试能比较挡水表现，不能替代对所有其他功能的评价。",
+    "verify": "\"在这次相同淋水测试中，乙的挡水表现更好\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p036_q102",
+    "topicId": "cns_p036",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "介绍自己做的小房子时，哪段说明更方便别人了解作品？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "说明原要求、所用材料、测试结果和下一步改进"
+      },
+      {
+        "key": "B",
+        "text": "只说作品很好，不说明测试过什么"
+      },
+      {
+        "key": "C",
+        "text": "只介绍装饰，不说明是否满足原要求"
+      },
+      {
+        "key": "D",
+        "text": "只报用了多少材料，不介绍结构和表现"
+      }
+    ],
+    "answer": "A",
+    "explanation": "清楚介绍要求、材料和测试，既能展示成果，也能让别人理解作品的依据和改进方向。",
+    "verify": "\"说明原要求、所用材料、测试结果和下一步改进\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p036_q103",
+    "topicId": "cns_p036",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "同学建议把房子的底座加宽，但小组只想按意见马上改。怎样更好地验证这个建议？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只要是建议就绝不需要测试"
+      },
+      {
+        "key": "B",
+        "text": "把屋顶也换掉、墙也变高，却只说底座有用"
+      },
+      {
+        "key": "C",
+        "text": "只比较修改前后的颜色"
+      },
+      {
+        "key": "D",
+        "text": "在其他条件相近时，比较加宽前后的稳定表现"
+      }
+    ],
+    "answer": "D",
+    "explanation": "尽量只改变与建议有关的部分，再比较测试结果，才便于判断改进是否起作用。",
+    "verify": "\"在其他条件相近时，比较加宽前后的稳定表现\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p037_q101",
+    "topicId": "cns_p037",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "用四根长度合适的吸管做成四边形框，接头能转动，一推就歪。加一根斜撑后不易变形，主要因为形成了什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "三角形支撑"
+      },
+      {
+        "key": "B",
+        "text": "会转动的圆球"
+      },
+      {
+        "key": "C",
+        "text": "没有连接的短绳"
+      },
+      {
+        "key": "D",
+        "text": "一张只作装饰的贴纸"
+      }
+    ],
+    "answer": "A",
+    "explanation": "加斜撑把可变形的四边形分成三角形，有利于约束框架形状。",
+    "verify": "\"三角形支撑\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p037_q102",
+    "topicId": "cns_p037",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两座同样高的纸塔，一座底座很窄，一座底座较宽。轻推时窄底塔先倒了。下一步怎样检查“底座宽度”的影响？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把宽底塔同时改矮，再把差异只归给底座"
+      },
+      {
+        "key": "B",
+        "text": "只交换两座塔的装饰图案"
+      },
+      {
+        "key": "C",
+        "text": "把窄底塔用手扶住、宽底塔不扶再比较"
+      },
+      {
+        "key": "D",
+        "text": "用其他条件尽量相同、只有底座宽窄不同的模型比较"
+      }
+    ],
+    "answer": "D",
+    "explanation": "要探究底座宽窄，应尽量保持高度、材料等其他条件相同，避免把别的变化误当作底宽的作用。",
+    "verify": "\"用其他条件尽量相同、只有底座宽窄不同的模型比较\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p037_q103",
+    "topicId": "cns_p037",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "房子模型的三角形支撑本来很稳，后来一处胶带松开，支撑滑动。哪种判断更合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "胶带松开能让支撑更牢"
+      },
+      {
+        "key": "B",
+        "text": "所有三角形材料都永远不会坏"
+      },
+      {
+        "key": "C",
+        "text": "连接也会影响牢固程度，需先修好接头再测试"
+      },
+      {
+        "key": "D",
+        "text": "只要看起来是三角形，接头松不松都无所谓"
+      }
+    ],
+    "answer": "C",
+    "explanation": "结构形状与连接质量都很重要，三角形支撑也需要接头可靠地连接。",
+    "verify": "\"连接也会影响牢固程度，需先修好接头再测试\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p038_q101",
+    "topicId": "cns_p038",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小组在校园观察到土壤、雨水、树木和一条水泥路。若讨论“自然物和人造物”，哪项归类更准确？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只要在校园里，就全是人造物"
+      },
+      {
+        "key": "B",
+        "text": "树木会长大，所以一定是塑料制品"
+      },
+      {
+        "key": "C",
+        "text": "水泥路不动，所以一定是动物"
+      },
+      {
+        "key": "D",
+        "text": "土壤、雨水、树木是自然物，水泥路是人造物"
+      }
+    ],
+    "answer": "D",
+    "explanation": "是否为人造物要看它是否经过人的制造，不能只凭位置或会不会动判断。",
+    "verify": "\"土壤、雨水、树木是自然物，水泥路是人造物\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p038_q102",
+    "topicId": "cns_p038",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "观察一片草地，发现雨后土壤湿了，草叶上也有小水滴。这条记录说明了什么联系？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "土里一有水就不能再有植物"
+      },
+      {
+        "key": "B",
+        "text": "草叶上的水滴一定是小石头"
+      },
+      {
+        "key": "C",
+        "text": "水可以存在于土壤和植物周围，是家园环境的一部分"
+      },
+      {
+        "key": "D",
+        "text": "只有河里才可能有水"
+      }
+    ],
+    "answer": "C",
+    "explanation": "水不只在河湖中，也会进入土壤或附在植物表面，和生物生活的环境联系在一起。",
+    "verify": "\"水可以存在于土壤和植物周围，是家园环境的一部分\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p038_q103",
+    "topicId": "cns_p038",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "小安画“地球家园”时，只画楼房和汽车。想把自然环境补充得更完整，应再画哪组？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "再画几台电视机就算包括所有自然环境"
+      },
+      {
+        "key": "B",
+        "text": "水、空气、土壤和生活其中的动植物"
+      },
+      {
+        "key": "C",
+        "text": "只把汽车画得更多"
+      },
+      {
+        "key": "D",
+        "text": "只给楼房增加广告牌"
+      }
+    ],
+    "answer": "B",
+    "explanation": "地球家园既有人造环境，也有水、空气、土壤和生物等自然组成，不能只画人造物。",
+    "verify": "\"水、空气、土壤和生活其中的动植物\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p039_q101",
+    "topicId": "cns_p039",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "校园简图中，教学楼在操场左边，花坛在操场右边。想让别人按图找到花坛，哪种做法更有帮助？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只画许多相同的圈，不作标记"
+      },
+      {
+        "key": "B",
+        "text": "把教学楼和花坛都删掉"
+      },
+      {
+        "key": "C",
+        "text": "保留正确相对位置，并说明图的方向"
+      },
+      {
+        "key": "D",
+        "text": "为了好看把花坛随意画到左边"
+      }
+    ],
+    "answer": "C",
+    "explanation": "简图可以简化外形，但应保留关键相对位置和方向，才能帮助寻找地点。",
+    "verify": "\"保留正确相对位置，并说明图的方向\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p039_q102",
+    "topicId": "cns_p039",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同学沿校园走了一圈，记录“古树、砖墙、小池塘、塑料滑梯”。哪条比较正确？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "古树只要有人浇水就成为塑料制品"
+      },
+      {
+        "key": "B",
+        "text": "古树是自然物，砖墙和塑料滑梯是人造物"
+      },
+      {
+        "key": "C",
+        "text": "砖墙是自然长出来的植物"
+      },
+      {
+        "key": "D",
+        "text": "塑料滑梯只要放在树旁就变成自然物"
+      }
+    ],
+    "answer": "B",
+    "explanation": "照料自然物不等于制造它；砖墙、滑梯由人加工建造，古树是生长的植物。",
+    "verify": "\"古树是自然物，砖墙和塑料滑梯是人造物\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p039_q103",
+    "topicId": "cns_p039",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "两张校园地图，一张图标漂亮却把食堂位置画错，另一张简洁但位置正确。用来找食堂时更应选哪张？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "位置正确的简图"
+      },
+      {
+        "key": "B",
+        "text": "位置错误但颜色鲜艳的图"
+      },
+      {
+        "key": "C",
+        "text": "只按画中食堂画得大小选择，不核对位置"
+      },
+      {
+        "key": "D",
+        "text": "只按道路画得直不直选择，不核对走向"
+      }
+    ],
+    "answer": "A",
+    "explanation": "地图首先要准确表达位置关系，装饰不能弥补关键地点画错的问题。",
+    "verify": "\"位置正确的简图\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p040_q101",
+    "topicId": "cns_p040",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "把一个没装水的透明瓶倒放进水中，倾斜时看到气泡跑出，水又进入瓶子。哪种解释更有依据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "气泡是瓶壁长出的植物"
+      },
+      {
+        "key": "B",
+        "text": "瓶内原来有空气，空气出来后水能进入"
+      },
+      {
+        "key": "C",
+        "text": "气泡说明瓶子里原来装满石头"
+      },
+      {
+        "key": "D",
+        "text": "瓶子里看不见东西，所以一直什么都没有"
+      }
+    ],
+    "answer": "B",
+    "explanation": "气泡与水进入的现象说明瓶内原来有占空间的空气，“看不见”不等于“没有”。",
+    "verify": "\"瓶内原来有空气，空气出来后水能进入\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p040_q102",
+    "topicId": "cns_p040",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同样两条细纸带，一条放在开着的风扇前，另一条放在远处静止空气中。前一条明显飘动，支持什么判断？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "风扇前有较明显的空气流动"
+      },
+      {
+        "key": "B",
+        "text": "空气一流动就变成了纸"
+      },
+      {
+        "key": "C",
+        "text": "没有飘动的纸带周围一定没有空气"
+      },
+      {
+        "key": "D",
+        "text": "空气只有开风扇时才存在"
+      }
+    ],
+    "answer": "A",
+    "explanation": "纸带飘动可显示空气流动，静止不飘不代表周围没有空气。",
+    "verify": "\"风扇前有较明显的空气流动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p040_q103",
+    "topicId": "cns_p040",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "用扇子扇脸会感觉有风。哪种说法更合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "扇子每扇一下就凭空制造出所有空气"
+      },
+      {
+        "key": "B",
+        "text": "风是扇子上掉下来的小纸片"
+      },
+      {
+        "key": "C",
+        "text": "只有看得见颜色的才算空气"
+      },
+      {
+        "key": "D",
+        "text": "扇子推动周围空气流动，形成风"
+      }
+    ],
+    "answer": "D",
+    "explanation": "周围本来就有空气，扇子推动空气流动，使人感觉到风。",
+    "verify": "\"扇子推动周围空气流动，形成风\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p041_q101",
+    "topicId": "cns_p041",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "上午有太阳，下午下起雨。只在上午画一个太阳符号，能完整说明这一天的天气变化吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能，应补记下午下雨及观察时间"
+      },
+      {
+        "key": "B",
+        "text": "能，有太阳后一天都不会下雨"
+      },
+      {
+        "key": "C",
+        "text": "能，太阳符号可以代表任何天气"
+      },
+      {
+        "key": "D",
+        "text": "不能，因为天气只能在夜里记录"
+      }
+    ],
+    "answer": "A",
+    "explanation": "一天中天气也会变化，记录多个时段并标明时间，才能保存这次变化。",
+    "verify": "\"不能，应补记下午下雨及观察时间\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p041_q102",
+    "topicId": "cns_p041",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小组站在室外，观察到天空云很多、没有阳光直射，也没有降水。此时怎样记录更符合观察？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只因看不到太阳就一定记暴雨"
+      },
+      {
+        "key": "B",
+        "text": "只因没下雨就一定记晴空无云"
+      },
+      {
+        "key": "C",
+        "text": "把想要的明天天气当成今天记录"
+      },
+      {
+        "key": "D",
+        "text": "记云多或阴，并记下当时没有降水"
+      }
+    ],
+    "answer": "D",
+    "explanation": "记录应依据当时的云量、阳光和降水等实际观察，不能把一种现象当成另一种现象的保证。",
+    "verify": "\"记云多或阴，并记下当时没有降水\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p041_q103",
+    "topicId": "cns_p041",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一张天气卡写“下雨”，另一张写“有风”。小宁说同一时刻只能选一张。怎样判断更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "下雨就说明空气完全不流动"
+      },
+      {
+        "key": "B",
+        "text": "天气记录只能写自己最喜欢的一个词"
+      },
+      {
+        "key": "C",
+        "text": "同一时刻可以既下雨又有风，应按实际情况记录"
+      },
+      {
+        "key": "D",
+        "text": "有风时绝不可能下雨"
+      }
+    ],
+    "answer": "C",
+    "explanation": "降水和风可以同时出现，天气可以从不同方面记录，不必强行只留一种现象。",
+    "verify": "\"同一时刻可以既下雨又有风，应按实际情况记录\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p042_q101",
+    "topicId": "cns_p042",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "某地一年里记录到春天渐暖、夏天较热、秋天转凉、冬天较冷。想比较这一年的季节变化，哪组资料更可靠？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不同城市随便拼起来的四张照片"
+      },
+      {
+        "key": "B",
+        "text": "只记录某一天中午的感受"
+      },
+      {
+        "key": "C",
+        "text": "只看一件冬季外套的颜色"
+      },
+      {
+        "key": "D",
+        "text": "这一地点一年中持续记录的气温和自然景象"
+      }
+    ],
+    "answer": "D",
+    "explanation": "季节变化应结合相同地点一段较长时间的连续记录，不能只凭一天或混杂地点的印象判断。",
+    "verify": "\"这一地点一年中持续记录的气温和自然景象\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p042_q102",
+    "topicId": "cns_p042",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同学说“冬天全国每个地方都一定下雪”。哪种观察能帮助改正？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只看冬天的衣服厚，就认定所在地必然下雪"
+      },
+      {
+        "key": "B",
+        "text": "只看一张雪景照片，不查它的地点和日期"
+      },
+      {
+        "key": "C",
+        "text": "查到我国有些地区冬季很少见雪，季节特点因地点不同而有差别"
+      },
+      {
+        "key": "D",
+        "text": "只查到自己城市一次下雪，就认定全国都一样"
+      }
+    ],
+    "answer": "C",
+    "explanation": "同一季节在不同地区的表现可以不同，不能把一个地方的现象说成所有地方都一样。",
+    "verify": "\"查到我国有些地区冬季很少见雪，季节特点因地点不同而有差别\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p042_q103",
+    "topicId": "cns_p042",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一棵树今年春天长出嫩叶，秋天叶子逐渐变黄脱落。怎样把这条记录用于研究季节？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只记树旁汽车的型号"
+      },
+      {
+        "key": "B",
+        "text": "继续在不同季节观察同一棵树，并标日期比较"
+      },
+      {
+        "key": "C",
+        "text": "只凭一次落叶就断定所有树都在这时落叶"
+      },
+      {
+        "key": "D",
+        "text": "每周换一棵树却不记树的身份"
+      }
+    ],
+    "answer": "B",
+    "explanation": "跟踪同一对象能更清楚地看季节中的变化，但一棵树的情况不能代表所有树。",
+    "verify": "\"继续在不同季节观察同一棵树，并标日期比较\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p043_q101",
+    "topicId": "cns_p043",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一天中在操场的固定地点观察一根直杆，早晨和太阳升到较高位置时影子长度不同。怎样记录更有帮助？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只记录当天穿了什么鞋"
+      },
+      {
+        "key": "B",
+        "text": "只凭一次观察就说影子永远不变"
+      },
+      {
+        "key": "C",
+        "text": "标明时间，画下影子的方向和长度"
+      },
+      {
+        "key": "D",
+        "text": "每次换一个不同高度的杆却不作说明"
+      }
+    ],
+    "answer": "C",
+    "explanation": "时间、方向和长度的对应记录，可以帮助比较太阳位置变化时影子的变化。",
+    "verify": "\"标明时间，画下影子的方向和长度\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p043_q102",
+    "topicId": "cns_p043",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小安说“太阳被云遮住，今天就没有白天了”。哪种说法更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "看不见太阳就证明太阳消失了"
+      },
+      {
+        "key": "B",
+        "text": "云会遮挡部分阳光，但阴天仍可能是白天"
+      },
+      {
+        "key": "C",
+        "text": "只要有云，地球就立刻进入夜晚"
+      },
+      {
+        "key": "D",
+        "text": "白天完全与太阳无关"
+      }
+    ],
+    "answer": "B",
+    "explanation": "是否为白天不取决于太阳是否正好被云遮住；阴天仍有来自太阳的光照亮周围。",
+    "verify": "\"云会遮挡部分阳光，但阴天仍可能是白天\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p043_q103",
+    "topicId": "cns_p043",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "天气晴朗，想感受太阳给物体带来的温暖，又保护眼睛，哪种做法合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不直视太阳，在成人带领下比较日照处和阴凉处的感受"
+      },
+      {
+        "key": "B",
+        "text": "盯着太阳看越久越好"
+      },
+      {
+        "key": "C",
+        "text": "用放大镜把阳光聚到手背上"
+      },
+      {
+        "key": "D",
+        "text": "对着太阳睁大眼睛比赛"
+      }
+    ],
+    "answer": "A",
+    "explanation": "可以通过安全位置的日照与阴凉对比感受光和热，不能直视太阳或用聚光方式伤害皮肤和眼睛。",
+    "verify": "\"不直视太阳，在成人带领下比较日照处和阴凉处的感受\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p044_q101",
+    "topicId": "cns_p044",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "连续几天在安全地点观察月亮，发现有时像弯钩、有时更圆。哪种做法最便于比较？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只保留最喜欢的一次，其他全删掉"
+      },
+      {
+        "key": "B",
+        "text": "在记录中画形状，并写观察日期和时间"
+      },
+      {
+        "key": "C",
+        "text": "只记月亮旁边的树叫什么"
+      },
+      {
+        "key": "D",
+        "text": "把不同日子的画全部标成同一天"
+      }
+    ],
+    "answer": "B",
+    "explanation": "日期、时间和形状共同构成可比较的观察记录，有助于认识月亮外观随日期的变化。",
+    "verify": "\"在记录中画形状，并写观察日期和时间\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p044_q102",
+    "topicId": "cns_p044",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "有一天白天，小雨在天空中看到了月亮。哪种记录最恰当？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "如实记录白天见到月亮，月亮并非只能在夜里看到"
+      },
+      {
+        "key": "B",
+        "text": "马上擦掉，因为月亮白天一定不存在"
+      },
+      {
+        "key": "C",
+        "text": "认定太阳已经变成月亮"
+      },
+      {
+        "key": "D",
+        "text": "只要白天见到月亮，就一定是塑料模型"
+      }
+    ],
+    "answer": "A",
+    "explanation": "月亮有时也能在白天被看见，应尊重实际观察，不把“常在夜里看”理解为“只能夜里看”。",
+    "verify": "\"如实记录白天见到月亮，月亮并非只能在夜里看到\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p044_q103",
+    "topicId": "cns_p044",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "老师用一只不发光的小球和手电演示：关手电时球很暗，照到球时能看到亮面。这能帮助理解月亮的什么特点？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "月亮内部一定装着手电"
+      },
+      {
+        "key": "B",
+        "text": "月亮只有被人照时才存在"
+      },
+      {
+        "key": "C",
+        "text": "任何亮的东西都一定自己发光"
+      },
+      {
+        "key": "D",
+        "text": "月亮本身不发光，我们常看到的是它反射的太阳光"
+      }
+    ],
+    "answer": "D",
+    "explanation": "不发光的物体被光照到也可以被看见，演示有助于理解月亮反射太阳光，但小球不是月亮本身。",
+    "verify": "\"月亮本身不发光，我们常看到的是它反射的太阳光\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p045_q101",
+    "topicId": "cns_p045",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "五天的天气日历依次记了晴、雨、阴、雨、晴。只看这五天，哪种说法正确？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "晴天和雨天一样多，都是两天"
+      },
+      {
+        "key": "B",
+        "text": "雨天比晴天多三天"
+      },
+      {
+        "key": "C",
+        "text": "五天都下了雨"
+      },
+      {
+        "key": "D",
+        "text": "阴天有四天"
+      }
+    ],
+    "answer": "A",
+    "explanation": "逐天计数，晴和雨各两天，阴一天；结论应与实际记录相符。",
+    "verify": "\"晴天和雨天一样多，都是两天\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p045_q102",
+    "topicId": "cns_p045",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小组忘记记录星期三的天气，星期四看到晴天就把星期三也补成晴天。怎样改进更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "漏记后直接照抄前一天的天气，不核实"
+      },
+      {
+        "key": "B",
+        "text": "把漏记的一天记成晴、雨各半天，不核实"
+      },
+      {
+        "key": "C",
+        "text": "只要两天挨着，就默认天气完全相同"
+      },
+      {
+        "key": "D",
+        "text": "标明那天漏记，再查可靠记录核对，不能凭次日天气猜填"
+      }
+    ],
+    "answer": "D",
+    "explanation": "连续两天的天气可能不同，漏记要如实标注，并根据可靠信息补查，不能伪造观察。",
+    "verify": "\"标明那天漏记，再查可靠记录核对，不能凭次日天气猜填\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p045_q103",
+    "topicId": "cns_p045",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "想比较两个星期下雨的天数，哪种安排更便于比较？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "第一周把有风都当雨，第二周只记晴天"
+      },
+      {
+        "key": "B",
+        "text": "哪周的日历纸大，就认为哪周雨天多"
+      },
+      {
+        "key": "C",
+        "text": "两个星期都按约定方法逐日记录，再分别数雨天"
+      },
+      {
+        "key": "D",
+        "text": "第一周每天记录，第二周只记自己喜欢的天气"
+      }
+    ],
+    "answer": "C",
+    "explanation": "比较前应统一记录方法和统计标准，不能因喜好或纸张大小改变结果。",
+    "verify": "\"两个星期都按约定方法逐日记录，再分别数雨天\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p046_q101",
+    "topicId": "cns_p046",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "展厅里一具霸王龙骨架会随着电机摆头，小朋友说“霸王龙又活过来了”。哪条信息最能帮助判断？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "模型很高，所以一定是活动物"
+      },
+      {
+        "key": "B",
+        "text": "模型声音响，就一定会生长"
+      },
+      {
+        "key": "C",
+        "text": "只要能摆头，就一定需要吃食物"
+      },
+      {
+        "key": "D",
+        "text": "说明牌写着电动模型，动作由机器控制"
+      }
+    ],
+    "answer": "D",
+    "explanation": "电动模型可以做出动作，但机器驱动的活动不是动物复活或生长的证据。",
+    "verify": "\"说明牌写着电动模型，动作由机器控制\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p046_q102",
+    "topicId": "cns_p046",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "想知道一种古代恐龙大概长什么样，哪种资料通常更有科学依据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "玩具商随意设计的广告颜色"
+      },
+      {
+        "key": "B",
+        "text": "小朋友希望它长成的样子"
+      },
+      {
+        "key": "C",
+        "text": "经过研究的化石及有关说明"
+      },
+      {
+        "key": "D",
+        "text": "完全不参考证据的动画造型"
+      }
+    ],
+    "answer": "C",
+    "explanation": "化石提供古代动物身体或活动的证据；动画和玩具可能含有想象，不能直接当成事实。",
+    "verify": "\"经过研究的化石及有关说明\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p046_q103",
+    "topicId": "cns_p046",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "小文把“霸王龙生活的很久以前”和“爷爷小时候”放在同一年代。怎样帮助他区分？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "爷爷没亲眼见过，就认为它和爷爷童年一样久远"
+      },
+      {
+        "key": "B",
+        "text": "说明霸王龙生活在远早于人类出现的年代"
+      },
+      {
+        "key": "C",
+        "text": "只要都属于过去，就认为生活在同一年"
+      },
+      {
+        "key": "D",
+        "text": "电影里有人和恐龙同场，就认为是真实历史"
+      }
+    ],
+    "answer": "B",
+    "explanation": "霸王龙所属的古代恐龙时代远早于人类，电影情节不能用来确定真实年代。",
+    "verify": "\"说明霸王龙生活在远早于人类出现的年代\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p047_q101",
+    "topicId": "cns_p047",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "模拟挖掘时，一块模型骨头只露出一小部分。怎样做更有利于保护和记录？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "用锤子把所有覆盖物一起敲碎"
+      },
+      {
+        "key": "B",
+        "text": "把不同位置的小块立即混装而不标记"
+      },
+      {
+        "key": "C",
+        "text": "轻刷周围材料，先记录位置，再逐步清理"
+      },
+      {
+        "key": "D",
+        "text": "直接用力拽露出的部分"
+      }
+    ],
+    "answer": "C",
+    "explanation": "轻缓清理并记录原位，可减少损坏，也保留各部分位置关系，不能只图挖得快。",
+    "verify": "\"轻刷周围材料，先记录位置，再逐步清理\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p047_q102",
+    "topicId": "cns_p047",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两个小组挖到相似的模型骨头，甲组写了发现位置，乙组把所有骨头混在一起。以后拼接时，甲组多了什么有用线索？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "所有骨头清理后统一摆放的朝向"
+      },
+      {
+        "key": "B",
+        "text": "骨头原来的位置关系"
+      },
+      {
+        "key": "C",
+        "text": "骨头在收集盒中按大小重新排列后的顺序"
+      },
+      {
+        "key": "D",
+        "text": "没有记录位置的骨头总数量"
+      }
+    ],
+    "answer": "B",
+    "explanation": "出土位置和相互关系有助于判断哪些部分可能有关联，混装不记录会丢失这种信息。",
+    "verify": "\"骨头原来的位置关系\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p047_q103",
+    "topicId": "cns_p047",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "真正的化石调查地点出现一条像脚印的石面，小朋友应该怎样处理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不自行挖取或破坏，请老师联系有关人员核查"
+      },
+      {
+        "key": "B",
+        "text": "马上用石头把脚印边缘敲大"
+      },
+      {
+        "key": "C",
+        "text": "为了留纪念把石面涂上油漆"
+      },
+      {
+        "key": "D",
+        "text": "先把它搬走，再决定要不要记录位置"
+      }
+    ],
+    "answer": "A",
+    "explanation": "疑似化石应保留现场并请专业人员核查，随意敲取、涂画或搬走会破坏证据。",
+    "verify": "\"不自行挖取或破坏，请老师联系有关人员核查\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p048_q101",
+    "topicId": "cns_p048",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "模拟骨片的左端对齐尺子3厘米处，右端对齐11厘米处。骨片长多少？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "3厘米"
+      },
+      {
+        "key": "B",
+        "text": "8厘米"
+      },
+      {
+        "key": "C",
+        "text": "11厘米"
+      },
+      {
+        "key": "D",
+        "text": "14厘米"
+      }
+    ],
+    "answer": "B",
+    "explanation": "物体长度是两端刻度之差，11减3等于8厘米，不是只读右端刻度。",
+    "verify": "\"8厘米\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p048_q102",
+    "topicId": "cns_p048",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一块骨片的两份测量记录，甲记“8厘米”，乙记“80毫米”。两条记录一定矛盾吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不矛盾，8厘米等于80毫米"
+      },
+      {
+        "key": "B",
+        "text": "矛盾，因为80一定比8长十倍"
+      },
+      {
+        "key": "C",
+        "text": "矛盾，因为长度不能使用不同单位"
+      },
+      {
+        "key": "D",
+        "text": "不能比较，因为毫米不是长度单位"
+      }
+    ],
+    "answer": "A",
+    "explanation": "比较长度要同时看数值和单位；1厘米等于10毫米，两条记录表示相同长度。",
+    "verify": "\"不矛盾，8厘米等于80毫米\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p048_q103",
+    "topicId": "cns_p048",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "测量模型骨片时，尺子斜着离开骨片，一端也没对准可用刻线。怎样改进读数更可靠？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只把右端读出的数写下来"
+      },
+      {
+        "key": "B",
+        "text": "不看单位，随便选择较大的数字"
+      },
+      {
+        "key": "C",
+        "text": "先弯折尺子，再从中间猜长度"
+      },
+      {
+        "key": "D",
+        "text": "把尺子沿要量的方向放好，记清两端刻度和单位"
+      }
+    ],
+    "answer": "D",
+    "explanation": "测量要选定方向、对好两端并注明单位；不从零刻线开始时，也可以用两端刻度相减。",
+    "verify": "\"把尺子沿要量的方向放好，记清两端刻度和单位\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p049_q101",
+    "topicId": "cns_p049",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "拼骨架时发现两块骨头断口形状正好接合，而且原来记录为相邻。可以怎样处理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把它们作为可能相接的部分，结合其他资料继续核对"
+      },
+      {
+        "key": "B",
+        "text": "只因颜色相同就认定所有骨头都接在一起"
+      },
+      {
+        "key": "C",
+        "text": "不看断口，按谁先拿到就排前面"
+      },
+      {
+        "key": "D",
+        "text": "一发现相接就不用保留记录"
+      }
+    ],
+    "answer": "A",
+    "explanation": "形状接合与原位相邻提供了拼接线索，但仍要结合整体构造和资料核对。",
+    "verify": "\"把它们作为可能相接的部分，结合其他资料继续核对\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p049_q102",
+    "topicId": "cns_p049",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小组拼出一条恐龙尾巴，骨块从身体附近到尾尖逐渐变小。若把最细的尾尖放到靠近身体处，最应该先核对什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "尾巴有没有涂成自己喜欢的颜色"
+      },
+      {
+        "key": "B",
+        "text": "展示台上的字写得多不多"
+      },
+      {
+        "key": "C",
+        "text": "每个人拿了几次胶水"
+      },
+      {
+        "key": "D",
+        "text": "骨块的大小顺序和整体连接是否合理"
+      }
+    ],
+    "answer": "D",
+    "explanation": "尾巴的骨块形状、大小变化和连接顺序有参考价值，拼接应结合结构线索而不是装饰。",
+    "verify": "\"骨块的大小顺序和整体连接是否合理\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p049_q103",
+    "topicId": "cns_p049",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "新发现的骨骼资料显示某个旧模型少了一段尾骨。科学家据此修改模型，哪种理解更合理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "修改证明所有化石都没有用"
+      },
+      {
+        "key": "B",
+        "text": "修改只需要看谁的声音大"
+      },
+      {
+        "key": "C",
+        "text": "有了新证据，可以修正原来的拼接解释"
+      },
+      {
+        "key": "D",
+        "text": "模型一做成就永远不能修改"
+      }
+    ],
+    "answer": "C",
+    "explanation": "拼接与复原是根据证据作解释，出现可靠新证据后修正，是改进认识的一部分。",
+    "verify": "\"有了新证据，可以修正原来的拼接解释\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p050_q101",
+    "topicId": "cns_p050",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "化石显示某种恐龙的后肢粗壮、前肢较短。复原姿势时更应该先参考什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只看同类玩具为了站稳采用的任意姿势"
+      },
+      {
+        "key": "B",
+        "text": "只按剩下的展示台空间摆放四肢"
+      },
+      {
+        "key": "C",
+        "text": "只把自己熟悉的小狗姿势照搬过去"
+      },
+      {
+        "key": "D",
+        "text": "这些骨骼的形状和连接位置"
+      }
+    ],
+    "answer": "D",
+    "explanation": "骨骼提供身体支撑和连接的证据，复原姿势应以这些证据为重要依据。",
+    "verify": "\"这些骨骼的形状和连接位置\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p050_q102",
+    "topicId": "cns_p050",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "只找到了牙齿化石，没有发现皮肤颜色的证据。哪种复原说明更诚实？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "没有皮肤证据，就随便写“已证实鲜红色”"
+      },
+      {
+        "key": "B",
+        "text": "只要画得逼真，就代表每个细节都已证实"
+      },
+      {
+        "key": "C",
+        "text": "牙齿形状依据化石，皮肤颜色暂作推测"
+      },
+      {
+        "key": "D",
+        "text": "牙齿是灰色，所以皮肤一定也是灰色"
+      }
+    ],
+    "answer": "C",
+    "explanation": "复原中应区分有证据的部分和推测部分，牙齿颜色不能直接确定古代皮肤颜色。",
+    "verify": "\"牙齿形状依据化石，皮肤颜色暂作推测\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p050_q103",
+    "topicId": "cns_p050",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一种恐龙留下了较大的足迹，旁边有一串同向足迹。哪种推测更谨慎？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "足迹越深，恐龙一定越爱吃植物"
+      },
+      {
+        "key": "B",
+        "text": "这些足迹能提供它曾在这里活动及行走方向的线索"
+      },
+      {
+        "key": "C",
+        "text": "足迹能直接告诉我们它当天全部想法"
+      },
+      {
+        "key": "D",
+        "text": "只看足迹就能确定身体每一处的颜色"
+      }
+    ],
+    "answer": "B",
+    "explanation": "足迹是活动痕迹，可以支持有限的行为推测，却不能直接给出皮肤颜色、想法或全部食性。",
+    "verify": "\"这些足迹能提供它曾在这里活动及行走方向的线索\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p051_q101",
+    "topicId": "cns_p051",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "黏土恐龙头很重、腿很细，放下后总向前倒。哪种修改更针对这个问题？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把腿做得更细、头做得更大"
+      },
+      {
+        "key": "B",
+        "text": "把模型换到另一张同样平稳的桌上而不改结构"
+      },
+      {
+        "key": "C",
+        "text": "减轻头部并适当加粗支撑腿、调整站姿"
+      },
+      {
+        "key": "D",
+        "text": "只改变模型的表面颜色"
+      }
+    ],
+    "answer": "C",
+    "explanation": "头部重量、腿的支撑和站姿都影响稳定；改变这些相关结构比只作装饰更有针对性。",
+    "verify": "\"减轻头部并适当加粗支撑腿、调整站姿\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p051_q102",
+    "topicId": "cns_p051",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "模型要表现“一条长尾、两条后腿较粗”的复原特点。制作中发现尾巴忘了做，怎样检查作品更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只记录用了多少黏土，不看形状"
+      },
+      {
+        "key": "B",
+        "text": "对照复原资料逐项核对身体结构，再补做尾巴"
+      },
+      {
+        "key": "C",
+        "text": "只要颜色好看就不用看尾巴"
+      },
+      {
+        "key": "D",
+        "text": "把少尾巴写成已经发现的新证据"
+      }
+    ],
+    "answer": "B",
+    "explanation": "模型应回应选定的复原资料，制作后需要核对关键结构，不能用装饰掩盖遗漏。",
+    "verify": "\"对照复原资料逐项核对身体结构，再补做尾巴\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p051_q103",
+    "topicId": "cns_p051",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "两个长颈黏土模型总低头，小组想检验“增加内部支撑是否有帮助”。哪组比较更公平？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "模型外形和头部重量相同，只给其中一个加支撑"
+      },
+      {
+        "key": "B",
+        "text": "加支撑的模型同时换成更小的头"
+      },
+      {
+        "key": "C",
+        "text": "不给支撑的模型同时把颈做得更细"
+      },
+      {
+        "key": "D",
+        "text": "一个放在桌上，另一个一直用手扶着"
+      }
+    ],
+    "answer": "A",
+    "explanation": "要判断内部支撑的作用，应尽量保持模型其他条件相同，放手后比较颈部能否保持形状。制作支撑时请成人协助处理尖端。",
+    "verify": "\"模型外形和头部重量相同，只给其中一个加支撑\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p052_q101",
+    "topicId": "cns_p052",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "恐龙公园模型要展示古代环境，哪些物品不适合作为“恐龙生活当时”的环境证据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "依据资料布置的地面和山坡"
+      },
+      {
+        "key": "B",
+        "text": "高速列车和现代路灯"
+      },
+      {
+        "key": "C",
+        "text": "河流和岩石"
+      },
+      {
+        "key": "D",
+        "text": "与选定复原资料相符的植物模型"
+      }
+    ],
+    "answer": "B",
+    "explanation": "现代列车、路灯远晚于古代恐龙时代，不能混作当时的生活环境；游览设施可以另行说明为现代设置。",
+    "verify": "\"高速列车和现代路灯\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p052_q102",
+    "topicId": "cns_p052",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "为一只食植物的恐龙模型制作介绍牌，哪组信息更有帮助？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "名称、依据资料推测的食物和生活环境"
+      },
+      {
+        "key": "B",
+        "text": "只介绍模型使用的颜色，不说明真实生物特点"
+      },
+      {
+        "key": "C",
+        "text": "把想象情节都写成已经证实的事实"
+      },
+      {
+        "key": "D",
+        "text": "只介绍用了多少黏土，不说明生活特点"
+      }
+    ],
+    "answer": "A",
+    "explanation": "展览说明应提供可理解的知识，并把依据资料的推测与想象区分开来。",
+    "verify": "\"名称、依据资料推测的食物和生活环境\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p052_q103",
+    "topicId": "cns_p052",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "公园模型里，某种恐龙的颜色是学生自由设计的，但身体轮廓参考了化石。介绍时怎样说更准确？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "所有细节都已经由化石证明"
+      },
+      {
+        "key": "B",
+        "text": "只要有一个细节参考化石，其余也都一定真实"
+      },
+      {
+        "key": "C",
+        "text": "颜色漂亮就能证明古代恐龙都是这种颜色"
+      },
+      {
+        "key": "D",
+        "text": "身体轮廓参考化石，颜色是本组的想象设计"
+      }
+    ],
+    "answer": "D",
+    "explanation": "展览既可以有艺术设计，也应说明哪些有证据、哪些是想象，不能把想象当作已证实事实。",
+    "verify": "\"身体轮廓参考化石，颜色是本组的想象设计\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p053_q101",
+    "topicId": "cns_p053",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "泥沙中保存的一串古代足印被研究为痕迹化石。它说明化石还可能保存什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "古代生物活动留下的痕迹"
+      },
+      {
+        "key": "B",
+        "text": "古代生物完整的叫声"
+      },
+      {
+        "key": "C",
+        "text": "古代生物身体每一处的颜色"
+      },
+      {
+        "key": "D",
+        "text": "每种古代生物吃过的全部食物"
+      }
+    ],
+    "answer": "A",
+    "explanation": "化石不仅可能保存身体部分，还可能保存足迹等古代活动痕迹。",
+    "verify": "\"古代生物活动留下的痕迹\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p053_q102",
+    "topicId": "cns_p053",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一块骨头放在桌上一夜，小雨说它明早就能变成恐龙化石。为什么不合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只要放在桌上，任何物体一夜都会成化石"
+      },
+      {
+        "key": "B",
+        "text": "骨头涂成灰色就一定是真化石"
+      },
+      {
+        "key": "C",
+        "text": "把“骨头”两个字改成“化石”就能完成变化"
+      },
+      {
+        "key": "D",
+        "text": "化石形成通常需要合适的保存条件和漫长时间"
+      }
+    ],
+    "answer": "D",
+    "explanation": "化石形成通常涉及掩埋、保存及长期变化，不能用放一夜、涂色或改名称代替。",
+    "verify": "\"化石形成通常需要合适的保存条件和漫长时间\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p053_q103",
+    "topicId": "cns_p053",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一只古代动物死后被泥沙较快覆盖，另一只长期暴露、骨骼不断被搬动破坏。哪种条件更有利于留下完整的身体证据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只要体型相同，掩埋与破坏程度就完全无关"
+      },
+      {
+        "key": "B",
+        "text": "只看两只动物原来哪只骨头更多，不看保存条件"
+      },
+      {
+        "key": "C",
+        "text": "较快被覆盖并得到保护的那只"
+      },
+      {
+        "key": "D",
+        "text": "长期暴露、骨骼已被反复破坏的那只"
+      }
+    ],
+    "answer": "C",
+    "explanation": "及时掩埋和较少破坏有利于身体部分保存；体型或名字不能代替保存条件。",
+    "verify": "\"较快被覆盖并得到保护的那只\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p054_q101",
+    "topicId": "cns_p054",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "桌上有铁回形针、铝片、木片和塑料片。想知道磁铁能吸引哪些，应怎样做？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把铝片和铁回形针都直接写成一定能吸"
+      },
+      {
+        "key": "B",
+        "text": "只按物体颜色深浅判断"
+      },
+      {
+        "key": "C",
+        "text": "先把不认识的材料丢掉，不作测试"
+      },
+      {
+        "key": "D",
+        "text": "逐一靠近磁铁并记录，而不是把所有金属都算作能吸"
+      }
+    ],
+    "answer": "D",
+    "explanation": "磁铁常能吸引铁制物品，但并非所有金属都能被普通磁铁明显吸引，应以测试和材料信息判断。",
+    "verify": "\"逐一靠近磁铁并记录，而不是把所有金属都算作能吸\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p054_q102",
+    "topicId": "cns_p054",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "磁铁吸住了一枚外面包着彩纸的铁回形针。哪种解释更有依据？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "回形针涂了颜色就变成了磁铁"
+      },
+      {
+        "key": "B",
+        "text": "只要轻的东西都能被吸住"
+      },
+      {
+        "key": "C",
+        "text": "磁铁吸引里面的铁，彩纸没有改变它的材料"
+      },
+      {
+        "key": "D",
+        "text": "所有彩纸本身都会被磁铁吸住"
+      }
+    ],
+    "answer": "C",
+    "explanation": "薄彩纸不妨碍磁铁吸引内部的铁，这不能说明所有彩纸都能被磁铁吸住。",
+    "verify": "\"磁铁吸引里面的铁，彩纸没有改变它的材料\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p054_q103",
+    "topicId": "cns_p054",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一枚金属小片没有被磁铁明显吸起。能直接断定它一定不是金属吗？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能，因为任何木头都会被磁铁吸起"
+      },
+      {
+        "key": "B",
+        "text": "不能，有些金属不易被普通磁铁吸引"
+      },
+      {
+        "key": "C",
+        "text": "能，所有金属都会被磁铁吸起"
+      },
+      {
+        "key": "D",
+        "text": "能，没吸起的物品一定全是纸"
+      }
+    ],
+    "answer": "B",
+    "explanation": "普通磁铁不能明显吸引所有金属，因此“没吸起”不能单独证明“不是金属”。",
+    "verify": "\"不能，有些金属不易被普通磁铁吸引\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p055_q101",
+    "topicId": "cns_p055",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "在同一根条形磁铁上，甲点靠近一端、乙点在中部。用相同回形针逐点测试，甲吸住的较多。这支持什么结论？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "回形针越重，磁铁就越没有两端"
+      },
+      {
+        "key": "B",
+        "text": "磁铁只有涂红色的位置才有磁力"
+      },
+      {
+        "key": "C",
+        "text": "这根磁铁靠近端部的吸引作用较强"
+      },
+      {
+        "key": "D",
+        "text": "所有磁铁中部的吸引作用都最强"
+      }
+    ],
+    "answer": "C",
+    "explanation": "用相同物品比较同一磁铁不同位置，结果可显示条形磁铁端部附近作用较强。",
+    "verify": "\"这根磁铁靠近端部的吸引作用较强\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p055_q102",
+    "topicId": "cns_p055",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "比较两块磁铁时，甲用小回形针，乙用很重的铁块，只数吸起数量。怎样改进更公平？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "一块用轻回形针，另一块用重回形针，仍只数数量"
+      },
+      {
+        "key": "B",
+        "text": "用同样的铁制物品，保持测试方法尽量相同"
+      },
+      {
+        "key": "C",
+        "text": "只比较两块磁铁外形大小，不测试吸引情况"
+      },
+      {
+        "key": "D",
+        "text": "让一块接触铁片，另一块隔很远吸铁块"
+      }
+    ],
+    "answer": "B",
+    "explanation": "吸起数量与被吸物品的材料、大小和方法都有关，比较磁铁时需要尽量统一这些条件。",
+    "verify": "\"用同样的铁制物品，保持测试方法尽量相同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p055_q103",
+    "topicId": "cns_p055",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "同样的回形针，甲磁铁一次吸住五枚，乙一次吸住四枚；重复几次的结果却有变化。下一步怎样做更可靠？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "统一方法，多次测试并完整记录结果"
+      },
+      {
+        "key": "B",
+        "text": "只挑甲吸得最多的一次当作全部结果"
+      },
+      {
+        "key": "C",
+        "text": "把不同的结果擦掉，只留喜欢的数字"
+      },
+      {
+        "key": "D",
+        "text": "说磁铁永远不可能有变化就停止记录"
+      }
+    ],
+    "answer": "A",
+    "explanation": "重复结果可能受接触位置等条件影响，应统一方法并保留完整记录，不能挑选有利结果。",
+    "verify": "\"统一方法，多次测试并完整记录结果\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p059_q101",
+    "topicId": "cns_p059",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "铁架小车停在桌上，小林不碰它，用磁铁从前方靠近，小车开始向前移动。这能说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "这次没看见接触，所以小车一定完全不受外界作用"
+      },
+      {
+        "key": "B",
+        "text": "磁铁能在一定距离内吸引铁架小车，使它运动"
+      },
+      {
+        "key": "C",
+        "text": "磁铁只有先碰到车身才能产生吸引"
+      },
+      {
+        "key": "D",
+        "text": "小车的运动只能来自手直接推车身"
+      }
+    ],
+    "answer": "B",
+    "explanation": "磁铁对铁架的吸引可在不直接接触时起作用，但效果受距离、材料等条件影响。",
+    "verify": "\"磁铁能在一定距离内吸引铁架小车，使它运动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p059_q102",
+    "topicId": "cns_p059",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小组想比较用细绳拉车和用磁铁吸引铁架车这两种方法。哪项记录最有助于区分？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "细绳需连着小车，磁铁可以隔开一小段距离吸引"
+      },
+      {
+        "key": "B",
+        "text": "只比较两次小车停下后的方向"
+      },
+      {
+        "key": "C",
+        "text": "只记录两种方法下小车是否有四个轮子"
+      },
+      {
+        "key": "D",
+        "text": "只比较两次小车车身的长度，不看施力方法"
+      }
+    ],
+    "answer": "A",
+    "explanation": "两种方法都能使车运动，连接方式和是否直接接触的差异可以通过观察记录比较。",
+    "verify": "\"细绳需连着小车，磁铁可以隔开一小段距离吸引\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p059_q103",
+    "topicId": "cns_p059",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "用一辆铁架车在同一桌面上测试：磁铁离车8厘米时车不动，离车3厘米时车动。想检验距离的作用，下一轮怎样安排？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "3厘米时换大磁铁，8厘米时用小磁铁"
+      },
+      {
+        "key": "B",
+        "text": "两次都保持3厘米，只换不同小车"
+      },
+      {
+        "key": "C",
+        "text": "3厘米时用光滑桌面，8厘米时改用粗糙纸面"
+      },
+      {
+        "key": "D",
+        "text": "仍用同一磁铁、小车和桌面，只比较不同距离"
+      }
+    ],
+    "answer": "D",
+    "explanation": "研究磁铁距离时，应尽量只改变距离，保持磁铁、小车和桌面等条件相同，并重复记录结果。",
+    "verify": "\"仍用同一磁铁、小车和桌面，只比较不同距离\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p056_q101",
+    "topicId": "cns_p056",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "纸片隔开磁铁和铁回形针，回形针仍随着磁铁移动。这个现象最能说明什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "磁铁的吸引作用可以隔着这张纸起作用"
+      },
+      {
+        "key": "B",
+        "text": "纸片已经变成了铁"
+      },
+      {
+        "key": "C",
+        "text": "磁铁必须碰到回形针才能起作用"
+      },
+      {
+        "key": "D",
+        "text": "所有厚度的材料都不会影响吸引"
+      }
+    ],
+    "answer": "A",
+    "explanation": "这次实验说明磁力能穿过这层纸产生作用，但不能推广为隔多厚或隔任何材料都一样有效。",
+    "verify": "\"磁铁的吸引作用可以隔着这张纸起作用\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p056_q102",
+    "topicId": "cns_p056",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一枚铁回形针隔着一层薄塑料能被吸住，隔着很厚的一叠塑料却吸不住。更合理的解释是什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "塑料隔层变厚会自动增加磁铁吸引作用"
+      },
+      {
+        "key": "B",
+        "text": "只要隔层是塑料，厚度就完全不影响结果"
+      },
+      {
+        "key": "C",
+        "text": "回形针离磁铁远近不同，但吸引作用一定相同"
+      },
+      {
+        "key": "D",
+        "text": "隔层变厚后，磁铁和回形针之间距离变大，吸引可能不足"
+      }
+    ],
+    "answer": "D",
+    "explanation": "增加隔层通常也增加距离，距离较大时吸引作用可能不足以把物体吸起。",
+    "verify": "\"隔层变厚后，磁铁和回形针之间距离变大，吸引可能不足\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p056_q103",
+    "topicId": "cns_p056",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "不拆开透明薄盒，想让里面的铁回形针沿着一条路线移动，哪种方案最可行？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只把路线画成红色，回形针就会跟着走"
+      },
+      {
+        "key": "B",
+        "text": "把盒子放远后大声喊路线"
+      },
+      {
+        "key": "C",
+        "text": "在盒外用磁铁靠近回形针并沿路线缓慢移动"
+      },
+      {
+        "key": "D",
+        "text": "在盒外用一块木头沿路线移动"
+      }
+    ],
+    "answer": "C",
+    "explanation": "在距离合适、盒壁较薄时，磁铁能隔盒壁吸引铁回形针，使它随磁铁移动。",
+    "verify": "\"在盒外用磁铁靠近回形针并沿路线缓慢移动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p057_q101",
+    "topicId": "cns_p057",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "纸鱼和磁铁鱼竿已经做好，但纸鱼总钓不起来。检查发现鱼上只贴了一小块塑料。最有针对性的修改是什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只增加纸鱼的尾巴面积，不改贴片材料"
+      },
+      {
+        "key": "B",
+        "text": "把塑料贴片换成同样大小的木片"
+      },
+      {
+        "key": "C",
+        "text": "把鱼线加长，仍让磁铁吸同一塑料贴片"
+      },
+      {
+        "key": "D",
+        "text": "在鱼上牢固贴一小片合适的铁制材料"
+      }
+    ],
+    "answer": "D",
+    "explanation": "磁铁需要吸引鱼上的铁制部分，只有塑料不能提供这个连接；也应固定好小零件。",
+    "verify": "\"在鱼上牢固贴一小片合适的铁制材料\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p057_q102",
+    "topicId": "cns_p057",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "鱼竿上的磁铁能碰到鱼，却一抬就掉。想比较“铁片固定位置”的影响，哪种测试更合适？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只比较两条鱼颜色"
+      },
+      {
+        "key": "B",
+        "text": "把掉落的结果全删掉"
+      },
+      {
+        "key": "C",
+        "text": "只改变铁片位置，鱼和鱼竿其他条件尽量相同"
+      },
+      {
+        "key": "D",
+        "text": "同时换磁铁、换大鱼、换鱼线，再只说位置有用"
+      }
+    ],
+    "answer": "C",
+    "explanation": "尽量只改变铁片位置并记录钓起和掉落情况，才能判断这个改动的作用。",
+    "verify": "\"只改变铁片位置，鱼和鱼竿其他条件尽量相同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p057_q103",
+    "topicId": "cns_p057",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "准备给一年级小朋友使用的钓鱼玩具，哪种设计更注意安全？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "让大家把磁铁含在嘴里试牢不牢"
+      },
+      {
+        "key": "B",
+        "text": "把磁铁和铁片牢固固定，并由成人检查小零件和尖边"
+      },
+      {
+        "key": "C",
+        "text": "把小磁铁故意做成很容易脱落"
+      },
+      {
+        "key": "D",
+        "text": "在纸鱼外露出尖铁丝，让它更容易挂住"
+      }
+    ],
+    "answer": "B",
+    "explanation": "磁铁、小铁片等零件应防脱落、防误吞，并处理尖边；玩具测试不能用嘴含或吞咽方式。",
+    "verify": "\"把磁铁和铁片牢固固定，并由成人检查小零件和尖边\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p223_q101",
+    "topicId": "cns_p223",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "钓鱼活动规定每人一分钟、相同数量的鱼。甲组却让一人玩两分钟。比较成绩前应怎样处理？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只看谁的鱼竿颜色更亮"
+      },
+      {
+        "key": "B",
+        "text": "让鱼多的一人自己挑选比较标准"
+      },
+      {
+        "key": "C",
+        "text": "把活动时间等条件统一后再比较"
+      },
+      {
+        "key": "D",
+        "text": "直接把两分钟的数量当成一分钟的成绩"
+      }
+    ],
+    "answer": "C",
+    "explanation": "比较钓鱼数量时，时间和可钓对象等条件要相近，不能把不同时间的结果直接当作公平成绩。",
+    "verify": "\"把活动时间等条件统一后再比较\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p223_q102",
+    "topicId": "cns_p223",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "连续钓鱼时，鱼上的铁片被拉松了，磁铁常把铁片单独吸走。下一轮前应先怎样做？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "让铁片散落在地上，继续比赛"
+      },
+      {
+        "key": "B",
+        "text": "请成人帮助把铁片安全固定好，再测试整条鱼能否钓起"
+      },
+      {
+        "key": "C",
+        "text": "把吸起铁片的次数都当成钓起整鱼"
+      },
+      {
+        "key": "D",
+        "text": "只把记录数字改大"
+      }
+    ],
+    "answer": "B",
+    "explanation": "活动要求钓起整条鱼，连接松动会影响结果，也可能产生小零件风险，应先修理和检查。",
+    "verify": "\"请成人帮助把铁片安全固定好，再测试整条鱼能否钓起\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p223_q103",
+    "topicId": "cns_p223",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "小组记录三次钓鱼数量是2条、4条、3条，想介绍玩具表现。哪种说法更诚实？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "三次记录分别是2、4、3条，表现并不完全一样"
+      },
+      {
+        "key": "B",
+        "text": "我们每次一定都钓到4条"
+      },
+      {
+        "key": "C",
+        "text": "只保留最多的一次，宣布其他都没发生"
+      },
+      {
+        "key": "D",
+        "text": "因为数量不同，所以三次都不能记录"
+      }
+    ],
+    "answer": "A",
+    "explanation": "真实记录应保留各次结果，既可以描述较好的表现，也要说明结果有变化，不能挑选或伪造。",
+    "verify": "\"三次记录分别是2、4、3条，表现并不完全一样\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p058_q101",
+    "topicId": "cns_p058",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "把两块条形磁铁的两端相互靠近，出现互相推开的现象。对接近的这两个磁极，哪种判断正确？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只有没磁力时才会互相推开"
+      },
+      {
+        "key": "B",
+        "text": "它们是同名磁极"
+      },
+      {
+        "key": "C",
+        "text": "它们一定一个是N极、一个是S极"
+      },
+      {
+        "key": "D",
+        "text": "它们都不是磁极"
+      }
+    ],
+    "answer": "B",
+    "explanation": "磁铁同名磁极相互排斥，异名磁极相互吸引，推开现象可帮助判断磁极关系。",
+    "verify": "\"它们是同名磁极\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p058_q102",
+    "topicId": "cns_p058",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一根已标明N极的磁铁，与另一根未标记磁铁的一端靠近时互相推开。未标记的这一端应记为什么？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "N极"
+      },
+      {
+        "key": "B",
+        "text": "S极"
+      },
+      {
+        "key": "C",
+        "text": "没有任何磁极"
+      },
+      {
+        "key": "D",
+        "text": "只能叫中部，不能判断"
+      }
+    ],
+    "answer": "A",
+    "explanation": "已知N极与这一端相互排斥，按同名磁极相斥，可以判断这一端也是N极。",
+    "verify": "\"N极\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p058_q103",
+    "topicId": "cns_p058",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一根磁针原来能自由转动并大致指南北，旁边放铁盒后方向变了。怎样检验是不是铁盒的影响？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "一边移开铁盒，一边换另一根磁针"
+      },
+      {
+        "key": "B",
+        "text": "不移铁盒，只转底盘让“北”字对准指针"
+      },
+      {
+        "key": "C",
+        "text": "把磁针粘住，让它不能再改变方向"
+      },
+      {
+        "key": "D",
+        "text": "保持磁针位置不变，移开铁盒后再观察"
+      }
+    ],
+    "answer": "D",
+    "explanation": "移开可能的干扰物，保持磁针及其位置等条件相同，再观察方向是否恢复，能检验铁盒的影响。",
+    "verify": "\"保持磁针位置不变，移开铁盒后再观察\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p060_q101",
+    "topicId": "cns_p060",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一个文具盒用磁铁吸住盒盖上的铁片。盒盖上的铁片掉了，磁铁还在，却吸不住塑料盖。哪种修理更针对原因？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "请成人把合适铁片安全固定回相应位置"
+      },
+      {
+        "key": "B",
+        "text": "只把塑料盖涂成金属一样的颜色"
+      },
+      {
+        "key": "C",
+        "text": "把磁铁移得更远，不补回可吸引的部件"
+      },
+      {
+        "key": "D",
+        "text": "在磁铁与盒盖之间塞上更厚的纸板"
+      }
+    ],
+    "answer": "A",
+    "explanation": "磁铁需要与盒盖上的可被吸引部件配合，材料不是靠颜色或名称决定的；修理应注意固定和尖边安全。",
+    "verify": "\"请成人把合适铁片安全固定回相应位置\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p060_q102",
+    "topicId": "cns_p060",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "使用小指南针时，旁边放一块大磁铁，指针方向改变。怎样做更有利于正常辨别方向？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把大磁铁贴到指针上，认为指向总会更准"
+      },
+      {
+        "key": "B",
+        "text": "用手一直按住指针"
+      },
+      {
+        "key": "C",
+        "text": "把指针涂黑就不用看它是否转动"
+      },
+      {
+        "key": "D",
+        "text": "移开大磁铁和附近明显的磁性干扰，再在平稳处观察"
+      }
+    ],
+    "answer": "D",
+    "explanation": "指南针也会受附近磁铁等干扰，应尽量移开干扰物，让指针自由转动并停稳。",
+    "verify": "\"移开大磁铁和附近明显的磁性干扰，再在平稳处观察\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cns_p060_q103",
+    "topicId": "cns_p060",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "工厂模型想从“铁片与塑料片的混合物”中取出铁片，哪种方案利用了磁铁的作用？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只用一张纸盖住混合物就认定已分类"
+      },
+      {
+        "key": "B",
+        "text": "靠比较颜色把两种材料都称为铁"
+      },
+      {
+        "key": "C",
+        "text": "用磁铁靠近混合物吸取铁片，再把它们分开收集"
+      },
+      {
+        "key": "D",
+        "text": "给所有塑料片都画上N字"
+      }
+    ],
+    "answer": "C",
+    "explanation": "磁铁能吸引其中的铁片，利用材料是否受吸引的差异可以进行简单分选。",
+    "verify": "\"用磁铁靠近混合物吸取铁片，再把它们分开收集\"",
+    "level": "pro",
+    "origin": "original"
+  }
+]

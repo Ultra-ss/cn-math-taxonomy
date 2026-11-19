@@ -142,6 +142,20 @@ test('普通和专家真实四题进度为0/4、1/4、2/4、3/4，提交反馈�
     assert.equal(E.nextItem(graph,run),null);assert.equal(E.statusOf(run,id),'mastered');
   }
 });
+test('小学和高中三题专家包即使设置四题确认，也显示真实0/3到3/3进度',()=>{
+  for(const id of ['cns_p001','cnp_h001']) {
+    const graph=progressGraph([id],3);
+    let run=E.createSession(graph,[id],{confirm:4,seed:'three-question-expert'});
+    for(let n=0;n<3;n++) {
+      const before=preview(graph,run);assert.equal(before.total,3);assert.equal(before.completed,n);
+      assert.equal(before.percent,Math.round(n/3*100));
+      const feedback=preview(graph,run,'auto');assert.equal(feedback.total,3);assert.equal(feedback.completed,n+1);
+      assert.equal(feedback.percent,Math.round((n+1)/3*100));
+      run=E.applyAnswer(graph,run,id,'correct');
+    }
+    assert.equal(E.nextItem(graph,run),null);assert.equal(E.statusOf(run,id),'mastered');
+  }
+});
 test('进度条公开已完成和预计题数的可访问数值，反馈阶段不必等下一题才更新',()=>{
   const ask=load();let bar=ask.page.querySelector('.progress');
   assert.equal(bar.getAttribute('role'),'progressbar');assert.equal(bar.getAttribute('aria-valuemin'),'0');

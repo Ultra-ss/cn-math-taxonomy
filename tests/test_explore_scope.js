@@ -101,7 +101,7 @@ assert.equal(ctx.selected,'cnp_029','没有学习记录时保留有效的当前�
 assert.equal(ctx.lastCameraRestore,false,'显式全部教材应重新对准目标，不套用拖远的旧相机');
 assert.equal(ctx.isAllBookScope(),true);assert.equal(nodes['book-title'].textContent,'全部教材');
 assert.equal(nodes['book-note'].textContent,'全部教材共有 269 个知识点');
-assert.equal(nodes['book-challenge-hint'].hidden,true);assert.equal(nodes['mobile-book-challenge-hint'].hidden,true);
+assert.equal(nodes['book-challenge-hint'].hidden,false);assert.equal(nodes['mobile-book-challenge-hint'].hidden,false);
 ctx.setBookScope([]);
 const neighborhood=new Set(['cnp_001','cnp_053']);assert.equal(ctx.scopedNodeSet(neighborhood),neighborhood,'无册次范围仍是原局部图');
 
@@ -115,11 +115,14 @@ assert.equal(new URL(ctx.graphReturnTo(),ctx.location.origin).searchParams.get('
 setSubject('physics');ctx.setBookScope(BookSelection.allowed('physics'));ctx.showWholeBook=true;
 assert.equal(ctx.hasBookScope(),true);assert.equal(ctx.scopedNodeSet(new Set()).size,269);
 assert.equal(ctx.selectedVolumes.length,9);
-ctx.syncBook();assert.equal(nodes['book-challenge-hint'].hidden,true,'混合初高中教材不显示仅初中适用的两轮说明');
+ctx.syncBook();assert.equal(nodes['book-challenge-hint'].hidden,false,'混合初高中教材也支持两轮挑战');
+assert.ok(nodes['book-challenge-hint'].textContent.startsWith('物理学科阶段'));
 ctx.setBookScope(['必修一']);ctx.syncBook();assert.equal(nodes['book-note'].textContent,'本册共有 27 个知识点');
-assert.equal(nodes['book-challenge-hint'].hidden,true);assert.equal(nodes['mobile-book-challenge-hint'].hidden,true);
+assert.ok(nodes['book-challenge-hint'].textContent.startsWith('高中物理阶段'));
+assert.equal(nodes['book-challenge-hint'].hidden,false);assert.equal(nodes['mobile-book-challenge-hint'].hidden,false);
 setSubject('science');ctx.setBookScope(['一上']);ctx.syncBook();assert.equal(nodes['book-note'].textContent,'本册共有 15 个知识点');
-assert.equal(nodes['book-challenge-hint'].hidden,true);assert.equal(nodes['mobile-book-challenge-hint'].hidden,true);
+assert.ok(nodes['mobile-book-challenge-hint'].textContent.startsWith('小学科学阶段'));
+assert.equal(nodes['book-challenge-hint'].hidden,false);assert.equal(nodes['mobile-book-challenge-hint'].hidden,false);
 setSubject('physics');
 ctx.window.CnmLastLocation.resume=()=>({subject:'physics',volume:'必修一',topicId:'cnp_h020',view:'local',depth:3});
 ctx.selected='cnp_071';ctx.setBookScope(['九全']);ctx.chooseBook('');

@@ -1,0 +1,6788 @@
+[
+  {
+    "id": "cnp_h090_q101",
+    "topicId": "cnp_h090",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "两个物体质量分别为m和4m，动能相同且都向东运动。较重物体的动量大小是较轻物体的多少倍？",
+    "explanation": "由p²=2mEk，动能相同则p正比于质量的平方根，故为√4=2倍。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "1/2倍"
+      },
+      {
+        "key": "B",
+        "text": "2倍"
+      },
+      {
+        "key": "C",
+        "text": "4倍"
+      },
+      {
+        "key": "D",
+        "text": "1倍"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"2倍\""
+  },
+  {
+    "id": "cnp_h090_q102",
+    "topicId": "cnp_h090",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "取向右为正，质量0.5 kg的小球碰墙前速度为+6 m/s，反弹后为−4 m/s。碰撞中小球的动量变化量是多少kg·m/s？（填写带正负号的数值）",
+    "answer": "-5",
+    "verify": "0.5*(-4-6)",
+    "explanation": "Δp=m(v末−v初)=0.5×(−4−6)=−5 kg·m/s，负号表示向左。"
+  },
+  {
+    "id": "cnp_h090_q103",
+    "topicId": "cnp_h090",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "两物体动量大小相等，方向相反，质量分别为m和2m。两者总动量为零，能否据此认为总动能为零？",
+    "explanation": "动量是矢量可相互抵消，动能是标量。动量大小相等时Ek=p²/(2m)，质量越小动能越大。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能；动量抵消时动能也抵消"
+      },
+      {
+        "key": "B",
+        "text": "不能；质量为2m者动能更大"
+      },
+      {
+        "key": "C",
+        "text": "不能；但两者动能必相等"
+      },
+      {
+        "key": "D",
+        "text": "不能；两者动能均为正，且质量为m者动能更大"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"不能；两者动能均为正，且质量为m者动能更大\""
+  },
+  {
+    "id": "cnp_h091_q101",
+    "topicId": "cnp_h091",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "取向右为正，物体先受+6 N恒力2 s，再受−2 N恒力3 s。这两个阶段该力的总冲量是多少N·s？",
+    "answer": "6",
+    "verify": "6*2-2*3",
+    "explanation": "分阶段求有向面积：I=6×2−2×3=6 N·s。"
+  },
+  {
+    "id": "cnp_h091_q102",
+    "topicId": "cnp_h091",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "一只箱子在水平地面静止5 s，支持力大小为100 N。关于这5 s内的冲量，正确的是",
+    "explanation": "单个力的冲量与物体是否移动无关；静止时重力与支持力冲量相互抵消。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "箱子没运动，所以支持力冲量为零"
+      },
+      {
+        "key": "B",
+        "text": "支持力的冲量向下"
+      },
+      {
+        "key": "C",
+        "text": "合外力冲量为500 N·s向上"
+      },
+      {
+        "key": "D",
+        "text": "支持力的冲量为500 N·s向上，合外力冲量为零"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"支持力的冲量为500 N·s向上，合外力冲量为零\""
+  },
+  {
+    "id": "cnp_h091_q103",
+    "topicId": "cnp_h091",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "某力方向固定，大小在0～4 s内由0均匀增至8 N。这个力的冲量大小与哪种恒力作用相同？",
+    "explanation": "F-t图像下三角形面积为4×8/2=16 N·s，与4 N×4 s相同。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "2 N作用4 s"
+      },
+      {
+        "key": "B",
+        "text": "4 N作用2 s"
+      },
+      {
+        "key": "C",
+        "text": "4 N作用4 s"
+      },
+      {
+        "key": "D",
+        "text": "8 N作用4 s"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"4 N作用4 s\""
+  },
+  {
+    "id": "cnp_h092_q101",
+    "topicId": "cnp_h092",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "质量0.2 kg的球以10 m/s水平撞墙，随后以5 m/s反向弹回。接触时间为0.03 s，忽略其他水平方向力。墙对球的平均作用力大小是多少N？",
+    "answer": "100",
+    "verify": "0.2*(10+5)/0.03",
+    "explanation": "球动量变化大小为0.2×(10+5)=3 kg·m/s，平均力大小为3/0.03=100 N。"
+  },
+  {
+    "id": "cnp_h092_q102",
+    "topicId": "cnp_h092",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一个球分别落到硬地和软垫上，落地前速度相同，最终都静止，且都不反弹。软垫减小平均冲击力的主要原因是",
+    "explanation": "两次Δp相同，缓冲延长作用时间，使平均合力减小；接触力还需结合重力分析。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "重力在软垫上消失"
+      },
+      {
+        "key": "B",
+        "text": "软垫使球的质量减小"
+      },
+      {
+        "key": "C",
+        "text": "动量变化相同，但停止所需时间更长"
+      },
+      {
+        "key": "D",
+        "text": "动量变化更小，停止时间不变"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"动量变化相同，但停止所需时间更长\""
+  },
+  {
+    "id": "cnp_h092_q103",
+    "topicId": "cnp_h092",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "质量m的球竖直下落后在时间Δt内停住。取向上为正，入射速度大小v。球所受平均支持力应满足",
+    "explanation": "动量由−mv变为0，变化量为+mv；必须使用支持力和重力的合冲量。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "(mg−N)Δt=mv"
+      },
+      {
+        "key": "B",
+        "text": "(N−mg)Δt=mv"
+      },
+      {
+        "key": "C",
+        "text": "NΔt=mv"
+      },
+      {
+        "key": "D",
+        "text": "(N+mg)Δt=mv"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"(N−mg)Δt=mv\""
+  },
+  {
+    "id": "cnp_h093_q101",
+    "topicId": "cnp_h093",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "光滑水平面上，2 kg小车以3 m/s向右追上静止的1 kg小车并粘在一起。不计其他水平外力，共同速度是多少m/s？",
+    "answer": "2",
+    "verify": "2*3/(2+1)",
+    "explanation": "取向右为正，系统动量守恒：2×3=(2+1)v，得v=2 m/s。"
+  },
+  {
+    "id": "cnp_h093_q102",
+    "topicId": "cnp_h093",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "两小车在光滑水平面上由压缩弹簧弹开，弹簧质量可忽略。选两车及弹簧为系统，弹开过程中",
+    "explanation": "水平合外力为零，系统总动量守恒；弹簧势能转化为两车动能，各车动量都会改变。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "任意一辆车的动量保持不变"
+      },
+      {
+        "key": "B",
+        "text": "总动量守恒，但两车总动能增加"
+      },
+      {
+        "key": "C",
+        "text": "总动量和两车总动能都不变"
+      },
+      {
+        "key": "D",
+        "text": "总动量增加，因为弹簧对两车做功"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"总动量守恒，但两车总动能增加\""
+  },
+  {
+    "id": "cnp_h093_q103",
+    "topicId": "cnp_h093",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "某系统在碰撞时受到竖直支持力和重力，且水平方向无外力。关于守恒条件，正确的是",
+    "explanation": "某方向合外力冲量为零即可保证该方向总动量守恒，不要求各分量全部守恒。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "即使竖直合外力不为零，系统水平动量仍可守恒"
+      },
+      {
+        "key": "B",
+        "text": "只要受到任何外力，任一方向动量都不能守恒"
+      },
+      {
+        "key": "C",
+        "text": "系统每个物体的水平动量均不变"
+      },
+      {
+        "key": "D",
+        "text": "水平动量守恒必意味着机械能守恒"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"即使竖直合外力不为零，系统水平动量仍可守恒\""
+  },
+  {
+    "id": "cnp_h094_q101",
+    "topicId": "cnp_h094",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "气垫导轨实验中，挡光片宽度为0.020 m，遮光时间为0.010 s。若遮光期间速度近似不变，小车速度是多少m/s？",
+    "answer": "2",
+    "verify": "0.020/0.010",
+    "explanation": "挡光片通过自身宽度所用时间为0.010 s，v=d/Δt=2 m/s。"
+  },
+  {
+    "id": "cnp_h094_q102",
+    "topicId": "cnp_h094",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "平抛碰撞法验证动量守恒时，三次平抛的起点与落地高度必须相同，主要是为了",
+    "explanation": "平抛时间由下落高度决定；同高时水平位移x=vt，可消去共同的飞行时间。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "使飞行时间相同，水平位移可代替水平初速度比较"
+      },
+      {
+        "key": "B",
+        "text": "使所有小球质量相同"
+      },
+      {
+        "key": "C",
+        "text": "使所有小球的水平位移相同"
+      },
+      {
+        "key": "D",
+        "text": "消除小球所有动能损失"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"使飞行时间相同，水平位移可代替水平初速度比较\""
+  },
+  {
+    "id": "cnp_h094_q103",
+    "topicId": "cnp_h094",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "某次实验测得碰前总动量0.600 kg·m/s，碰后0.588 kg·m/s；测量不确定度范围允许约3%的差异。合理结论是",
+    "explanation": "相对差为(0.600−0.588)/0.600=2%，应诚实记录并结合实验误差判断，不能篡改数据。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "差异不为零，立即否定动量守恒"
+      },
+      {
+        "key": "B",
+        "text": "必须把0.588修改为0.600后再报告"
+      },
+      {
+        "key": "C",
+        "text": "只比较速度即可，质量数据不必记录"
+      },
+      {
+        "key": "D",
+        "text": "两者相差约2%，数据在实验精度内支持动量守恒"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"两者相差约2%，数据在实验精度内支持动量守恒\""
+  },
+  {
+    "id": "cnp_h095_q101",
+    "topicId": "cnp_h095",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "光滑水平面上，质量相同的两车一辆以4 m/s运动，另一辆静止，碰后粘合。碰前总动能为8 J，碰撞损失的动能是多少J？",
+    "answer": "4",
+    "verify": "8*(1-0.5)",
+    "explanation": "动量守恒得共同速度2 m/s；总质量变为两倍，碰后动能为碰前的一半，即4 J，损失4 J。"
+  },
+  {
+    "id": "cnp_h095_q102",
+    "topicId": "cnp_h095",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "一个无爆炸、无储能释放的短时碰撞，系统水平外力可忽略。若碰后两物体速度不同，能否仅据此判为弹性碰撞？",
+    "explanation": "非完全非弹性碰撞也可碰后分开；弹性碰撞的额外条件是系统总动能不变。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能；速度不同就是弹性碰撞"
+      },
+      {
+        "key": "B",
+        "text": "不能；速度不同必为完全非弹性碰撞"
+      },
+      {
+        "key": "C",
+        "text": "能；动量守恒就保证动能守恒"
+      },
+      {
+        "key": "D",
+        "text": "不能；还要比较碰前与碰后总动能"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"不能；还要比较碰前与碰后总动能\""
+  },
+  {
+    "id": "cnp_h095_q103",
+    "topicId": "cnp_h095",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "两车在水平外力可忽略时粘在一起，机械能减少。减少的能量主要转化为什么？",
+    "explanation": "完全非弹性碰撞中动量仍守恒，部分机械能转化为内能、声能或形变能等，总能量不丢失。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "额外产生的系统动量"
+      },
+      {
+        "key": "B",
+        "text": "只能转化为系统整体的重力势能"
+      },
+      {
+        "key": "C",
+        "text": "内能及形变相关能量等"
+      },
+      {
+        "key": "D",
+        "text": "凭空消失的能量"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"内能及形变相关能量等\""
+  },
+  {
+    "id": "cnp_h096_q101",
+    "topicId": "cnp_h096",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "质量m的小球以速度v撞向静止的质量3m小球，发生一维弹性碰撞。碰后质量m小球的速度是",
+    "explanation": "v₁′=(m−3m)v/(m+3m)=−v/2，负号表示反弹。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "v/2"
+      },
+      {
+        "key": "B",
+        "text": "−v"
+      },
+      {
+        "key": "C",
+        "text": "0"
+      },
+      {
+        "key": "D",
+        "text": "−v/2"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"−v/2\""
+  },
+  {
+    "id": "cnp_h096_q102",
+    "topicId": "cnp_h096",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "光滑水平面上，两辆相同质量小车碰前速度为6 m/s和0。以下哪组碰后速度不可能由无储能释放的碰撞产生？",
+    "explanation": "四组总动量都相同，但8与−2对应速度平方和68，大于碰前36，总动能反而增加，故不可能。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "3 m/s和3 m/s"
+      },
+      {
+        "key": "B",
+        "text": "2 m/s和4 m/s"
+      },
+      {
+        "key": "C",
+        "text": "8 m/s和−2 m/s"
+      },
+      {
+        "key": "D",
+        "text": "0和6 m/s"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"8 m/s和−2 m/s\""
+  },
+  {
+    "id": "cnp_h096_q103",
+    "topicId": "cnp_h096",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "在同一直线上，左边小球追上右边小球并完成一次碰撞。接触结束后两球将分离，沿向右为正，应满足",
+    "explanation": "碰后分离要求后方的左球不能继续追压右球；除动量与能量条件外，还要检验相对运动是否合理。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两球速率一定相等"
+      },
+      {
+        "key": "B",
+        "text": "左球速度不大于右球速度"
+      },
+      {
+        "key": "C",
+        "text": "左球速度必须大于右球速度"
+      },
+      {
+        "key": "D",
+        "text": "两球速度一定都为正"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"左球速度不大于右球速度\""
+  },
+  {
+    "id": "cnp_h097_q101",
+    "topicId": "cnp_h097",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "光滑冰面上，人和小车总质量为50 kg，另有2 kg物块，初始整体静止。人把物块向右抛出，物块对地速度为10 m/s。人和车反冲速度大小是多少m/s？",
+    "answer": "0.4",
+    "verify": "2*10/50",
+    "explanation": "水平总动量守恒：50v+2×10=0，反冲速度为−0.4 m/s，大小0.4 m/s。"
+  },
+  {
+    "id": "cnp_h097_q102",
+    "topicId": "cnp_h097",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "一个静止物体在无外力情况下分成两块，质量之比为1:3。两块分离后的动能之比为",
+    "explanation": "两块动量大小相等、方向相反；由Ek=p²/(2m)，动能与质量成反比，故为3:1。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "9:1"
+      },
+      {
+        "key": "B",
+        "text": "3:1"
+      },
+      {
+        "key": "C",
+        "text": "1:3"
+      },
+      {
+        "key": "D",
+        "text": "1:1"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"3:1\""
+  },
+  {
+    "id": "cnp_h097_q103",
+    "topicId": "cnp_h097",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "太空中的火箭向后喷出气体。关于它在真空中加速的解释，正确的是",
+    "explanation": "火箭与喷出气体组成的系统近似动量守恒；反冲不依赖空气，也不意味着关机后失去原有速度。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "喷出气体带走向后的动量，火箭获得向前的动量"
+      },
+      {
+        "key": "B",
+        "text": "必须靠喷出气体推挤周围空气"
+      },
+      {
+        "key": "C",
+        "text": "气体喷出后质量消失，动量也消失"
+      },
+      {
+        "key": "D",
+        "text": "只要关闭发动机，火箭立即停下"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"喷出气体带走向后的动量，火箭获得向前的动量\""
+  },
+  {
+    "id": "cnp_h098_q101",
+    "topicId": "cnp_h098",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "竖直弹簧下悬挂小球做小振幅振动。以静止平衡位置为位移零点，球到达平衡位置时",
+    "explanation": "平衡时弹力与重力抵消，不代表弹簧处于原长；相对平衡位置势能最低，速度最大。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只有重力，弹力为零"
+      },
+      {
+        "key": "B",
+        "text": "合力为零，速度最大，弹簧通常仍有伸长"
+      },
+      {
+        "key": "C",
+        "text": "弹簧必为原长，速度为零"
+      },
+      {
+        "key": "D",
+        "text": "合力最大，速度最大"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"合力为零，速度最大，弹簧通常仍有伸长\""
+  },
+  {
+    "id": "cnp_h098_q102",
+    "topicId": "cnp_h098",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "水平简谐振子某时刻x=+A/2且速度向正方向。直到下一个转折点前，速度大小和加速度大小如何变化？",
+    "explanation": "此时正远离平衡位置，回复力朝负方向并随|x|增大，故运动减速但加速度大小增大。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "速率减小，加速度大小增大"
+      },
+      {
+        "key": "B",
+        "text": "速率和加速度大小都减小"
+      },
+      {
+        "key": "C",
+        "text": "速率增大，加速度大小减小"
+      },
+      {
+        "key": "D",
+        "text": "速率和加速度大小都保持不变"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"速率减小，加速度大小增大\""
+  },
+  {
+    "id": "cnp_h098_q103",
+    "topicId": "cnp_h098",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "简谐振子振幅为0.08 m，从正向最大位移开始，到第一次到达负向最大位移为止，经过的路程是多少m？",
+    "answer": "0.16",
+    "verify": "2*0.08",
+    "explanation": "由+A经过平衡位置到−A，路程为2A=0.16 m，位移则为−0.16 m。"
+  },
+  {
+    "id": "cnp_h099_q101",
+    "topicId": "cnp_h099",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "某振子位移满足x=0.04 sin(5πt+π/6) m。它的周期与初相位分别为",
+    "explanation": "角频率ω=5π rad/s，T=2π/ω=0.4 s；初相位是常量π/6。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "0.4 s、π/6"
+      },
+      {
+        "key": "B",
+        "text": "0.2 s、π/6"
+      },
+      {
+        "key": "C",
+        "text": "0.4 s、5π"
+      },
+      {
+        "key": "D",
+        "text": "5π s、π/6"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"0.4 s、π/6\""
+  },
+  {
+    "id": "cnp_h099_q102",
+    "topicId": "cnp_h099",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "简谐振子振幅为0.03 m、周期为0.4 s。从任意时刻开始的1.2 s恰为三个完整周期，其路程是多少m？",
+    "answer": "0.36",
+    "verify": "4*0.03*(1.2/0.4)",
+    "explanation": "每个完整周期路程为4A，三个周期共12A=0.36 m。"
+  },
+  {
+    "id": "cnp_h099_q103",
+    "topicId": "cnp_h099",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同频率的两振子位移为x₁=A sinωt、x₂=A sin(ωt+π)。下列判断正确的是",
+    "explanation": "sin(θ+π)=−sinθ；相位差影响同步关系，不改变振幅和频率。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两者位移始终相同"
+      },
+      {
+        "key": "B",
+        "text": "第二个振子振幅是第一个的π倍"
+      },
+      {
+        "key": "C",
+        "text": "两者相位差恒为π，位移始终互为相反数"
+      },
+      {
+        "key": "D",
+        "text": "两者频率不同"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"两者相位差恒为π，位移始终互为相反数\""
+  },
+  {
+    "id": "cnp_h100_q101",
+    "topicId": "cnp_h100",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "水平理想弹簧振子k=100 N/m，振幅0.20 m。当位移大小为0.12 m时，它的动能是多少J？",
+    "answer": "1.28",
+    "verify": "0.5*100*(0.20**2-0.12**2)",
+    "explanation": "总能量为½kA²，当前弹性势能为½kx²，两者之差为动能1.28 J。"
+  },
+  {
+    "id": "cnp_h100_q102",
+    "topicId": "cnp_h100",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一水平理想弹簧振子把振幅变为原来的2倍，其他条件不变，则",
+    "explanation": "E=½kA²，T=2π√(m/k)，在线性弹簧理想模型内周期与振幅无关。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "机械能不变，周期变为4倍"
+      },
+      {
+        "key": "B",
+        "text": "机械能变为4倍，周期变为2倍"
+      },
+      {
+        "key": "C",
+        "text": "机械能变为4倍，周期不变"
+      },
+      {
+        "key": "D",
+        "text": "机械能变为2倍，周期变为2倍"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"机械能变为4倍，周期不变\""
+  },
+  {
+    "id": "cnp_h100_q103",
+    "topicId": "cnp_h100",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "水平理想弹簧振子经过x=+A/2和x=−A/2两位置时，正确的是",
+    "explanation": "势能只与x²有关，故动能相等；F=−kx，位置符号相反时回复力方向相反。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两处加速度均为零"
+      },
+      {
+        "key": "B",
+        "text": "动能相同，回复力方向相反"
+      },
+      {
+        "key": "C",
+        "text": "动能相反，回复力相同"
+      },
+      {
+        "key": "D",
+        "text": "动能不同，回复力均向正方向"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"动能相同，回复力方向相反\""
+  },
+  {
+    "id": "cnp_h101_q101",
+    "topicId": "cnp_h101",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一地点的小角度单摆，摆长由L改为4L，摆球质量同时增为2倍。新周期是原来的",
+    "explanation": "小角度单摆T=2π√(L/g)，质量不影响周期，摆长变为4倍则周期变为2倍。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "√2倍"
+      },
+      {
+        "key": "B",
+        "text": "1/2倍"
+      },
+      {
+        "key": "C",
+        "text": "2倍"
+      },
+      {
+        "key": "D",
+        "text": "4倍"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"2倍\""
+  },
+  {
+    "id": "cnp_h101_q102",
+    "topicId": "cnp_h101",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "一只摆钟在小摆角条件下正常走时，若把摆长略微加长，且当地g不变，它将",
+    "explanation": "周期随√L增大；按原标定振动次数计时，实际经过更多时间，摆钟示数落后。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "走快，因为回复力总是增大"
+      },
+      {
+        "key": "B",
+        "text": "走慢，因为每次全振动耗时变长"
+      },
+      {
+        "key": "C",
+        "text": "走快，因为摆幅增大"
+      },
+      {
+        "key": "D",
+        "text": "走时不变，因为摆球质量不变"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"走慢，因为每次全振动耗时变长\""
+  },
+  {
+    "id": "cnp_h101_q103",
+    "topicId": "cnp_h101",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "关于小角度单摆的回复力，正确的是",
+    "explanation": "振动的回复力是指沿弧线指向平衡位置的切向力；径向张力不能直接作为切向回复力。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "重力沿圆弧切线的分量提供回复力，绳张力主要改变速度方向"
+      },
+      {
+        "key": "B",
+        "text": "绳张力就是切向回复力"
+      },
+      {
+        "key": "C",
+        "text": "重力与张力大小总相等，所以球永不加速"
+      },
+      {
+        "key": "D",
+        "text": "回复力方向始终竖直向下"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"重力沿圆弧切线的分量提供回复力，绳张力主要改变速度方向\""
+  },
+  {
+    "id": "cnp_h102_q101",
+    "topicId": "cnp_h102",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "用单摆测g，若误把摆线长度当作摆长而漏加小球半径，周期测量正确，则测得g",
+    "explanation": "g=4π²L/T²，采用的L偏小，计算的g也偏小。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只由小球质量决定"
+      },
+      {
+        "key": "B",
+        "text": "偏小"
+      },
+      {
+        "key": "C",
+        "text": "偏大"
+      },
+      {
+        "key": "D",
+        "text": "不变"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"偏小\""
+  },
+  {
+    "id": "cnp_h102_q102",
+    "topicId": "cnp_h102",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "某单摆完成30次全振动用时60.0 s。摆长L=1.00 m，取π²=10，算得的g是多少m/s²？",
+    "answer": "10",
+    "verify": "4*10*1/(60/30)**2",
+    "explanation": "T=60/30=2 s，g=4π²L/T²=4×10×1/4=10 m/s²。"
+  },
+  {
+    "id": "cnp_h102_q103",
+    "topicId": "cnp_h102",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "作T²-L图像时，若把测得的摆线长度作为横坐标，遗漏的球半径为恒定r，则理想拟合直线",
+    "explanation": "实际摆长为L线+r，因此T²=(4π²/g)L线+4π²r/g，固定漏加长度改变截距而不改变斜率。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "过原点且斜率变大"
+      },
+      {
+        "key": "B",
+        "text": "斜率为g/(4π²)"
+      },
+      {
+        "key": "C",
+        "text": "横截距为+r"
+      },
+      {
+        "key": "D",
+        "text": "斜率仍为4π²/g，但纵截距为4π²r/g"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"斜率仍为4π²/g，但纵截距为4π²r/g\""
+  },
+  {
+    "id": "cnp_h103_q101",
+    "topicId": "cnp_h103",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "某系统固有频率为3 Hz，受到频率为2 Hz的周期性驱动力。稳定受迫振动的频率是",
+    "explanation": "稳定受迫振动跟随驱动力频率；固有频率决定接近共振时振幅增强的程度。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "2 Hz"
+      },
+      {
+        "key": "B",
+        "text": "3 Hz"
+      },
+      {
+        "key": "C",
+        "text": "5 Hz"
+      },
+      {
+        "key": "D",
+        "text": "1 Hz"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"2 Hz\""
+  },
+  {
+    "id": "cnp_h103_q102",
+    "topicId": "cnp_h103",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一装置在驱动力幅值和阻尼条件相同的情况下，驱动频率从远低于固有频率逐渐增大并越过它，振幅通常",
+    "explanation": "扫描驱动频率得到共振曲线，固有频率附近能量输入与振动较匹配，振幅出现峰值。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "始终增大"
+      },
+      {
+        "key": "B",
+        "text": "始终减小"
+      },
+      {
+        "key": "C",
+        "text": "始终与频率成正比"
+      },
+      {
+        "key": "D",
+        "text": "先增大，在共振附近达到峰值后减小"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"先增大，在共振附近达到峰值后减小\""
+  },
+  {
+    "id": "cnp_h103_q103",
+    "topicId": "cnp_h103",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "桥梁可能受到近似周期性的外界激励。降低共振风险的合理方法是",
+    "explanation": "避开激励频率与固有频率接近并增强耗能，可减小共振振幅；增大外力反而可能加剧振动。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只增加外力幅值"
+      },
+      {
+        "key": "B",
+        "text": "把驱动频率长期固定在固有频率附近"
+      },
+      {
+        "key": "C",
+        "text": "改变结构固有频率并增加适当阻尼"
+      },
+      {
+        "key": "D",
+        "text": "要求任何外力的频率都绝对为零"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"改变结构固有频率并增加适当阻尼\""
+  },
+  {
+    "id": "cnp_h104_q101",
+    "topicId": "cnp_h104",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "向右传播的绳波到达绳上一枚彩色标记后，若绳中质点只上下振动，标记随后将",
+    "explanation": "波传播的是振动状态和能量，不是把各段介质持续搬运到前方。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "随波峰一直向右移动"
+      },
+      {
+        "key": "B",
+        "text": "保持永远静止"
+      },
+      {
+        "key": "C",
+        "text": "沿绳向右加速到波速"
+      },
+      {
+        "key": "D",
+        "text": "在原水平位置附近上下运动"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"在原水平位置附近上下运动\""
+  },
+  {
+    "id": "cnp_h104_q102",
+    "topicId": "cnp_h104",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "波源开始振动时先向上，波沿均匀绳向右传播，传播中无反射。右侧尚未振动的质点刚开始运动时方向为",
+    "explanation": "后续质点依次重复波源之前的振动，刚起振时重现波源最初的振动方向。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "向右，与传播方向相同"
+      },
+      {
+        "key": "B",
+        "text": "方向任意，不能由波源判断"
+      },
+      {
+        "key": "C",
+        "text": "向上，与波源最初起振方向相同"
+      },
+      {
+        "key": "D",
+        "text": "向下，与传播方向相反"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"向上，与波源最初起振方向相同\""
+  },
+  {
+    "id": "cnp_h104_q103",
+    "topicId": "cnp_h104",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "一列机械波波速为3 m/s。相距0.9 m的两点沿传播方向排列，后一点开始振动比前一点晚多少s？",
+    "answer": "0.3",
+    "verify": "0.9/3",
+    "explanation": "传播时间差Δt=Δx/v=0.9/3=0.3 s，并非介质质点移动了0.9 m。"
+  },
+  {
+    "id": "cnp_h105_q101",
+    "topicId": "cnp_h105",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "频率为5 Hz的机械波由甲介质进入乙介质，在乙中波长为0.8 m。它在乙中的波速是多少m/s？",
+    "answer": "4",
+    "verify": "5*0.8",
+    "explanation": "跨介质传播时频率由波源决定而保持5 Hz，v=fλ=4 m/s。"
+  },
+  {
+    "id": "cnp_h105_q102",
+    "topicId": "cnp_h105",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一声源发出的声波从空气进入水，波速增大，则",
+    "explanation": "声源频率不因介质改变，波长λ=v/f随波速增大。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "频率减小，波长减小"
+      },
+      {
+        "key": "B",
+        "text": "频率不变，波长增大"
+      },
+      {
+        "key": "C",
+        "text": "频率增大，波长不变"
+      },
+      {
+        "key": "D",
+        "text": "频率和波长都不变"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"频率不变，波长增大\""
+  },
+  {
+    "id": "cnp_h105_q103",
+    "topicId": "cnp_h105",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一均匀、无明显色散的绳上，振源频率变为原来的2倍，其他条件不变。形成新稳态波后",
+    "explanation": "在该模型中波速由绳的张力和线密度决定；f加倍、v不变，因此λ减半。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "波速不变，波长变为一半"
+      },
+      {
+        "key": "B",
+        "text": "波速变为2倍，波长不变"
+      },
+      {
+        "key": "C",
+        "text": "波速变为一半，波长不变"
+      },
+      {
+        "key": "D",
+        "text": "波速与波长均变为2倍"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"波速不变，波长变为一半\""
+  },
+  {
+    "id": "cnp_h106_q101",
+    "topicId": "cnp_h106",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "某横波沿+x方向传播。在某时刻波形的一段随x增大而向上倾斜，该段上的质点此刻将",
+    "explanation": "向右传播时y(x,t)=f(x−vt)，质点的竖直速度与当地波形斜率符号相反。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "向−x方向运动"
+      },
+      {
+        "key": "B",
+        "text": "向下运动"
+      },
+      {
+        "key": "C",
+        "text": "向上运动"
+      },
+      {
+        "key": "D",
+        "text": "向+x方向运动"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"向下运动\""
+  },
+  {
+    "id": "cnp_h106_q102",
+    "topicId": "cnp_h106",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "同一列波的瞬时空间图像给出波长0.60 m，某点振动图像给出周期0.20 s。波速是多少m/s？",
+    "answer": "3",
+    "verify": "0.60/0.20",
+    "explanation": "空间图像读波长，时间图像读周期，两者结合得v=λ/T=3 m/s。"
+  },
+  {
+    "id": "cnp_h106_q103",
+    "topicId": "cnp_h106",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "看到某质点的位移随时间呈正弦变化，单凭这张振动图像能否确定波的传播方向？",
+    "explanation": "振动图像仅记录一个位置的时间变化，不包含空间上哪一侧的状态先后传到该点。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能，图像向右延伸就说明波向右传播"
+      },
+      {
+        "key": "B",
+        "text": "能，位移为正就说明波向右传播"
+      },
+      {
+        "key": "C",
+        "text": "能，周期越大就说明向左传播"
+      },
+      {
+        "key": "D",
+        "text": "不能；还需要空间波形或其他位置的时间先后信息"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"不能；还需要空间波形或其他位置的时间先后信息\""
+  },
+  {
+    "id": "cnp_h107_q101",
+    "topicId": "cnp_h107",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "某人在山谷中听到自己的回声，发声后1.2 s听到，声速取340 m/s。人与反射面距离是多少m？",
+    "answer": "204",
+    "verify": "340*1.2/2",
+    "explanation": "声音经历往返路程2d，故d=vt/2=204 m。"
+  },
+  {
+    "id": "cnp_h107_q102",
+    "topicId": "cnp_h107",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "水波经一狭缝后弯向两侧。保持缝宽不变，若同一水域中改用波长更长的波，通常",
+    "explanation": "缝宽与波长之比越小，衍射越明显；这里比较的是波长相对于缝宽的大小。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "衍射更不明显"
+      },
+      {
+        "key": "B",
+        "text": "频率必增大才产生衍射"
+      },
+      {
+        "key": "C",
+        "text": "狭缝后的波只能直线传播"
+      },
+      {
+        "key": "D",
+        "text": "衍射更明显"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"衍射更明显\""
+  },
+  {
+    "id": "cnp_h107_q103",
+    "topicId": "cnp_h107",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "一列波从甲介质进入乙介质时方向发生改变。它的反射波仍在甲中传播，正确的是",
+    "explanation": "固定界面不改变频率；反射波仍在原介质中，波速也相同，透射波的波速才由乙介质决定。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "反射波波速必须等于乙介质中的波速"
+      },
+      {
+        "key": "B",
+        "text": "进入乙介质的波频率随折射角改变"
+      },
+      {
+        "key": "C",
+        "text": "反射波的频率和波速与原入射波相同"
+      },
+      {
+        "key": "D",
+        "text": "反射波频率必减半"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"反射波的频率和波速与原入射波相同\""
+  },
+  {
+    "id": "cnp_h108_q101",
+    "topicId": "cnp_h108",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "两同相、同频、等振幅波源形成稳定干涉。某点到两源路程差为1.5λ，该点属于",
+    "explanation": "同相源路程差为半波长的奇数倍时相消；1.5λ=3λ/2。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "振动加强区"
+      },
+      {
+        "key": "B",
+        "text": "波速加倍区"
+      },
+      {
+        "key": "C",
+        "text": "频率为零区"
+      },
+      {
+        "key": "D",
+        "text": "振动减弱区"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"振动减弱区\""
+  },
+  {
+    "id": "cnp_h108_q102",
+    "topicId": "cnp_h108",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "两个同频、同相且等振幅的波源，在振动加强点P处，正确的是",
+    "explanation": "加强是两振动同相叠加、振幅增大，不是位移保持最大，也不使频率加倍。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "P点始终不运动"
+      },
+      {
+        "key": "B",
+        "text": "P点振动频率是波源频率的2倍"
+      },
+      {
+        "key": "C",
+        "text": "P点振幅较大，但位移仍周期性经过零"
+      },
+      {
+        "key": "D",
+        "text": "P点始终处于最大正位移"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"P点振幅较大，但位移仍周期性经过零\""
+  },
+  {
+    "id": "cnp_h108_q103",
+    "topicId": "cnp_h108",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "若两波源原来同相，某点路程差为λ。仅使一个波源的初相位增加π，其他条件不变，该点将由",
+    "explanation": "原路程差带来2π相位差；再加π后两振动反相，因此由相长变为相消。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "加强保持不变"
+      },
+      {
+        "key": "B",
+        "text": "加强变为减弱"
+      },
+      {
+        "key": "C",
+        "text": "减弱变为加强"
+      },
+      {
+        "key": "D",
+        "text": "加强变为频率加倍"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"加强变为减弱\""
+  },
+  {
+    "id": "cnp_h109_q101",
+    "topicId": "cnp_h109",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "救护车鸣笛频率恒定，从静止观察者身边驶过后继续远离。与驶近时相比，观察者听到的音调",
+    "explanation": "驶近时单位时间接收波峰较多，远离时较少；改变的是接收频率，不是声源本身的振动频率。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不变，因声速不变"
+      },
+      {
+        "key": "B",
+        "text": "变高，因距离变大"
+      },
+      {
+        "key": "C",
+        "text": "变低，车上鸣笛器的自身频率不变"
+      },
+      {
+        "key": "D",
+        "text": "变低，鸣笛器自身频率也必减小"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"变低，车上鸣笛器的自身频率不变\""
+  },
+  {
+    "id": "cnp_h109_q102",
+    "topicId": "cnp_h109",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "观察者与声源都相对空气静止。比较距离较近和较远的两种布置，能否仅因传播距离不同就断言发生多普勒频移？",
+    "explanation": "多普勒频移来自波源或接收者的运动引起波峰接收间隔变化；距离增加通常影响强度，但不直接决定频率。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能；声音变弱必意味着频率降低"
+      },
+      {
+        "key": "B",
+        "text": "不能；距离本身不等于沿视线方向的相对运动"
+      },
+      {
+        "key": "C",
+        "text": "能；距离越远频率必越低"
+      },
+      {
+        "key": "D",
+        "text": "能；声速随距离不断减小"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"不能；距离本身不等于沿视线方向的相对运动\""
+  },
+  {
+    "id": "cnp_h109_q103",
+    "topicId": "cnp_h109",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "雷达向前方驶近的车辆发射电磁波并接收反射波。与静止车辆相比，回波频率将",
+    "explanation": "反射过程涉及相向运动的频率变化，回波升频；实际频移与沿雷达视线的速度分量有关。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "更高，可据频移估计径向速度"
+      },
+      {
+        "key": "B",
+        "text": "更低，只可测车辆质量"
+      },
+      {
+        "key": "C",
+        "text": "不变，因为电磁波不能产生多普勒效应"
+      },
+      {
+        "key": "D",
+        "text": "必等于发射频率的2倍"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"更高，可据频移估计径向速度\""
+  },
+  {
+    "id": "cnp_h110_q101",
+    "topicId": "cnp_h110",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "某透明介质折射率为1.5，真空光速取3.0×10⁸ m/s。光在其中的速度是几×10⁸ m/s？（填写前面的系数）",
+    "answer": "2",
+    "verify": "3/1.5",
+    "explanation": "n=c/v，所以v=c/n=2.0×10⁸ m/s，所填系数为2。"
+  },
+  {
+    "id": "cnp_h110_q102",
+    "topicId": "cnp_h110",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "单色光由空气射入某透明玻璃，频率保持不变，若玻璃折射率为n，则玻璃中的波长约为空气中的",
+    "explanation": "波速变为原来的1/n，频率不变，由λ=v/f，波长也变为原来的1/n。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "1/n"
+      },
+      {
+        "key": "B",
+        "text": "n倍"
+      },
+      {
+        "key": "C",
+        "text": "n²倍"
+      },
+      {
+        "key": "D",
+        "text": "不变"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"1/n\""
+  },
+  {
+    "id": "cnp_h110_q103",
+    "topicId": "cnp_h110",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "从空气斜射入玻璃的光，入射光与界面的夹角为30°，折射光与法线夹角为30°。忽略空气折射率偏离1，玻璃折射率为",
+    "explanation": "入射角与法线夹角为60°，n=sin60°/sin30°=√3，不能直接使用与界面的夹角。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "1"
+      },
+      {
+        "key": "B",
+        "text": "1/√3"
+      },
+      {
+        "key": "C",
+        "text": "2"
+      },
+      {
+        "key": "D",
+        "text": "√3"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"√3\""
+  },
+  {
+    "id": "cnp_h111_q101",
+    "topicId": "cnp_h111",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "插针法测平行玻璃砖折射率，观察侧的第三、第四根针需挡住先前两针的像。使两针间距离适当增大，主要为了",
+    "explanation": "较长的基线可减小针位置小偏差对直线方向的影响，但仍需保证针像共线和针竖直。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "减小确定光线方向的角度误差"
+      },
+      {
+        "key": "B",
+        "text": "改变玻璃的折射率"
+      },
+      {
+        "key": "C",
+        "text": "使光在玻璃中频率变高"
+      },
+      {
+        "key": "D",
+        "text": "使出射光不再平行于入射光"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"减小确定光线方向的角度误差\""
+  },
+  {
+    "id": "cnp_h111_q102",
+    "topicId": "cnp_h111",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "插针实验作图后测得sin i=0.75、sin r=0.50。玻璃对空气的折射率是多少？",
+    "answer": "1.5",
+    "verify": "0.75/0.50",
+    "explanation": "入射角、折射角均相对法线测量，n=sin i/sin r=1.5。"
+  },
+  {
+    "id": "cnp_h111_q103",
+    "topicId": "cnp_h111",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "玻璃砖实验中，学生量出入射光与法线夹角，却把折射光与界面的夹角当作折射角。即使线迹准确，这样算得的折射率",
+    "explanation": "折射定律要求入射角和折射角都相对于法线；把r误换成90°−r会把分母sin r误写成cos r。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "必等于玻璃真实折射率"
+      },
+      {
+        "key": "B",
+        "text": "只会影响图线粗细，不影响计算"
+      },
+      {
+        "key": "C",
+        "text": "一般不可靠，因为两角并非按同一法线定义"
+      },
+      {
+        "key": "D",
+        "text": "一定正确，任意夹角的正弦比都一样"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"一般不可靠，因为两角并非按同一法线定义\""
+  },
+  {
+    "id": "cnp_h112_q101",
+    "topicId": "cnp_h112",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "光从折射率√2的介质射向空气，入射角为60°，界面光滑平整。将发生",
+    "explanation": "临界角满足sin C=1/√2，C=45°；由光密到光疏且60°>45°，发生全反射。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只有折射而无反射"
+      },
+      {
+        "key": "B",
+        "text": "折射角小于入射角"
+      },
+      {
+        "key": "C",
+        "text": "光频率加倍"
+      },
+      {
+        "key": "D",
+        "text": "全反射"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"全反射\""
+  },
+  {
+    "id": "cnp_h112_q102",
+    "topicId": "cnp_h112",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "将原本可在空气中发生全反射的玻璃界面浸入水中，玻璃折射率仍大于水。与玻璃—空气界面相比，临界角",
+    "explanation": "sin C=n外/n内，水的折射率大于空气，使临界角增大；同一入射角下可能不再全反射。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不变，只由玻璃决定"
+      },
+      {
+        "key": "B",
+        "text": "变成0°"
+      },
+      {
+        "key": "C",
+        "text": "增大，更不容易满足全反射条件"
+      },
+      {
+        "key": "D",
+        "text": "减小，更容易全反射"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"增大，更不容易满足全反射条件\""
+  },
+  {
+    "id": "cnp_h112_q103",
+    "topicId": "cnp_h112",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "光纤利用内芯与外层界面的全反射导光。若要保持此机制，折射率应满足",
+    "explanation": "全反射要求从高折射率介质射向低折射率介质，并满足足够大的界面入射角。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "内芯大于外层，但光必须垂直界面入射"
+      },
+      {
+        "key": "B",
+        "text": "内芯大于外层，且界面入射角大于临界角"
+      },
+      {
+        "key": "C",
+        "text": "内芯小于外层，任意入射角均可"
+      },
+      {
+        "key": "D",
+        "text": "内芯等于外层，因而反射最强"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"内芯大于外层，且界面入射角大于临界角\""
+  },
+  {
+    "id": "cnp_h113_q101",
+    "topicId": "cnp_h113",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "双缝干涉中，保持双缝间距和屏距不变，把红光换成波长更短的绿光，相邻亮纹间距将",
+    "explanation": "Δx=Lλ/d，屏距和缝距固定时条纹间距正比于波长；没有具体波长不能断言恰好减半。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不变"
+      },
+      {
+        "key": "B",
+        "text": "必为原来的一半"
+      },
+      {
+        "key": "C",
+        "text": "减小"
+      },
+      {
+        "key": "D",
+        "text": "增大"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"减小\""
+  },
+  {
+    "id": "cnp_h113_q102",
+    "topicId": "cnp_h113",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "某双缝干涉装置L=2.0 m、d=0.50 mm，单色光波长为600 nm。相邻亮纹间距是多少mm？",
+    "answer": "2.4",
+    "verify": "2*600e-9/(0.50e-3)*1000",
+    "explanation": "统一单位代入Δx=Lλ/d=0.0024 m=2.4 mm。"
+  },
+  {
+    "id": "cnp_h113_q103",
+    "topicId": "cnp_h113",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一双缝装置改用白光照射且中心光程差为零，中心附近通常可见",
+    "explanation": "中央各色光都相长而呈白色；两侧因波长不同、条纹间距不同而分色，远处条纹可能重叠模糊。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "中央白色亮纹，两侧出现有颜色分布的条纹"
+      },
+      {
+        "key": "B",
+        "text": "全部明纹都严格为白色"
+      },
+      {
+        "key": "C",
+        "text": "中央一定为黑色暗纹"
+      },
+      {
+        "key": "D",
+        "text": "完全没有干涉，因为白光不是单色光"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"中央白色亮纹，两侧出现有颜色分布的条纹\""
+  },
+  {
+    "id": "cnp_h114_q101",
+    "topicId": "cnp_h114",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "双缝实验测得第1条至第6条亮纹中心距离为10.0 mm，d=0.25 mm，L=1.0 m。光的波长是多少nm？",
+    "answer": "500",
+    "verify": "(10e-3/5)*(0.25e-3)/1*1e9",
+    "explanation": "第1至第6条共有5个间隔，Δx=2.0 mm，λ=Δx d/L=500 nm。"
+  },
+  {
+    "id": "cnp_h114_q102",
+    "topicId": "cnp_h114",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "用双缝干涉测波长，若把从第1条到第11条亮纹的距离误除以11，其余量正确，则波长计算值",
+    "explanation": "11条亮纹之间只有10个间隔；误用更大的除数使Δx和λ均偏小。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "偏小，为正确值的10/11"
+      },
+      {
+        "key": "B",
+        "text": "偏大，为正确值的11/10"
+      },
+      {
+        "key": "C",
+        "text": "不变，误差会自动抵消"
+      },
+      {
+        "key": "D",
+        "text": "偏小，为正确值的1/11"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"偏小，为正确值的10/11\""
+  },
+  {
+    "id": "cnp_h114_q103",
+    "topicId": "cnp_h114",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一条干涉条纹很细，测一对相邻条纹间距的相对误差较大。更合理的数据处理是",
+    "explanation": "多间隔测量可降低位置读数误差占总跨度的比例，计算时必须区分条纹数与间隔数。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只测亮纹边缘，不考虑条纹宽度"
+      },
+      {
+        "key": "B",
+        "text": "把条纹数直接当作间隔数"
+      },
+      {
+        "key": "C",
+        "text": "直接将屏距当作条纹间距"
+      },
+      {
+        "key": "D",
+        "text": "测多个连续亮纹中心的总跨度，再除以间隔数"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"测多个连续亮纹中心的总跨度，再除以间隔数\""
+  },
+  {
+    "id": "cnp_h115_q101",
+    "topicId": "cnp_h115",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "单色光照射可调狭缝，缝变窄但未完全闭合时，单缝衍射中央亮纹通常",
+    "explanation": "狭缝越窄衍射角越大，中央亮纹更宽；透光面积减小通常使透过总功率降低。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "变宽，同时透过的总光功率可能减小"
+      },
+      {
+        "key": "B",
+        "text": "变窄且总透光功率必增大"
+      },
+      {
+        "key": "C",
+        "text": "宽度不变，只改变颜色"
+      },
+      {
+        "key": "D",
+        "text": "分裂为两条等宽中心亮纹"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"变宽，同时透过的总光功率可能减小\""
+  },
+  {
+    "id": "cnp_h115_q102",
+    "topicId": "cnp_h115",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "观察屏上中央亮条纹比两侧亮条纹明显宽，且两侧逐渐变暗。这更符合",
+    "explanation": "单缝衍射中央明纹最宽最亮，两侧明纹较窄较弱；双缝干涉主要表现为近似等间距条纹。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "理想双缝干涉中等间距条纹的主要特征"
+      },
+      {
+        "key": "B",
+        "text": "光电效应的电流图像"
+      },
+      {
+        "key": "C",
+        "text": "光在真空中无衍射的证据"
+      },
+      {
+        "key": "D",
+        "text": "单缝衍射图样"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"单缝衍射图样\""
+  },
+  {
+    "id": "cnp_h115_q103",
+    "topicId": "cnp_h115",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "圆形不透明小盘的几何阴影中心出现亮斑，对这一现象最恰当的说明是",
+    "explanation": "泊松亮斑由绕过圆盘边缘的衍射光在阴影中心相干叠加形成，是光波动性的典型证据。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "证明光没有能量"
+      },
+      {
+        "key": "B",
+        "text": "说明光频率在阴影中变为零"
+      },
+      {
+        "key": "C",
+        "text": "光在边缘衍射后叠加，支持光的波动性"
+      },
+      {
+        "key": "D",
+        "text": "光只可能沿直线，亮斑一定是盘中央有孔"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"光在边缘衍射后叠加，支持光的波动性\""
+  },
+  {
+    "id": "cnp_h116_q101",
+    "topicId": "cnp_h116",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "自然光先后通过两块理想偏振片。第二片由与第一片透振方向平行转到垂直，透射光强将",
+    "explanation": "第一片后光已偏振，第二片仅透过其透振方向的分量；转至正交时该分量为零。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "逐渐增强，垂直时最强"
+      },
+      {
+        "key": "B",
+        "text": "保持不变，自然光不能被偏振"
+      },
+      {
+        "key": "C",
+        "text": "频率逐渐降低到零"
+      },
+      {
+        "key": "D",
+        "text": "逐渐减弱，理想垂直时为零"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"逐渐减弱，理想垂直时为零\""
+  },
+  {
+    "id": "cnp_h116_q102",
+    "topicId": "cnp_h116",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "两块理想偏振片透振方向互相垂直，原本不透光。在中间插入一片方向与二者都成45°的理想偏振片后，通常",
+    "explanation": "中间片把第一片后的偏振方向转成可分解出末片透振方向分量的方向，不能把两端正交简单用于三片情形。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "出射光成为频率更高的紫光"
+      },
+      {
+        "key": "B",
+        "text": "光偏振方向不再有意义"
+      },
+      {
+        "key": "C",
+        "text": "可有光透出"
+      },
+      {
+        "key": "D",
+        "text": "仍必完全不透光"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"可有光透出\""
+  },
+  {
+    "id": "cnp_h116_q103",
+    "topicId": "cnp_h116",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "偏振太阳镜可减弱某些水面反射眩光。这一应用反映出",
+    "explanation": "反射光往往含较强的某一偏振分量，适当设置偏振片方向可降低眩光；不需要改变光的频率。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "偏振片把所有可见光变成红外线"
+      },
+      {
+        "key": "B",
+        "text": "反射眩光有偏振成分，可利用透振方向选择性削弱"
+      },
+      {
+        "key": "C",
+        "text": "偏振片只能通过声波"
+      },
+      {
+        "key": "D",
+        "text": "偏振片让光速降为零"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"反射眩光有偏振成分，可利用透振方向选择性削弱\""
+  },
+  {
+    "id": "cnp_h117_q101",
+    "topicId": "cnp_h117",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "激光测距仪发出脉冲到接收回波历时2.0 μs，光速取3.0×10⁸ m/s，忽略空气折射影响。目标距离是多少m？",
+    "answer": "300",
+    "verify": "3e8*2e-6/2",
+    "explanation": "脉冲经历往返路程，d=cΔt/2=300 m。"
+  },
+  {
+    "id": "cnp_h117_q102",
+    "topicId": "cnp_h117",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "用激光做双缝干涉比普通灯泡直接照射更容易获得稳定清晰条纹，主要利用激光的",
+    "explanation": "干涉要求稳定的相位关系；激光相干性好便于形成稳定条纹，单纯高亮度不是全部原因。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "光子不携带能量"
+      },
+      {
+        "key": "B",
+        "text": "相干性好"
+      },
+      {
+        "key": "C",
+        "text": "只能在真空传播"
+      },
+      {
+        "key": "D",
+        "text": "没有波长"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"相干性好\""
+  },
+  {
+    "id": "cnp_h117_q103",
+    "topicId": "cnp_h117",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "激光经透镜聚焦后用于切割材料，直接相关的优势是",
+    "explanation": "聚焦缩小光斑，在一定功率下提高单位面积上的能量输入；切割并不违背能量守恒。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能量可集中到很小区域，使局部功率密度很高"
+      },
+      {
+        "key": "B",
+        "text": "激光在任何材料内都绝不被吸收"
+      },
+      {
+        "key": "C",
+        "text": "聚焦使总能量凭空增加"
+      },
+      {
+        "key": "D",
+        "text": "激光照射不可能产生热效应"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"能量可集中到很小区域，使局部功率密度很高\""
+  },
+  {
+    "id": "cnp_h118_q101",
+    "topicId": "cnp_h118",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "长0.40 m的直导线处于0.50 T的匀强磁场，通以3.0 A电流。导线与磁场夹角30°，安培力大小是多少N？",
+    "answer": "0.3",
+    "verify": "0.5*3*0.4*0.5",
+    "explanation": "F=BIL sin30°=0.50×3.0×0.40×0.5=0.30 N。"
+  },
+  {
+    "id": "cnp_h118_q102",
+    "topicId": "cnp_h118",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "纸面内的直导线电流向右，磁场垂直纸面向里。导线所受安培力方向为",
+    "explanation": "由左手定则或I与B的矢量叉积可知，力向上，且同时垂直电流和磁场。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "纸面内向上"
+      },
+      {
+        "key": "B",
+        "text": "纸面内向下"
+      },
+      {
+        "key": "C",
+        "text": "垂直纸面向外"
+      },
+      {
+        "key": "D",
+        "text": "纸面内向右"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"纸面内向上\""
+  },
+  {
+    "id": "cnp_h118_q103",
+    "topicId": "cnp_h118",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "一根折成折线的导线全部位于同一匀强磁场，电流大小处处相同，导线两端连线与磁场平行。忽略接线在场外部分的影响，整段折线导线的安培合力为",
+    "explanation": "均匀B下各段IL矢量可相加，等效长度是两端的有向连线；该连线平行B，故合力为零。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "一定等于B乘电流乘实际总长度"
+      },
+      {
+        "key": "B",
+        "text": "一定指向导线弯曲的一侧"
+      },
+      {
+        "key": "C",
+        "text": "仅由折角个数决定"
+      },
+      {
+        "key": "D",
+        "text": "零"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"零\""
+  },
+  {
+    "id": "cnp_h119_q101",
+    "topicId": "cnp_h119",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "磁电式电流表在有效量程内偏角与电流成正比，20 μA使指针偏转12°。使它偏转30°需要多少μA？",
+    "answer": "50",
+    "verify": "20*30/12",
+    "explanation": "比例关系I/θ不变，I=20×30/12=50 μA。"
+  },
+  {
+    "id": "cnp_h119_q102",
+    "topicId": "cnp_h119",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "磁电式电表采用辐向磁场，使转动范围内线圈平面始终近似与磁场方向平行，主要目的是",
+    "explanation": "在辐向磁场中有效安培力矩近似正比于I，配合弹簧反向力矩正比于偏角，可得到均匀刻度。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "使线圈中电流恒定为零"
+      },
+      {
+        "key": "B",
+        "text": "让指针只能转动90°"
+      },
+      {
+        "key": "C",
+        "text": "消除螺旋弹簧的所有作用"
+      },
+      {
+        "key": "D",
+        "text": "使电磁力矩与电流的比例系数近似不随偏角改变"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"使电磁力矩与电流的比例系数近似不随偏角改变\""
+  },
+  {
+    "id": "cnp_h119_q103",
+    "topicId": "cnp_h119",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "运输灵敏磁电式电表时将接线柱短接，晃动时指针摆动较快衰减。这主要利用",
+    "explanation": "闭合线圈在磁场中运动会产生感应电流，安培力矩形成电磁阻尼，减轻指针摆动。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "短接给表头持续输入大电流"
+      },
+      {
+        "key": "B",
+        "text": "短接使线圈质量增加"
+      },
+      {
+        "key": "C",
+        "text": "线圈运动产生感应电流，其磁效应阻碍运动"
+      },
+      {
+        "key": "D",
+        "text": "短接使永磁体磁场永久消失"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"线圈运动产生感应电流，其磁效应阻碍运动\""
+  },
+  {
+    "id": "cnp_h120_q101",
+    "topicId": "cnp_h120",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "电子向右运动，磁场垂直纸面向外，且电子只受磁场力。电子此刻所受力的方向为",
+    "explanation": "正电荷向右、B向外时受力向下；电子带负电，受力反向，即向上。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "向下"
+      },
+      {
+        "key": "B",
+        "text": "向右"
+      },
+      {
+        "key": "C",
+        "text": "垂直纸面向里"
+      },
+      {
+        "key": "D",
+        "text": "向上"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"向上\""
+  },
+  {
+    "id": "cnp_h120_q102",
+    "topicId": "cnp_h120",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "带电粒子在磁场中偏转，忽略电场、重力及辐射损耗，只有磁洛伦兹力作用。关于它的速率和动能，正确的是",
+    "explanation": "磁洛伦兹力始终垂直速度，功率F·v=0，因此只能改变速度方向，不改变速率和动能。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "速率不变但动能减小"
+      },
+      {
+        "key": "B",
+        "text": "只要轨迹弯曲，动能必改变"
+      },
+      {
+        "key": "C",
+        "text": "速率不变，动能不变"
+      },
+      {
+        "key": "D",
+        "text": "速率不断增加，动能增加"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"速率不变，动能不变\""
+  },
+  {
+    "id": "cnp_h120_q103",
+    "topicId": "cnp_h120",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "带正电粒子电荷量2.0×10⁻⁶ C，速率6000 m/s，速度与0.20 T匀强磁场夹角30°。仅垂直磁场的速度分量受磁场力，力的大小是多少mN？",
+    "answer": "1.2",
+    "verify": "2e-6*6000*0.5*0.2*1000",
+    "explanation": "垂直分量v⊥=v sin30°=3000 m/s，F=qv⊥B=0.0012 N=1.2 mN。"
+  },
+  {
+    "id": "cnp_h121_q101",
+    "topicId": "cnp_h121",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一种带电粒子先后以v和2v垂直射入同一匀强磁场，均忽略相对论效应，则",
+    "explanation": "r=mv/(|q|B)随v成正比，而T=2πm/(|q|B)与v无关。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "半径和周期均变为2倍"
+      },
+      {
+        "key": "B",
+        "text": "半径和周期均不变"
+      },
+      {
+        "key": "C",
+        "text": "轨道半径变为2倍，周期不变"
+      },
+      {
+        "key": "D",
+        "text": "轨道半径不变，周期变为2倍"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"轨道半径变为2倍，周期不变\""
+  },
+  {
+    "id": "cnp_h121_q102",
+    "topicId": "cnp_h121",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "一粒子只受匀强磁场力，垂直入射后沿圆弧转过90°。这段运动时间为",
+    "explanation": "匀速圆周运动转角与时间成正比，90°占一周的1/4。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "与半径成正比但与周期无关"
+      },
+      {
+        "key": "B",
+        "text": "T/4，T为该粒子的完整回旋周期"
+      },
+      {
+        "key": "C",
+        "text": "T/2"
+      },
+      {
+        "key": "D",
+        "text": "T"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"T/4，T为该粒子的完整回旋周期\""
+  },
+  {
+    "id": "cnp_h121_q103",
+    "topicId": "cnp_h121",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "某粒子在匀强磁场中回旋半径为0.10 m。保持粒子速度和电荷量、质量不变，把磁感应强度减为原来的1/2，新半径是多少m？",
+    "answer": "0.2",
+    "verify": "0.10/0.5",
+    "explanation": "r与B成反比，B减半则半径加倍为0.20 m。"
+  },
+  {
+    "id": "cnp_h122_q101",
+    "topicId": "cnp_h122",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "两种正离子电荷量相同，从静止经同一电压加速后进入同一匀强磁场，轨道半径分别为r和2r。后者质量是前者的",
+    "explanation": "r²=2mU/(qB²)，在q、U、B相同时质量与半径平方成正比。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "1/4倍"
+      },
+      {
+        "key": "B",
+        "text": "4倍"
+      },
+      {
+        "key": "C",
+        "text": "2倍"
+      },
+      {
+        "key": "D",
+        "text": "1/2倍"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"4倍\""
+  },
+  {
+    "id": "cnp_h122_q102",
+    "topicId": "cnp_h122",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "速度选择器中电场强度为6.0×10⁴ V/m、磁感应强度为0.20 T，电场、磁场与粒子入射方向两两垂直，且电场力与磁场力反向。能不偏转沿直线通过的粒子速率是几×10⁵ m/s？（填写系数）",
+    "answer": "3",
+    "verify": "6e4/0.2/1e5",
+    "explanation": "电场力与磁场力平衡：|q|E=|q|vB，v=E/B=3.0×10⁵ m/s。"
+  },
+  {
+    "id": "cnp_h122_q103",
+    "topicId": "cnp_h122",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "两种离子先通过同一速度选择器，再垂直进入同一偏转磁场，荷质比分别为k和2k。它们在偏转区的半径之比为",
+    "explanation": "选择器使速度相同，r=v/[B(|q|/m)]，半径与荷质比成反比。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "1:2"
+      },
+      {
+        "key": "B",
+        "text": "1:1"
+      },
+      {
+        "key": "C",
+        "text": "4:1"
+      },
+      {
+        "key": "D",
+        "text": "2:1"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"2:1\""
+  },
+  {
+    "id": "cnp_h123_q101",
+    "topicId": "cnp_h123",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "经典回旋加速器保持磁场和D形盒半径不变，只把加速电压提高一倍，忽略相对论效应。理想情况下",
+    "explanation": "最大动能由q²B²R²/(2m)决定；增大加速电压增大每次能量增益，使所需次数减少。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "最大动能不变，达到该动能所需穿越狭缝次数减少"
+      },
+      {
+        "key": "B",
+        "text": "最大动能加倍，穿越次数不变"
+      },
+      {
+        "key": "C",
+        "text": "最大动能减半"
+      },
+      {
+        "key": "D",
+        "text": "粒子在每个D形盒内主要受电场加速"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"最大动能不变，达到该动能所需穿越狭缝次数减少\""
+  },
+  {
+    "id": "cnp_h123_q102",
+    "topicId": "cnp_h123",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "某带一个元电荷的正离子，每次穿过回旋加速器狭缝增加2 keV动能。忽略初始动能和损耗，达到200 keV至少需穿越狭缝多少次？",
+    "answer": "100",
+    "verify": "200/2",
+    "explanation": "每次能量增益为qU=2 keV，总次数为200/2=100；一次完整回旋一般穿越两次狭缝。"
+  },
+  {
+    "id": "cnp_h123_q103",
+    "topicId": "cnp_h123",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "经典回旋加速器磁感应强度增为原来的2倍，粒子种类不变，为保持同步加速，交变电压频率应",
+    "explanation": "回旋频率f=|q|B/(2πm)，必须与加速电压频率匹配，因此随B加倍。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "保持不变"
+      },
+      {
+        "key": "B",
+        "text": "增为4倍"
+      },
+      {
+        "key": "C",
+        "text": "增为2倍"
+      },
+      {
+        "key": "D",
+        "text": "减为1/2"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"增为2倍\""
+  },
+  {
+    "id": "cnp_h124_q101",
+    "topicId": "cnp_h124",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "条形磁铁的N极靠近闭合线圈时，电流表向右偏。保持接线不变，改为同一N极远离线圈，则电流表应",
+    "explanation": "同一极性磁铁由靠近改为远离，使磁通量变化方向反转，感应电流方向也反转。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "仍向右偏"
+      },
+      {
+        "key": "B",
+        "text": "保持原偏角不动"
+      },
+      {
+        "key": "C",
+        "text": "只有磁铁完全静止时才偏转"
+      },
+      {
+        "key": "D",
+        "text": "向左偏"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"向左偏\""
+  },
+  {
+    "id": "cnp_h124_q102",
+    "topicId": "cnp_h124",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "探究感应电流方向时，先用带保护电阻的电池短暂试触电流表，主要是为了",
+    "explanation": "只有先校准指针正反偏与电流方向的关系，才能由偏转现象推断实际电流方向。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把线圈电阻永久变为零"
+      },
+      {
+        "key": "B",
+        "text": "使感应电流不再受运动方向影响"
+      },
+      {
+        "key": "C",
+        "text": "建立电流方向与指针偏转方向的对应关系"
+      },
+      {
+        "key": "D",
+        "text": "改变磁铁的南北极"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"建立电流方向与指针偏转方向的对应关系\""
+  },
+  {
+    "id": "cnp_h124_q103",
+    "topicId": "cnp_h124",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "为单独研究磁场极性对感应电流方向的影响，应比较哪两次操作？",
+    "explanation": "控制线圈接线、运动方向和速度等条件相同，只改变朝向线圈的磁极，才能识别极性的影响。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "同时反转极性、接线并改变运动方向"
+      },
+      {
+        "key": "B",
+        "text": "N极、S极分别以相同速度向同一线圈靠近"
+      },
+      {
+        "key": "C",
+        "text": "N极慢速靠近与N极快速远离"
+      },
+      {
+        "key": "D",
+        "text": "N极靠近与S极静止在圈内"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"N极、S极分别以相同速度向同一线圈靠近\""
+  },
+  {
+    "id": "cnp_h125_q101",
+    "topicId": "cnp_h125",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "从上向下看水平闭合圆环，穿过环的向外（朝观察者）磁通量正在减小。感应电流方向为",
+    "explanation": "磁通量减小时感应磁场应同向补偿，即朝观察者；右手螺旋定则给出逆时针电流。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "无论如何都无感应电流"
+      },
+      {
+        "key": "B",
+        "text": "先后方向随机"
+      },
+      {
+        "key": "C",
+        "text": "逆时针"
+      },
+      {
+        "key": "D",
+        "text": "顺时针"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"逆时针\""
+  },
+  {
+    "id": "cnp_h125_q102",
+    "topicId": "cnp_h125",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "一个闭合金属环靠近固定磁铁时受到阻碍靠近的磁力，外力仍使它匀速靠近。关于能量，正确的是",
+    "explanation": "楞次定律体现能量守恒：外力克服磁阻力做功，机械能转化为电能和内能；阻碍不等于阻止。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "电阻发热时能量不再守恒"
+      },
+      {
+        "key": "B",
+        "text": "外力做功可转化为环中的焦耳热"
+      },
+      {
+        "key": "C",
+        "text": "磁铁无须能量来源即可无限产生电能"
+      },
+      {
+        "key": "D",
+        "text": "感应电流完全阻止任何磁通量变化"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"外力做功可转化为环中的焦耳热\""
+  },
+  {
+    "id": "cnp_h125_q103",
+    "topicId": "cnp_h125",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "匀强磁场中静止闭合线圈的磁通量向纸内增加，若感应电流产生的磁场向纸外，这体现",
+    "explanation": "原磁通量增加时感应场反向；若原磁通量减少，感应场会同向，关键是阻碍变化。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "阻碍原磁通量的增加"
+      },
+      {
+        "key": "B",
+        "text": "感应场永远与原场反向，与变化无关"
+      },
+      {
+        "key": "C",
+        "text": "感应电流使原磁通量立刻归零"
+      },
+      {
+        "key": "D",
+        "text": "线圈必已经脱离磁场"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"阻碍原磁通量的增加\""
+  },
+  {
+    "id": "cnp_h126_q101",
+    "topicId": "cnp_h126",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "100匝线圈每匝磁通量在0.020 s内由0.003 Wb均匀减至0.001 Wb。感应电动势大小是多少V？",
+    "answer": "10",
+    "verify": "100*(0.003-0.001)/0.020",
+    "explanation": "E=N|ΔΦ|/Δt=100×0.002/0.020=10 V。"
+  },
+  {
+    "id": "cnp_h126_q102",
+    "topicId": "cnp_h126",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "两线圈匝数相同，甲每匝磁通量在0.1 s内改变0.02 Wb，乙在0.5 s内改变0.05 Wb。甲、乙平均感应电动势大小之比为",
+    "explanation": "甲的变化率为0.2 Wb/s，乙为0.1 Wb/s；电动势比等于变化率之比。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "2:1"
+      },
+      {
+        "key": "B",
+        "text": "1:2"
+      },
+      {
+        "key": "C",
+        "text": "2:5"
+      },
+      {
+        "key": "D",
+        "text": "1:1"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"2:1\""
+  },
+  {
+    "id": "cnp_h126_q103",
+    "topicId": "cnp_h126",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "固定线圈中某时刻磁通量为零，而该时刻磁通量对时间的变化率不为零。此时感应电动势",
+    "explanation": "法拉第定律取决于磁通量变化率；磁通量的瞬时值为零，不妨碍它正在快速变化。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "必为零，因为磁通量为零"
+      },
+      {
+        "key": "B",
+        "text": "必达到无穷大"
+      },
+      {
+        "key": "C",
+        "text": "只能由线圈电阻决定"
+      },
+      {
+        "key": "D",
+        "text": "可以不为零"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"可以不为零\""
+  },
+  {
+    "id": "cnp_h127_q101",
+    "topicId": "cnp_h127",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "一根总长0.80 m的直金属棒，仅其中0.50 m位于0.40 T匀强磁场内，其余在无场区。棒以3.0 m/s运动，棒、速度、磁场两两垂直且有效入场长度不变。两端动生电动势是多少V？",
+    "answer": "0.6",
+    "verify": "0.40*0.50*3",
+    "explanation": "只有位于磁场中的部分贡献BLv，应取有效长度0.50 m而非总长0.80 m，得到0.60 V。"
+  },
+  {
+    "id": "cnp_h127_q102",
+    "topicId": "cnp_h127",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "长度L的细导体棒在垂直棒转动平面的匀强磁场B中绕一端以角速度ω转动。两端感应电动势大小为",
+    "explanation": "棒上各段速度随到转轴距离增加，有效平均速度为ωL/2，E=B L(ωL/2)。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "BL²ω"
+      },
+      {
+        "key": "B",
+        "text": "BLω"
+      },
+      {
+        "key": "C",
+        "text": "零，因棒的一端不动"
+      },
+      {
+        "key": "D",
+        "text": "BL²ω/2"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"BL²ω/2\""
+  },
+  {
+    "id": "cnp_h127_q103",
+    "topicId": "cnp_h127",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "直棒向右运动，棒竖直放在纸面内，磁场垂直纸面向里。棒与外电路断开时，哪端电势较高？",
+    "explanation": "正电荷受qv×B作用向上分离，导致上端正电荷积累、电势较高；开路也可有动生电动势。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两端始终等势"
+      },
+      {
+        "key": "B",
+        "text": "无法判断，因为没有闭合电流"
+      },
+      {
+        "key": "C",
+        "text": "上端"
+      },
+      {
+        "key": "D",
+        "text": "下端"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"上端\""
+  },
+  {
+    "id": "cnp_h128_q101",
+    "topicId": "cnp_h128",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "均匀导体棒长0.50 m，在0.40 T匀强磁场中以2.0 m/s运动，棒、速度与磁场方向两两垂直。棒电阻0.20 Ω，与0.80 Ω外接电阻构成闭合回路，忽略导线电阻和自感。外接电阻两端电压是多少V？",
+    "answer": "0.32",
+    "verify": "0.4*0.5*2/(0.2+0.8)*0.8",
+    "explanation": "E=0.40 V，总电阻1.0 Ω，I=0.40 A；路端电压U=IR外=0.32 V，小于电动势。"
+  },
+  {
+    "id": "cnp_h128_q102",
+    "topicId": "cnp_h128",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "水平导轨上导体棒在恒定拉力作用下切割匀强磁场，回路总电阻恒定，无摩擦。速度增大时，安培阻力随速度增大，最后可能",
+    "explanation": "E=BLv、I=E/R，故磁阻力F磁=B²L²v/R；当它等于外拉力时加速度降为零。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "安培力自动变成助力"
+      },
+      {
+        "key": "B",
+        "text": "速度越大，焦耳热功率必越小"
+      },
+      {
+        "key": "C",
+        "text": "达到拉力与安培力平衡的稳定速度"
+      },
+      {
+        "key": "D",
+        "text": "无限加速且电流恒为零"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"达到拉力与安培力平衡的稳定速度\""
+  },
+  {
+    "id": "cnp_h128_q103",
+    "topicId": "cnp_h128",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "一个单匝纯电阻闭合回路总电阻为2.0 Ω，无其他电源并忽略自感。某过程中穿过回路的磁通量单调改变0.060 Wb，总电阻不变。该过程中通过某截面的电荷量大小是多少C？",
+    "answer": "0.03",
+    "verify": "0.060/2",
+    "explanation": "由法拉第电磁感应定律和欧姆定律，各小段时间内的电荷量等于磁通量改变量除以电阻。磁通量单调变化时合计q=|ΔΦ|/R=0.030 C，与过程快慢无关。"
+  },
+  {
+    "id": "cnp_h129_q101",
+    "topicId": "cnp_h129",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "强磁铁沿铜管下落，速度明显低于同尺寸非磁性塑料管中的下落速度。铜不具明显铁磁性，主要解释是",
+    "explanation": "变化磁通在导电铜管中激发涡流，其磁场产生电磁阻尼，不要求铜像铁一样被静磁铁强烈吸引。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "铜管把磁铁的质量逐渐变小"
+      },
+      {
+        "key": "B",
+        "text": "磁铁必须吸引铜才能减速"
+      },
+      {
+        "key": "C",
+        "text": "铜管中产生涡流，磁效应阻碍磁铁与铜管的相对运动"
+      },
+      {
+        "key": "D",
+        "text": "铜管没有任何电流，磁铁只受浮力"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"铜管中产生涡流，磁效应阻碍磁铁与铜管的相对运动\""
+  },
+  {
+    "id": "cnp_h129_q102",
+    "topicId": "cnp_h129",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "变压器铁芯用相互绝缘的薄硅钢片叠成，而不做成整块，主要为了",
+    "explanation": "薄片绝缘结构增加涡流回路的电阻并减小回路面积，从而降低不需要的焦耳热。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "使铁芯不再能导磁"
+      },
+      {
+        "key": "B",
+        "text": "限制涡流回路，减小铁芯中的涡流损耗"
+      },
+      {
+        "key": "C",
+        "text": "增大所有涡流并主动加热铁芯"
+      },
+      {
+        "key": "D",
+        "text": "把交流电直接变成恒定直流"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"限制涡流回路，减小铁芯中的涡流损耗\""
+  },
+  {
+    "id": "cnp_h129_q103",
+    "topicId": "cnp_h129",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "电磁炉能加热适配的金属锅，但普通玻璃锅通常不能按同一机制被有效加热，主要因为",
+    "explanation": "交变磁场可在合适的导电锅体内产生感应电流等损耗而发热；玻璃缺少相应导电路径。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "金属锅能形成较强感应电流并产生热效应"
+      },
+      {
+        "key": "B",
+        "text": "玻璃完全不能吸收任何热量"
+      },
+      {
+        "key": "C",
+        "text": "电磁炉使锅中原子核发生裂变"
+      },
+      {
+        "key": "D",
+        "text": "涡流必须依靠锅整体高速旋转"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"金属锅能形成较强感应电流并产生热效应\""
+  },
+  {
+    "id": "cnp_h130_q101",
+    "topicId": "cnp_h130",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "自感系数为0.50 H的理想线圈，电流在0.020 s内由1.0 A均匀增至3.0 A。自感电动势大小是多少V？",
+    "answer": "50",
+    "verify": "0.50*(3-1)/0.020",
+    "explanation": "|E|=L|ΔI/Δt|=0.50×2.0/0.020=50 V，方向阻碍电流增加。"
+  },
+  {
+    "id": "cnp_h130_q102",
+    "topicId": "cnp_h130",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "直流电源刚接通含较大自感系数线圈的电路时，电流不能立即达到稳态值，主要因为",
+    "explanation": "电流变化产生的自感电动势反抗该变化；在接通时表现为阻碍电流建立。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "自感电动势阻碍电流增加"
+      },
+      {
+        "key": "B",
+        "text": "线圈永久切断电路"
+      },
+      {
+        "key": "C",
+        "text": "自感电动势一定与原电流同方向助增"
+      },
+      {
+        "key": "D",
+        "text": "电源的电荷量被线圈全部消灭"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"自感电动势阻碍电流增加\""
+  },
+  {
+    "id": "cnp_h130_q103",
+    "topicId": "cnp_h130",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "两个彼此靠近但没有导线连接的线圈，甲接直流电源和开关，乙接电流计。下列哪种操作可在乙中引起短暂感应电流？",
+    "explanation": "互感依赖穿过乙的磁通量变化；甲电流建立或消失时会产生变化磁场，不需导线直接连接。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "甲中恒定电流保持很久且两线圈都不动"
+      },
+      {
+        "key": "B",
+        "text": "甲、乙长期静止并均无电流"
+      },
+      {
+        "key": "C",
+        "text": "只保持甲线圈匝数不变，完全不改变电流或位置"
+      },
+      {
+        "key": "D",
+        "text": "闭合或断开甲的开关，使甲中电流变化"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"闭合或断开甲的开关，使甲中电流变化\""
+  },
+  {
+    "id": "cnp_h131_q101",
+    "topicId": "cnp_h131",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "矩形线圈在匀强磁场中匀速转动，从中性面开始计时。在线圈处于中性面瞬间",
+    "explanation": "中性面时线圈平面垂直B，磁通量处于极值，瞬时变化率为零，所以e=0。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "磁通量大小最大，感应电动势为零"
+      },
+      {
+        "key": "B",
+        "text": "磁通量为零，感应电动势最大"
+      },
+      {
+        "key": "C",
+        "text": "磁通量和感应电动势都最大"
+      },
+      {
+        "key": "D",
+        "text": "磁通量和变化率都为零"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"磁通量大小最大，感应电动势为零\""
+  },
+  {
+    "id": "cnp_h131_q102",
+    "topicId": "cnp_h131",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "某交流发电机的感应电动势e=40 sin(100πt) V，t以s为单位。其频率是多少Hz？",
+    "answer": "50",
+    "verify": "100/2",
+    "explanation": "ω=100π rad/s，f=ω/(2π)=50 Hz，40 V是峰值而非有效值。"
+  },
+  {
+    "id": "cnp_h131_q103",
+    "topicId": "cnp_h131",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一发电机线圈在同一磁场中转速变为原来的2倍，其他条件不变，则",
+    "explanation": "Em=NBSω且f=ω/(2π)，两者都随角速度成正比。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "峰值变为2倍、频率不变"
+      },
+      {
+        "key": "B",
+        "text": "峰值和频率均变为4倍"
+      },
+      {
+        "key": "C",
+        "text": "电动势峰值、频率均变为2倍"
+      },
+      {
+        "key": "D",
+        "text": "峰值不变、频率变为2倍"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"电动势峰值、频率均变为2倍\""
+  },
+  {
+    "id": "cnp_h132_q101",
+    "topicId": "cnp_h132",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "某正弦交流电压u=220√2 sin(100πt) V，加在纯电阻上。用相同时间产生相同热量的恒定直流电压大小为",
+    "explanation": "有效值按热效应等效，正弦波Urms=Um/√2=220 V；一个周期内电压平均值为零不代表不发热。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "220√2 V"
+      },
+      {
+        "key": "B",
+        "text": "110 V"
+      },
+      {
+        "key": "C",
+        "text": "0 V"
+      },
+      {
+        "key": "D",
+        "text": "220 V"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"220 V\""
+  },
+  {
+    "id": "cnp_h132_q102",
+    "topicId": "cnp_h132",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "某周期电压前半周期为+6 V、后半周期为−2 V，作用于恒定电阻。其有效值为",
+    "explanation": "均方电压为(6²+(-2)²)/2=20 V²，所以有效值为√20 V，不能直接取代数平均值。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "4 V"
+      },
+      {
+        "key": "B",
+        "text": "√8 V"
+      },
+      {
+        "key": "C",
+        "text": "√20 V"
+      },
+      {
+        "key": "D",
+        "text": "2 V"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"√20 V\""
+  },
+  {
+    "id": "cnp_h132_q103",
+    "topicId": "cnp_h132",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "正弦交流电流有效值为2.0 A，流过5.0 Ω纯电阻10 s，产生热量是多少J？",
+    "answer": "200",
+    "verify": "2**2*5*10",
+    "explanation": "焦耳热使用有效值：Q=I有效²Rt=2²×5×10=200 J。"
+  },
+  {
+    "id": "cnp_h133_q101",
+    "topicId": "cnp_h133",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "理想变压器有一个原线圈和两个副线圈，匝数依次为400、100、200。原线圈接120 V交流源，两副线圈分别接15 Ω和60 Ω纯电阻。按理想模型求原线圈电流有效值，单位A。",
+    "answer": "1",
+    "verify": "((120*100/400)**2/15+(120*200/400)**2/60)/120",
+    "explanation": "两个副电压分别为30 V和60 V，各向负载输出60 W；总输出120 W等于输入功率，原电流为120/120=1 A。"
+  },
+  {
+    "id": "cnp_h133_q102",
+    "topicId": "cnp_h133",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "理想变压器原线圈接恒定有效值交流电源，副线圈接电阻R。把R减为一半，其他不变，则",
+    "explanation": "匝数比和原电压固定，副电压不变，负载电流加倍；功率增倍，原电流也加倍。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "原线圈频率增为2倍"
+      },
+      {
+        "key": "B",
+        "text": "原、副线圈电流都增为2倍"
+      },
+      {
+        "key": "C",
+        "text": "副线圈电流增倍，原线圈电流不变"
+      },
+      {
+        "key": "D",
+        "text": "副线圈电压减为一半"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"原、副线圈电流都增为2倍\""
+  },
+  {
+    "id": "cnp_h133_q103",
+    "topicId": "cnp_h133",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "理想变压器用于将50 Hz交流电降压。关于副线圈输出，正确的是",
+    "explanation": "变压器改变交流电压和相应电流，不改变频率；副电流受负载约束。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "频率仍为50 Hz，电流大小由负载及匝数比共同决定"
+      },
+      {
+        "key": "B",
+        "text": "电压减半时频率必减半"
+      },
+      {
+        "key": "C",
+        "text": "输出必为直流"
+      },
+      {
+        "key": "D",
+        "text": "不接负载也必有与满载相同的副线圈电流"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"频率仍为50 Hz，电流大小由负载及匝数比共同决定\""
+  },
+  {
+    "id": "cnp_h134_q101",
+    "topicId": "cnp_h134",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "验证变压器电压比与匝数比关系时，下列实验设计最合理的是",
+    "explanation": "互感变压依靠交变磁通，实验应采用适当低压交流并控制其他变量，测量真实电压比。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只测线圈直流电阻就宣称验证成功"
+      },
+      {
+        "key": "B",
+        "text": "使用低压交流电源，改变一侧匝数并记录两侧交流电压"
+      },
+      {
+        "key": "C",
+        "text": "把低压直流源长期接在原线圈上测稳态输出"
+      },
+      {
+        "key": "D",
+        "text": "同时随意更换铁芯、频率、匝数且不记录"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"使用低压交流电源，改变一侧匝数并记录两侧交流电压\""
+  },
+  {
+    "id": "cnp_h134_q102",
+    "topicId": "cnp_h134",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "低压变压器实验中，原线圈200匝、副线圈100匝，原电压有效值12 V。按理想模型，副电压应为多少V？",
+    "answer": "6",
+    "verify": "12*100/200",
+    "explanation": "理想变压器U₂/U₁=N₂/N₁，故U₂=12×100/200=6 V。"
+  },
+  {
+    "id": "cnp_h134_q103",
+    "topicId": "cnp_h134",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "几组测量显示副、原电压比随副、原匝数比近似成正比，但副电压略低于理想值。合理做法是",
+    "explanation": "真实变压器存在漏磁和铜损等，需结合实验精度分析偏差，而不是篡改或武断否定规律。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "删除所有与理想值不完全相等的数据"
+      },
+      {
+        "key": "B",
+        "text": "直接把实测副电压全部改为理论值"
+      },
+      {
+        "key": "C",
+        "text": "据一次小差异断言电磁感应不存在"
+      },
+      {
+        "key": "D",
+        "text": "保留原始数据，分析绕组电阻、漏磁等非理想因素"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"保留原始数据，分析绕组电阻、漏磁等非理想因素\""
+  },
+  {
+    "id": "cnp_h135_q101",
+    "topicId": "cnp_h135",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "两种输电方案的送端功率和线路电阻相同且均有非零线损，甲送端电压为乙的2倍。忽略其他损耗，关于电流与用户得到的功率，正确的是",
+    "explanation": "送端P固定时I=P/U，甲电流减半、I²R线损减至1/4；用户功率为送端功率减线损，故甲更大但不是固定4倍。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "甲电流为乙的一半，甲用户得到的功率更大"
+      },
+      {
+        "key": "B",
+        "text": "甲电流为乙的2倍，用户所得功率相同"
+      },
+      {
+        "key": "C",
+        "text": "甲电流为乙的一半，但用户所得功率更小"
+      },
+      {
+        "key": "D",
+        "text": "甲用户得到的功率必为乙的4倍"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"甲电流为乙的一半，甲用户得到的功率更大\""
+  },
+  {
+    "id": "cnp_h135_q102",
+    "topicId": "cnp_h135",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "某输电线路总电阻为5 Ω，输电电流有效值为20 A，连续输电1 h。线路上损耗的电能是多少kWh？",
+    "answer": "2",
+    "verify": "20**2*5/1000*1",
+    "explanation": "热损耗功率I²R=2000 W=2 kW，1小时损耗2 kWh，不能把用户功率全部算作线损。"
+  },
+  {
+    "id": "cnp_h135_q103",
+    "topicId": "cnp_h135",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "远距离输电在发电端升压、用户附近降压，升压的主要技术目的为",
+    "explanation": "升压并不产生额外能量，而是用高电压、小电流传输相同功率，减少线路焦耳热。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "使输电线电阻严格变为零"
+      },
+      {
+        "key": "B",
+        "text": "把交流频率提高到无限大"
+      },
+      {
+        "key": "C",
+        "text": "在相同输送功率下减小线路电流和I²R损耗"
+      },
+      {
+        "key": "D",
+        "text": "让电能在途中凭空增加"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"在相同输送功率下减小线路电流和I²R损耗\""
+  },
+  {
+    "id": "cnp_h136_q101",
+    "topicId": "cnp_h136",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "一台直流电动机端电压为12 V，电流2.0 A，线圈电阻1.0 Ω，忽略其他损耗。输出机械功率是多少W？",
+    "answer": "20",
+    "verify": "12*2-2**2*1",
+    "explanation": "输入功率UI=24 W，线圈热功率I²r=4 W，故机械功率为20 W。"
+  },
+  {
+    "id": "cnp_h136_q102",
+    "topicId": "cnp_h136",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一台直流电动机端电压不变且线圈电阻恒定。正常转动时电流小于堵转时电流，主要因为转动时",
+    "explanation": "转动产生与外加电源相抗的反电动势；堵转时反电动势很小，电流主要受绕组电阻限制。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "电源电压自动变为零"
+      },
+      {
+        "key": "B",
+        "text": "洛伦兹力开始直接为自由电荷提供无限能量"
+      },
+      {
+        "key": "C",
+        "text": "线圈切割磁场产生反电动势，降低实际驱动电流"
+      },
+      {
+        "key": "D",
+        "text": "线圈电阻必变为无限大"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"线圈切割磁场产生反电动势，降低实际驱动电流\""
+  },
+  {
+    "id": "cnp_h136_q103",
+    "topicId": "cnp_h136",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "使用外力持续带动线圈在磁场中转动并向外电路供电，以下能量分析正确的是",
+    "explanation": "发电机把机械功输入转成电能，部分还转为内能；磁场使能量转化成为可能，但不提供无限能源。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "线圈有电阻时总能量不守恒"
+      },
+      {
+        "key": "B",
+        "text": "机械能转化为输出电能和装置中的损耗"
+      },
+      {
+        "key": "C",
+        "text": "发电无需外力做功，只消耗磁感线"
+      },
+      {
+        "key": "D",
+        "text": "输出电能必等于磁场储能的无限增量"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"机械能转化为输出电能和装置中的损耗\""
+  },
+  {
+    "id": "cnp_h137_q101",
+    "topicId": "cnp_h137",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "理想LC回路某时刻电容器电荷量最大，此刻",
+    "explanation": "电容器充电极值时电流dQ/dt=0，能量主要储存在电场；随后放电向电感磁场能转化。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "电流和磁场能均最大"
+      },
+      {
+        "key": "B",
+        "text": "电场能与磁场能同时为零"
+      },
+      {
+        "key": "C",
+        "text": "电流为零，电场能最大"
+      },
+      {
+        "key": "D",
+        "text": "电流最大，磁场能最大"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"电流为零，电场能最大\""
+  },
+  {
+    "id": "cnp_h137_q102",
+    "topicId": "cnp_h137",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "保持电感L不变，把理想LC回路的电容C增为原来的4倍，振荡频率变为原来的",
+    "explanation": "f=1/(2π√LC)，电容增为4倍使周期增为2倍，频率减为1/2。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "4倍"
+      },
+      {
+        "key": "B",
+        "text": "1/2"
+      },
+      {
+        "key": "C",
+        "text": "2倍"
+      },
+      {
+        "key": "D",
+        "text": "1/4"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"1/2\""
+  },
+  {
+    "id": "cnp_h137_q103",
+    "topicId": "cnp_h137",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "实际LC回路中电磁振荡的振幅逐渐衰减，其原因与理想模型的主要差异是",
+    "explanation": "理想模型忽略损耗而总振荡能量守恒；实际损耗转移能量，导致振幅衰减。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "电阻发热和电磁辐射等使振荡能量减少"
+      },
+      {
+        "key": "B",
+        "text": "能量在电场与磁场间转化本身必损失一半"
+      },
+      {
+        "key": "C",
+        "text": "电容器电荷总凭空消失"
+      },
+      {
+        "key": "D",
+        "text": "电场能与磁场能不能相互转化"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"电阻发热和电磁辐射等使振荡能量减少\""
+  },
+  {
+    "id": "cnp_h138_q101",
+    "topicId": "cnp_h138",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "光波和无线电波在真空中传播，以下判断正确的是",
+    "explanation": "电磁波真空速度均为c，λ=c/f；频率不同体现为波长不同，不是波速不同。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "真空中只有光波有磁场分量"
+      },
+      {
+        "key": "B",
+        "text": "波速相同，频率不同，波长通常不同"
+      },
+      {
+        "key": "C",
+        "text": "频率越高真空波速越大"
+      },
+      {
+        "key": "D",
+        "text": "无线电波必须依赖空气传播"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"波速相同，频率不同，波长通常不同\""
+  },
+  {
+    "id": "cnp_h138_q102",
+    "topicId": "cnp_h138",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "某电磁波频率为1.5×10⁸ Hz，真空光速取3.0×10⁸ m/s。其波长是多少m？",
+    "answer": "2",
+    "verify": "3e8/1.5e8",
+    "explanation": "λ=c/f=2.0 m，电磁波在真空中无需介质。"
+  },
+  {
+    "id": "cnp_h138_q103",
+    "topicId": "cnp_h138",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "把传播中的电磁波描述为“电场和磁场以横向振动形式传播”，其中“横向”的含义是",
+    "explanation": "横波的振动方向与传播方向垂直；电磁波可传递能量和动量，不等于电荷随波整体迁移。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "所有电荷随波以光速一起迁移"
+      },
+      {
+        "key": "B",
+        "text": "电场沿传播方向，磁场恒为零"
+      },
+      {
+        "key": "C",
+        "text": "传播路线必须在地面上水平"
+      },
+      {
+        "key": "D",
+        "text": "电场、磁场的振动方向均垂直传播方向"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"电场、磁场的振动方向均垂直传播方向\""
+  },
+  {
+    "id": "cnp_h139_q101",
+    "topicId": "cnp_h139",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "收音机调台时改变调谐电路的电容，使其固有频率接近某电台载波频率，主要利用",
+    "explanation": "LC调谐电路在接近自身谐振频率时响应较强，可从混合信号中选择需要的载波。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "电谐振，增强所选频率的响应"
+      },
+      {
+        "key": "B",
+        "text": "把该电台的声音传播速度变为光速"
+      },
+      {
+        "key": "C",
+        "text": "把所有电台频率合成为零"
+      },
+      {
+        "key": "D",
+        "text": "通过增大电阻把任何波完全反射"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"电谐振，增强所选频率的响应\""
+  },
+  {
+    "id": "cnp_h139_q102",
+    "topicId": "cnp_h139",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "在简化调幅模型中，声音信号控制高频载波的振幅，而载波基本频率保持不变。这一步称为",
+    "explanation": "调幅把信息编码在载波振幅的变化中；检波是在接收端从已调信号中恢复信息。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "接收端检波"
+      },
+      {
+        "key": "B",
+        "text": "把声波直接变成低速电磁波"
+      },
+      {
+        "key": "C",
+        "text": "将高频电流永久整流为恒定直流"
+      },
+      {
+        "key": "D",
+        "text": "调制中的调幅"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"调制中的调幅\""
+  },
+  {
+    "id": "cnp_h139_q103",
+    "topicId": "cnp_h139",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "无线电接收机已选中某电台高频信号，要使扬声器重现声音，还需要",
+    "explanation": "高频载波携带信息但不直接等同于音频，需要解调恢复音频，再放大驱动扬声器。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把载波频率直接作为声音频率输出"
+      },
+      {
+        "key": "B",
+        "text": "使电磁波在真空中的速度降为声速"
+      },
+      {
+        "key": "C",
+        "text": "解调，取出与原声音有关的低频信号"
+      },
+      {
+        "key": "D",
+        "text": "只把天线无限延长"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"解调，取出与原声音有关的低频信号\""
+  },
+  {
+    "id": "cnp_h140_q101",
+    "topicId": "cnp_h140",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "红外遥控和医院X射线成像所用电磁波相比，在真空中",
+    "explanation": "真空中都以c传播；X射线波长更短、频率更高，由E=hf可知其单光子能量更大。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "X射线波速一定更大"
+      },
+      {
+        "key": "B",
+        "text": "红外线单光子能量一定更大"
+      },
+      {
+        "key": "C",
+        "text": "二者必须使用不同传播介质"
+      },
+      {
+        "key": "D",
+        "text": "波速相同，X射线通常频率更高、单光子能量更大"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"波速相同，X射线通常频率更高、单光子能量更大\""
+  },
+  {
+    "id": "cnp_h140_q102",
+    "topicId": "cnp_h140",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "检测恒星发出的可见光谱时发现红光与紫光同时经过真空传播。以下关系正确的是",
+    "explanation": "可见光中紫光频率高于红光，所以波长较短、光子能量较大；真空波速相同。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "紫光真空波速更快"
+      },
+      {
+        "key": "B",
+        "text": "红光和紫光的光子能量相同"
+      },
+      {
+        "key": "C",
+        "text": "紫光波长较短，真空波速与红光相同"
+      },
+      {
+        "key": "D",
+        "text": "红光频率更高"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"紫光波长较短，真空波速与红光相同\""
+  },
+  {
+    "id": "cnp_h140_q103",
+    "topicId": "cnp_h140",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "给不同电磁波按频率从低到高排序，哪组正确？",
+    "explanation": "电磁波谱频率由低到高总体为无线电、红外、可见、紫外、X、γ；不同波段分界可有交叠，但本组常规排序成立。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "紫外线、可见光、红外线、γ射线"
+      },
+      {
+        "key": "B",
+        "text": "无线电波、红外线、紫外线、X射线"
+      },
+      {
+        "key": "C",
+        "text": "红外线、无线电波、X射线、紫外线"
+      },
+      {
+        "key": "D",
+        "text": "X射线、紫外线、红外线、无线电波"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"无线电波、红外线、紫外线、X射线\""
+  },
+  {
+    "id": "cnp_h141_q101",
+    "topicId": "cnp_h141",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "电子秤把托盘受力变成电阻变化，再由电路显示质量。传感器直接完成的关键转换是",
+    "explanation": "受力使敏感元件性质变化，经电阻、电压等电信号反映原非电量；显示质量还需标定和电路处理。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把所有电能直接变成重力"
+      },
+      {
+        "key": "B",
+        "text": "只存储数据而完全不响应受力"
+      },
+      {
+        "key": "C",
+        "text": "把力等非电学量变成可测电学量"
+      },
+      {
+        "key": "D",
+        "text": "把物体质量转化为电荷而消耗掉"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"把力等非电学量变成可测电学量\""
+  },
+  {
+    "id": "cnp_h141_q102",
+    "topicId": "cnp_h141",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "某温度传感器标定范围为0～100 ℃。有人只凭其在20 ℃、30 ℃的两点读数，就声称能精确测量500 ℃。主要问题是",
+    "explanation": "传感器有适用范围与响应曲线，不能把有限区间的关系未经检验地外推到任意条件。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "测量范围只由显示屏数字位数决定"
+      },
+      {
+        "key": "B",
+        "text": "超出标定范围，响应规律和器件工作条件未得到验证"
+      },
+      {
+        "key": "C",
+        "text": "温度不能转化为任何电信号"
+      },
+      {
+        "key": "D",
+        "text": "两个数据点一定能保证任意温度下线性"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"超出标定范围，响应规律和器件工作条件未得到验证\""
+  },
+  {
+    "id": "cnp_h141_q103",
+    "topicId": "cnp_h141",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "某线性压力传感器在0 N时输出0.20 V，每增大10 N电压增加0.50 V。在标定范围内输出1.70 V对应多少N？",
+    "answer": "30",
+    "verify": "(1.70-0.20)/0.50*10",
+    "explanation": "先扣除零点偏置0.20 V，净增1.50 V对应3个10 N，即30 N。"
+  },
+  {
+    "id": "cnp_h142_q101",
+    "topicId": "cnp_h142",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "光敏电阻与定值电阻R串联接恒压电源，取定值电阻R两端电压为输出。光照增强时，光敏电阻阻值减小，则输出电压",
+    "explanation": "总电阻减小，串联电流增大；R固定，UR=IR随之增大，需先明确输出取自哪一元件。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "正负号必周期反转"
+      },
+      {
+        "key": "B",
+        "text": "增大"
+      },
+      {
+        "key": "C",
+        "text": "减小"
+      },
+      {
+        "key": "D",
+        "text": "必保持为零"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"增大\""
+  },
+  {
+    "id": "cnp_h142_q102",
+    "topicId": "cnp_h142",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "NTC热敏电阻与定值电阻串联接恒压电源，输出取NTC两端。温度升高且NTC阻值减小时，输出电压",
+    "explanation": "分压U热=U总R热/(R热+R定)，R热减小使其分压减小，不能只凭“电流变大”判断此电压。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "减小"
+      },
+      {
+        "key": "B",
+        "text": "增大"
+      },
+      {
+        "key": "C",
+        "text": "恒等于电源电压"
+      },
+      {
+        "key": "D",
+        "text": "只取决于导线长度"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"减小\""
+  },
+  {
+    "id": "cnp_h142_q103",
+    "topicId": "cnp_h142",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "测量电机转速时，在转轴上安装小磁铁，并使用霍尔元件记录周期性信号。该元件主要响应",
+    "explanation": "霍尔元件把磁场相关量转成电信号，磁铁每次经过可产生可计数脉冲，从而估计转速。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "环境声音大小"
+      },
+      {
+        "key": "B",
+        "text": "金属表面的颜色"
+      },
+      {
+        "key": "C",
+        "text": "转轴质量被消耗的速率"
+      },
+      {
+        "key": "D",
+        "text": "磁场并把相应变化转为电压信号"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"磁场并把相应变化转为电压信号\""
+  },
+  {
+    "id": "cnp_h143_q101",
+    "topicId": "cnp_h143",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "制作“天黑自动开灯”装置时，光敏电阻负责检测亮暗，继电器主要承担什么作用？",
+    "explanation": "继电器通过电磁吸合切换触点，实现控制回路与负载回路的开关联动；仍需按额定值正确接线。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "用较小控制电流切换另一条负载电路"
+      },
+      {
+        "key": "B",
+        "text": "把室外亮度直接变成灯泡的质量"
+      },
+      {
+        "key": "C",
+        "text": "使任何电源电压无限增大"
+      },
+      {
+        "key": "D",
+        "text": "保证任何错误接线都绝对安全"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"用较小控制电流切换另一条负载电路\""
+  },
+  {
+    "id": "cnp_h143_q102",
+    "topicId": "cnp_h143",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "设计温度超过设定值才启动风扇的低压实验装置，搭好后风扇在所有温度都不启动。最合理的排查次序是",
+    "explanation": "分段测试可区分检测、判断和执行环节的问题，应使用安全低压及匹配额定值，不应盲目增压。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "直接接入市电提高电压且不检查额定值"
+      },
+      {
+        "key": "B",
+        "text": "认定热敏电阻在所有温度下阻值都相同"
+      },
+      {
+        "key": "C",
+        "text": "先随意拆去所有限流元件"
+      },
+      {
+        "key": "D",
+        "text": "分段检查供电、传感器响应、阈值设置及执行开关"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"分段检查供电、传感器响应、阈值设置及执行开关\""
+  },
+  {
+    "id": "cnp_h143_q103",
+    "topicId": "cnp_h143",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "光控灯在天刚暗时反复闪烁，经检查发现灯光本身照到了光敏电阻。较合理的改进是",
+    "explanation": "灯亮会改变自身传感器接收光照，可能反复跨越阈值；隔离自照明、合理设置阈值可改善稳定性。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "将所有开关去掉使灯永远断电"
+      },
+      {
+        "key": "B",
+        "text": "让继电器线圈长期超额定电流工作"
+      },
+      {
+        "key": "C",
+        "text": "调整传感器朝向或遮光，避免灯光对检测形成不必要反馈"
+      },
+      {
+        "key": "D",
+        "text": "把光敏电阻短路后宣称已能准确测光"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"调整传感器朝向或遮光，避免灯光对检测形成不必要反馈\""
+  },
+  {
+    "id": "cnp_h144_q101",
+    "topicId": "cnp_h144",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "密闭容器一侧为氮气，另一侧为氧气，去掉隔板后即使没有风，两种气体也逐渐混合。这直接说明",
+    "explanation": "扩散可由分子的无规则运动产生，不需宏观气流，也不涉及分子种类互相转变。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "每个分子只在固定点静止"
+      },
+      {
+        "key": "B",
+        "text": "只有受到外力推动时分子才运动"
+      },
+      {
+        "key": "C",
+        "text": "氮气分子必须先变成氧气分子"
+      },
+      {
+        "key": "D",
+        "text": "分子持续做无规则热运动"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"分子持续做无规则热运动\""
+  },
+  {
+    "id": "cnp_h144_q102",
+    "topicId": "cnp_h144",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "对分子间作用力的描述，哪一种能解释“固体既难压缩又不易拉开”？",
+    "explanation": "靠得过近时斥力占优，拉开到一定范围时引力占优；分子作用不是仅有单一种力。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "任意距离上只有斥力"
+      },
+      {
+        "key": "B",
+        "text": "分子间完全没有相互作用"
+      },
+      {
+        "key": "C",
+        "text": "分子间同时存在引力与斥力，净作用随间距而改变"
+      },
+      {
+        "key": "D",
+        "text": "任意距离上只有引力"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"分子间同时存在引力与斥力，净作用随间距而改变\""
+  },
+  {
+    "id": "cnp_h144_q103",
+    "topicId": "cnp_h144",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "把一块固体研磨成很细的粉末，肉眼已难分辨颗粒。能否据此说每粒粉末就是一个分子？",
+    "explanation": "宏观颗粒与分子尺度差异很大，“肉眼看不清”不是判断其是否为单个分子的依据。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能；因为固体完全不由微观粒子组成"
+      },
+      {
+        "key": "B",
+        "text": "不能；一粒微小粉末通常仍含大量分子或原子"
+      },
+      {
+        "key": "C",
+        "text": "能；看不清的颗粒必是一个分子"
+      },
+      {
+        "key": "D",
+        "text": "能；研磨会把所有分子间距变为零"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"不能；一粒微小粉末通常仍含大量分子或原子\""
+  },
+  {
+    "id": "cnp_h145_q101",
+    "topicId": "cnp_h145",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "显微镜下看到悬浮花粉颗粒不停地无规则运动。这种运动与液体分子热运动的关系是",
+    "explanation": "布朗运动观察到的是悬浮颗粒，分子的无规则碰撞提供不断变化的合力。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "花粉运动方向始终与重力相同"
+      },
+      {
+        "key": "B",
+        "text": "液体分子必须都朝同一方向运动"
+      },
+      {
+        "key": "C",
+        "text": "花粉运动是大量液体分子不均衡碰撞的结果，不是单个液体分子的轨迹"
+      },
+      {
+        "key": "D",
+        "text": "花粉就是一个液体分子"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"花粉运动是大量液体分子不均衡碰撞的结果，不是单个液体分子的轨迹\""
+  },
+  {
+    "id": "cnp_h145_q102",
+    "topicId": "cnp_h145",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "在同一种液体、同一温度下，比较不同大小且仍可做布朗运动的悬浮颗粒，较小颗粒通常表现为",
+    "explanation": "颗粒较小时各方向分子碰撞的不平衡作用更显著，布朗运动更容易观察。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "运动频率仅由地球自转决定"
+      },
+      {
+        "key": "B",
+        "text": "无规则运动更明显"
+      },
+      {
+        "key": "C",
+        "text": "运动一定完全消失"
+      },
+      {
+        "key": "D",
+        "text": "只能匀速直线运动"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"无规则运动更明显\""
+  },
+  {
+    "id": "cnp_h145_q103",
+    "topicId": "cnp_h145",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "某液体中的悬浮小颗粒布朗运动在升温后更明显，合理解释是",
+    "explanation": "温度升高通常使液体分子运动更剧烈，观察到的随机颗粒运动也更明显；并非规则振动。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "分子热运动加剧，使对颗粒的随机碰撞更强烈"
+      },
+      {
+        "key": "B",
+        "text": "所有颗粒都被加热成单个分子"
+      },
+      {
+        "key": "C",
+        "text": "升温使重力方向随机改变"
+      },
+      {
+        "key": "D",
+        "text": "颗粒必须沿同一条周期轨迹运动"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"分子热运动加剧，使对颗粒的随机碰撞更强烈\""
+  },
+  {
+    "id": "cnp_h146_q101",
+    "topicId": "cnp_h146",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "油膜法中，一滴溶液含纯油酸体积2.0×10⁻⁵ cm³，铺成单分子层的面积为200 cm²。估算分子直径为多少nm？",
+    "answer": "1",
+    "verify": "2e-5/200*1e7",
+    "explanation": "把单分子层厚度近似为分子直径，d=V/S=1.0×10⁻⁷ cm=1.0 nm。"
+  },
+  {
+    "id": "cnp_h146_q102",
+    "topicId": "cnp_h146",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "油膜法中，纯油酸体积估计正确，但把实际油膜边缘内的一部分区域漏计，使面积S偏小。估得分子直径将",
+    "explanation": "d=V/S，分子近似单层排布时，分母面积估小会使厚度和分子直径估大。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "偏大"
+      },
+      {
+        "key": "B",
+        "text": "偏小"
+      },
+      {
+        "key": "C",
+        "text": "不变"
+      },
+      {
+        "key": "D",
+        "text": "只能变为零"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"偏大\""
+  },
+  {
+    "id": "cnp_h146_q103",
+    "topicId": "cnp_h146",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "油膜法用稀释溶液滴在水面，待酒精挥发后估计油酸单分子层厚度。计算V时应使用",
+    "explanation": "单分子层由油酸组成，必须通过浓度和每滴溶液体积求纯油酸体积，不能把溶剂也计入膜厚。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "整滴溶液的总体积"
+      },
+      {
+        "key": "B",
+        "text": "水槽中全部水的体积"
+      },
+      {
+        "key": "C",
+        "text": "酒精挥发后整个容器的体积"
+      },
+      {
+        "key": "D",
+        "text": "该滴溶液中纯油酸的体积"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"该滴溶液中纯油酸的体积\""
+  },
+  {
+    "id": "cnp_h147_q101",
+    "topicId": "cnp_h147",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同种理想气体由较低温度升到较高温度，速率分布整体向较大速率区域变化。以下结论合理的是",
+    "explanation": "温度决定统计分布和平均动能，分子仍持续碰撞，个体速率有增有减。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "较大速率的分子所占比例总体增多，但不能说每个分子速率都增大"
+      },
+      {
+        "key": "B",
+        "text": "所有分子的速率都变成同一个值"
+      },
+      {
+        "key": "C",
+        "text": "每个分子的速率都严格增为相同倍数"
+      },
+      {
+        "key": "D",
+        "text": "低速分子从此完全不存在"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"较大速率的分子所占比例总体增多，但不能说每个分子速率都增大\""
+  },
+  {
+    "id": "cnp_h147_q102",
+    "topicId": "cnp_h147",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "比较两张以“单位速率区间的分子比例密度”为纵坐标的归一化速率分布曲线，高温曲线的峰较矮、位置更靠右。两曲线下总面积应",
+    "explanation": "归一化曲线面积表示总概率，不表示能量；高温曲线虽较宽较矮，总面积仍为1。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "高温一定更大，因总能量更大"
+      },
+      {
+        "key": "B",
+        "text": "低温一定更大，因曲线峰更高"
+      },
+      {
+        "key": "C",
+        "text": "都等于零，因为平均速度可为零"
+      },
+      {
+        "key": "D",
+        "text": "相同，都代表全部分子的比例1"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"相同，都代表全部分子的比例1\""
+  },
+  {
+    "id": "cnp_h147_q103",
+    "topicId": "cnp_h147",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "某气体样本统计10000个分子的速率，其中低于v₁的占20%，高于v₂的占15%，v₁<v₂。速率介于v₁和v₂之间的约有多少个？（忽略恰等于边界的分子）",
+    "answer": "6500",
+    "verify": "10000*(1-0.20-0.15)",
+    "explanation": "三个互斥区域比例合为100%，中间区间占65%，约6500个；这是统计分布而非单分子固定速率。"
+  },
+  {
+    "id": "cnp_h148_q101",
+    "topicId": "cnp_h148",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同温度的氢气与氧气在热平衡时，不计分子内部自由度差异对平动讨论的影响，分子平均平动动能",
+    "explanation": "同温度决定相同的分子平均平动动能；氢分子质量较小，对应的典型速率更大，整体静止不等于分子不动。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "氢气更大且两者平均速率相同"
+      },
+      {
+        "key": "B",
+        "text": "氧气更大且两者平均速率相同"
+      },
+      {
+        "key": "C",
+        "text": "都为零，因为容器整体静止"
+      },
+      {
+        "key": "D",
+        "text": "相同，但氢气分子平均速率较大"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"相同，但氢气分子平均速率较大\""
+  },
+  {
+    "id": "cnp_h148_q102",
+    "topicId": "cnp_h148",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "一定量理想气体温度从300 K升到600 K，分子平均平动动能变为原来的多少倍？",
+    "answer": "2",
+    "verify": "600/300",
+    "explanation": "分子平均平动动能正比于热力学温度，故比值为600/300=2。"
+  },
+  {
+    "id": "cnp_h148_q103",
+    "topicId": "cnp_h148",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "两个同温度的同种气体样本，一个分子数是另一个的3倍。它们的分子平均平动动能和总平动动能分别如何比较？",
+    "explanation": "平均值由温度决定；同种气体总分子平动动能等于分子数乘平均值，故随分子数增大。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "平均为1/3，总平动动能为3倍"
+      },
+      {
+        "key": "B",
+        "text": "平均相同，总平动动能为3倍"
+      },
+      {
+        "key": "C",
+        "text": "平均为3倍，总平动动能相同"
+      },
+      {
+        "key": "D",
+        "text": "平均和总平动动能均相同"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"平均相同，总平动动能为3倍\""
+  },
+  {
+    "id": "cnp_h149_q101",
+    "topicId": "cnp_h149",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "两个分子由相距大于平衡距离r₀的位置继续缓慢分开，仍处在分子引力有效范围内。分子力做功与势能变化分别为",
+    "explanation": "分开方向与引力相反，分子力做负功；保守力做功等于势能减少量，因此势能增加。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "做负功，分子势能减少"
+      },
+      {
+        "key": "B",
+        "text": "分子势能不随距离改变"
+      },
+      {
+        "key": "C",
+        "text": "做负功，分子势能增加"
+      },
+      {
+        "key": "D",
+        "text": "做正功，分子势能增加"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"做负功，分子势能增加\""
+  },
+  {
+    "id": "cnp_h149_q102",
+    "topicId": "cnp_h149",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "两个分子从小于r₀的距离靠近到更小距离，斥力占优势。此过程中分子势能",
+    "explanation": "靠近方向与净斥力相反，分子力做负功，分子势能上升；r₀附近是势能的极小位置。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "仅由整体速度决定"
+      },
+      {
+        "key": "B",
+        "text": "增加"
+      },
+      {
+        "key": "C",
+        "text": "减少"
+      },
+      {
+        "key": "D",
+        "text": "始终为零"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"增加\""
+  },
+  {
+    "id": "cnp_h149_q103",
+    "topicId": "cnp_h149",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "一份纯冰在通常熔点附近吸热熔化，温度保持不变，忽略对外体积功。关于其微观能量，正确的是",
+    "explanation": "温度主要表征分子平均动能；物态改变可使分子势能改变，温度不变仍可增加内能。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "平均分子动能基本不变，分子势能增加使内能增加"
+      },
+      {
+        "key": "B",
+        "text": "温度不变，所以内能必不变"
+      },
+      {
+        "key": "C",
+        "text": "所有分子动能降为零"
+      },
+      {
+        "key": "D",
+        "text": "吸热必须全部转化为物体整体动能"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"平均分子动能基本不变，分子势能增加使内能增加\""
+  },
+  {
+    "id": "cnp_h150_q101",
+    "topicId": "cnp_h150",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "某物体由18.5 ℃升温到33.0 ℃，其热力学温度增加多少K？",
+    "answer": "14.5",
+    "verify": "33.0-18.5",
+    "explanation": "T=t+273.15，两个状态相减后常量抵消，ΔT=Δt=14.5 K。"
+  },
+  {
+    "id": "cnp_h150_q102",
+    "topicId": "cnp_h150",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "甲、乙两物体接触足够久达到热平衡，以下哪项一定相同？",
+    "explanation": "热平衡对应温度相同；内能还与物质、质量、状态等有关，热量是过程量而非物体持有的量。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "温度"
+      },
+      {
+        "key": "B",
+        "text": "内能"
+      },
+      {
+        "key": "C",
+        "text": "质量"
+      },
+      {
+        "key": "D",
+        "text": "过去吸收的热量"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"温度\""
+  },
+  {
+    "id": "cnp_h150_q103",
+    "topicId": "cnp_h150",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "采用T=t+273.15 K的换算关系，温度−23.15 ℃对应的热力学温度是多少K？",
+    "answer": "250",
+    "verify": "-23.15+273.15",
+    "explanation": "把摄氏温度加273.15，得到250 K，不能直接把负摄氏温度当作负热力学温度。"
+  },
+  {
+    "id": "cnp_h151_q101",
+    "topicId": "cnp_h151",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "用注射器封闭空气探究等温p-V关系，为减小温度变化的干扰，更合理的操作是",
+    "explanation": "快速压缩会升温；缓慢改变并与环境充分换热，更接近一定质量、温度不变的实验条件。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "缓慢推动活塞并在每个位置待压强稳定后读数"
+      },
+      {
+        "key": "B",
+        "text": "尽可能快速压缩并立即读数"
+      },
+      {
+        "key": "C",
+        "text": "持续加热注射器同时改变体积"
+      },
+      {
+        "key": "D",
+        "text": "故意让空气从接口泄漏"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"缓慢推动活塞并在每个位置待压强稳定后读数\""
+  },
+  {
+    "id": "cnp_h151_q102",
+    "topicId": "cnp_h151",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "对一定质量、恒温气体的实验数据作图，哪种图像应近似为过原点的直线？",
+    "explanation": "玻意耳定律pV=常量，可写为p=C(1/V)，故p与1/V线性相关。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "p对V的图像"
+      },
+      {
+        "key": "B",
+        "text": "p对V²的图像"
+      },
+      {
+        "key": "C",
+        "text": "p对1/V²的图像"
+      },
+      {
+        "key": "D",
+        "text": "p对1/V的图像"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"p对1/V的图像\""
+  },
+  {
+    "id": "cnp_h151_q103",
+    "topicId": "cnp_h151",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "实验接口有一段未计入读数的死体积V₀，真实总体积为注射器读数V加V₀。若直接作p对1/V图像，偏离直线的可能原因是",
+    "explanation": "恒温时p(V+V₀)=常量，若忽略固定附加体积，所用变量不再严格满足p=C/V。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "气体压强完全与体积无关"
+      },
+      {
+        "key": "B",
+        "text": "任意死体积都会使质量数自动改变"
+      },
+      {
+        "key": "C",
+        "text": "使用的V不等于被研究气体的真实总体积"
+      },
+      {
+        "key": "D",
+        "text": "一定证明玻意耳定律错误"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"使用的V不等于被研究气体的真实总体积\""
+  },
+  {
+    "id": "cnp_h152_q101",
+    "topicId": "cnp_h152",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "一定质量理想气体等温变化，初压强1.2×10⁵ Pa、体积40 cm³，压缩到30 cm³后压强是多少Pa？",
+    "answer": "160000",
+    "verify": "1.2e5*40/30",
+    "explanation": "等温且气体量不变，p₂=p₁V₁/V₂=1.6×10⁵ Pa。"
+  },
+  {
+    "id": "cnp_h152_q102",
+    "topicId": "cnp_h152",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一份理想气体的两条p-V等温线，在相同体积处，甲线压强比乙线更高。甲、乙对应热力学温度关系为",
+    "explanation": "对于同一份理想气体，pV正比于T；V相同时压强越大温度越高。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "二者温度相同"
+      },
+      {
+        "key": "B",
+        "text": "只比较p不能判断，即使气体量相同"
+      },
+      {
+        "key": "C",
+        "text": "甲温度更高"
+      },
+      {
+        "key": "D",
+        "text": "乙温度更高"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"甲温度更高\""
+  },
+  {
+    "id": "cnp_h152_q103",
+    "topicId": "cnp_h152",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "密闭气体等温膨胀，体积变为原来的1.5倍。使用玻意耳定律可得",
+    "explanation": "质量一定且温度不变，p与V成反比，p₂/p₁=V₁/V₂=1/1.5=2/3。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "压强不变"
+      },
+      {
+        "key": "B",
+        "text": "压强变为原来的2/3"
+      },
+      {
+        "key": "C",
+        "text": "压强变为原来的1.5倍"
+      },
+      {
+        "key": "D",
+        "text": "压强变为原来的1/3"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"压强变为原来的2/3\""
+  },
+  {
+    "id": "cnp_h153_q101",
+    "topicId": "cnp_h153",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "一定质量理想气体在恒压下由300 K加热到450 K，初体积2.0 L，末体积是多少L？",
+    "answer": "3",
+    "verify": "2*450/300",
+    "explanation": "恒压时V/T不变，V₂=V₁T₂/T₁=3.0 L，必须使用热力学温度比。"
+  },
+  {
+    "id": "cnp_h153_q102",
+    "topicId": "cnp_h153",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "刚性密闭容器中的理想气体由27 ℃加热到127 ℃，初压强1.5×10⁵ Pa。取T=t+273 K，末压强是多少Pa？",
+    "answer": "200000",
+    "verify": "1.5e5*(127+273)/(27+273)",
+    "explanation": "体积与气体量不变，p₂/p₁=T₂/T₁=400/300，故p₂=2.0×10⁵ Pa。"
+  },
+  {
+    "id": "cnp_h153_q103",
+    "topicId": "cnp_h153",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "一定质量理想气体等容变化，作压强p对摄氏温度t图像。在理想模型中，直线延长线应与t轴相交于约",
+    "explanation": "等容时p∝T=t+273.15，零压强的形式外推截距约为−273.15 ℃，不表示实际能达到绝对零度。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "−273.15 ℃"
+      },
+      {
+        "key": "B",
+        "text": "0 ℃"
+      },
+      {
+        "key": "C",
+        "text": "273.15 ℃"
+      },
+      {
+        "key": "D",
+        "text": "与任何气体量无关的正温度100 ℃"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"−273.15 ℃\""
+  },
+  {
+    "id": "cnp_h154_q101",
+    "topicId": "cnp_h154",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "一定质量理想气体初始p₁=1.0×10⁵ Pa、V₁=2.0 L、T₁=300 K，末状态V₂=1.0 L、T₂=450 K。末压强是多少Pa？",
+    "answer": "300000",
+    "verify": "1e5*2*450/(300*1)",
+    "explanation": "由p₁V₁/T₁=p₂V₂/T₂，p₂=3.0×10⁵ Pa，温度与体积变化的效应共同决定压强。"
+  },
+  {
+    "id": "cnp_h154_q102",
+    "topicId": "cnp_h154",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "用pV/T=常量比较两状态时，下列哪种情况不能直接沿用同一个常量？",
+    "explanation": "常量与气体物质的量有关，漏气使气体量改变；其他密闭变化在理想气体适用范围内可比较。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "容器向外漏出一部分气体"
+      },
+      {
+        "key": "B",
+        "text": "密闭气体的压强、体积同时变化"
+      },
+      {
+        "key": "C",
+        "text": "密闭气体的温度改变但仍可近似理想气体"
+      },
+      {
+        "key": "D",
+        "text": "密闭气体发生等温膨胀"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"容器向外漏出一部分气体\""
+  },
+  {
+    "id": "cnp_h154_q103",
+    "topicId": "cnp_h154",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一密闭理想气体从甲态到乙态，pV乘积增大为原来的1.2倍，则热力学温度",
+    "explanation": "物质的量不变时pV=nRT，所以T的比值等于pV的比值；温差不能由比值直接写成摄氏度数。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "下降为原来的1/1.2"
+      },
+      {
+        "key": "B",
+        "text": "保持不变"
+      },
+      {
+        "key": "C",
+        "text": "一定升高1.2 ℃"
+      },
+      {
+        "key": "D",
+        "text": "增大为原来的1.2倍"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"增大为原来的1.2倍\""
+  },
+  {
+    "id": "cnp_h155_q101",
+    "topicId": "cnp_h155",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一密闭理想气体在等温条件下压缩到原体积的一半，从微观角度看压强增大的主要原因是",
+    "explanation": "等温时平均分子动能不变，体积减半使单位体积分子数加倍，碰撞效应增强，压强增大。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "分子数密度增大，而平均平动动能不变"
+      },
+      {
+        "key": "B",
+        "text": "每个分子质量变为2倍"
+      },
+      {
+        "key": "C",
+        "text": "温度不变使所有分子停止运动"
+      },
+      {
+        "key": "D",
+        "text": "器壁只在有重力时才受到碰撞"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"分子数密度增大，而平均平动动能不变\""
+  },
+  {
+    "id": "cnp_h155_q102",
+    "topicId": "cnp_h155",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "空间站内失重环境中的密闭气体仍能对容器壁产生压强，主要因为",
+    "explanation": "压强源于大量分子碰撞器壁的统计效应，不依赖气体受到的重力。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "气体压强只能来自重力，失重时不可能有压强"
+      },
+      {
+        "key": "B",
+        "text": "所有分子都固定吸附在壁上"
+      },
+      {
+        "key": "C",
+        "text": "容器壁必须做高速整体旋转"
+      },
+      {
+        "key": "D",
+        "text": "分子热运动造成持续碰撞，与是否有宏观重量不是一回事"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"分子热运动造成持续碰撞，与是否有宏观重量不是一回事\""
+  },
+  {
+    "id": "cnp_h155_q103",
+    "topicId": "cnp_h155",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "相同温度、相同体积的两个容器，分别装有分子数相同的氦气和氧气，均可视为理想气体。尽管分子质量不同，两容器压强将",
+    "explanation": "理想气体压强p=n数kT，质量较大的分子典型速率较小；不能仅凭单次碰撞的分子质量或速率判断压强。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "氦气一定更大，因为分子运动更快"
+      },
+      {
+        "key": "B",
+        "text": "都为零，因为两容器整体静止"
+      },
+      {
+        "key": "C",
+        "text": "相同，由相同分子数密度和温度决定"
+      },
+      {
+        "key": "D",
+        "text": "氧气一定更大，因为分子质量更大"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"相同，由相同分子数密度和温度决定\""
+  },
+  {
+    "id": "cnp_h156_q101",
+    "topicId": "cnp_h156",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "某纯净样品在恒压、缓慢加热中出现一段温度保持不变的熔化过程。这支持它属于",
+    "explanation": "晶体有确定熔点；单凭熔化平台不能区分单晶体和多晶体，更不能说温度不变时不吸热。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "一定是非晶体"
+      },
+      {
+        "key": "B",
+        "text": "必定是单晶体且所有性质各向异性"
+      },
+      {
+        "key": "C",
+        "text": "从此不能再吸收热量"
+      },
+      {
+        "key": "D",
+        "text": "具有确定熔点的晶体"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"具有确定熔点的晶体\""
+  },
+  {
+    "id": "cnp_h156_q102",
+    "topicId": "cnp_h156",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "一块多晶体宏观上常近似各向同性，这主要是因为",
+    "explanation": "每个晶粒仍是晶体，但取向不同可使宏观性质近似各向同性，不应把多晶体混同于非晶体。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "多晶体必没有确定熔点"
+      },
+      {
+        "key": "B",
+        "text": "多晶体中所有原子都不运动"
+      },
+      {
+        "key": "C",
+        "text": "大量小晶粒的取向杂乱，方向效应在宏观上平均化"
+      },
+      {
+        "key": "D",
+        "text": "每个晶粒内部都没有规则排列"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"大量小晶粒的取向杂乱，方向效应在宏观上平均化\""
+  },
+  {
+    "id": "cnp_h156_q103",
+    "topicId": "cnp_h156",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "两块材料外形都不规则，其中一块测得明确熔点，另一块在一段温区逐渐软化。更可靠的判断是",
+    "explanation": "外形可受加工影响，晶体与非晶体需结合内部排列和熔化等性质判断，外观不是充分判据。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "逐渐软化必表示温度计失灵"
+      },
+      {
+        "key": "B",
+        "text": "不能仅凭外形分类，应结合熔化特征等性质判断"
+      },
+      {
+        "key": "C",
+        "text": "外形不规则的都必是非晶体"
+      },
+      {
+        "key": "D",
+        "text": "有明确熔点的必不是晶体"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"不能仅凭外形分类，应结合熔化特征等性质判断\""
+  },
+  {
+    "id": "cnp_h157_q101",
+    "topicId": "cnp_h157",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "在失重环境中，一个孤立小水滴近似呈球形，主要原因是",
+    "explanation": "球形在一定体积下表面积最小；表面张力使液面收缩，失重时这一效应更显著。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "液体分子间完全没有作用力"
+      },
+      {
+        "key": "B",
+        "text": "水滴把所有内能都转化为整体运动"
+      },
+      {
+        "key": "C",
+        "text": "表面张力使一定体积下的液体表面积趋于减小"
+      },
+      {
+        "key": "D",
+        "text": "水滴必须受到竖直重力才能存在"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"表面张力使一定体积下的液体表面积趋于减小\""
+  },
+  {
+    "id": "cnp_h157_q102",
+    "topicId": "cnp_h157",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一根洁净细玻璃管分别插入水和不浸润玻璃的水银中。通常观察到",
+    "explanation": "毛细现象方向与浸润性质有关：浸润时通常上升，不浸润时通常下降，不能一概而论。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只要管径足够小，任何液体都上升"
+      },
+      {
+        "key": "B",
+        "text": "水面在管内上升，水银面在管内下降"
+      },
+      {
+        "key": "C",
+        "text": "水和水银都必上升相同高度"
+      },
+      {
+        "key": "D",
+        "text": "水下降，水银上升"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"水面在管内上升，水银面在管内下降\""
+  },
+  {
+    "id": "cnp_h157_q103",
+    "topicId": "cnp_h157",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "液晶能用于显示技术，与它的哪些性质组合直接有关？",
+    "explanation": "液晶兼有液体流动性和某些晶体式各向异性，可通过控制分子取向调节光学响应。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "有流动性，并可表现出方向相关的光学性质"
+      },
+      {
+        "key": "B",
+        "text": "绝不流动且必为各向同性"
+      },
+      {
+        "key": "C",
+        "text": "所有液晶都在任何温度下保持同一种状态"
+      },
+      {
+        "key": "D",
+        "text": "液晶本身必持续产生无限电能"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"有流动性，并可表现出方向相关的光学性质\""
+  },
+  {
+    "id": "cnp_h158_q101",
+    "topicId": "cnp_h158",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "绝热容器内由外部电机带动搅拌器，对液体做功250 J，忽略机械部件能量积累和其他能量输出。液体内能增加多少J？",
+    "answer": "250",
+    "verify": "250",
+    "explanation": "绝热时无热传递，外界对液体做的功转化为其内能，ΔU=250 J。"
+  },
+  {
+    "id": "cnp_h158_q102",
+    "topicId": "cnp_h158",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一系统由完全相同的初态达到完全相同的末态，过程甲通过做功，过程乙通过热传递。两过程内能变化",
+    "explanation": "内能是状态量，ΔU仅由初末状态决定；做功与热传递是改变内能的过程方式。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "相同，但功与热量的分配可能不同"
+      },
+      {
+        "key": "B",
+        "text": "必不同，因为路径不同"
+      },
+      {
+        "key": "C",
+        "text": "都必为零"
+      },
+      {
+        "key": "D",
+        "text": "取决于过程中用了哪一支温度计"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"相同，但功与热量的分配可能不同\""
+  },
+  {
+    "id": "cnp_h158_q103",
+    "topicId": "cnp_h158",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "快速压缩一支绝热且密闭的气筒，使空气温度上升，主要说明",
+    "explanation": "绝热压缩中外界对气体做正功；升温并不必然意味着有热量从外界传入。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "温度上升一定是从外界吸热"
+      },
+      {
+        "key": "B",
+        "text": "气体内能只能靠电流改变"
+      },
+      {
+        "key": "C",
+        "text": "压缩时气体对外做正功导致自身内能增加"
+      },
+      {
+        "key": "D",
+        "text": "外界做功可在几乎无热交换时增加气体内能"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"外界做功可在几乎无热交换时增加气体内能\""
+  },
+  {
+    "id": "cnp_h159_q101",
+    "topicId": "cnp_h159",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "气体从外界吸热250 J，同时对外做功100 J。取ΔU=Q+W，其中W为外界对气体做功，气体内能增加多少J？",
+    "answer": "150",
+    "verify": "250-100",
+    "explanation": "Q=+250 J，气体对外做功对应W=−100 J，因此ΔU=150 J。"
+  },
+  {
+    "id": "cnp_h159_q102",
+    "topicId": "cnp_h159",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "某过程外界对气体做功400 J，气体同时向外放热150 J。气体内能变化量是多少J？",
+    "answer": "250",
+    "verify": "400-150",
+    "explanation": "外界做功W=+400 J，放热Q=−150 J，ΔU=250 J。"
+  },
+  {
+    "id": "cnp_h159_q103",
+    "topicId": "cnp_h159",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "气体经历一完整循环回到原来的热力学状态，若总共从外界净吸热80 J，则全过程",
+    "explanation": "完整循环ΔU=0；按ΔU=Q+W外，W外=−80 J，即气体对外净做功80 J。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "外界对气体净做功80 J"
+      },
+      {
+        "key": "B",
+        "text": "气体对外净做功必为零"
+      },
+      {
+        "key": "C",
+        "text": "气体对外净做功80 J"
+      },
+      {
+        "key": "D",
+        "text": "内能增加80 J"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"气体对外净做功80 J\""
+  },
+  {
+    "id": "cnp_h160_q101",
+    "topicId": "cnp_h160",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "一定质量理想气体在1.0×10⁵ Pa恒压下膨胀，体积增加2.0 L，同时吸热500 J。忽略其他功，内能增加多少J？",
+    "answer": "300",
+    "verify": "500-1e5*2e-3",
+    "explanation": "气体对外做功pΔV=200 J，ΔU=Q−pΔV=300 J。"
+  },
+  {
+    "id": "cnp_h160_q102",
+    "topicId": "cnp_h160",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "绝热刚性容器被隔板分成两部分，一侧为理想气体，另一侧为真空。撤去隔板后气体自由膨胀到整个容器，最终重新平衡。忽略其他能量交换，温度如何变化？",
+    "explanation": "这是向真空的自由膨胀，外界阻力为零，W=0；又绝热Q=0，故ΔU=0，理想气体温度不变。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "升高，因为真空对气体做正功"
+      },
+      {
+        "key": "B",
+        "text": "必降到绝对零度"
+      },
+      {
+        "key": "C",
+        "text": "不变，因为无热传递且不对外做功，理想气体内能不变"
+      },
+      {
+        "key": "D",
+        "text": "降低，因为任何体积增大都必须对外做正功"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"不变，因为无热传递且不对外做功，理想气体内能不变\""
+  },
+  {
+    "id": "cnp_h160_q103",
+    "topicId": "cnp_h160",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "刚性、密闭且无其他能量输入方式的理想气体容器被加热，关于气体的体积功和内能，正确的是",
+    "explanation": "刚性容器ΔV=0，无体积功；由第一定律，若无其他功，ΔU=Q，温度可升高。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "容器不膨胀，所以气体不能吸热"
+      },
+      {
+        "key": "B",
+        "text": "体积功为零，吸收的热量用于增加内能"
+      },
+      {
+        "key": "C",
+        "text": "气体必做pΔV大于零的功"
+      },
+      {
+        "key": "D",
+        "text": "只要压强升高，温度就必下降"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"体积功为零，吸收的热量用于增加内能\""
+  },
+  {
+    "id": "cnp_h161_q101",
+    "topicId": "cnp_h161",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "某装置吸收电能1000 J，对外输出机械能650 J，其余转化为内能且无其他能量去向。转化为内能的能量是多少J？",
+    "answer": "350",
+    "verify": "1000-650",
+    "explanation": "对整体应用能量守恒，内能增量对应其余能量1000−650=350 J。"
+  },
+  {
+    "id": "cnp_h161_q102",
+    "topicId": "cnp_h161",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "一种宣称“无任何能量输入却能长期持续对外做功”的机器，根本问题是",
+    "explanation": "若机器状态不变且持续向外输出能量，必须有相应能量来源；减少摩擦也不能凭空供能。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "在任何地方只要温度恒定即可实现"
+      },
+      {
+        "key": "B",
+        "text": "违背能量守恒定律，属于第一类永动机设想"
+      },
+      {
+        "key": "C",
+        "text": "只要摩擦足够大就能实现"
+      },
+      {
+        "key": "D",
+        "text": "仅把机械能转成内能就一定违背守恒"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"违背能量守恒定律，属于第一类永动机设想\""
+  },
+  {
+    "id": "cnp_h161_q103",
+    "topicId": "cnp_h161",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "能量总量守恒，但人类仍需节约能源，主要是因为",
+    "explanation": "能量守恒不意味着任何形式都能等效、无条件地转成有用功；可利用程度受转化方向和环境约束。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能量转化有方向性，可利用的高品质能量会减少"
+      },
+      {
+        "key": "B",
+        "text": "能量守恒只对没有摩擦的机械成立"
+      },
+      {
+        "key": "C",
+        "text": "一切能量一旦使用就完全消失"
+      },
+      {
+        "key": "D",
+        "text": "内能在任何条件下都能无代价全部转成功"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"能量转化有方向性，可利用的高品质能量会减少\""
+  },
+  {
+    "id": "cnp_h162_q101",
+    "topicId": "cnp_h162",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "冰箱能把热量从较冷的箱内传到较热的室内，而不违背热力学第二定律，关键是",
+    "explanation": "第二定律限制无外界影响的自发传热；制冷过程需输入功，向室内放出的热量包括从箱内吸走的热量和电功。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "箱内温度低，所以制冷无需任何条件"
+      },
+      {
+        "key": "B",
+        "text": "冰箱消耗电能并向室内释放更多总热量"
+      },
+      {
+        "key": "C",
+        "text": "热量在任何情况下都不能由冷处到热处"
+      },
+      {
+        "key": "D",
+        "text": "冰箱让总能量减少"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"冰箱消耗电能并向室内释放更多总热量\""
+  },
+  {
+    "id": "cnp_h162_q102",
+    "topicId": "cnp_h162",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "某循环热机只从单一热源吸热，并宣称把所吸热量全部转为功而不产生其他影响。这种设想",
+    "explanation": "第二类永动机的缺陷不是能量数量凭空产生，而是企图实现第二定律禁止的循环热转功方式。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "可满足能量账面守恒，但违背热力学第二定律"
+      },
+      {
+        "key": "B",
+        "text": "只违反动量守恒，不涉及热力学"
+      },
+      {
+        "key": "C",
+        "text": "因为效率为100%所以必然可实现"
+      },
+      {
+        "key": "D",
+        "text": "与完全绝热的自由膨胀是同一过程"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"可满足能量账面守恒，但违背热力学第二定律\""
+  },
+  {
+    "id": "cnp_h162_q103",
+    "topicId": "cnp_h162",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "孤立系统中的两部分初始温度不同，随后自发达到热平衡。关于总熵，合理判断是",
+    "explanation": "孤立系统自发过程总熵不减，非平衡热传导通常使总熵增加；总能量仍守恒。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "总熵必减小为零"
+      },
+      {
+        "key": "B",
+        "text": "总能量在传热中消失"
+      },
+      {
+        "key": "C",
+        "text": "达到同温就意味着各部分内能相等"
+      },
+      {
+        "key": "D",
+        "text": "总熵增加，能量在系统内部重新分配"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"总熵增加，能量在系统内部重新分配\""
+  },
+  {
+    "id": "cnp_h163_q101",
+    "topicId": "cnp_h163",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "理想黑体温度升高时，其辐射谱峰值对应波长通常如何变化？",
+    "explanation": "黑体温度越高，辐射能量分布向较高频率、较短波长方向扩展，峰值位置移向短波。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "向较短波长移动"
+      },
+      {
+        "key": "B",
+        "text": "向较长波长移动"
+      },
+      {
+        "key": "C",
+        "text": "严格不变"
+      },
+      {
+        "key": "D",
+        "text": "由观察距离单独决定"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"向较短波长移动\""
+  },
+  {
+    "id": "cnp_h163_q102",
+    "topicId": "cnp_h163",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "某振动系统辐射频率为ν，按普朗克能量子假说，在该频率上交换的能量可为",
+    "explanation": "能量子大小为hν，该频率的能量交换体现整数份额，不等于任意连续分割。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "任意小的连续能量，绝不量子化"
+      },
+      {
+        "key": "B",
+        "text": "只能为0.5hν"
+      },
+      {
+        "key": "C",
+        "text": "只由传播距离决定"
+      },
+      {
+        "key": "D",
+        "text": "hν、2hν、3hν等整数倍"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"hν、2hν、3hν等整数倍\""
+  },
+  {
+    "id": "cnp_h163_q103",
+    "topicId": "cnp_h163",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "一个光子的频率为5.0×10¹⁴ Hz，取h=6.6×10⁻³⁴ J·s。光子能量是几×10⁻¹⁹ J？（填写系数）",
+    "answer": "3.3",
+    "verify": "6.6e-34*5e14/1e-19",
+    "explanation": "E=hν=3.3×10⁻¹⁹ J，填写系数3.3，不能把整个光束的总能量当成单光子能量。"
+  },
+  {
+    "id": "cnp_h164_q101",
+    "topicId": "cnp_h164",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "用频率低于金属截止频率的单色光照射，持续增加光强且照射很久，在通常单光子光电效应条件下",
+    "explanation": "单个光子能量hν不足以克服逸出功；在这里不能靠增加光子数量补足每个光子的能量。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "迟早会因光子能量累积而必然逸出"
+      },
+      {
+        "key": "B",
+        "text": "最大初动能必不断增加"
+      },
+      {
+        "key": "C",
+        "text": "光电流必与照射时间成正比无限增长"
+      },
+      {
+        "key": "D",
+        "text": "仍不能逸出光电子"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"仍不能逸出光电子\""
+  },
+  {
+    "id": "cnp_h164_q102",
+    "topicId": "cnp_h164",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "频率已高于截止频率，保持频率不变而增加入射光强，在材料及收集条件不变时",
+    "explanation": "增加光强主要增加光子通量和逸出电子数；最大初动能由hν−W₀决定。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "截止频率随光强升高"
+      },
+      {
+        "key": "B",
+        "text": "饱和光电流必须保持不变"
+      },
+      {
+        "key": "C",
+        "text": "饱和光电流通常增大，最大初动能不变"
+      },
+      {
+        "key": "D",
+        "text": "最大初动能与光强成正比"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"饱和光电流通常增大，最大初动能不变\""
+  },
+  {
+    "id": "cnp_h164_q103",
+    "topicId": "cnp_h164",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "某光电管每秒接收入射光子5.0×10¹⁴个，每100个入射光子平均使2个电子逸出，且逸出电子都被收集。取e=1.6×10⁻¹⁹ C，饱和电流是多少μA？",
+    "answer": "1.6",
+    "verify": "5e14*(2/100)*1.6e-19*1e6",
+    "explanation": "每秒逸出电子为5.0×10¹⁴×2%=1.0×10¹³个，I=Ne=1.6×10⁻⁶ A=1.6 μA。"
+  },
+  {
+    "id": "cnp_h165_q101",
+    "topicId": "cnp_h165",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "用能量5.0 eV的单色光照射某金属，测得遏止电压大小为1.8 V。保持材料不变，改用光子能量6.2 eV的光，遏止电压大小应为多少V？",
+    "answer": "3",
+    "verify": "6.2-(5.0-1.8)",
+    "explanation": "第一次最大初动能1.8 eV，故逸出功为5.0−1.8=3.2 eV；第二次最大初动能为3.0 eV，对应遏止电压3.0 V。"
+  },
+  {
+    "id": "cnp_h165_q102",
+    "topicId": "cnp_h165",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同种金属分别用频率ν₁、ν₂照射，均能发生光电效应，ν₂>ν₁。两次最大初动能之差为",
+    "explanation": "相减Ek₂−Ek₁=(hν₂−W₀)−(hν₁−W₀)，逸出功抵消，只剩hΔν。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只由两束光强之比决定"
+      },
+      {
+        "key": "B",
+        "text": "h(ν₂−ν₁)"
+      },
+      {
+        "key": "C",
+        "text": "h(ν₂+ν₁)"
+      },
+      {
+        "key": "D",
+        "text": "W₀(ν₂−ν₁)"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"h(ν₂−ν₁)\""
+  },
+  {
+    "id": "cnp_h165_q103",
+    "topicId": "cnp_h165",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "光电子最大初动能为2.4 eV时，相应遏止电压的大小为",
+    "explanation": "遏止条件为eU遏=Ek,max，电子的动能用eV表示时，其数值等于遏止电压的伏特数值，注意单位不同。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "2.4 V"
+      },
+      {
+        "key": "B",
+        "text": "2.4 eV"
+      },
+      {
+        "key": "C",
+        "text": "1.2 V"
+      },
+      {
+        "key": "D",
+        "text": "4.8 V"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"2.4 V\""
+  },
+  {
+    "id": "cnp_h166_q101",
+    "topicId": "cnp_h166",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "α粒子散射中，大多数粒子几乎不偏转，只有极少数大角度偏转。两种观察共同支持",
+    "explanation": "若正电荷均匀弥散，难以造成极少数极强的偏转；稀少的大角度事件提示中心小而集中的正电核。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "α粒子本身不带电"
+      },
+      {
+        "key": "B",
+        "text": "原子的大部分空间较空，正电荷和绝大部分质量集中于很小的核"
+      },
+      {
+        "key": "C",
+        "text": "正电荷均匀分布在原子整个体积"
+      },
+      {
+        "key": "D",
+        "text": "原子核占据原子全部体积"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"原子的大部分空间较空，正电荷和绝大部分质量集中于很小的核\""
+  },
+  {
+    "id": "cnp_h166_q102",
+    "topicId": "cnp_h166",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "α粒子正对固定正原子核运动，忽略电子及核反冲，尚未触及核且只有静电相互作用。接近过程中",
+    "explanation": "同号电荷相斥，接近时电场力做负功，动能转化为电势能；这与磁场力不做功不同。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "动能减小，电势能增加"
+      },
+      {
+        "key": "B",
+        "text": "动能和电势能同时增加"
+      },
+      {
+        "key": "C",
+        "text": "动能增加，电势能减少"
+      },
+      {
+        "key": "D",
+        "text": "速率保持不变，因静电力不做功"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"动能减小，电势能增加\""
+  },
+  {
+    "id": "cnp_h166_q103",
+    "topicId": "cnp_h166",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "在相同核电荷、忽略核反冲的正对散射近似中，把α粒子初动能提高为原来的2倍，最近距离变为原来的",
+    "explanation": "最近处初动能全部转化为静电势能，Ek=kqQ/rmin；其他量不变时rmin与Ek成反比。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "2倍"
+      },
+      {
+        "key": "B",
+        "text": "√2倍"
+      },
+      {
+        "key": "C",
+        "text": "不变"
+      },
+      {
+        "key": "D",
+        "text": "1/2"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"1/2\""
+  },
+  {
+    "id": "cnp_h167_q101",
+    "topicId": "cnp_h167",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "实验发现不同元素原子发出的特征谱线位置不同，天文观测可据此判断恒星中的元素。这依靠",
+    "explanation": "特征谱线是原子特定能级差的表现，可作为元素识别依据；远距离传播本身不会把所有元素谱线变成相同。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "原子能级结构不同，产生各自特定的跃迁频率"
+      },
+      {
+        "key": "B",
+        "text": "任何元素发光都只含同一个频率"
+      },
+      {
+        "key": "C",
+        "text": "谱线位置只由观测距离决定"
+      },
+      {
+        "key": "D",
+        "text": "只有固体才能形成特征光谱"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"原子能级结构不同，产生各自特定的跃迁频率\""
+  },
+  {
+    "id": "cnp_h167_q102",
+    "topicId": "cnp_h167",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "氢原子巴耳末系中，比较n=3到2和n=4到2的跃迁，后者光子",
+    "explanation": "能级差|E₄−E₂|大于|E₃−E₂|，由E光=hν=hc/λ可知频率更高、波长更短。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "频率更低，波长更长"
+      },
+      {
+        "key": "B",
+        "text": "频率相同，波长相同"
+      },
+      {
+        "key": "C",
+        "text": "没有确定波长，因为n不同"
+      },
+      {
+        "key": "D",
+        "text": "频率更高，波长更短"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"频率更高，波长更短\""
+  },
+  {
+    "id": "cnp_h167_q103",
+    "topicId": "cnp_h167",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "氢原子光谱出现一条条分立谱线，而非所有频率都连续出现。对此最直接的物理解释是",
+    "explanation": "分立能级之间只允许特定能量差，对应特定光子频率；经典连续辐射模型难以解释这一事实。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "光在任何介质中都不能有确定频率"
+      },
+      {
+        "key": "B",
+        "text": "每个原子永久静止且没有能量"
+      },
+      {
+        "key": "C",
+        "text": "原子只能在允许的离散能级之间跃迁"
+      },
+      {
+        "key": "D",
+        "text": "电子只可作任意能量的连续辐射"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"原子只能在允许的离散能级之间跃迁\""
+  },
+  {
+    "id": "cnp_h168_q101",
+    "topicId": "cnp_h168",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "氢原子能级Eₙ=−13.6/n² eV。从n=2能级电离到能量零点，最少需要吸收多少eV？",
+    "answer": "3.4",
+    "verify": "13.6/2**2",
+    "explanation": "n=2时能量为−3.4 eV，电离到0至少需补充3.4 eV。"
+  },
+  {
+    "id": "cnp_h168_q102",
+    "topicId": "cnp_h168",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "一大群氢原子均处于n=4激发态，经过各种允许的逐级辐射跃迁回到基态，最多可出现多少种不同频率的光子？",
+    "answer": "6",
+    "verify": "4*(4-1)/2",
+    "explanation": "四个能级间任意两个不同能级可对应一种频率，最多C₄²=6种；不是说单个原子一次就发出6个光子。"
+  },
+  {
+    "id": "cnp_h168_q103",
+    "topicId": "cnp_h168",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "氢原子由较高轨道跃迁到较低轨道（玻尔模型）并辐射光子，电子动能与原子总能量的变化为",
+    "explanation": "在库仑束缚态中较低n对应更大动能、负值更大的势能和更低总能量；辐射能量来自总能量降低。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "二者都不变"
+      },
+      {
+        "key": "B",
+        "text": "电子动能增加，原子总能量降低"
+      },
+      {
+        "key": "C",
+        "text": "电子动能减少，原子总能量增加"
+      },
+      {
+        "key": "D",
+        "text": "二者都增加"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"电子动能增加，原子总能量降低\""
+  },
+  {
+    "id": "cnp_h169_q101",
+    "topicId": "cnp_h169",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "两束非相对论电子动量大小之比为1:2。其德布罗意波长之比为",
+    "explanation": "λ=h/p，波长与动量大小成反比。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "1:4"
+      },
+      {
+        "key": "B",
+        "text": "1:1"
+      },
+      {
+        "key": "C",
+        "text": "2:1"
+      },
+      {
+        "key": "D",
+        "text": "1:2"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"2:1\""
+  },
+  {
+    "id": "cnp_h169_q102",
+    "topicId": "cnp_h169",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一种非相对论粒子的动能增为原来的4倍，其德布罗意波长变为原来的",
+    "explanation": "p=√(2mEk)，动能加4倍使动量加2倍，λ=h/p变为1/2。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "4倍"
+      },
+      {
+        "key": "B",
+        "text": "1/2"
+      },
+      {
+        "key": "C",
+        "text": "1/4"
+      },
+      {
+        "key": "D",
+        "text": "2倍"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"1/2\""
+  },
+  {
+    "id": "cnp_h169_q103",
+    "topicId": "cnp_h169",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "把极弱电子束一次只发射一个电子通过双缝，累积许多电子后出现干涉条纹。合理理解是",
+    "explanation": "量子粒子的单次探测呈一个局域事件，概率分布可体现干涉；不能把波粒二象性理解为电子分裂成半个电荷。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "单次探测具有局域性，大量事件的分布体现波动规律"
+      },
+      {
+        "key": "B",
+        "text": "每个电子必须裂成两半电荷才能出现条纹"
+      },
+      {
+        "key": "C",
+        "text": "条纹只说明电子是经典小球，毫无波动性"
+      },
+      {
+        "key": "D",
+        "text": "任何单个电子都均匀涂满整块屏幕"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"单次探测具有局域性，大量事件的分布体现波动规律\""
+  },
+  {
+    "id": "cnp_h170_q101",
+    "topicId": "cnp_h170",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "α、β⁻、γ三种射线在同一真空匀强磁场中垂直入射，关于偏转方向，正确的是",
+    "explanation": "α为带正电的氦核，β⁻为电子，γ为不带电的电磁辐射；轨迹弯曲程度还取决于动量与电荷量。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "α粒子不带电，完全不偏转"
+      },
+      {
+        "key": "B",
+        "text": "α与β⁻带相反电荷，向相反方向偏；γ不因磁场直接偏转"
+      },
+      {
+        "key": "C",
+        "text": "三者都沿同一方向偏转"
+      },
+      {
+        "key": "D",
+        "text": "γ射线带负电，必与β⁻同向偏转"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"α与β⁻带相反电荷，向相反方向偏；γ不因磁场直接偏转\""
+  },
+  {
+    "id": "cnp_h170_q102",
+    "topicId": "cnp_h170",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "选取通常高中比较的三类核辐射，在相近讨论条件下，哪组“电离能力强、穿透能力弱”的特征最符合α射线？",
+    "explanation": "α粒子与物质相互作用强，沿途电离显著而易被阻挡；穿透强弱与具体能量和材料有关，不能脱离条件绝对化。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "电离强、穿透弱"
+      },
+      {
+        "key": "B",
+        "text": "电离弱、穿透强"
+      },
+      {
+        "key": "C",
+        "text": "电离弱、完全不受物质影响"
+      },
+      {
+        "key": "D",
+        "text": "电离与穿透都必须无限大"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"电离强、穿透弱\""
+  },
+  {
+    "id": "cnp_h170_q103",
+    "topicId": "cnp_h170",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "发现天然放射现象，对物质结构认识的重要意义在于",
+    "explanation": "天然放射来源于原子核变化，促使人们认识核的内部结构，而不是把核变化等同于普通化学变化。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "表明化学反应一定能随意改变核电荷数"
+      },
+      {
+        "key": "B",
+        "text": "直接证明电子没有质量"
+      },
+      {
+        "key": "C",
+        "text": "证明一切原子都在同一时刻衰变"
+      },
+      {
+        "key": "D",
+        "text": "表明原子核并非不可改变，具有内部结构"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"表明原子核并非不可改变，具有内部结构\""
+  },
+  {
+    "id": "cnp_h171_q101",
+    "topicId": "cnp_h171",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "某正二价离子有24个核外电子，原子核质量数为56，且未发生核反应。该核中有多少个中子？",
+    "answer": "30",
+    "verify": "56-(24+2)",
+    "explanation": "正二价表示核内质子数比电子数多2，所以Z=26；中子数N=A−Z=56−26=30。"
+  },
+  {
+    "id": "cnp_h171_q102",
+    "topicId": "cnp_h171",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "下列两种核哪一组互为同位素？",
+    "explanation": "同位素必须质子数相同而中子数不同；碳-12和碳-14均有6个质子，质量数不同。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "碳-14与氮-14"
+      },
+      {
+        "key": "B",
+        "text": "氢-2与氦-4"
+      },
+      {
+        "key": "C",
+        "text": "氧-16与氮-16"
+      },
+      {
+        "key": "D",
+        "text": "碳-12与碳-14"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"碳-12与碳-14\""
+  },
+  {
+    "id": "cnp_h171_q103",
+    "topicId": "cnp_h171",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "某中性原子失去一个核外电子成为正一价离子，在没有核反应时，其核电荷数与质量数",
+    "explanation": "普通电离仅改变核外电子数，原子核的质子、中子组成不变；不能把电离当作核衰变。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "核电荷数加1，质量数加1"
+      },
+      {
+        "key": "B",
+        "text": "质量数减1，核电荷数不变"
+      },
+      {
+        "key": "C",
+        "text": "都不变"
+      },
+      {
+        "key": "D",
+        "text": "核电荷数减1，质量数不变"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"都不变\""
+  },
+  {
+    "id": "cnp_h172_q101",
+    "topicId": "cnp_h172",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "静止原子核发生一次α衰变，不考虑随后γ跃迁，原子序数Z和质量数A分别变为",
+    "explanation": "α粒子为含2个质子和2个中子的氦核，母核失去4个核子、2个正电荷。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "Z−4、A−2"
+      },
+      {
+        "key": "B",
+        "text": "Z+1、A"
+      },
+      {
+        "key": "C",
+        "text": "Z−1、A−1"
+      },
+      {
+        "key": "D",
+        "text": "Z−2、A−4"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"Z−2、A−4\""
+  },
+  {
+    "id": "cnp_h172_q102",
+    "topicId": "cnp_h172",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "某核发生β⁻衰变时，质量数保持不变而核电荷数增加1。电子的来源应解释为",
+    "explanation": "β⁻衰变为n→p+e⁻+反中微子；电子由衰变产生，质量数不变，核电荷数增加1。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "原子核失去一个质子"
+      },
+      {
+        "key": "B",
+        "text": "中子被分成两个质子且不产生其他粒子"
+      },
+      {
+        "key": "C",
+        "text": "核内一个中子转化为质子，同时产生电子和反中微子"
+      },
+      {
+        "key": "D",
+        "text": "一个早已藏在核内的核外电子被挤出"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"核内一个中子转化为质子，同时产生电子和反中微子\""
+  },
+  {
+    "id": "cnp_h172_q103",
+    "topicId": "cnp_h172",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "铀-238（Z=92）经过若干次α衰变和β⁻衰变变成铅-206（Z=82）。其中共发生多少次β⁻衰变？",
+    "answer": "6",
+    "verify": "82-(92-2*((238-206)/4))",
+    "explanation": "质量数减少32对应8次α衰变；Z先变为92−16=76，再需6次β⁻衰变增至82。"
+  },
+  {
+    "id": "cnp_h173_q101",
+    "topicId": "cnp_h173",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "大量某放射性核初始有8000个，半衰期为2 h。经历6 h后，按统计规律预计还剩多少个未衰变核？",
+    "answer": "1000",
+    "verify": "8000*(0.5)**(6/2)",
+    "explanation": "6 h等于3个半衰期，剩余N=N₀/2³=1000。"
+  },
+  {
+    "id": "cnp_h173_q102",
+    "topicId": "cnp_h173",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "只选取4个半衰期为10 min的同种放射性核，观察10 min。关于剩余未衰变核数，下列说法正确的是",
+    "explanation": "半衰期是大量独立衰变事件的统计规律；少数核的一次实现会涨落，不能把期望数量当作必然数量。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只要样本少，半衰期就自动变成20 min"
+      },
+      {
+        "key": "B",
+        "text": "平均期望值为2，但一次实验不保证恰好剩2个"
+      },
+      {
+        "key": "C",
+        "text": "每一次都必须恰好剩2个"
+      },
+      {
+        "key": "D",
+        "text": "每一次都必全部衰变"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"平均期望值为2，但一次实验不保证恰好剩2个\""
+  },
+  {
+    "id": "cnp_h173_q103",
+    "topicId": "cnp_h173",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "同一核素的样品甲、乙初始未衰变核数之比为3:1，分别在相同条件下经过同样长时间。按统计平均，其剩余未衰变核数之比为",
+    "explanation": "同核素衰减因子相同，N=N₀2^(−t/τ)，两者同时乘同一因子，比例保持3:1。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "3:1"
+      },
+      {
+        "key": "B",
+        "text": "1:1"
+      },
+      {
+        "key": "C",
+        "text": "9:1"
+      },
+      {
+        "key": "D",
+        "text": "由初始质量较大者半衰期更长决定"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"3:1\""
+  },
+  {
+    "id": "cnp_h174_q101",
+    "topicId": "cnp_h174",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "医院利用带有放射性标记的药物追踪其在体内的分布。此法主要利用",
+    "explanation": "示踪依靠化学行为及可探测的核辐射，实际应用需专业评估、控制剂量和合适半衰期，不能认为没有风险。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "放射性标记完全不需要控制剂量"
+      },
+      {
+        "key": "B",
+        "text": "示踪核素与对应普通核素化学行为相近，且其辐射可被检测"
+      },
+      {
+        "key": "C",
+        "text": "药物质量必在进入人体后立即加倍"
+      },
+      {
+        "key": "D",
+        "text": "辐射可无条件让所有细胞不再代谢"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"示踪核素与对应普通核素化学行为相近，且其辐射可被检测\""
+  },
+  {
+    "id": "cnp_h174_q102",
+    "topicId": "cnp_h174",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "工业γ射线探伤可检查金属内部缺陷，核心依据是",
+    "explanation": "穿透辐射经过不同结构后的衰减不同，检测透射差异可揭示内部缺陷；需专业屏蔽和操作规范。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不同路径中材料厚度、密度等差异导致透射强度不同"
+      },
+      {
+        "key": "B",
+        "text": "γ射线只在材料表面反射，不能穿透"
+      },
+      {
+        "key": "C",
+        "text": "γ射线会让所有金属瞬间变透明"
+      },
+      {
+        "key": "D",
+        "text": "缺陷会使射线失去能量守恒"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"不同路径中材料厚度、密度等差异导致透射强度不同\""
+  },
+  {
+    "id": "cnp_h174_q103",
+    "topicId": "cnp_h174",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "在专业放射作业中，降低不必要外照射剂量的一般原则是",
+    "explanation": "防护需综合时间、距离和适当屏蔽，具体材料及厚度随射线种类、能量和条件选择。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "延长近距离停留，因人体会自动免疫"
+      },
+      {
+        "key": "B",
+        "text": "任何射线都只需一层纸即可完全屏蔽"
+      },
+      {
+        "key": "C",
+        "text": "离开现场后所有受照剂量会立即归零"
+      },
+      {
+        "key": "D",
+        "text": "缩短接触时间、适当增大距离并采用匹配射线种类的屏蔽"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"缩短接触时间、适当增大距离并采用匹配射线种类的屏蔽\""
+  },
+  {
+    "id": "cnp_h175_q101",
+    "topicId": "cnp_h175",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "一个质量数为20的原子核，对应的自由核子静质量总和为20.160 u，成核后静质量为20.000 u。取1 u对应931.5 MeV/c²，该核的比结合能是多少MeV/核子？",
+    "answer": "7.452",
+    "verify": "(20.160-20.000)*931.5/20",
+    "explanation": "先求质量亏损0.160 u，结合能149.04 MeV，再除以20个核子，得比结合能7.452 MeV/核子。"
+  },
+  {
+    "id": "cnp_h175_q102",
+    "topicId": "cnp_h175",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "甲核总结合能为160 MeV、质量数20；乙核总结合能为240 MeV、质量数40。只按比结合能比较核的稳定程度，哪项正确？",
+    "explanation": "比较平均到每个核子的结合能：160/20=8，240/40=6，不能只比较总结合能。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "乙总结合能较大，所以比结合能也必较大"
+      },
+      {
+        "key": "B",
+        "text": "二者比结合能相同"
+      },
+      {
+        "key": "C",
+        "text": "甲的每个核子质量数是乙的2倍"
+      },
+      {
+        "key": "D",
+        "text": "甲较大，为8 MeV/核子；乙为6 MeV/核子"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"甲较大，为8 MeV/核子；乙为6 MeV/核子\""
+  },
+  {
+    "id": "cnp_h175_q103",
+    "topicId": "cnp_h175",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "原子核中质子间有静电斥力，核仍能结合，说明核力在其有效范围内具有何种重要特点？",
+    "explanation": "核力是核尺度上的强相互作用表现，范围很短；不能把它等同为宏观引力或无限程静电力。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "与引力完全相同且强度也相同"
+      },
+      {
+        "key": "B",
+        "text": "作用范围无限大且只排斥中子"
+      },
+      {
+        "key": "C",
+        "text": "短程且很强，可在核尺度上克服相应静电斥力"
+      },
+      {
+        "key": "D",
+        "text": "只在整个原子尺度外才出现"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"短程且很强，可在核尺度上克服相应静电斥力\""
+  },
+  {
+    "id": "cnp_h176_q101",
+    "topicId": "cnp_h176",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "一个铀-235核吸收中子后裂变，放出的中子再引发其他裂变，形成持续链式反应。关键条件之一是",
+    "explanation": "链式反应靠中子增殖与有效利用维持，过多中子逃逸或被非裂变吸收会使反应难以延续。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "每次裂变产生的中子必须全部逃出系统"
+      },
+      {
+        "key": "B",
+        "text": "只能靠核外电子彼此碰撞传递反应"
+      },
+      {
+        "key": "C",
+        "text": "任何一个铀原子核都必须同时吸收两个α粒子"
+      },
+      {
+        "key": "D",
+        "text": "足够多的裂变中子能继续诱发后续裂变"
+      }
+    ],
+    "answer": "D",
+    "verify": "\"足够多的裂变中子能继续诱发后续裂变\""
+  },
+  {
+    "id": "cnp_h176_q102",
+    "topicId": "cnp_h176",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "轻核聚变通常要求极高温度，其重要作用之一是",
+    "explanation": "正电轻核接近时须克服库仑势垒，极高温度有助于达到必要接近条件，核力再促成结合。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "让核间库仑斥力变成引力"
+      },
+      {
+        "key": "B",
+        "text": "使质量数不再需要守恒"
+      },
+      {
+        "key": "C",
+        "text": "使核具有足够动能接近到核力能起主要作用的距离"
+      },
+      {
+        "key": "D",
+        "text": "使原子核的正电荷完全消失"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"使核具有足够动能接近到核力能起主要作用的距离\""
+  },
+  {
+    "id": "cnp_h176_q103",
+    "topicId": "cnp_h176",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "numeric",
+    "prompt": "某核反应每次释放200 MeV能量，取1 MeV=1.6×10⁻¹³ J。发生10¹⁰次反应共释放多少J？",
+    "answer": "0.32",
+    "verify": "200*1.6e-13*1e10",
+    "explanation": "总释放能量为反应次数乘每次释放量：200×1.6×10⁻¹³×10¹⁰=0.32 J。"
+  },
+  {
+    "id": "cnp_h177_q101",
+    "topicId": "cnp_h177",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "质子由两个u夸克和一个d夸克构成，u电荷为+2e/3，d为−e/3。其总电荷为",
+    "explanation": "将夸克电荷相加：2×(2e/3)−e/3=+e，分数电荷不意味着质子电荷是分数个元电荷。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "−e"
+      },
+      {
+        "key": "B",
+        "text": "+2e"
+      },
+      {
+        "key": "C",
+        "text": "+e"
+      },
+      {
+        "key": "D",
+        "text": "0"
+      }
+    ],
+    "answer": "C",
+    "verify": "\"+e\""
+  },
+  {
+    "id": "cnp_h177_q102",
+    "topicId": "cnp_h177",
+    "difficulty": "standard",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "电子、质子和中子中，按高中粒子分类的基本认识，正确的是",
+    "explanation": "轻子如电子不参与强相互作用；质子、中子是由夸克组成的重子，属于强子。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "中子无电荷，所以内部不含夸克"
+      },
+      {
+        "key": "B",
+        "text": "电子是轻子，质子和中子是由夸克构成的强子"
+      },
+      {
+        "key": "C",
+        "text": "三者都是由三个夸克组成的轻子"
+      },
+      {
+        "key": "D",
+        "text": "电子也是由两个u和一个d组成"
+      }
+    ],
+    "answer": "B",
+    "verify": "\"电子是轻子，质子和中子是由夸克构成的强子\""
+  },
+  {
+    "id": "cnp_h177_q103",
+    "topicId": "cnp_h177",
+    "difficulty": "challenge",
+    "level": "pro",
+    "origin": "original",
+    "type": "choice",
+    "prompt": "β⁻衰变中中子转变为质子并产生电子和反中微子，这一转变主要涉及四种基本相互作用中的",
+    "explanation": "改变夸克类型的β衰变由弱相互作用主导；静电作用负责电荷间作用，强相互作用与核子结构和核结合相关。",
+    "choices": [
+      {
+        "key": "A",
+        "text": "弱相互作用"
+      },
+      {
+        "key": "B",
+        "text": "引力"
+      },
+      {
+        "key": "C",
+        "text": "普通静电相互作用"
+      },
+      {
+        "key": "D",
+        "text": "把核外电子束缚在核上的强相互作用"
+      }
+    ],
+    "answer": "A",
+    "verify": "\"弱相互作用\""
+  }
+]

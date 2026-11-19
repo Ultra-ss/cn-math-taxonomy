@@ -136,7 +136,8 @@
 
     var info = el('div', 'wb-info no-print');
     var tags = el('div', 'wb-tags');
-    if (/^cnp_\d+_q10[1-4]$/.test(e.qid || '')) tags.appendChild(badge('count', '专家挑战'));
+    var expertQuestion = /^(?:cns|cnp)_[A-Za-z0-9]+_q([1-9][0-9]*)$/.exec(e.qid || '');
+    if (expertQuestion && Number(expertQuestion[1]) >= 101) tags.appendChild(badge('count', '专家挑战'));
     tags.appendChild(badge(e.kind === 'skip' ? 'skip' : 'wrong', e.kind === 'skip' ? '不会' : '答错'));
     tags.appendChild(badge('count', '答错 ' + (e.count || 1) + ' 次'));
     tags.appendChild(el('span', 'wb-date', fmt(e.ts)));

@@ -267,13 +267,19 @@
       mobileTitle.textContent = hasBookScope() ? scopeTitle() : subject === 'physics' ? '物理知识图谱' : '科学知识图谱';
       mobileTitle.setAttribute('aria-label', hasBookScope() ? '所选教材：' + selectedVolumes.map(bookTitle).join('、') : mobileTitle.textContent);
     }
-    var juniorPhysics = subject === 'physics' && hasBookScope() && selectedVolumes.every(function (key) {
+    var expertScope = hasBookScope() && selectedVolumes.every(function (key) {
       var book = bookSpec(key);
-      return book && book[2] >= 8 && book[2] <= 9;
+      return book && (subject === 'science' ? book[2] >= 1 && book[2] <= 6 : subject === 'physics' && book[2] >= 8 && book[2] <= 15);
     });
+    var challengeStage = subject === 'science' ? '小学科学' : selectedVolumes.every(function (key) { var book = bookSpec(key); return book && book[2] <= 9; })
+      ? '初中物理' : selectedVolumes.every(function (key) { var book = bookSpec(key); return book && book[2] >= 10; }) ? '高中物理' : '物理学科';
     ['book-challenge-hint', 'mobile-book-challenge-hint'].forEach(function (id) {
       var hint = $(id);
-      if (hint) hint.hidden = !juniorPhysics;
+      if (!hint) return;
+      hint.hidden = !expertScope;
+      var prefix = challengeStage + '阶段，每个知识点可完成两轮挑战，';
+      if (id === 'mobile-book-challenge-hint' && hint.firstChild && hint.firstChild.nodeType === 3) hint.firstChild.nodeValue = prefix;
+      else hint.textContent = prefix + '第二次可解锁专家模式';
     });
     var count = topics.filter(inBookScope).length;
     $('book-note').textContent = isAllBookScope() ? '全部教材共有 ' + count + ' 个知识点' : selectedVolumes.length > 1 ? '所选教材共有 ' + count + ' 个知识点'
@@ -733,7 +739,9 @@
   }
   function canChallengeExpert(id) {
     var topic = byId.get(id), row = progressOf(id);
-    return !!(subject === 'physics' && topic && topic.grade >= 8 && topic.grade <= 9 && row && row.status === 'mastered');
+    var supported = topic && !topic.external && (subject === 'science' ? /^cns_p\d{3}$/.test(id) && topic.grade >= 1 && topic.grade <= 6
+      : subject === 'physics' && /^cnp_(?:h)?\d{3}$/.test(id) && topic.grade >= 8 && topic.grade <= 15);
+    return !!(supported && row && row.status === 'mastered');
   }
   function nodeDiagnosisHref(id) {
     if (!byId.has(id)) return '';

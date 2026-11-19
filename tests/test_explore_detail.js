@@ -36,12 +36,12 @@ function load(topic, state) {
     $: () => detail, stageKind: () => 'junior', stageLabel: () => '初中', gradeLabel: () => '九年级全一册',
     progressOf: () => state || null,
     progressMark: row => !row ? '' : row.expert ? '⭐' : row.status === 'mastered' ? '✓' : '×',
-    canChallengeExpert: () => !!(topic && topic.subject === 'physics' && topic.grade >= 8 && topic.grade <= 9 && state && state.status === 'mastered'), progressClass: row => row ? row.status === 'mastered' ? 'test-passed' : 'test-failed' : '',
+    progressClass: row => row ? row.status === 'mastered' ? 'test-passed' : 'test-failed' : '',
     progressLabel: row => row ? row.status === 'mastered' ? '已通过检测' : '未通过检测，建议巩固后再测' : '尚未完成检测',
     withReturn: href => href + '&returnTo=%2Fexplore%2F%3Fsubject%3Dphysics%26volume%3D%E4%B9%9D%E5%85%A8%23cnp_053',
     refreshDiagnosisLinks() {}
   };
-  vm.runInNewContext(section('function el(tag, attrs)', 'function stageKind(grade)') + section('function metaItem(label, value, wide)', 'function upstream(id, depth)'), context);
+  vm.runInNewContext(section('function el(tag, attrs)', 'function stageKind(grade)') + section('function canChallengeExpert(id)', 'function nodeDiagnosisHref(id)') + section('function metaItem(label, value, wide)', 'function upstream(id, depth)'), context);
   context.renderDetail();
   return {context, detail};
 }
@@ -96,6 +96,15 @@ test('检测通过和未通过状态继续显示，仍可重新检测', () => {
     assert.ok(state.textContent.startsWith(status === 'mastered' ? '✓ ' : '× '));
     assert.equal(klass(detail, 'diag-btn')[0].textContent, status === 'mastered' ? '挑战专家水平' : '重新检测这个知识点');
     assert.equal(new URL(klass(detail, 'diag-btn')[0].getAttribute('href'), 'https://physicalmap.pages.dev').searchParams.get('level'), status === 'mastered' ? 'pro' : null);
+  }
+});
+test('小学科学和高中通过普通检测后，详情入口开启相应独立专家模式', () => {
+  for(const id of ['cns_p001','cnp_h001']) {
+    const topic=topics.find(item=>item.id===id),{detail}=load(topic,{status:'mastered'});
+    const button=klass(detail,'diag-btn')[0],url=new URL(button.getAttribute('href'),'https://physicalmap.pages.dev');
+    assert.equal(button.textContent,'挑战专家水平');
+    assert.equal(url.searchParams.get('subject'),topic.subject);assert.equal(url.searchParams.get('target'),id);
+    assert.equal(url.searchParams.get('level'),'pro');
   }
 });
 test('切换知识点后课标重新收起，空课标和起点说明均有正常呈现', () => {

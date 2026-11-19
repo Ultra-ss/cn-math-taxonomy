@@ -1,0 +1,5978 @@
+[
+  {
+    "id": "cnp_h001_q101",
+    "topicId": "cnp_h001",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "无人机沿长 2 km 的直线航线巡航，又在终点检查螺旋桨是否碰到护罩。关于两项研究的模型选择，正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "无人机质量很小，两项研究都必须视为质点"
+      },
+      {
+        "key": "B",
+        "text": "研究航程时可视为质点，研究叶片与护罩间隙时不可"
+      },
+      {
+        "key": "C",
+        "text": "无人机有转动，两项研究都不能视为质点"
+      },
+      {
+        "key": "D",
+        "text": "只要拍摄分辨率足够高，两项研究都可视为质点"
+      }
+    ],
+    "answer": "B",
+    "explanation": "能否忽略大小和形状取决于研究问题。航程远大于机身尺寸，叶片间隙却直接涉及形状和尺寸。",
+    "verify": "\"研究航程时可视为质点，研究叶片与护罩间隙时不可\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h001_q102",
+    "topicId": "cnp_h001",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "两辆小车相对地面沿同一直线向东匀速运动，甲速率为 9 m/s，乙为 5 m/s。以甲车为参考系，乙在 6 s 内的位移向西，大小为多少米？（只填数值）",
+    "answer": "24",
+    "explanation": "乙相对甲的速度为向西 4 m/s，6 s 内相对位移大小为 4×6=24 m。",
+    "verify": "(9-5)*6",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h001_q103",
+    "topicId": "cnp_h001",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "雨滴相对地面竖直下落，匀速向东行驶的车上乘客看到雨滴斜向西下落。两种描述不同的原因是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "汽车改变了全部雨滴受到的重力方向"
+      },
+      {
+        "key": "B",
+        "text": "乘客看到的斜雨滴一定是假象"
+      },
+      {
+        "key": "C",
+        "text": "汽车参考系中雨滴没有竖直速度"
+      },
+      {
+        "key": "D",
+        "text": "参考系不同，雨滴相对汽车还具有向西的水平速度"
+      }
+    ],
+    "answer": "D",
+    "explanation": "相对速度满足 v雨/车=v雨/地−v车/地，因此多出向西分量；重力方向并未改变。",
+    "verify": "\"参考系不同，雨滴相对汽车还具有向西的水平速度\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h002_q101",
+    "topicId": "cnp_h002",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "巡检机器人起初在坐标 (−3 m,−4 m)，随后沿若干折线路径到达 (9 m,1 m)。记录的总路程为 21 m。位移大小是多少米？（只填数值）",
+    "answer": "13",
+    "explanation": "坐标变化为 (12 m,5 m)，位移大小 √(12²+5²)=13 m。路程记录不能替代初末位置差。",
+    "verify": "sqrt((9-(-3))**2+(1-(-4))**2)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h002_q102",
+    "topicId": "cnp_h002",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "巡检员 8:10 从入口出发，8:16 回到入口，途经一条总长 420 m 的闭合路线。下列记录正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "8:10 是时间间隔，位移为 420 m"
+      },
+      {
+        "key": "B",
+        "text": "历时 8:16，位移为零"
+      },
+      {
+        "key": "C",
+        "text": "历时 6 min，位移大小必为 420 m"
+      },
+      {
+        "key": "D",
+        "text": "8:10 是时刻，历时 6 min，位移为零"
+      }
+    ],
+    "answer": "D",
+    "explanation": "钟表读数是时刻，相减得时间间隔；回到出发点时位置变化为零，路程仍为 420 m。",
+    "verify": "\"8:10 是时刻，历时 6 min，位移为零\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h002_q103",
+    "topicId": "cnp_h002",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "取向右为正，小球在一条直线上由 x=−7 m 到 x=5 m，再到 x=−2 m。全过程位移是多少米？（保留正负号，只填数值）",
+    "answer": "5",
+    "explanation": "位移只由初末位置决定，Δx=−2−(−7)=+5 m，与中途转向无关。",
+    "verify": "-2-(-7)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h003_q101",
+    "topicId": "cnp_h003",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "小车先向东匀速行驶 60 m 用时 10 s，再向西行驶 20 m 用时 10 s。全过程平均速度向东，其大小为多少 m/s？（只填数值）",
+    "answer": "2",
+    "explanation": "平均速度用总位移除以总时间，为 40/20=2 m/s；不能用总路程 80 m。",
+    "verify": "(60-20)/(10+10)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h003_q102",
+    "topicId": "cnp_h003",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同一小钢球通过两个光电门。甲门处挡光片宽 0.004 m、遮光 0.002 s；乙门处挡光片宽 0.008 m、遮光 0.002 s。忽略挡光期间速度变化，则",
+    "choices": [
+      {
+        "key": "A",
+        "text": "乙门处瞬时速率约为甲门处的 2 倍"
+      },
+      {
+        "key": "B",
+        "text": "两处速率相等，因为遮光时间相同"
+      },
+      {
+        "key": "C",
+        "text": "甲门处速率约为乙门处的 2 倍"
+      },
+      {
+        "key": "D",
+        "text": "不能用挡光宽度与时间估算速率"
+      }
+    ],
+    "answer": "A",
+    "explanation": "光电门用短距离平均速率近似瞬时速率：甲约 2 m/s，乙约 4 m/s。",
+    "verify": "\"乙门处瞬时速率约为甲门处的 2 倍\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h003_q103",
+    "topicId": "cnp_h003",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "某质点沿半径 R 的圆周匀速运动，速率为 v，恰好运动半周。该过程平均速度的大小为",
+    "choices": [
+      {
+        "key": "A",
+        "text": "v"
+      },
+      {
+        "key": "B",
+        "text": "2v/π"
+      },
+      {
+        "key": "C",
+        "text": "πv/2"
+      },
+      {
+        "key": "D",
+        "text": "0"
+      }
+    ],
+    "answer": "B",
+    "explanation": "半周位移大小为 2R，时间为 πR/v，故平均速度大小为 2v/π；速率不变不代表平均速度大小等于速率。",
+    "verify": "\"2v/π\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h004_q101",
+    "topicId": "cnp_h004",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "以向东为正，质点速度在 3 s 内由 +4 m/s 变为 −5 m/s。平均加速度是多少 m/s²？（保留正负号，只填数值）",
+    "answer": "-3",
+    "explanation": "速度变化量为 −9 m/s，除以 3 s 得 −3 m/s²，方向向西。",
+    "verify": "(-5-4)/3",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h004_q102",
+    "topicId": "cnp_h004",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一辆向右运动的车先减速到零，随后向左加速。若全过程加速度恒定且不为零，则加速度方向",
+    "choices": [
+      {
+        "key": "A",
+        "text": "减速阶段向右，反向后向左"
+      },
+      {
+        "key": "B",
+        "text": "始终向左"
+      },
+      {
+        "key": "C",
+        "text": "始终向右"
+      },
+      {
+        "key": "D",
+        "text": "车速为零的瞬间也必为零"
+      }
+    ],
+    "answer": "B",
+    "explanation": "加速度方向与速度变化量同向。全过程速度不断向左变化，停车瞬间加速度也不必为零。",
+    "verify": "\"始终向左\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h004_q103",
+    "topicId": "cnp_h004",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "两小车从相同的速度 2 m/s 开始同向加速，甲 4 s 后达到 10 m/s，乙 2 s 后达到 8 m/s。乙的平均加速度比甲大多少 m/s²？（只填数值）",
+    "answer": "1",
+    "explanation": "甲的平均加速度为 2 m/s²，乙为 3 m/s²，差为 1 m/s²。",
+    "verify": "(8-2)/2-(10-2)/4",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h005_q101",
+    "topicId": "cnp_h005",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "打点频率为 50 Hz，每隔 4 个打点选一个计数点，即相邻计数点间共有 5 个周期。某点两侧相邻位移为 5 cm、7 cm，运动可视为匀变速。该点速度为多少 m/s？（只填数值）",
+    "answer": "0.6",
+    "explanation": "先由频率与计数间隔得 T=5/50=0.10 s，再由两侧平均速度得 v=0.12/0.20=0.60 m/s。",
+    "verify": "(0.05+0.07)/(2*(5/50))",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h005_q102",
+    "topicId": "cnp_h005",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "纸带上每相邻两个计数点间还有 4 个未画出的打点，电源频率 50 Hz。若误把计数点间隔按 0.02 s 计算，求得的速度会",
+    "choices": [
+      {
+        "key": "A",
+        "text": "偏小为正确值的 5 倍"
+      },
+      {
+        "key": "B",
+        "text": "保持正确"
+      },
+      {
+        "key": "C",
+        "text": "偏大为正确值的 5 倍"
+      },
+      {
+        "key": "D",
+        "text": "偏大为正确值的 25 倍"
+      }
+    ],
+    "answer": "C",
+    "explanation": "相邻计数点之间实际有 5 个打点周期，时间为 0.10 s；分母误缩为 1/5，速度扩大 5 倍。",
+    "verify": "\"偏大为正确值的 5 倍\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h005_q103",
+    "topicId": "cnp_h005",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "同一纸带在相等时间间隔内的连续位移为 4.0 cm、6.0 cm、10.0 cm、12.0 cm，测量不确定度远小于 1 cm。对于“全程匀加速”这一假设，正确判断是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只要各段位移递增，就已证明加速度恒定"
+      },
+      {
+        "key": "B",
+        "text": "直接把四段取平均，就可证明匀加速"
+      },
+      {
+        "key": "C",
+        "text": "把 10.0 cm 改为 8.0 cm，便可把修改后的值当作实测值"
+      },
+      {
+        "key": "D",
+        "text": "数据不支持全程同一加速度，应检查异常段或运动条件"
+      }
+    ],
+    "answer": "D",
+    "explanation": "相邻位移差为 2、4、2 cm，不在误差范围内相等；匀加速要求相邻等时位移差恒定，不能改数据凑结论。",
+    "verify": "\"数据不支持全程同一加速度，应检查异常段或运动条件\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h006_q101",
+    "topicId": "cnp_h006",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两辆自动车同时以 12 m/s 向前行驶，甲立即以 3 m/s² 制动，乙延迟 1 s 后再以同样加速度制动。停下后均不倒车。在开始计时后第 4 s 末，它们的速度分别是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "甲乙均为 0"
+      },
+      {
+        "key": "B",
+        "text": "甲为 −3 m/s，乙为 0"
+      },
+      {
+        "key": "C",
+        "text": "甲为 0，乙为 3 m/s"
+      },
+      {
+        "key": "D",
+        "text": "甲乙均为 3 m/s"
+      }
+    ],
+    "answer": "C",
+    "explanation": "甲制动 4 s 正好停止；乙只实际制动 3 s，v乙=12−3×3=3 m/s。应区分计时时长和实际制动时长。",
+    "verify": "\"甲为 0，乙为 3 m/s\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h006_q102",
+    "topicId": "cnp_h006",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "以向右为正，一物体做匀变速直线运动，v=−6+2t（SI 单位）。从 t=0 到 t=5 s，运动情况是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "始终向右加速"
+      },
+      {
+        "key": "B",
+        "text": "始终向左减速"
+      },
+      {
+        "key": "C",
+        "text": "前 3 s 加速度向左，后 2 s 向右"
+      },
+      {
+        "key": "D",
+        "text": "先向左减速，3 s 时停下，随后向右加速"
+      }
+    ],
+    "answer": "D",
+    "explanation": "加速度恒为 +2 m/s²，v 在 3 s 时过零；速度负时向左且减速，速度正时向右加速。",
+    "verify": "\"先向左减速，3 s 时停下，随后向右加速\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h006_q103",
+    "topicId": "cnp_h006",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "同向匀速行驶的前车速率为 8 m/s，后车初速率为 14 m/s。后车以 2 m/s² 匀减速，经过多少秒两车速度第一次相同？（只填数值）",
+    "answer": "3",
+    "explanation": "令 14−2t=8，得 t=3 s；这里比较的是速度而不是追上所需时间。",
+    "verify": "(14-8)/2",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h007_q101",
+    "topicId": "cnp_h007",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "一小车做同方向匀加速直线运动，连续前两个 1 s 内的位移分别为 3 m、5 m。按同一规律运动，第 5 s 内位移是多少米？（只填数值）",
+    "answer": "11",
+    "explanation": "相邻等时位移差为 aT²=2 m，因此各秒位移依次为 3、5、7、9、11 m，不能将 5 s 内总位移当作第 5 s 位移。",
+    "verify": "3+4*(5-3)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h007_q102",
+    "topicId": "cnp_h007",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "质点的速度在前 2 s 从 +4 m/s 均匀减到 0，随后 2 s 从 0 均匀减到 −4 m/s。全过程",
+    "choices": [
+      {
+        "key": "A",
+        "text": "位移为零，路程为 8 m"
+      },
+      {
+        "key": "B",
+        "text": "位移为 8 m，路程为零"
+      },
+      {
+        "key": "C",
+        "text": "位移和路程都为零"
+      },
+      {
+        "key": "D",
+        "text": "位移为 −8 m，路程为 8 m"
+      }
+    ],
+    "answer": "A",
+    "explanation": "v-t 图像前后两个三角形面积分别为 +4 m、−4 m，代数和为零，绝对值之和为 8 m。",
+    "verify": "\"位移为零，路程为 8 m\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h007_q103",
+    "topicId": "cnp_h007",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "汽车初速率为 12 m/s，以 3 m/s² 匀减速直到停止，之后保持静止。从开始制动起 6 s 内前进多少米？（只填数值）",
+    "answer": "24",
+    "explanation": "停止时间为 4 s，实际位移应算前 4 s：12×4−1.5×16=24 m。",
+    "verify": "12*(12/3)-0.5*3*(12/3)**2",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h008_q101",
+    "topicId": "cnp_h008",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "同向匀加速运动中，某物体速度由 3 m/s 增到 5 m/s 经过 4 m。加速度为多少 m/s²？（只填数值）",
+    "answer": "2",
+    "explanation": "用不含时间公式 v²−v₀²=2ax，得 a=(25−9)/8=2 m/s²。",
+    "verify": "(5**2-3**2)/(2*4)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h008_q102",
+    "topicId": "cnp_h008",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "物体以恒加速度同向通过一段路，初、末速率分别为 2 m/s 和 6 m/s。通过位移中点时的速率是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "4 m/s"
+      },
+      {
+        "key": "B",
+        "text": "√20 m/s"
+      },
+      {
+        "key": "C",
+        "text": "√12 m/s"
+      },
+      {
+        "key": "D",
+        "text": "5 m/s"
+      }
+    ],
+    "answer": "B",
+    "explanation": "由两半段的 v² 变化量相等，得中点速率平方为 (2²+6²)/2=20；4 m/s 对应中间时刻的速度。",
+    "verify": "\"√20 m/s\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h008_q103",
+    "topicId": "cnp_h008",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "小车同向匀加速，通过连续两段各 0.50 s 的位移分别为 0.80 m、1.30 m。第二段结束时速度为多少 m/s？（只填数值）",
+    "answer": "3.1",
+    "explanation": "先得 a=2 m/s²。第二段的平均速度为 2.6 m/s，中间时刻到末时刻相隔 0.25 s，末速度为 2.6+2×0.25=3.1 m/s。",
+    "verify": "(1.30-0.80)/0.50**2*0.50/2+1.30/0.50",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h009_q101",
+    "topicId": "cnp_h009",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "在两颗行星上从相同高度将同一小球由静止释放，忽略阻力。甲地 g=10 m/s²，小球落地前最后 1 s 下落 15 m；乙地 g=2.5 m/s²。乙地总下落时间是多少秒？（只填数值）",
+    "answer": "4",
+    "explanation": "甲地最后 1 s 位移为 10t−5=15，得 t甲=2 s、总高 20 m。同高度自由落体时间与 √g 成反比，乙地为 4 s。",
+    "verify": "(15/10+0.5)*sqrt(10/2.5)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h009_q102",
+    "topicId": "cnp_h009",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两小球在同一地点从不同高度同时由静止自由下落，空气阻力忽略，且都未落地。经过相同时间后，两球",
+    "choices": [
+      {
+        "key": "A",
+        "text": "高处小球速度较大，间距变大"
+      },
+      {
+        "key": "B",
+        "text": "低处小球速度较大，间距变小"
+      },
+      {
+        "key": "C",
+        "text": "速度相同，竖直间距保持不变"
+      },
+      {
+        "key": "D",
+        "text": "加速度大小与各自高度成正比"
+      }
+    ],
+    "answer": "C",
+    "explanation": "在当地 g 近似相同时，两球均有 v=gt、下落距离 gt²/2，因此速度相同、原有高度差不变。",
+    "verify": "\"速度相同，竖直间距保持不变\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h009_q103",
+    "topicId": "cnp_h009",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "水龙头每隔 0.20 s 滴下一滴水。某时刻第 1 滴刚下落 0.60 s，第 2 滴已下落 0.40 s。取 g=10 m/s²，两滴相距多少米？（只填数值）",
+    "answer": "1",
+    "explanation": "各滴分别自由落体，间距为 5(0.36−0.16)=1.0 m；不能把时间差单独代入自由落体位移。",
+    "verify": "0.5*10*(0.60**2-0.40**2)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h010_q101",
+    "topicId": "cnp_h010",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "均匀薄圆环竖直悬挂。研究它在近地匀强重力场中的重力作用时，重心位于",
+    "choices": [
+      {
+        "key": "A",
+        "text": "圆环最低点"
+      },
+      {
+        "key": "B",
+        "text": "悬挂点"
+      },
+      {
+        "key": "C",
+        "text": "圆环的几何中心，可以不在圆环材料上"
+      },
+      {
+        "key": "D",
+        "text": "任意一段圆环材料的中点"
+      }
+    ],
+    "answer": "C",
+    "explanation": "质量分布关于圆心对称，重心在圆心；重心是等效作用点，并不要求位于实体材料中。",
+    "verify": "\"圆环的几何中心，可以不在圆环材料上\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h010_q102",
+    "topicId": "cnp_h010",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "同一个质量为 2 kg 的物体在甲地重力为 19.6 N，在乙地当地 g 为 9.7 m/s²。它在乙地比甲地的重力小多少牛？（只填数值）",
+    "answer": "0.2",
+    "explanation": "质量不随地点改变，乙地重力为 19.4 N，比甲地小 0.2 N。",
+    "verify": "19.6-2*9.7",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h010_q103",
+    "topicId": "cnp_h010",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "把一块质量不变的橡皮泥由均匀圆球捏成长条，放在同一地点。忽略空气浮力，则",
+    "choices": [
+      {
+        "key": "A",
+        "text": "重力大小基本不变，重心相对材料的位置可能改变"
+      },
+      {
+        "key": "B",
+        "text": "重力因长度增加而增大"
+      },
+      {
+        "key": "C",
+        "text": "重心必定仍是捏制前同一材料点"
+      },
+      {
+        "key": "D",
+        "text": "重心只能在长条外部"
+      }
+    ],
+    "answer": "A",
+    "explanation": "重力大小主要由 mg 决定；形状和质量分布改变时，等效重心位置可能随之变化。",
+    "verify": "\"重力大小基本不变，重心相对材料的位置可能改变\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h011_q101",
+    "topicId": "cnp_h011",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "轻弹簧原长 12 cm，受 4 N 拉力时长 14 cm，均在弹性限度内。弹簧长度为 17 cm 时，弹力大小为多少牛？（只填数值）",
+    "answer": "10",
+    "explanation": "由 2 cm 伸长对应 4 N 得 k=200 N/m，伸长 5 cm 时弹力为 10 N。",
+    "verify": "4/(0.14-0.12)*(0.17-0.12)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h011_q102",
+    "topicId": "cnp_h011",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小球静止在光滑斜面上并用一根沿斜面向上的细绳拉住。斜面对小球的弹力方向为",
+    "choices": [
+      {
+        "key": "A",
+        "text": "垂直斜面向外"
+      },
+      {
+        "key": "B",
+        "text": "沿斜面向上"
+      },
+      {
+        "key": "C",
+        "text": "竖直向上"
+      },
+      {
+        "key": "D",
+        "text": "与细绳拉力同向"
+      }
+    ],
+    "answer": "A",
+    "explanation": "光滑接触面的弹力沿接触面法线方向；沿斜面的力由细绳提供，不能把两种作用混同。",
+    "verify": "\"垂直斜面向外\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h011_q103",
+    "topicId": "cnp_h011",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "两相同轻弹簧分别伸长 2 cm 和压缩 3 cm，均满足胡克定律。后者弹力大小是前者的多少倍？（只填数值）",
+    "answer": "1.5",
+    "explanation": "同一劲度系数下，弹力大小只与形变量的绝对值成正比，比例为 3/2。",
+    "verify": "3/2",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h012_q101",
+    "topicId": "cnp_h012",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "测得弹簧在拉力 1 N、3 N 时长度分别为 11 cm、15 cm。假设线性且读数准确，弹簧原长是多少厘米？（只填数值）",
+    "answer": "9",
+    "explanation": "每增加 1 N 伸长 2 cm，故 1 N 时的 11 cm 含 2 cm 伸长，原长 9 cm。",
+    "verify": "11-1*(15-11)/(3-1)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h012_q102",
+    "topicId": "cnp_h012",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "某弹簧实验中，前几组 F-x 点在一条过原点的直线上，继续加砝码后明显偏离直线。更合理的处理是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把所有点直接连成折线并取任意一段为 k"
+      },
+      {
+        "key": "B",
+        "text": "检查是否超过弹性范围，不用偏离段强行求同一劲度系数"
+      },
+      {
+        "key": "C",
+        "text": "认为胡克定律对任何形变都成立，修改数据"
+      },
+      {
+        "key": "D",
+        "text": "只要增加砝码数量就一定消除偏离"
+      }
+    ],
+    "answer": "B",
+    "explanation": "胡克定律有弹性范围条件，超范围或读数、装置问题均应检查，不能为了线性而改数据。",
+    "verify": "\"检查是否超过弹性范围，不用偏离段强行求同一劲度系数\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h012_q103",
+    "topicId": "cnp_h012",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "在 F 为纵轴、弹簧总长 l 为横轴的线性图像中，斜率和横轴截距分别表示",
+    "choices": [
+      {
+        "key": "A",
+        "text": "原长和劲度系数"
+      },
+      {
+        "key": "B",
+        "text": "弹力和伸长量"
+      },
+      {
+        "key": "C",
+        "text": "劲度系数和原长"
+      },
+      {
+        "key": "D",
+        "text": "劲度系数的倒数和原长"
+      }
+    ],
+    "answer": "C",
+    "explanation": "F=k(l−l₀)，斜率为 k，F=0 时 l=l₀。总长与伸长不能混用。",
+    "verify": "\"劲度系数和原长\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h013_q101",
+    "topicId": "cnp_h013",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "木块静止在粗糙水平面上，最大静摩擦力为 10 N。同时有向右 8 N 与向左 3 N 的水平拉力作用，木块仍静止。接触面静摩擦力大小为多少牛？（只填数值）",
+    "answer": "5",
+    "explanation": "非摩擦水平外力合成为向右 5 N，静摩擦力应向左 5 N 使其平衡，不是与某一个拉力单独平衡。",
+    "verify": "8-3",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h013_q102",
+    "topicId": "cnp_h013",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "箱子放在向右加速的水平传送带上，开始阶段箱子与带始终没有相对滑动。箱子受到的静摩擦力方向为",
+    "choices": [
+      {
+        "key": "A",
+        "text": "向左，因为箱子向右运动"
+      },
+      {
+        "key": "B",
+        "text": "竖直向上"
+      },
+      {
+        "key": "C",
+        "text": "向右，为箱子提供向右的加速度"
+      },
+      {
+        "key": "D",
+        "text": "一定为零，因为没有相对滑动"
+      }
+    ],
+    "answer": "C",
+    "explanation": "静摩擦力阻碍相对运动趋势，并非总与物体对地速度反向。箱子若不受摩擦会相对带向左落后。",
+    "verify": "\"向右，为箱子提供向右的加速度\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h013_q103",
+    "topicId": "cnp_h013",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "质量 3 kg 的物体贴着竖直粗糙墙面静止，水平方向压力从 80 N 增加到 100 N，物体始终未滑动。取 g=10 m/s²，此时墙面对它的静摩擦力是多少牛？（只填数值）",
+    "answer": "30",
+    "explanation": "竖直方向只有重力和静摩擦力平衡，故始终为 30 N。压力增加可能提高最大静摩擦力，但不改变所需平衡力。",
+    "verify": "3*10",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h014_q101",
+    "topicId": "cnp_h014",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "质量 5 kg 的箱子在水平地面上滑动，动摩擦因数 0.20，用竖直向上的 10 N 拉力提着箱子但不离地。取 g=10 m/s²，滑动摩擦力大小是多少牛？（只填数值）",
+    "answer": "8",
+    "explanation": "支持力为 mg−10=40 N，滑动摩擦力为 μN=8 N。",
+    "verify": "0.20*(5*10-10)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h014_q102",
+    "topicId": "cnp_h014",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "水平传送带向右匀速运动，一块小物体向右运动但速率比带小，此时仍相对带滑动。小物体受到的滑动摩擦力",
+    "choices": [
+      {
+        "key": "A",
+        "text": "必向左，因为小物体对地向右"
+      },
+      {
+        "key": "B",
+        "text": "为零，因为两者对地方向相同"
+      },
+      {
+        "key": "C",
+        "text": "只由小物体对地速率决定"
+      },
+      {
+        "key": "D",
+        "text": "向右，可以使小物体对地加速"
+      }
+    ],
+    "answer": "D",
+    "explanation": "小物体相对传送带向左滑动，摩擦力便向右；判断摩擦方向要看接触面的相对运动。",
+    "verify": "\"向右，可以使小物体对地加速\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h014_q103",
+    "topicId": "cnp_h014",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "同一材料箱子在水平地面滑动，第一次质量为 4 kg，第二次加 2 kg 砝码，动摩擦因数不变。第二次摩擦力是第一次的多少倍？（只填数值）",
+    "answer": "1.5",
+    "explanation": "水平面没有其他竖直力时 N=mg，摩擦力之比为质量比 6/4=1.5，与接触面积无关。",
+    "verify": "(4+2)/4",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h015_q101",
+    "topicId": "cnp_h015",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "卡车与小车相撞，碰撞时间相同且忽略外界水平冲量。关于两车相互作用力和加速度，正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "卡车对小车的力更大，二者加速度相同"
+      },
+      {
+        "key": "B",
+        "text": "小车对卡车的力更大"
+      },
+      {
+        "key": "C",
+        "text": "碰撞越严重的一方受到的力一定更大"
+      },
+      {
+        "key": "D",
+        "text": "相互作用力等大，质量较小的小车加速度大小较大"
+      }
+    ],
+    "answer": "D",
+    "explanation": "作用与反作用力始终等大；a=F/m，质量不同可导致加速度不同，不能由损伤判断力的大小。",
+    "verify": "\"相互作用力等大，质量较小的小车加速度大小较大\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h015_q102",
+    "topicId": "cnp_h015",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一本书静止在水平桌面上。书所受重力的反作用力是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "书对地球的引力"
+      },
+      {
+        "key": "B",
+        "text": "桌面对书的支持力"
+      },
+      {
+        "key": "C",
+        "text": "书对桌面的压力"
+      },
+      {
+        "key": "D",
+        "text": "桌面对地球的压力"
+      }
+    ],
+    "answer": "A",
+    "explanation": "一对相互作用力属于同一相互作用并作用在不同物体上；支持力与重力是作用在书上的平衡力。",
+    "verify": "\"书对地球的引力\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h015_q103",
+    "topicId": "cnp_h015",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "两人分别用 80 N 的水平力拉同一根理想轻绳两端，绳保持静止。绳中张力为",
+    "choices": [
+      {
+        "key": "A",
+        "text": "160 N"
+      },
+      {
+        "key": "B",
+        "text": "80 N"
+      },
+      {
+        "key": "C",
+        "text": "0 N"
+      },
+      {
+        "key": "D",
+        "text": "40 N"
+      }
+    ],
+    "answer": "B",
+    "explanation": "对绳的任一截面作隔离分析，其张力与一端拉力平衡，大小为 80 N；两端合力为零不代表内部张力为零。",
+    "verify": "\"80 N\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h016_q101",
+    "topicId": "cnp_h016",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "实验发现两共点力的方向可改变：合力最大为 14 N，最小为 4 N。两个力中较小的力为多少牛？（只填数值）",
+    "answer": "5",
+    "explanation": "由 F大+F小=14、F大−F小=4，解得 F小=5 N。合力的极值可反推出两个分力大小。",
+    "verify": "(14-4)/2",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h016_q102",
+    "topicId": "cnp_h016",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两个共点力大小分别为 3 N、4 N。要使合力大小为 5 N，二力应",
+    "choices": [
+      {
+        "key": "A",
+        "text": "同向"
+      },
+      {
+        "key": "B",
+        "text": "互相垂直"
+      },
+      {
+        "key": "C",
+        "text": "反向"
+      },
+      {
+        "key": "D",
+        "text": "夹角为 60°"
+      }
+    ],
+    "answer": "B",
+    "explanation": "合力平方为 3²+4²+2×3×4cosθ=25，因此 cosθ=0，夹角 90°。",
+    "verify": "\"互相垂直\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h016_q103",
+    "topicId": "cnp_h016",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "三个共点力 F₁、F₂、F₃ 的合力为零。突然只撤掉 F₃，其他两力大小和方向不变，则剩余合力",
+    "choices": [
+      {
+        "key": "A",
+        "text": "与原 F₃ 等大同向"
+      },
+      {
+        "key": "B",
+        "text": "仍为零"
+      },
+      {
+        "key": "C",
+        "text": "与原 F₃ 等大反向"
+      },
+      {
+        "key": "D",
+        "text": "等于 F₁、F₂ 大小的算术和，方向无法判断"
+      }
+    ],
+    "answer": "C",
+    "explanation": "原有 F₁+F₂+F₃=0，所以撤掉 F₃ 后 F₁+F₂=−F₃。应作矢量运算而非只比较大小。",
+    "verify": "\"与原 F₃ 等大反向\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h017_q101",
+    "topicId": "cnp_h017",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "探究两个互成角度的力的合成时，换用一只测力计拉橡皮条，必须使结点回到先前标记的位置。主要原因是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "使两只测力计的示数必相等"
+      },
+      {
+        "key": "B",
+        "text": "使两次对橡皮条的作用效果相同"
+      },
+      {
+        "key": "C",
+        "text": "使橡皮条的质量不变"
+      },
+      {
+        "key": "D",
+        "text": "保证两分力一定互相垂直"
+      }
+    ],
+    "answer": "B",
+    "explanation": "结点到同一位置时橡皮条形变及弹力相同，才能比较两个力与一个力的等效关系。",
+    "verify": "\"使两次对橡皮条的作用效果相同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h017_q102",
+    "topicId": "cnp_h017",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "该实验记录了两个测力计的示数，却没有记录两条细绳的方向。仅凭示数能否作出理论合力？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能，合力总等于两示数相加"
+      },
+      {
+        "key": "B",
+        "text": "能，合力总等于两示数之差"
+      },
+      {
+        "key": "C",
+        "text": "不能，合成矢量还需要两个力的方向"
+      },
+      {
+        "key": "D",
+        "text": "能，只需取较大示数"
+      }
+    ],
+    "answer": "C",
+    "explanation": "合力与夹角有关，只有大小而没有方向，无法完成力的平行四边形。",
+    "verify": "\"不能，合成矢量还需要两个力的方向\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h017_q103",
+    "topicId": "cnp_h017",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "本实验作图时，理论合力 F 与单只测力计实测力 F′略有偏差。合理做法是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "把 F′直接改画到对角线上"
+      },
+      {
+        "key": "B",
+        "text": "只要略有偏差就否定矢量合成法则"
+      },
+      {
+        "key": "C",
+        "text": "把两分力的标度分别改变到完全重合"
+      },
+      {
+        "key": "D",
+        "text": "检查读数、方向记录和结点复位，比较误差范围内是否一致"
+      }
+    ],
+    "answer": "D",
+    "explanation": "实验允许测量误差，应保持统一标度和原始数据，分析偏差原因，不能修图凑结论。",
+    "verify": "\"检查读数、方向记录和结点复位，比较误差范围内是否一致\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h018_q101",
+    "topicId": "cnp_h018",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "10 N 的力与水平向右方向成 37°，已知 cos37°=0.8、sin37°=0.6。它的水平分力大小是多少牛？（只填数值）",
+    "answer": "8",
+    "explanation": "正交分解得 Fx=Fcos37°=8 N，竖直分力为 6 N；分力不是按大小任意平分。",
+    "verify": "10*0.8",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h018_q102",
+    "topicId": "cnp_h018",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同一物体分别放在倾角 30° 和 60° 的斜面上，重力大小相同。把重力分解为沿斜面、垂直斜面的分量，随倾角增大",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两个分量都增大"
+      },
+      {
+        "key": "B",
+        "text": "两个分量都减小"
+      },
+      {
+        "key": "C",
+        "text": "两分量大小之和始终等于重力"
+      },
+      {
+        "key": "D",
+        "text": "沿斜面分量增大，垂直斜面分量减小，两分量平方和不变"
+      }
+    ],
+    "answer": "D",
+    "explanation": "两个正交分量为 Gsinθ、Gcosθ，倾角由 30° 增至 60° 时前者增、后者减，平方和恒为 G²。",
+    "verify": "\"沿斜面分量增大，垂直斜面分量减小，两分量平方和不变\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h018_q103",
+    "topicId": "cnp_h018",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "把一个非零力 F 分解为方向可自由选择的两个分力。下列说法正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两个分力都可能比 F 大"
+      },
+      {
+        "key": "B",
+        "text": "每个分力都必须小于 F"
+      },
+      {
+        "key": "C",
+        "text": "两个分力大小之和必等于 F"
+      },
+      {
+        "key": "D",
+        "text": "只给出 F 时分解结果唯一"
+      }
+    ],
+    "answer": "A",
+    "explanation": "两个较大的分力在接近反向时可以合成为较小的 F。没有额外方向约束时，分解并不唯一。",
+    "verify": "\"两个分力都可能比 F 大\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h019_q101",
+    "topicId": "cnp_h019",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "质量 6 kg 的物体静止在光滑 30° 斜面上，靠沿斜面向上的拉力维持平衡。取 g=10 m/s²，拉力大小是多少牛？（只填数值）",
+    "answer": "30",
+    "explanation": "沿斜面平衡要求 T=mgsin30°=30 N，支持力只平衡垂直斜面的分量。",
+    "verify": "6*10*0.5",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h019_q102",
+    "topicId": "cnp_h019",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "物体受三个共点力而保持静止，其中两个力的合力为向东 12 N。第三个力必须是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "向西 12 N"
+      },
+      {
+        "key": "B",
+        "text": "向东 12 N"
+      },
+      {
+        "key": "C",
+        "text": "任意方向 12 N"
+      },
+      {
+        "key": "D",
+        "text": "向西 24 N"
+      }
+    ],
+    "answer": "A",
+    "explanation": "平衡要求三力矢量和为零，第三力应与前两力的合力等大反向。",
+    "verify": "\"向西 12 N\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h019_q103",
+    "topicId": "cnp_h019",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一重物由两条等长轻绳对称悬挂，绳与竖直方向夹角从 30° 缓慢增至 60°，重物始终平衡。每条绳的拉力",
+    "choices": [
+      {
+        "key": "A",
+        "text": "减小，因为绳子变得更水平"
+      },
+      {
+        "key": "B",
+        "text": "增大，因为每条绳的竖直分力始终为重力的一半"
+      },
+      {
+        "key": "C",
+        "text": "保持不变，始终等于重力的一半"
+      },
+      {
+        "key": "D",
+        "text": "增至无穷大，因为夹角大于 45°"
+      }
+    ],
+    "answer": "B",
+    "explanation": "2Tcosθ=mg，θ 增大使 cosθ 变小，T 增大；只有趋近 90° 时理想模型的拉力才趋向无穷大。",
+    "verify": "\"增大，因为每条绳的竖直分力始终为重力的一半\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h020_q101",
+    "topicId": "cnp_h020",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "光滑水平冰面上的小冰块受到一段水平推力后离手。忽略空气阻力，离手后冰块",
+    "choices": [
+      {
+        "key": "A",
+        "text": "保持离手瞬间的速度做匀速直线运动"
+      },
+      {
+        "key": "B",
+        "text": "逐渐停下，因为没有力维持运动"
+      },
+      {
+        "key": "C",
+        "text": "继续加速，因为保留了推力"
+      },
+      {
+        "key": "D",
+        "text": "先匀速再自动减速"
+      }
+    ],
+    "answer": "A",
+    "explanation": "离手后合力为零，运动状态不再改变；力是改变运动状态的原因，推力并不会储存在冰块中。",
+    "verify": "\"保持离手瞬间的速度做匀速直线运动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h020_q102",
+    "topicId": "cnp_h020",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "伽利略理想斜面推理中，假设没有摩擦，逐渐减小第二斜面的倾角。小球为达到相同高度需要走的距离",
+    "choices": [
+      {
+        "key": "A",
+        "text": "越来越短，水平时立刻停止"
+      },
+      {
+        "key": "B",
+        "text": "越来越长，第二斜面水平时可一直运动"
+      },
+      {
+        "key": "C",
+        "text": "保持不变，只与质量有关"
+      },
+      {
+        "key": "D",
+        "text": "必定等于第一斜面的长度"
+      }
+    ],
+    "answer": "B",
+    "explanation": "无摩擦时回到同一高度；斜面越平缓需要的路程越长，水平面是理想推理的极限情形。",
+    "verify": "\"越来越长，第二斜面水平时可一直运动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h020_q103",
+    "topicId": "cnp_h020",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "下列情形中，能够据此判断物体所受合力为零的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "某一瞬间速度恰好为零"
+      },
+      {
+        "key": "B",
+        "text": "速率一直不变但运动方向持续改变"
+      },
+      {
+        "key": "C",
+        "text": "在惯性参考系中持续做速度大小和方向均不变的运动"
+      },
+      {
+        "key": "D",
+        "text": "运动轨迹是一条直线"
+      }
+    ],
+    "answer": "C",
+    "explanation": "只有速度矢量保持不变才能推出加速度和合力为零；停下瞬间或匀速圆周运动均不符合。",
+    "verify": "\"在惯性参考系中持续做速度大小和方向均不变的运动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h021_q101",
+    "topicId": "cnp_h021",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同一辆小车分别静止、以 5 m/s 行驶和以 10 m/s 行驶，其质量不变。三种状态下的惯性",
+    "choices": [
+      {
+        "key": "A",
+        "text": "静止时最小，10 m/s 时最大"
+      },
+      {
+        "key": "B",
+        "text": "相同，质量是惯性大小的量度"
+      },
+      {
+        "key": "C",
+        "text": "静止时没有惯性"
+      },
+      {
+        "key": "D",
+        "text": "减速时才出现惯性"
+      }
+    ],
+    "answer": "B",
+    "explanation": "在高中牛顿力学适用条件下，惯性由质量决定，与当前速度及运动状态无关。",
+    "verify": "\"相同，质量是惯性大小的量度\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h021_q102",
+    "topicId": "cnp_h021",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "在相同大小的水平合力作用下，甲小车的加速度为 2 m/s²，乙为 5 m/s²。甲的质量是乙的多少倍？（只填数值）",
+    "answer": "2.5",
+    "explanation": "同力下质量与加速度成反比，m甲/m乙=a乙/a甲=5/2=2.5，甲惯性较大。",
+    "verify": "5/2",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h021_q103",
+    "topicId": "cnp_h021",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "汽车向前急刹时，乘客上身前倾。下列解释正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "乘客受到一个额外向前的惯性力才前倾"
+      },
+      {
+        "key": "B",
+        "text": "汽车刹车使乘客质量突然增大"
+      },
+      {
+        "key": "C",
+        "text": "乘客离开靠背后不再有惯性"
+      },
+      {
+        "key": "D",
+        "text": "下身随车减速，上身趋于保持原来的向前速度"
+      }
+    ],
+    "answer": "D",
+    "explanation": "安全带等约束改变身体各部分运动状态的过程不同，前倾体现惯性；在地面惯性系中不必添加所谓惯性力。",
+    "verify": "\"下身随车减速，上身趋于保持原来的向前速度\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h022_q101",
+    "topicId": "cnp_h022",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "用砝码盘牵引小车探究 a-F 关系，为把砝码盘重力近似当作小车所受拉力，主要需要",
+    "choices": [
+      {
+        "key": "A",
+        "text": "砝码盘质量必须等于小车质量"
+      },
+      {
+        "key": "B",
+        "text": "绳子必须尽可能粗重"
+      },
+      {
+        "key": "C",
+        "text": "砝码盘和砝码总质量远小于小车质量"
+      },
+      {
+        "key": "D",
+        "text": "让小车先达到很大的速度"
+      }
+    ],
+    "answer": "C",
+    "explanation": "真实拉力小于砝码盘重力；砝码盘总质量远小于小车质量时，系统加速度较小，相对误差较小。",
+    "verify": "\"砝码盘和砝码总质量远小于小车质量\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h022_q102",
+    "topicId": "cnp_h022",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "已平衡摩擦力的小车实验中，保持拉力相同，把小车总质量从 0.40 kg 增至 0.60 kg，原加速度为 1.8 m/s²。新加速度约为多少 m/s²？（只填数值）",
+    "answer": "1.2",
+    "explanation": "合力近似不变，a 与质量成反比，a₂=a₁m₁/m₂=1.2 m/s²。",
+    "verify": "1.8*0.40/0.60",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h022_q103",
+    "topicId": "cnp_h022",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "探究 a 与质量的关系，测量结果支持 a∝1/M。为了直观得到直线，应绘制",
+    "choices": [
+      {
+        "key": "A",
+        "text": "纵轴 a、横轴 1/M 的图像"
+      },
+      {
+        "key": "B",
+        "text": "纵轴 a、横轴 M² 的图像"
+      },
+      {
+        "key": "C",
+        "text": "纵轴 a、横轴 M 的图像并强制过原点"
+      },
+      {
+        "key": "D",
+        "text": "纵轴 a²、横轴 M 的图像"
+      }
+    ],
+    "answer": "A",
+    "explanation": "若 a=F/M，则 a 对 1/M 的关系为过原点的直线，斜率反映所保持的合力。",
+    "verify": "\"纵轴 a、横轴 1/M 的图像\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h023_q101",
+    "topicId": "cnp_h023",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "质量 2 kg 的物体在水平面上以 3 m/s² 加速，阻力恒为 2 N。水平牵引力大小为多少牛？（只填数值）",
+    "answer": "8",
+    "explanation": "F−f=ma，牵引力为 ma+f=8 N，6 N 是合力。",
+    "verify": "2*3+2",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h023_q102",
+    "topicId": "cnp_h023",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "质量 m 的小球被竖直轻绳和竖直轻弹簧共同向上拉住而静止。突然剪断轻绳，弹簧形变量在该瞬间尚未改变。该瞬间应",
+    "choices": [
+      {
+        "key": "A",
+        "text": "保留原弹簧弹力，去掉绳的拉力，再求合力和加速度"
+      },
+      {
+        "key": "B",
+        "text": "把弹簧弹力和绳拉力同时改为零"
+      },
+      {
+        "key": "C",
+        "text": "认为速度仍为零，所以加速度必为零"
+      },
+      {
+        "key": "D",
+        "text": "把弹簧弹力立即改为重力"
+      }
+    ],
+    "answer": "A",
+    "explanation": "轻绳约束断开后拉力消失；弹簧形变来不及突变，弹力应按原形变量保留，再应用牛顿第二定律。",
+    "verify": "\"保留原弹簧弹力，去掉绳的拉力，再求合力和加速度\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h023_q103",
+    "topicId": "cnp_h023",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "一物体所受合力在某瞬间由向东 6 N 改为向西 4 N，质量为 2 kg。该瞬间加速度向西，大小为多少 m/s²？（只填数值）",
+    "answer": "2",
+    "explanation": "加速度与此时合力同向，大小为 4/2=2 m/s²；速度不能决定加速度方向。",
+    "verify": "4/2",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h024_q101",
+    "topicId": "cnp_h024",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同学推导位移公式 x=v₀t+at。仅通过量纲检查，可判断该式",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不成立，因为 at 是速度量纲，不能与位移相加"
+      },
+      {
+        "key": "B",
+        "text": "成立，因为加号两侧都有时间"
+      },
+      {
+        "key": "C",
+        "text": "成立，因为 a 和 v₀ 都描述运动"
+      },
+      {
+        "key": "D",
+        "text": "只需把 a 改成负数即可成立"
+      }
+    ],
+    "answer": "A",
+    "explanation": "v₀t 的单位是 m，at 的单位是 m/s，量纲不同不能相加；正确匀变速位移项应含 at²。",
+    "verify": "\"不成立，因为 at 是速度量纲，不能与位移相加\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h024_q102",
+    "topicId": "cnp_h024",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "质量 250 g 的物体受到 0.75 N 的合力，加速度为多少 m/s²？（只填数值）",
+    "answer": "3",
+    "explanation": "须先把 250 g 化为 0.250 kg，再用 a=F/m=3 m/s²。",
+    "verify": "0.75/0.250",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h024_q103",
+    "topicId": "cnp_h024",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "某实验用 g（克）、cm（厘米）、s（秒）代入 ma，算得数值为 200。将此结果换成牛顿是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "200 N"
+      },
+      {
+        "key": "B",
+        "text": "2 N"
+      },
+      {
+        "key": "C",
+        "text": "0.002 N"
+      },
+      {
+        "key": "D",
+        "text": "0.2 N"
+      }
+    ],
+    "answer": "C",
+    "explanation": "1 g·cm/s²=10⁻³×10⁻² N=10⁻⁵ N，所以 200 g·cm/s²=0.002 N。",
+    "verify": "\"0.002 N\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h025_q101",
+    "topicId": "cnp_h025",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "质量 2 kg 的物体沿光滑 30° 斜面由静止下滑，取 g=10 m/s²。2 s 后速率为多少 m/s？（只填数值）",
+    "answer": "10",
+    "explanation": "沿斜面加速度为 gsin30°=5 m/s²，2 s 后 v=at=10 m/s。",
+    "verify": "10*0.5*2",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h025_q102",
+    "topicId": "cnp_h025",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "质量 4 kg 的小车在水平恒拉力作用下由静止出发，4 s 内前进 16 m，阻力为 3 N。拉力大小为多少牛？（只填数值）",
+    "answer": "11",
+    "explanation": "先由 x=at²/2 得 a=2 m/s²，再由 F−3=4a 得 F=11 N。",
+    "verify": "4*(2*16/4**2)+3",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h025_q103",
+    "topicId": "cnp_h025",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "物体在粗糙斜面上沿斜面向上运动，已知动摩擦因数 μ，且只受重力、支持力和摩擦力。其加速度方向和大小为",
+    "choices": [
+      {
+        "key": "A",
+        "text": "沿斜面向下，g(sinθ−μcosθ)"
+      },
+      {
+        "key": "B",
+        "text": "沿斜面向上，g(sinθ+μcosθ)"
+      },
+      {
+        "key": "C",
+        "text": "垂直斜面向下，gcosθ"
+      },
+      {
+        "key": "D",
+        "text": "沿斜面向下，g(sinθ+μcosθ)"
+      }
+    ],
+    "answer": "D",
+    "explanation": "上滑时重力沿斜面分量与摩擦力均向下，支持力为 mgcosθ，两者相加后除以质量。",
+    "verify": "\"沿斜面向下，g(sinθ+μcosθ)\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h026_q101",
+    "topicId": "cnp_h026",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "光滑水平面上，2 kg 的甲和 3 kg 的乙用轻绳连接，对甲施加向右 10 N 拉力。绳的张力为多少牛？（只填数值）",
+    "answer": "6",
+    "explanation": "整体加速度为 10/5=2 m/s²，隔离乙可得张力 T=m乙a=6 N。",
+    "verify": "3*10/(2+3)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h026_q102",
+    "topicId": "cnp_h026",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "对两个接触且同加速度运动的物体，整体法和隔离法的正确用法是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "整体受力图中必须把所有内力重复画入合力"
+      },
+      {
+        "key": "B",
+        "text": "隔离后每个物体的加速度必不同"
+      },
+      {
+        "key": "C",
+        "text": "整体法永远不能用于有摩擦的系统"
+      },
+      {
+        "key": "D",
+        "text": "整体法求共同加速度，隔离法求物体间相互作用力"
+      }
+    ],
+    "answer": "D",
+    "explanation": "系统内部相互作用力成对抵消；共同加速度可先由外力求出，内力再通过单个物体受力分析求解。",
+    "verify": "\"整体法求共同加速度，隔离法求物体间相互作用力\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h026_q103",
+    "topicId": "cnp_h026",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "上方质量 2 kg 的小块叠在下方木板上，一起在水平面向右加速，上下间最大静摩擦力为 6 N。为保持小块不滑动，共同加速度最大为多少 m/s²？（只填数值）",
+    "answer": "3",
+    "explanation": "小块水平方向只由静摩擦力提供加速度，ma≤6 N，故 a≤3 m/s²。",
+    "verify": "6/2",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h027_q101",
+    "topicId": "cnp_h027",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "质量 50 kg 的人站在电梯秤上，电梯向下运动但以 2 m/s² 的加速度减速。取 g=10 m/s²，秤示数为多少牛？（只填数值）",
+    "answer": "600",
+    "explanation": "向下减速说明加速度向上，N−mg=ma，秤示数 N=600 N，处于超重。",
+    "verify": "50*(10+2)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h027_q102",
+    "topicId": "cnp_h027",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "载人电梯在地面参考系中自由下落，忽略空气阻力，人在电梯内完全失重。此时",
+    "choices": [
+      {
+        "key": "A",
+        "text": "支持力为零，但人仍受到地球引力"
+      },
+      {
+        "key": "B",
+        "text": "人的质量变为零"
+      },
+      {
+        "key": "C",
+        "text": "人的重力消失"
+      },
+      {
+        "key": "D",
+        "text": "人的加速度为零"
+      }
+    ],
+    "answer": "A",
+    "explanation": "完全失重指视重为零，重力仍提供向下加速度 g；并非失去质量或地球引力。",
+    "verify": "\"支持力为零，但人仍受到地球引力\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h027_q103",
+    "topicId": "cnp_h027",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "质量 3 kg 的物体用弹簧秤悬在电梯内，始终相对电梯静止，g=10 m/s²。秤示数稳定为 24 N 时，电梯加速度向下，其大小为多少 m/s²？（只填数值）",
+    "answer": "2",
+    "explanation": "mg−T=ma，a=(30−24)/3=2 m/s²；仅由示数不能判断电梯当前速度方向。",
+    "verify": "(3*10-24)/3",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h028_q101",
+    "topicId": "cnp_h028",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一质点的轨迹向左弯曲。在某点它的速度竖直向上，下列合力方向中可能使其继续向左弯曲的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "水平向左"
+      },
+      {
+        "key": "B",
+        "text": "竖直向上"
+      },
+      {
+        "key": "C",
+        "text": "竖直向下"
+      },
+      {
+        "key": "D",
+        "text": "水平向右"
+      }
+    ],
+    "answer": "A",
+    "explanation": "合力须有指向轨迹凹侧的分量；此处左侧是凹侧，水平向左的合力可改变速度方向。",
+    "verify": "\"水平向左\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h028_q102",
+    "topicId": "cnp_h028",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "某物体运动轨迹是曲线，但速率始终为 6 m/s。对它的速度和加速度，判断正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "速度不变，因为速率不变"
+      },
+      {
+        "key": "B",
+        "text": "速度一定变化，加速度不可能始终为零"
+      },
+      {
+        "key": "C",
+        "text": "加速度一定为零"
+      },
+      {
+        "key": "D",
+        "text": "合力只能改变速率，不能改变方向"
+      }
+    ],
+    "answer": "B",
+    "explanation": "速度是矢量，曲线运动方向持续改变，即使速率不变仍有速度变化，必须存在加速度。",
+    "verify": "\"速度一定变化，加速度不可能始终为零\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h028_q103",
+    "topicId": "cnp_h028",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "质点初速度沿 x 轴正方向，同时受到沿 y 轴正方向的恒定合力，忽略其他作用。在惯性参考系中它的轨迹为",
+    "choices": [
+      {
+        "key": "A",
+        "text": "沿 x 轴的直线"
+      },
+      {
+        "key": "B",
+        "text": "匀速圆周轨迹"
+      },
+      {
+        "key": "C",
+        "text": "向 y 轴正方向弯曲的抛物线"
+      },
+      {
+        "key": "D",
+        "text": "沿合力方向的直线"
+      }
+    ],
+    "answer": "C",
+    "explanation": "x 方向匀速、y 方向初速为零的匀加速，消去时间后 y 与 x² 成正比，速度不会立即转为合力方向。",
+    "verify": "\"向 y 轴正方向弯曲的抛物线\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h029_q101",
+    "topicId": "cnp_h029",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "河宽 120 m，水流沿岸速率 2 m/s，小船相对水速率 3 m/s。船头始终垂直河岸，用最短时间渡河，过河时间是多少秒？（只填数值）",
+    "answer": "40",
+    "explanation": "渡河方向速度为 3 m/s，时间为 120/3=40 s；水流只影响沿岸漂移。",
+    "verify": "120/3",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h029_q102",
+    "topicId": "cnp_h029",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "河宽 180 m，水速 4 m/s，船相对水速 5 m/s。甲方案船头始终垂直河岸，乙方案恰好到正对岸。乙比甲多用多少秒？（只填数值）",
+    "answer": "24",
+    "explanation": "甲用最短时间 36 s；乙须用 4 m/s 的上游分量抵消水流，垂岸分量为 3 m/s，耗时 60 s，多 24 s。",
+    "verify": "180/sqrt(5**2-4**2)-180/5",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h029_q103",
+    "topicId": "cnp_h029",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "质点同时参与两个互相垂直的匀速直线分运动，速度大小分别为 3 m/s、4 m/s。其合运动",
+    "choices": [
+      {
+        "key": "A",
+        "text": "为速率 7 m/s 的匀速直线运动"
+      },
+      {
+        "key": "B",
+        "text": "一定是曲线运动"
+      },
+      {
+        "key": "C",
+        "text": "为速率 1 m/s 的匀速直线运动"
+      },
+      {
+        "key": "D",
+        "text": "为速率 5 m/s 的匀速直线运动"
+      }
+    ],
+    "answer": "D",
+    "explanation": "两个恒定分速度的矢量和也是恒定速度，大小为 √(3²+4²)=5 m/s。",
+    "verify": "\"为速率 5 m/s 的匀速直线运动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h030_q101",
+    "topicId": "cnp_h030",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "用斜槽描绘平抛轨迹时，换一张记录纸后重新放球，应特别保证每次小球",
+    "choices": [
+      {
+        "key": "A",
+        "text": "从任意位置用手推出，只要抛出点相同"
+      },
+      {
+        "key": "B",
+        "text": "离开斜槽时竖直速度尽可能大"
+      },
+      {
+        "key": "C",
+        "text": "从斜槽同一位置由静止释放，使抛出初速度一致"
+      },
+      {
+        "key": "D",
+        "text": "在不同高度落地以增大轨迹范围"
+      }
+    ],
+    "answer": "C",
+    "explanation": "逐点描迹需重现同一条轨迹，抛出位置和速度都应相同；同位置静止释放有助于保证初速度一致。",
+    "verify": "\"从斜槽同一位置由静止释放，使抛出初速度一致\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h030_q102",
+    "topicId": "cnp_h030",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "频闪照片中，平抛小球相邻位置的时间间隔为 0.10 s，连续两个竖直下降位移为 8 cm、18 cm。由此测得当地 g 为多少 m/s²？（只填数值）",
+    "answer": "10",
+    "explanation": "竖直分运动满足相邻等时位移差 Δy=gT²，因此 g=0.10/0.01=10 m/s²；两段数据可对应抛出后 0.03 s 起的连续时段。",
+    "verify": "(0.18-0.08)/(0.10**2)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h030_q103",
+    "topicId": "cnp_h030",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "同高度同时释放两球：甲水平抛出，乙由静止下落，空气阻力忽略。两球同时落地，主要说明",
+    "choices": [
+      {
+        "key": "A",
+        "text": "甲的竖直分运动与乙的自由落体相同"
+      },
+      {
+        "key": "B",
+        "text": "甲在空中没有水平速度"
+      },
+      {
+        "key": "C",
+        "text": "甲的水平运动也一定匀加速"
+      },
+      {
+        "key": "D",
+        "text": "两球的总位移相同"
+      }
+    ],
+    "answer": "A",
+    "explanation": "两球具有相同初始竖直速度和竖直加速度；同时落地验证竖直运动与水平抛速的独立性，不意味着总位移相同。",
+    "verify": "\"甲的竖直分运动与乙的自由落体相同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h031_q101",
+    "topicId": "cnp_h031",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "平台高出水平地面 20 m。小球水平抛出时，一辆视为质点的小车在平台正下方前方 8 m 处，沿远离平台方向以 2 m/s 匀速行驶。g=10 m/s²，忽略阻力。小球恰在地面与小车相遇，其水平初速为多少 m/s？（只填数值）",
+    "answer": "6",
+    "explanation": "下落时间为 2 s，小车这时距平台正下方 8+2×2=12 m，故小球水平初速度为 12/2=6 m/s。",
+    "verify": "(8+2*sqrt(2*20/10))/sqrt(2*20/10)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h031_q102",
+    "topicId": "cnp_h031",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "平抛物体在某时刻的位移与水平线夹角为 α，速度与水平线夹角为 β，向下夹角均取正值且小于 90°。两角满足",
+    "choices": [
+      {
+        "key": "A",
+        "text": "tanβ=2tanα"
+      },
+      {
+        "key": "B",
+        "text": "β=α"
+      },
+      {
+        "key": "C",
+        "text": "tanα=2tanβ"
+      },
+      {
+        "key": "D",
+        "text": "β=2α 必成立"
+      }
+    ],
+    "answer": "A",
+    "explanation": "tanα=y/x=gt/(2v₀)，tanβ=vᵧ/v₀=gt/v₀，故正切值满足 2 倍关系，角度本身一般不成 2 倍。",
+    "verify": "\"tanβ=2tanα\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h031_q103",
+    "topicId": "cnp_h031",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "水平抛出的小球经过 0.60 s 时，竖直速度大小为 6 m/s，总速率为 10 m/s。忽略空气阻力，它的水平初速度是多少 m/s？（只填数值）",
+    "answer": "8",
+    "explanation": "水平分速度恒定且与竖直分速度正交，v₀=√(10²−6²)=8 m/s。",
+    "verify": "sqrt(10**2-6**2)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h032_q101",
+    "topicId": "cnp_h032",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "小球以 10 m/s 斜向上抛出，抛射角 37°，sin37°=0.6、cos37°=0.8，g=10 m/s²，忽略空气阻力。相对抛出点的最大上升高度是多少米？（只填数值）",
+    "answer": "1.8",
+    "explanation": "初始竖直分速度为 6 m/s，最高点竖直速度为零，h=vᵧ₀²/(2g)=1.8 m。",
+    "verify": "(10*0.6)**2/(2*10)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h032_q102",
+    "topicId": "cnp_h032",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小球斜抛运动到最高点时，空气阻力忽略且初始水平分速度不为零。该瞬间",
+    "choices": [
+      {
+        "key": "A",
+        "text": "速度与加速度都为零"
+      },
+      {
+        "key": "B",
+        "text": "速度水平，加速度仍竖直向下"
+      },
+      {
+        "key": "C",
+        "text": "速度竖直向下，加速度为零"
+      },
+      {
+        "key": "D",
+        "text": "加速度水平并与速度同向"
+      }
+    ],
+    "answer": "B",
+    "explanation": "最高点只意味着竖直速度分量为零，水平分量仍存在；重力始终给出向下的加速度。",
+    "verify": "\"速度水平，加速度仍竖直向下\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h032_q103",
+    "topicId": "cnp_h032",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "在同一水平地面，以相同初速率分别按 30° 和 60° 向上抛出小球，均落回原高度且忽略空气阻力。两次运动",
+    "choices": [
+      {
+        "key": "A",
+        "text": "射程相等，飞行时间也相等"
+      },
+      {
+        "key": "B",
+        "text": "60° 的射程一定是 30° 的两倍"
+      },
+      {
+        "key": "C",
+        "text": "射程相等，60° 抛射的飞行时间较长"
+      },
+      {
+        "key": "D",
+        "text": "30° 的最高点比 60° 更高"
+      }
+    ],
+    "answer": "C",
+    "explanation": "射程 R=v₀²sin2θ/g，互余角的 sin2θ 相等；飞行时间 2v₀sinθ/g 随此处角度增大而变长。",
+    "verify": "\"射程相等，60° 抛射的飞行时间较长\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h033_q101",
+    "topicId": "cnp_h033",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "一个转盘每分钟转 120 圈，转速保持不变。盘上某点转一圈的周期是多少秒？（只填数值）",
+    "answer": "0.5",
+    "explanation": "120 r/min=2 r/s，周期是每圈时间 T=1/2=0.5 s。",
+    "verify": "60/120",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h033_q102",
+    "topicId": "cnp_h033",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "半径比为 1:3 的两个轮子用不打滑的皮带传动。小轮和大轮边缘的线速度大小之比、角速度大小之比分别为",
+    "choices": [
+      {
+        "key": "A",
+        "text": "1:3 和 1:1"
+      },
+      {
+        "key": "B",
+        "text": "3:1 和 1:1"
+      },
+      {
+        "key": "C",
+        "text": "1:1 和 3:1"
+      },
+      {
+        "key": "D",
+        "text": "1:1 和 1:3"
+      }
+    ],
+    "answer": "C",
+    "explanation": "皮带不打滑使边缘线速度相同，ω=v/r，因此小轮角速度是大轮的 3 倍。",
+    "verify": "\"1:1 和 3:1\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h033_q103",
+    "topicId": "cnp_h033",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "刚性转盘上甲、乙两点距转轴分别为 0.10 m 和 0.30 m，甲点线速度为 0.80 m/s。乙点线速度是多少 m/s？（只填数值）",
+    "answer": "2.4",
+    "explanation": "同轴转动的角速度相同，线速度 v=ωr 与半径成正比，乙的线速度为 2.4 m/s。",
+    "verify": "0.80*0.30/0.10",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h034_q101",
+    "topicId": "cnp_h034",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "水平转盘上的小块随盘匀速转动而不滑动，小块与盘间最大静摩擦力为 8 N。小块质量 2 kg、距轴 1 m。允许的最大角速度是多少 rad/s？（只填数值）",
+    "answer": "2",
+    "explanation": "静摩擦力提供所需向心力，mω²r≤8，解得 ω≤2 rad/s；不能额外再给小块画一个向心力。",
+    "verify": "sqrt(8/(2*1))",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h034_q102",
+    "topicId": "cnp_h034",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "分析细绳牵引小球做水平匀速圆周运动时，有同学在受力图中同时画了拉力、重力、支持力和一个额外“向心力”。问题在于",
+    "choices": [
+      {
+        "key": "A",
+        "text": "重力在圆周运动时一定不存在"
+      },
+      {
+        "key": "B",
+        "text": "拉力只能改变速度大小"
+      },
+      {
+        "key": "C",
+        "text": "支持力一定指向圆心"
+      },
+      {
+        "key": "D",
+        "text": "向心力是已有力的合效果，不是额外一种性质力"
+      }
+    ],
+    "answer": "D",
+    "explanation": "向心力由真实作用力沿半径方向的合力提供，不能在这些力之外再重复添加。",
+    "verify": "\"向心力是已有力的合效果，不是额外一种性质力\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h034_q103",
+    "topicId": "cnp_h034",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "同一小球做匀速圆周运动，角速度变为原来的 2 倍，轨道半径变为原来的一半。所需向心力是原来的多少倍？（只填数值）",
+    "answer": "2",
+    "explanation": "按 F=mω²r 比较，比例为 4×1/2=2，不能误把线速度视为不变。",
+    "verify": "2**2*0.5",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h035_q101",
+    "topicId": "cnp_h035",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "用向心力演示器研究质量对向心力的影响，应控制两物体",
+    "choices": [
+      {
+        "key": "A",
+        "text": "线速度与角速度都改变，只保留半径"
+      },
+      {
+        "key": "B",
+        "text": "质量和半径都改变，只保留角速度"
+      },
+      {
+        "key": "C",
+        "text": "仅保持质量相同"
+      },
+      {
+        "key": "D",
+        "text": "转动半径和角速度相同，只改变质量"
+      }
+    ],
+    "answer": "D",
+    "explanation": "由 F=mω²r，用控制变量法只改变质量，半径和角速度必须相同。",
+    "verify": "\"转动半径和角速度相同，只改变质量\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h035_q102",
+    "topicId": "cnp_h035",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "演示器两物体质量、转动半径均相同，甲角速度是乙的 3 倍。甲所需向心力是乙的多少倍？（只填数值）",
+    "answer": "9",
+    "explanation": "向心力与角速度平方成正比，F甲/F乙=3²=9。",
+    "verify": "3**2",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h035_q103",
+    "topicId": "cnp_h035",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "实验固定 m、r，测量多组 F 与 ω。若要用直线关系检验 F=mω²r，应优先绘制",
+    "choices": [
+      {
+        "key": "A",
+        "text": "F 对 1/ω 的图像"
+      },
+      {
+        "key": "B",
+        "text": "F 对 ω² 的图像"
+      },
+      {
+        "key": "C",
+        "text": "F 对 ω 的图像并强行拟合过原点直线"
+      },
+      {
+        "key": "D",
+        "text": "F² 对 ω 的图像"
+      }
+    ],
+    "answer": "B",
+    "explanation": "固定 m、r 后，F 与 ω² 成正比，F-ω² 图应近似为过原点直线，斜率为 mr。",
+    "verify": "\"F 对 ω² 的图像\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h036_q101",
+    "topicId": "cnp_h036",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一质点做非零速率的匀速圆周运动，考察完整一周。关于平均加速度与任意时刻的向心加速度，正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "一周平均加速度为零，瞬时向心加速度不为零"
+      },
+      {
+        "key": "B",
+        "text": "两者均为零"
+      },
+      {
+        "key": "C",
+        "text": "两者大小始终相同且均不为零"
+      },
+      {
+        "key": "D",
+        "text": "平均加速度指向圆心且瞬时加速度沿切线"
+      }
+    ],
+    "answer": "A",
+    "explanation": "完整一周初末速度矢量相同，Δv/Δt=0；过程中速度方向不断改变，瞬时向心加速度大小 v²/r 非零。",
+    "verify": "\"一周平均加速度为零，瞬时向心加速度不为零\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h036_q102",
+    "topicId": "cnp_h036",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "匀速圆周运动中，加速度大小不变。下列结论正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "加速度矢量不变，属于匀变速运动"
+      },
+      {
+        "key": "B",
+        "text": "加速度方向不断变化，因而不是匀变速运动"
+      },
+      {
+        "key": "C",
+        "text": "因为速率恒定，所以没有加速度"
+      },
+      {
+        "key": "D",
+        "text": "加速度方向始终沿切线"
+      }
+    ],
+    "answer": "B",
+    "explanation": "匀变速要求加速度矢量恒定，圆周运动的向心方向随位置而变化。",
+    "verify": "\"加速度方向不断变化，因而不是匀变速运动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h036_q103",
+    "topicId": "cnp_h036",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "甲、乙做匀速圆周运动，甲半径为乙的 4 倍、周期为乙的 2 倍。甲向心加速度大小是乙的多少倍？（只填数值）",
+    "answer": "1",
+    "explanation": "用 a=4π²r/T² 同时比较半径和周期，a甲/a乙=4/2²=1；不能只看半径较大。",
+    "verify": "4/2**2",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h037_q101",
+    "topicId": "cnp_h037",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "同一辆汽车以相同速率分别通过半径均为 20 m 的凸桥顶和凹桥底。凹桥支持力恰为凸桥支持力的 3 倍，g=10 m/s²。汽车速率是多少 m/s？（只填数值）",
+    "answer": "10",
+    "explanation": "N凹=mg+mv²/R，N凸=mg−mv²/R；由 N凹=3N凸 得 v²/R=g/2，故 v=10 m/s。",
+    "verify": "sqrt(0.5*10*20)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h037_q102",
+    "topicId": "cnp_h037",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "汽车在同一水平弯道上的干燥路面限速为 20 m/s。雨后最大可用静摩擦力降为干燥时的 9/16，其他条件相同。按侧滑临界条件估算，雨后限速是多少 m/s？（只填数值）",
+    "answer": "15",
+    "explanation": "临界条件 F最大=mv²/r，半径和质量不变时限速与 √F最大 成正比，变为 20×3/4=15 m/s。",
+    "verify": "20*sqrt(9/16)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h037_q103",
+    "topicId": "cnp_h037",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "轻绳系小球在竖直面内运动，讨论它恰好通过圆周最高点的临界情况，绳长 R，空气阻力忽略。正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "最高点重力为零，速率为零"
+      },
+      {
+        "key": "B",
+        "text": "最高点张力等于重力，速率为 √(gR)"
+      },
+      {
+        "key": "C",
+        "text": "最高点速率可任意小，只要绳不断"
+      },
+      {
+        "key": "D",
+        "text": "最高点绳张力为零，速率为 √(gR)"
+      }
+    ],
+    "answer": "D",
+    "explanation": "最高点所需向心力向下，mg+T=mv²/R；轻绳不能提供推力，临界时 T=0。",
+    "verify": "\"最高点绳张力为零，速率为 √(gR)\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h038_q101",
+    "topicId": "cnp_h038",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小球在光滑水平面上被绳拉着做圆周运动，绳突然断裂后，没有其他水平力。小球随后",
+    "choices": [
+      {
+        "key": "A",
+        "text": "沿半径向外做匀加速运动"
+      },
+      {
+        "key": "B",
+        "text": "继续沿原圆周运动"
+      },
+      {
+        "key": "C",
+        "text": "沿断裂瞬间的切线做匀速直线运动"
+      },
+      {
+        "key": "D",
+        "text": "立刻沿半径向内运动"
+      }
+    ],
+    "answer": "C",
+    "explanation": "断绳后向心合力消失，速度保持断裂瞬间的切线方向，不会凭空产生径向外力。",
+    "verify": "\"沿断裂瞬间的切线做匀速直线运动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h038_q102",
+    "topicId": "cnp_h038",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "汽车在半径不变的水平弯道行驶，速率从 v 增为 2v。所需向心力与原来相比",
+    "choices": [
+      {
+        "key": "A",
+        "text": "变为 2 倍，仍一定不会侧滑"
+      },
+      {
+        "key": "B",
+        "text": "保持不变，只与半径有关"
+      },
+      {
+        "key": "C",
+        "text": "变为 1/4，转弯更安全"
+      },
+      {
+        "key": "D",
+        "text": "变为 4 倍，更容易超过最大静摩擦力而侧滑"
+      }
+    ],
+    "answer": "D",
+    "explanation": "F需=mv²/r，速率加倍使所需向心力增加到 4 倍；可提供的静摩擦力有上限。",
+    "verify": "\"变为 4 倍，更容易超过最大静摩擦力而侧滑\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h038_q103",
+    "topicId": "cnp_h038",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "洗衣机脱水时，水滴通过滚筒小孔离开衣物。用地面近似惯性参考系解释，应强调",
+    "choices": [
+      {
+        "key": "A",
+        "text": "水滴失去足够向心作用后趋于沿切线运动"
+      },
+      {
+        "key": "B",
+        "text": "一个真实的向外离心力把所有水滴拉出"
+      },
+      {
+        "key": "C",
+        "text": "水滴重力方向变为水平向外"
+      },
+      {
+        "key": "D",
+        "text": "水滴穿孔后仍必须保持原来的角速度"
+      }
+    ],
+    "answer": "A",
+    "explanation": "滚筒对衣物和水的约束不同；水滴失去保持圆周运动所需的作用后不再随滚筒转动，不必添加向外性质力。",
+    "verify": "\"水滴失去足够向心作用后趋于沿切线运动\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h039_q101",
+    "topicId": "cnp_h039",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "同一恒星的两颗行星轨道半长轴之比为 4:1。按开普勒第三定律，它们的公转周期之比是多少？（只填大周期与小周期的数值比）",
+    "answer": "8",
+    "explanation": "同一中心天体有 T²∝a³，周期之比为 √(4³)=8。",
+    "verify": "sqrt(4**3)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h039_q102",
+    "topicId": "cnp_h039",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同一颗行星沿椭圆轨道运行。在近日点附近和远日点附近各取一段相同时间，则",
+    "choices": [
+      {
+        "key": "A",
+        "text": "与太阳连线扫过的面积相等，近日点附近走过的弧长较大"
+      },
+      {
+        "key": "B",
+        "text": "扫过面积相等，弧长也必相等"
+      },
+      {
+        "key": "C",
+        "text": "远日点附近扫过的面积较大"
+      },
+      {
+        "key": "D",
+        "text": "太阳一定在椭圆几何中心"
+      }
+    ],
+    "answer": "A",
+    "explanation": "面积定律保证相等时间扫过相等面积；近日点距离小，速率较大，走过的弧长较大。太阳位于一个焦点。",
+    "verify": "\"与太阳连线扫过的面积相等，近日点附近走过的弧长较大\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h039_q103",
+    "topicId": "cnp_h039",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "将绕地球卫星和绕太阳行星的数据直接放在一起，要求它们 a³/T² 都相同。该要求",
+    "choices": [
+      {
+        "key": "A",
+        "text": "合理，因为所有天体都服从同一个数值的 k"
+      },
+      {
+        "key": "B",
+        "text": "不合理，比例常量与中心天体质量有关"
+      },
+      {
+        "key": "C",
+        "text": "不合理，因为开普勒定律只适用于地球"
+      },
+      {
+        "key": "D",
+        "text": "合理，因为周期与中心天体无关"
+      }
+    ],
+    "answer": "B",
+    "explanation": "在中心天体质量占优的近似下 a³/T²=GM/(4π²)，同一中心天体的比值才相同。",
+    "verify": "\"不合理，比例常量与中心天体质量有关\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h040_q101",
+    "topicId": "cnp_h040",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "两个可视为点质量的物体，质量分别变为原来的 2 倍、3 倍，中心距离变为原来的 2 倍。新引力大小是原来的多少倍？（只填数值）",
+    "answer": "1.5",
+    "explanation": "F 与两质量乘积成正比、距离平方成反比，因此比值为 6/4=1.5。",
+    "verify": "2*3/2**2",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h040_q102",
+    "topicId": "cnp_h040",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两个均匀球体相距较远，球半径不能与球心距混同。用万有引力公式计算球体间引力时，r 应取",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两球表面的最短距离"
+      },
+      {
+        "key": "B",
+        "text": "两球球心之间的距离"
+      },
+      {
+        "key": "C",
+        "text": "两个球半径之和，无论球心距多大"
+      },
+      {
+        "key": "D",
+        "text": "质量较大球体的半径"
+      }
+    ],
+    "answer": "B",
+    "explanation": "对球外的均匀球体，其引力可等效集中于球心，公式的距离是球心距。",
+    "verify": "\"两球球心之间的距离\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h040_q103",
+    "topicId": "cnp_h040",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "地球吸引月球，月球也吸引地球。以下比较正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "地球对月球的引力大，因为地球更重"
+      },
+      {
+        "key": "B",
+        "text": "月球对地球的引力小，因为月球较轻"
+      },
+      {
+        "key": "C",
+        "text": "两引力等大，地球因质量更大而加速度更小"
+      },
+      {
+        "key": "D",
+        "text": "只有月球运动，地球完全不受月球作用"
+      }
+    ],
+    "answer": "C",
+    "explanation": "引力是一对作用与反作用力，大小相等。a=F/m，地球质量较大时相应加速度较小。",
+    "verify": "\"两引力等大，地球因质量更大而加速度更小\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h041_q101",
+    "topicId": "cnp_h041",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同一行星的两颗质量可忽略的卫星做圆周运动，已测得轨道半径之比 r甲:r乙=2:1、周期之比 T甲:T乙=2:1。以下分析正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两组数据符合模型，因为半径比等于周期比"
+      },
+      {
+        "key": "B",
+        "text": "数据不符合纯引力圆轨道模型，应检查测量或圆轨道假设"
+      },
+      {
+        "key": "C",
+        "text": "只需把甲卫星质量改为乙的 2 倍即可满足模型"
+      },
+      {
+        "key": "D",
+        "text": "只要卫星质量不同，就无需满足开普勒第三定律"
+      }
+    ],
+    "answer": "B",
+    "explanation": "同一中心天体要求 r³/T² 相同；甲与乙该比值之比为 2³/2²=2，并非 1。改变卫星质量不能消除矛盾。",
+    "verify": "\"数据不符合纯引力圆轨道模型，应检查测量或圆轨道假设\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h041_q102",
+    "topicId": "cnp_h041",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "某均匀球形行星质量为地球的 8 倍、平均密度也为地球的 8 倍，忽略自转。该行星表面重力加速度是地球的多少倍？（只填数值）",
+    "answer": "8",
+    "explanation": "由 M=ρ·4πR³/3，质量和密度同倍数增大说明半径不变；g=GM/R² 因而为地球的 8 倍。",
+    "verify": "8/(8/8)**(2/3)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h041_q103",
+    "topicId": "cnp_h041",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "质量可忽略的卫星紧贴球形天体表面做圆周运动，测得周期为 T，据此用 ρ=3π/(GT²) 估计平均密度。若实际轨道半径比天体半径大，却仍套用此近表面公式，则密度结果",
+    "choices": [
+      {
+        "key": "A",
+        "text": "偏大，因为远轨道速度更慢"
+      },
+      {
+        "key": "B",
+        "text": "准确，因为轨道高度完全不影响周期"
+      },
+      {
+        "key": "C",
+        "text": "只要卫星质量小，结果就必准确"
+      },
+      {
+        "key": "D",
+        "text": "偏小，因为实际周期含有更大的轨道半径"
+      }
+    ],
+    "answer": "D",
+    "explanation": "一般有 T²=4π²r³/(GM)，套近表面式得到的密度为真实密度乘 (R/r)³；r>R 时偏小。",
+    "verify": "\"偏小，因为实际周期含有更大的轨道半径\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h042_q101",
+    "topicId": "cnp_h042",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "某球形行星半径为地球的 2 倍，表面重力加速度为地球的一半。其第一宇宙速度是地球第一宇宙速度的多少倍？（只填数值）",
+    "answer": "1",
+    "explanation": "第一宇宙速度 v=√(gR)，两者 gR 相同，因此比值为 1。",
+    "verify": "sqrt(2*0.5)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h042_q102",
+    "topicId": "cnp_h042",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "在不计大气阻力、自转等影响的理想模型中，地球第一宇宙速度 7.9 km/s 的含义是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "任何高度圆轨道卫星的速度都等于 7.9 km/s"
+      },
+      {
+        "key": "B",
+        "text": "从地面脱离地球引力所需的最小速度"
+      },
+      {
+        "key": "C",
+        "text": "脱离太阳系所需的最小速度"
+      },
+      {
+        "key": "D",
+        "text": "近地圆轨道运行速度，也是进入绕地轨道所需的最小理想发射速度"
+      }
+    ],
+    "answer": "D",
+    "explanation": "近地圆轨道速度为 √(GM/R)；更高圆轨道速度较小，脱离地球和太阳系分别涉及第二、第三宇宙速度。",
+    "verify": "\"近地圆轨道运行速度，也是进入绕地轨道所需的最小理想发射速度\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h042_q103",
+    "topicId": "cnp_h042",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "同一行星的半径不变而质量增大到原来的 4 倍，忽略其他影响。其近表面圆轨道速度变为",
+    "choices": [
+      {
+        "key": "A",
+        "text": "原来的 2 倍"
+      },
+      {
+        "key": "B",
+        "text": "原来的 4 倍"
+      },
+      {
+        "key": "C",
+        "text": "原来的 1/2"
+      },
+      {
+        "key": "D",
+        "text": "与原来相同"
+      }
+    ],
+    "answer": "A",
+    "explanation": "第一宇宙速度 v=√(GM/R)，质量增至 4 倍时速度增至 2 倍。",
+    "verify": "\"原来的 2 倍\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h043_q101",
+    "topicId": "cnp_h043",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "绕同一行星运行的两颗圆轨道卫星，甲线速度大小为乙的 2 倍。乙的周期是甲的多少倍？（只填数值）",
+    "answer": "8",
+    "explanation": "v²=GM/r，所以乙半径为甲的 4 倍，再由 T∝r^(3/2)，得 T乙/T甲=4^(3/2)=8。",
+    "verify": "(2**2)**1.5",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h043_q102",
+    "topicId": "cnp_h043",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一颗正常工作的地球同步卫星保持对地面某点静止，它必须",
+    "choices": [
+      {
+        "key": "A",
+        "text": "在赤道平面内与地球同向运行，周期等于地球自转周期"
+      },
+      {
+        "key": "B",
+        "text": "在任意纬度上空沿圆周运行即可"
+      },
+      {
+        "key": "C",
+        "text": "周期可以随其质量改变"
+      },
+      {
+        "key": "D",
+        "text": "轨道半径越大仍可保持相同同步周期"
+      }
+    ],
+    "answer": "A",
+    "explanation": "保持相对地面静止要求同向、同周期且位于赤道平面，给定中心天体时同步周期确定轨道半径。",
+    "verify": "\"在赤道平面内与地球同向运行，周期等于地球自转周期\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h043_q103",
+    "topicId": "cnp_h043",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "两颗圆轨道卫星质量不同，轨道半径相同，均绕同一中心行星。质量较大卫星的向心加速度是质量较小卫星的多少倍？（只填数值）",
+    "answer": "1",
+    "explanation": "a=GM/r² 与卫星质量无关，轨道半径相同时两者加速度大小相同。",
+    "verify": "1",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h044_q101",
+    "topicId": "cnp_h044",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "一根沿运动方向放置的杆，地面惯性系测得长度为其固有长度的 3/5。按 l=l₀√(1−v²/c²)，杆速率 v 与 c 的比值是多少？（只填数值）",
+    "answer": "0.8",
+    "explanation": "由 (l/l₀)²=1−v²/c²，v/c=√(1−9/25)=4/5=0.8。",
+    "verify": "sqrt(1-(3/5)**2)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h044_q102",
+    "topicId": "cnp_h044",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "在真空中，地面观察者测得光束速度为 c。另一位沿光束方向高速匀速运动的惯性观察者测得该光束速度",
+    "choices": [
+      {
+        "key": "A",
+        "text": "为 c 减去观察者速度"
+      },
+      {
+        "key": "B",
+        "text": "仍为 c"
+      },
+      {
+        "key": "C",
+        "text": "为 c 加上观察者速度"
+      },
+      {
+        "key": "D",
+        "text": "取决于光束颜色，可能为零"
+      }
+    ],
+    "answer": "B",
+    "explanation": "狭义相对论的光速不变原理指出，真空光速在所有惯性系中相同，不能使用经典速度直接相减。",
+    "verify": "\"仍为 c\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h044_q103",
+    "topicId": "cnp_h044",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "对牛顿力学适用范围的判断，正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "物体只要受重力，任何速度都必须精确使用牛顿力学"
+      },
+      {
+        "key": "B",
+        "text": "有了相对论后，低速汽车也不能使用 F=ma"
+      },
+      {
+        "key": "C",
+        "text": "宏观物体低速运动通常可用牛顿力学近似描述"
+      },
+      {
+        "key": "D",
+        "text": "牛顿力学可以完整解释原子能级与光电效应"
+      }
+    ],
+    "answer": "C",
+    "explanation": "牛顿力学是宏观低速范围内很好的近似；高速相对论效应与微观量子效应需要更广的理论。",
+    "verify": "\"宏观物体低速运动通常可用牛顿力学近似描述\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h045_q101",
+    "topicId": "cnp_h045",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "用大小 20 N 的恒力拉物体沿水平面前进 5 m，拉力与水平位移夹角为 60°。拉力做功多少焦？（只填数值）",
+    "answer": "50",
+    "explanation": "恒力做功 W=Flcos60°=20×5×0.5=50 J，只取沿位移的力分量。",
+    "verify": "20*5*0.5",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h045_q102",
+    "topicId": "cnp_h045",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "物体沿光滑圆形轨道运动，轨道的支持力始终垂直瞬时速度。支持力对物体",
+    "choices": [
+      {
+        "key": "A",
+        "text": "做正功，因为物体一直在运动"
+      },
+      {
+        "key": "B",
+        "text": "做负功，因为支持力阻碍穿入轨道"
+      },
+      {
+        "key": "C",
+        "text": "做功为零，但可以改变速度方向"
+      },
+      {
+        "key": "D",
+        "text": "不做功，因此也不可能改变运动方向"
+      }
+    ],
+    "answer": "C",
+    "explanation": "每一小段位移沿切线，支持力沿法线，二者垂直所以功为零，但力可改变速度方向。",
+    "verify": "\"做功为零，但可以改变速度方向\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h045_q103",
+    "topicId": "cnp_h045",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "物体向右移动 4 m，受到向右 9 N 牵引力和向左 3 N 阻力，两力均恒定。合力做功多少焦？（只填数值）",
+    "answer": "24",
+    "explanation": "总功等于各力功的代数和，为 9×4−3×4=24 J。",
+    "verify": "(9-3)*4",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h046_q101",
+    "topicId": "cnp_h046",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "汽车以恒定牵引功率 12 kW 行驶，速率达到 20 m/s 时，牵引力为多少牛？（只填数值）",
+    "answer": "600",
+    "explanation": "同向牵引满足 P=Fv，F=12000/20=600 N，功率须换算为瓦。",
+    "verify": "12000/20",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h046_q102",
+    "topicId": "cnp_h046",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "小车由静止在恒定水平合力作用下沿合力方向加速。只讨论此合力做功，则在这段过程中",
+    "choices": [
+      {
+        "key": "A",
+        "text": "瞬时功率因合力恒定而恒定"
+      },
+      {
+        "key": "B",
+        "text": "瞬时功率始终为零，因为初速度为零"
+      },
+      {
+        "key": "C",
+        "text": "平均功率必等于末时刻瞬时功率"
+      },
+      {
+        "key": "D",
+        "text": "瞬时功率随速率增大而增大"
+      }
+    ],
+    "answer": "D",
+    "explanation": "瞬时功率 P=Fv，力恒定而速率增大，所以瞬时功率增大；初始瞬间为零并不意味着之后为零。",
+    "verify": "\"瞬时功率随速率增大而增大\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h046_q103",
+    "topicId": "cnp_h046",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "起重机在 8 s 内把 400 kg 的货物竖直匀速提升 6 m，g=10 m/s²。提升货物的平均有用功率是多少千瓦？（只填数值）",
+    "answer": "3",
+    "explanation": "有用功为 mgh=24000 J，平均功率为 3000 W，即 3 kW。",
+    "verify": "400*10*6/8/1000",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h047_q101",
+    "topicId": "cnp_h047",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "质量 2 kg 的物体由离地 5 m 处降到离地 1 m 处，g=10 m/s²。其重力势能减少多少焦？（只填数值）",
+    "answer": "80",
+    "explanation": "势能减少量为 mg(h初−h末)=80 J，与零势能面的选取无关。",
+    "verify": "2*10*(5-1)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h047_q102",
+    "topicId": "cnp_h047",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同一物体从山顶 A 到山脚 B，一次沿直道，一次沿更长的弯道，初末位置相同。两过程中重力做功",
+    "choices": [
+      {
+        "key": "A",
+        "text": "相同，只由 A、B 的高度差决定"
+      },
+      {
+        "key": "B",
+        "text": "沿弯道更大，因为路程更长"
+      },
+      {
+        "key": "C",
+        "text": "沿直道更大，因为用时更少"
+      },
+      {
+        "key": "D",
+        "text": "都为零，因为重力是恒力"
+      }
+    ],
+    "answer": "A",
+    "explanation": "重力做功为 mg(hA−hB)，不依赖路径长度和过程用时。",
+    "verify": "\"相同，只由 A、B 的高度差决定\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h047_q103",
+    "topicId": "cnp_h047",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "把重力势能零点从地面改为离地 2 m 的水平面。对质量不变的物体，下列量不改变的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "物体在每一位置的势能数值"
+      },
+      {
+        "key": "B",
+        "text": "任意两确定位置之间的重力势能差"
+      },
+      {
+        "key": "C",
+        "text": "离地 1 m 处势能的正负"
+      },
+      {
+        "key": "D",
+        "text": "零势能面的高度"
+      }
+    ],
+    "answer": "B",
+    "explanation": "改变参考平面使所有势能值整体平移相同常量，因此差值不变，势能的数值和正负却可改变。",
+    "verify": "\"任意两确定位置之间的重力势能差\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h048_q101",
+    "topicId": "cnp_h048",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "轻弹簧劲度系数 200 N/m，原来已伸长 0.05 m。缓慢继续拉到伸长 0.15 m，始终在线性弹性范围。该过程外力做功多少焦？（只填数值）",
+    "answer": "2",
+    "explanation": "外力功为弹性势能增量：k(x₂²−x₁²)/2=2 J。不能用末弹力乘本段伸长，也不能误从原长算起。",
+    "verify": "0.5*200*(0.15**2-0.05**2)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h048_q102",
+    "topicId": "cnp_h048",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两根不同轻弹簧 k甲=2k乙，在各自弹性范围内储存相同弹性势能。它们形变量的绝对值满足",
+    "choices": [
+      {
+        "key": "A",
+        "text": "x乙=2x甲"
+      },
+      {
+        "key": "B",
+        "text": "x乙=√2x甲"
+      },
+      {
+        "key": "C",
+        "text": "x乙=x甲/2"
+      },
+      {
+        "key": "D",
+        "text": "x乙=x甲"
+      }
+    ],
+    "answer": "B",
+    "explanation": "等储能要求 k甲x甲²=k乙x乙²，劲度系数较小的乙需更大形变量，比例为 √2。",
+    "verify": "\"x乙=√2x甲\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h048_q103",
+    "topicId": "cnp_h048",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "弹簧从伸长 2 cm 缓慢变为伸长 4 cm，劲度系数为 100 N/m。外力克服弹力做功多少焦？（只填数值）",
+    "answer": "0.06",
+    "explanation": "缓慢拉伸时外力功等于弹性势能增量，为 50(0.0016−0.0004)=0.06 J。",
+    "verify": "0.5*100*(0.04**2-0.02**2)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h049_q101",
+    "topicId": "cnp_h049",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "质量 2 kg 的小车沿原方向增速，速率增加 4 m/s，动能增加 40 J。增速前速率为多少 m/s？（只填数值）",
+    "answer": "3",
+    "explanation": "设原速率为 v，有 40=(2/2)[(v+4)²−v²]=8v+16，得 v=3 m/s。必须比较速率平方之差。",
+    "verify": "(40-0.5*2*4**2)/(2*4)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h049_q102",
+    "topicId": "cnp_h049",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同一小球先向东以 4 m/s 运动，后向西以 4 m/s 运动。比较两个状态，正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "速度相同，动能改变"
+      },
+      {
+        "key": "B",
+        "text": "速度和动能都相同"
+      },
+      {
+        "key": "C",
+        "text": "速度改变，动能相同"
+      },
+      {
+        "key": "D",
+        "text": "动能由正变负"
+      }
+    ],
+    "answer": "C",
+    "explanation": "速度含方向，改变方向即改变速度；动能是标量，仅与质量和速率平方有关，不能为负。",
+    "verify": "\"速度改变，动能相同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h049_q103",
+    "topicId": "cnp_h049",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "甲、乙动能相等，甲质量为乙的 4 倍。乙速率为 6 m/s，甲速率为多少 m/s？（只填数值）",
+    "answer": "3",
+    "explanation": "动能相等时 mv² 相同，速率与质量平方根成反比，甲速率为 6/2=3 m/s。",
+    "verify": "6/sqrt(4)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h050_q101",
+    "topicId": "cnp_h050",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "质量 2 kg 的物体初速率为 3 m/s，经过一段运动，所有力做的总功为 16 J。末速率是多少 m/s？（只填数值）",
+    "answer": "5",
+    "explanation": "由 W合=mv²/2−mv₀²/2，得 v²=9+16=25，末速率 5 m/s。",
+    "verify": "sqrt(3**2+2*16/2)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h050_q102",
+    "topicId": "cnp_h050",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "质量不变的物体沿曲线运动，所受某个力大小和方向均可能改变。动能定理",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只适用于恒力直线运动"
+      },
+      {
+        "key": "B",
+        "text": "只需计算做正功的力"
+      },
+      {
+        "key": "C",
+        "text": "可把任一单个力的功直接当作总功"
+      },
+      {
+        "key": "D",
+        "text": "仍可使用，总功须包含所有实际作用力的功"
+      }
+    ],
+    "answer": "D",
+    "explanation": "动能定理适用于变力和曲线运动；关键是所有力做功的代数和，而不是只取某个力或正功。",
+    "verify": "\"仍可使用，总功须包含所有实际作用力的功\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h050_q103",
+    "topicId": "cnp_h050",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "质量 1 kg 的物体以 6 m/s 沿粗糙水平面滑行，恒定摩擦阻力 3 N，最终停止。滑行距离是多少米？（只填数值）",
+    "answer": "6",
+    "explanation": "摩擦力做功 −fs=0−mv₀²/2，s=18/3=6 m。",
+    "verify": "0.5*1*6**2/3",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h051_q101",
+    "topicId": "cnp_h051",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "小球由静止从光滑轨道上高出最低点 1.8 m 处释放，g=10 m/s²，忽略空气阻力。到最低点的速率为多少 m/s？（只填数值）",
+    "answer": "6",
+    "explanation": "只有重力做功，mgh=mv²/2，v=√36=6 m/s，与轨道具体形状无关。",
+    "verify": "sqrt(2*10*1.8)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h051_q102",
+    "topicId": "cnp_h051",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一物体由轻弹簧推动，在光滑水平面上运动。选择“物体和弹簧”为系统，忽略空气阻力，则",
+    "choices": [
+      {
+        "key": "A",
+        "text": "动能与弹性势能之和守恒，物体自身动能不必守恒"
+      },
+      {
+        "key": "B",
+        "text": "物体自身动能必始终不变"
+      },
+      {
+        "key": "C",
+        "text": "弹簧对物体做功，所以系统机械能必不守恒"
+      },
+      {
+        "key": "D",
+        "text": "系统机械能增加量等于弹簧弹力的功"
+      }
+    ],
+    "answer": "A",
+    "explanation": "弹力是所选系统的内力，弹性势能与动能相互转化；不能把弹力功再作为系统额外能量来源。",
+    "verify": "\"动能与弹性势能之和守恒，物体自身动能不必守恒\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h051_q103",
+    "topicId": "cnp_h051",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "小球从静止沿光滑轨道下降 0.80 m 后进入一段粗糙轨道，该粗糙段损失机械能 3 J。球质量 1 kg，g=10 m/s²。粗糙段终点与入口等高，终点动能为多少焦？（只填数值）",
+    "answer": "5",
+    "explanation": "下降释放 8 J 重力势能，粗糙段再耗散 3 J，剩余动能为 5 J；全程机械能并不守恒。",
+    "verify": "1*10*0.80-3",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h052_q101",
+    "topicId": "cnp_h052",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "用重物下落实验检验机械能守恒并考察实际阻力影响时，若先按理想自由落体公式 v=√(2gh) 算速度，再比较 mgh 与 mv²/2，这种做法",
+    "choices": [
+      {
+        "key": "A",
+        "text": "不能独立检验，因为预先把实际过程按无阻力的理想自由落体处理了"
+      },
+      {
+        "key": "B",
+        "text": "更准确，完全不需测纸带"
+      },
+      {
+        "key": "C",
+        "text": "只要质量足够大就没有逻辑问题"
+      },
+      {
+        "key": "D",
+        "text": "能直接测出空气阻力"
+      }
+    ],
+    "answer": "A",
+    "explanation": "v=√(2gh) 也可由理想自由落体运动学导出，但它已预设无阻力的运动模型。用它代替实测速度会自动给出能量等式，无法独立发现实际耗散；应由纸带位移和时间测速度。",
+    "verify": "\"不能独立检验，因为预先把实际过程按无阻力的理想自由落体处理了\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h052_q102",
+    "topicId": "cnp_h052",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "自由下落纸带上某点前后相邻两点到它的距离分别为 7.8 cm、8.2 cm，相邻点时间间隔为 0.020 s。该点瞬时速度约为多少 m/s？（只填数值）",
+    "answer": "4",
+    "explanation": "用中间时刻速度近似两侧平均速度：v=0.16/0.040=4 m/s；相邻位移差 0.004 m 也与 g≈10 m/s² 的自由落体数据一致。",
+    "verify": "(0.078+0.082)/(2*0.020)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h052_q103",
+    "topicId": "cnp_h052",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "自由下落重物带纸带的验证实验中，实测重力势能减少量通常略大于动能增加量。合理解释是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "质量在下落过程中不断减少"
+      },
+      {
+        "key": "B",
+        "text": "重力势能完全不能转化为动能"
+      },
+      {
+        "key": "C",
+        "text": "空气阻力和纸带摩擦消耗了部分机械能"
+      },
+      {
+        "key": "D",
+        "text": "打点计时器向重物持续提供额外向下动力"
+      }
+    ],
+    "answer": "C",
+    "explanation": "实际存在阻力做负功，部分机械能转化为内能，因此动能增量略小于重力势能减少量。",
+    "verify": "\"空气阻力和纸带摩擦消耗了部分机械能\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h053_q101",
+    "topicId": "cnp_h053",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "两个相同、放在绝缘支架上的金属小球原来分别带 +6 μC、−2 μC 电荷。让两球接触后再远距离分开，忽略电荷损失和外界电场影响，每球最终带电量为多少微库？（保留正负号，只填数值）",
+    "answer": "2",
+    "explanation": "总电荷为 +4 μC，相同金属球接触后在对称条件下平分，最终每球 +2 μC。",
+    "verify": "(6-2)/2",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h053_q102",
+    "topicId": "cnp_h053",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一根带正电的玻璃棒吸引一颗轻小球，仅凭“吸引”现象可以确定",
+    "choices": [
+      {
+        "key": "A",
+        "text": "小球一定带负电"
+      },
+      {
+        "key": "B",
+        "text": "小球一定带正电"
+      },
+      {
+        "key": "C",
+        "text": "小球可能带负电，也可能不带净电荷"
+      },
+      {
+        "key": "D",
+        "text": "小球一定没有电子"
+      }
+    ],
+    "answer": "C",
+    "explanation": "异号电荷相吸，但带电体也可因极化吸引中性物体，单凭吸引不能确定小球净电荷的符号。",
+    "verify": "\"小球可能带负电，也可能不带净电荷\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h053_q103",
+    "topicId": "cnp_h053",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "某物体失去 1.6 μC 的负电荷，元电荷 e=1.6×10⁻¹⁹ C。失去的电子数以 10¹² 个为单位，应填多少？（只填数值）",
+    "answer": "10",
+    "explanation": "电子数 N=Q/e=10¹³ 个，等于 10×10¹² 个；失去电子后物体带正电。",
+    "verify": "1.6e-6/(1.6e-19)/1e12",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h054_q101",
+    "topicId": "cnp_h054",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "两相同导体小球原来各带 +9 μC、−1 μC。接触后分开至球心距离 0.20 m，球半径远小于间距，无电荷损失与外界场。k=9×10⁹ N·m²/C²。最终相互作用力大小是多少牛？（只填数值）",
+    "answer": "3.6",
+    "explanation": "总电荷 +8 μC，接触后每球 +4 μC；再用库仑定律 F=kq²/r²=3.6 N，为相互排斥。",
+    "verify": "9e9*((9-1)/2*1e-6)**2/0.20**2",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h054_q102",
+    "topicId": "cnp_h054",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "两个静止点电荷的电荷量大小都变为原来的 2 倍，间距变为原来的一半。相互作用力大小是原来的多少倍？（只填数值）",
+    "answer": "16",
+    "explanation": "电荷量乘积增为 4 倍，距离平方降为 1/4，故力增为 16 倍。",
+    "verify": "2*2/(0.5**2)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h054_q103",
+    "topicId": "cnp_h054",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "真空中固定两个正点电荷 +Q、+4Q，相距 L。在它们连线上寻找使另一非零试探电荷合力为零的位置，该位置在",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两电荷之间，距 +Q 为 L/3"
+      },
+      {
+        "key": "B",
+        "text": "两电荷之间，距 +Q 为 L/2"
+      },
+      {
+        "key": "C",
+        "text": "两电荷之间，距 +Q 为 2L/3"
+      },
+      {
+        "key": "D",
+        "text": "+Q 外侧距 +Q 为 L"
+      }
+    ],
+    "answer": "A",
+    "explanation": "两电场在中间方向相反，Q/x²=4Q/(L−x)²，得 L−x=2x，x=L/3。外侧两场同向不能抵消。",
+    "verify": "\"两电荷之间，距 +Q 为 L/3\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h055_q101",
+    "topicId": "cnp_h055",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "在某点放置 −2 μC 的试探电荷，所受电场力大小为 0.006 N、方向向西。该点场强方向向东，大小为多少 N/C？（只填数值）",
+    "answer": "3000",
+    "explanation": "场强大小 E=F/|q|=3000 N/C；试探电荷为负，场强方向与其受力方向相反。",
+    "verify": "0.006/(2e-6)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h055_q102",
+    "topicId": "cnp_h055",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "将同一点的正试探电荷从 +q 换为 +3q，认为试探电荷不扰动原电场。该点",
+    "choices": [
+      {
+        "key": "A",
+        "text": "场强不变，试探电荷所受力增为 3 倍"
+      },
+      {
+        "key": "B",
+        "text": "场强增为 3 倍，受力不变"
+      },
+      {
+        "key": "C",
+        "text": "场强和受力都不变"
+      },
+      {
+        "key": "D",
+        "text": "场强减为原来的 1/3"
+      }
+    ],
+    "answer": "A",
+    "explanation": "场强由场源决定，E=F/q 是比值定义；试探电荷改变时 F=qE 随之改变。",
+    "verify": "\"场强不变，试探电荷所受力增为 3 倍\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h055_q103",
+    "topicId": "cnp_h055",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "真空中正点电荷 Q 的电场中，A、B 在同一条径向线上，B 到 Q 的距离是 A 的 2 倍。场强大小关系是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "EA=2EB"
+      },
+      {
+        "key": "B",
+        "text": "EA=4EB"
+      },
+      {
+        "key": "C",
+        "text": "EA=EB"
+      },
+      {
+        "key": "D",
+        "text": "EA=EB/4"
+      }
+    ],
+    "answer": "B",
+    "explanation": "点电荷场强大小 E=kQ/r²，距离增为 2 倍时场强降为 1/4，两点场强均径向向外。",
+    "verify": "\"EA=4EB\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h056_q101",
+    "topicId": "cnp_h056",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "某点有三个场源的电场：向东 6 N/C、向西 3 N/C、向北 4 N/C。该点合场强大小是多少 N/C？（只填数值）",
+    "answer": "5",
+    "explanation": "先合成同一直线分量为向东 3 N/C，再与向北 4 N/C 正交合成，得 5 N/C。三者大小不能直接相加。",
+    "verify": "sqrt((6-3)**2+4**2)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h056_q102",
+    "topicId": "cnp_h056",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "等量异号点电荷 +Q、−Q 固定在同一水平线上。两者连线中点的合场强",
+    "choices": [
+      {
+        "key": "A",
+        "text": "为零，因为电荷等量异号"
+      },
+      {
+        "key": "B",
+        "text": "沿连线从 +Q 指向 −Q，大小不为零"
+      },
+      {
+        "key": "C",
+        "text": "从 −Q 指向 +Q"
+      },
+      {
+        "key": "D",
+        "text": "垂直于两电荷连线"
+      }
+    ],
+    "answer": "B",
+    "explanation": "中点处正电荷产生的场强背离正电荷，负电荷产生的场强指向负电荷，二者方向相同而相加。",
+    "verify": "\"沿连线从 +Q 指向 −Q，大小不为零\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h056_q103",
+    "topicId": "cnp_h056",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "带电粒子从某点沿不平行于电场线的方向射入电场，忽略其他力。关于电场线与轨迹，正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "电场线一定就是所有带电粒子的运动轨迹"
+      },
+      {
+        "key": "B",
+        "text": "粒子速度必须瞬间转为沿电场线方向"
+      },
+      {
+        "key": "C",
+        "text": "电场线表示场强方向，粒子轨迹一般不与其重合"
+      },
+      {
+        "key": "D",
+        "text": "负粒子的加速度必沿电场线正向"
+      }
+    ],
+    "answer": "C",
+    "explanation": "场强决定电场力和加速度，轨迹还取决于初速度；负电荷的电场力方向与场强相反。",
+    "verify": "\"电场线表示场强方向，粒子轨迹一般不与其重合\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h057_q101",
+    "topicId": "cnp_h057",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一个封闭空腔金属壳处于外加静电场中，空腔内无电荷，导体已达静电平衡。空腔中的电场",
+    "choices": [
+      {
+        "key": "A",
+        "text": "必与壳外电场相同"
+      },
+      {
+        "key": "B",
+        "text": "为零，这是静电屏蔽的表现"
+      },
+      {
+        "key": "C",
+        "text": "一定随金属壳净电荷增大而均匀增大"
+      },
+      {
+        "key": "D",
+        "text": "为零就意味着空腔内电势必须取零"
+      }
+    ],
+    "answer": "B",
+    "explanation": "封闭导体在静电平衡时屏蔽外部静电场；空腔内场强为零但电势可为非零常量，取决于参考。",
+    "verify": "\"为零，这是静电屏蔽的表现\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h057_q102",
+    "topicId": "cnp_h057",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "避雷装置采用高出建筑物的尖端并可靠接地。其物理原理中合理的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "金属尖端能使重力消失"
+      },
+      {
+        "key": "B",
+        "text": "避雷针会把任何位置的雷电全部吸走"
+      },
+      {
+        "key": "C",
+        "text": "尖端附近电场较强，接地导体可为电荷转移提供路径"
+      },
+      {
+        "key": "D",
+        "text": "接地后装置不再导电"
+      }
+    ],
+    "answer": "C",
+    "explanation": "尖端效应与导电接地共同参与防雷设计；并不存在绝对范围内吸走所有雷电的保证，装置应由专业人员安装。",
+    "verify": "\"尖端附近电场较强，接地导体可为电荷转移提供路径\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h057_q103",
+    "topicId": "cnp_h057",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "油罐车采用规范的导静电接地措施，主要目的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "创造相反电荷使总电荷不守恒"
+      },
+      {
+        "key": "B",
+        "text": "让燃油完全不再流动"
+      },
+      {
+        "key": "C",
+        "text": "利用静电火花提高燃烧效率"
+      },
+      {
+        "key": "D",
+        "text": "及时转移积累的净电荷，降低静电放电风险"
+      }
+    ],
+    "answer": "D",
+    "explanation": "运输、流动摩擦可能导致静电积累；通过可靠导电路径转移电荷以减小火花风险，电荷并未被凭空消灭。",
+    "verify": "\"及时转移积累的净电荷，降低静电放电风险\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h058_q101",
+    "topicId": "cnp_h058",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "负点电荷在匀强电场中沿电场方向移动一段距离，只讨论静电力的功和电势能变化。正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "静电力做正功，电势能增加"
+      },
+      {
+        "key": "B",
+        "text": "静电力做正功，电势能减少"
+      },
+      {
+        "key": "C",
+        "text": "静电力做负功，电势能增加"
+      },
+      {
+        "key": "D",
+        "text": "静电力不做功，电势能不变"
+      }
+    ],
+    "answer": "C",
+    "explanation": "负电荷所受静电力与电场方向相反，力与位移反向而做负功；ΔEp=−W，因此电势能增加。",
+    "verify": "\"静电力做负功，电势能增加\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h058_q102",
+    "topicId": "cnp_h058",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "一带电粒子从 A 到 B 的过程中，静电力做功 +12 μJ，其在 A 的电势能为 30 μJ。沿用同一零势能参考，在 B 的电势能是多少微焦？（只填数值）",
+    "answer": "18",
+    "explanation": "静电力的功等于电势能的减少量，EpB=EpA−W=18 μJ。",
+    "verify": "30-12",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h058_q103",
+    "topicId": "cnp_h058",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "电荷在同一静电场中从 A 经不同路径到达 B。若电荷量不变，则静电力做功",
+    "choices": [
+      {
+        "key": "A",
+        "text": "与路径无关，由电荷量和 A、B 的电势差决定"
+      },
+      {
+        "key": "B",
+        "text": "沿更长路径一定更多"
+      },
+      {
+        "key": "C",
+        "text": "沿路径弯曲处必为零"
+      },
+      {
+        "key": "D",
+        "text": "只与所用时间成正比"
+      }
+    ],
+    "answer": "A",
+    "explanation": "静电场具有保守性，WAB=qUAB，固定起点、终点和电荷量后做功相同。",
+    "verify": "\"与路径无关，由电荷量和 A、B 的电势差决定\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h059_q101",
+    "topicId": "cnp_h059",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "同一静电场、同一零势能参考下，−2 μC 电荷在 A 点的电势能为 −12 μJ，+3 μC 电荷在 B 点的电势能为 +3 μJ。改取 B 为零电势点，A 点电势是多少伏？（只填数值）",
+    "answer": "5",
+    "explanation": "先由 Ep/q 得原 φA=6 V、φB=1 V，再改变参考使 A 点新电势为 6−1=5 V。应保留电荷正负号。",
+    "verify": "(-12)/(-2)-3/3",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h059_q102",
+    "topicId": "cnp_h059",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "某点电势为 +8 V，放入一个负试探电荷，且试探电荷不扰动电场。以既定参考点计算，该电荷的电势能",
+    "choices": [
+      {
+        "key": "A",
+        "text": "为负，但该点电势仍为 +8 V"
+      },
+      {
+        "key": "B",
+        "text": "为正，因为电势为正"
+      },
+      {
+        "key": "C",
+        "text": "必为零，因为负电荷可中和电势"
+      },
+      {
+        "key": "D",
+        "text": "会使该点电势立刻变为 −8 V"
+      }
+    ],
+    "answer": "A",
+    "explanation": "电势能 Ep=qφ，负电荷乘正电势得负电势能；电势本身是电场的属性，并不因换试探电荷而反号。",
+    "verify": "\"为负，但该点电势仍为 +8 V\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h059_q103",
+    "topicId": "cnp_h059",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "以等量异号点电荷的对称零势面为例，其中一点电势可取零。由“电势为零”能否推出“场强为零”？",
+    "choices": [
+      {
+        "key": "A",
+        "text": "能，电势与场强总成正比"
+      },
+      {
+        "key": "B",
+        "text": "不能，电势零值依赖参考，而场强可能非零"
+      },
+      {
+        "key": "C",
+        "text": "能，因为电场线不能经过零电势点"
+      },
+      {
+        "key": "D",
+        "text": "不能，但场强方向必与零势面相切"
+      }
+    ],
+    "answer": "B",
+    "explanation": "等量异号电荷中点电势可为零，合场强却不为零；电势数值不直接决定场强，场强也不沿等势面切向。",
+    "verify": "\"不能，电势零值依赖参考，而场强可能非零\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h060_q101",
+    "topicId": "cnp_h060",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "一个电荷量为 −2 μC 的粒子从 A 移到 B，UAB=−6 V。静电力做功多少微焦？（保留正负号，只填数值）",
+    "answer": "12",
+    "explanation": "WAB=qUAB，两个负号相乘得 +12 μJ，电势能相应减少。",
+    "verify": "(-2)*(-6)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h060_q102",
+    "topicId": "cnp_h060",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "已知 UAB=9 V、UBC=−4 V，UAC 是多少伏？（保留正负号，只填数值）",
+    "answer": "5",
+    "explanation": "UAC=(φA−φB)+(φB−φC)=UAB+UBC=5 V，需按同一方向连接。",
+    "verify": "9+(-4)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h060_q103",
+    "topicId": "cnp_h060",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "把静电场的零电势点从 A 改到另一点 O，仍比较固定的 B、C 两点。下列量保持不变的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "B 点的电势数值"
+      },
+      {
+        "key": "B",
+        "text": "C 点的电势数值"
+      },
+      {
+        "key": "C",
+        "text": "UBC，以及固定电荷从 B 到 C 的静电力功"
+      },
+      {
+        "key": "D",
+        "text": "B、C 两点电势数值之和"
+      }
+    ],
+    "answer": "C",
+    "explanation": "参考改变只给所有电势加同一常量，电势差及 qUBC 不变。",
+    "verify": "\"UBC，以及固定电荷从 B 到 C 的静电力功\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h061_q101",
+    "topicId": "cnp_h061",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "正电荷由 A 沿某条路径运动到 B，A、B 位于同一等势面，但路径可以离开该面。静电力对它的总功",
+    "choices": [
+      {
+        "key": "A",
+        "text": "一定为正，因为电荷在移动"
+      },
+      {
+        "key": "B",
+        "text": "为零，因为初末电势相同"
+      },
+      {
+        "key": "C",
+        "text": "一定为负，因为离开了等势面"
+      },
+      {
+        "key": "D",
+        "text": "取决于路径经过的最高电势，不能确定"
+      }
+    ],
+    "answer": "B",
+    "explanation": "静电力功只取决于初末位置，W=q(φA−φB)=0；途中能量可变化，但总功仍为零。",
+    "verify": "\"为零，因为初末电势相同\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h061_q102",
+    "topicId": "cnp_h061",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "在局部近似匀强电场中，相邻等势面电势差相同。甲区域面间距为 1 cm，乙区域为 2 cm。场强大小应满足",
+    "choices": [
+      {
+        "key": "A",
+        "text": "甲为乙的一半"
+      },
+      {
+        "key": "B",
+        "text": "甲乙相等"
+      },
+      {
+        "key": "C",
+        "text": "甲为乙的 2 倍"
+      },
+      {
+        "key": "D",
+        "text": "无法利用面间距比较场强"
+      }
+    ],
+    "answer": "C",
+    "explanation": "等势面的法线方向就是电场方向，局部有 E=ΔU/Δd，同电势差下间距越小，场越强。",
+    "verify": "\"甲为乙的 2 倍\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h061_q103",
+    "topicId": "cnp_h061",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "静电场中某处电场线与等势面相交。若该点场强非零，两者应",
+    "choices": [
+      {
+        "key": "A",
+        "text": "相切，电场线指向电势升高方向"
+      },
+      {
+        "key": "B",
+        "text": "夹角任意，只要电势相同"
+      },
+      {
+        "key": "C",
+        "text": "互相垂直，电场线必从负电势指向正电势"
+      },
+      {
+        "key": "D",
+        "text": "互相垂直，电场线指向电势降低方向"
+      }
+    ],
+    "answer": "D",
+    "explanation": "沿等势面电势不变，没有切向场强；场强垂直等势面且由高电势指向低电势，不能只看电势正负。",
+    "verify": "\"互相垂直，电场线指向电势降低方向\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h062_q101",
+    "topicId": "cnp_h062",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "匀强电场场强为 200 V/m，A 到 B 的位移长 0.40 m，与电场方向夹角为 60°。UAB 为多少伏？（只填数值）",
+    "answer": "40",
+    "explanation": "沿场方向的位移投影为 0.40cos60°=0.20 m，所以 UAB=Ed=40 V。",
+    "verify": "200*0.40*0.5",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h062_q102",
+    "topicId": "cnp_h062",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "匀强电场沿 x 轴正方向，大小为 500 V/m。A=(0,0)，B=(0.02 m,0.03 m)。UAB 是多少伏？（保留正负号，只填数值）",
+    "answer": "10",
+    "explanation": "只有沿场方向的 0.02 m 位移影响电势差；B 电势较低，UAB=+10 V，竖直分量不贡献。",
+    "verify": "500*0.02",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h062_q103",
+    "topicId": "cnp_h062",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "两点相距 d，电势差为 U。直接把 U/d 当作某点场强大小，需要特别满足",
+    "choices": [
+      {
+        "key": "A",
+        "text": "场在两点间为匀强场，且 d 沿电场方向"
+      },
+      {
+        "key": "B",
+        "text": "两点只要位于任意电场中即可"
+      },
+      {
+        "key": "C",
+        "text": "U 为正时即可，不需要方向条件"
+      },
+      {
+        "key": "D",
+        "text": "只要两点都取零电势即可"
+      }
+    ],
+    "answer": "A",
+    "explanation": "E=U/d 的简单形式要求匀强场和沿场方向的间距；一般非匀强场不能据此确定某点场强。",
+    "verify": "\"场在两点间为匀强场，且 d 沿电场方向\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h063_q101",
+    "topicId": "cnp_h063",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "电容 C₁=2 μF 的电容器充到 6 V，C₂=3 μF 的电容器未充电，两者均与电源断开。把两正极相接、两负极相接，忽略漏电，最终共同电压为多少伏？（只填数值）",
+    "answer": "2.4",
+    "explanation": "相连极板的总净电荷守恒为 12 μC；最终两电容器电压相同，Q总=(C₁+C₂)U，得 U=2.4 V。",
+    "verify": "2*6/(2+3)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h063_q102",
+    "topicId": "cnp_h063",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "理想平行板电容器接在恒压电源上，面积和介质不变，板距减为一半。忽略边缘效应，则",
+    "choices": [
+      {
+        "key": "A",
+        "text": "电容、带电量和板间场强都变为 2 倍"
+      },
+      {
+        "key": "B",
+        "text": "电容变为 2 倍，带电量和场强不变"
+      },
+      {
+        "key": "C",
+        "text": "电容不变，场强变为 2 倍"
+      },
+      {
+        "key": "D",
+        "text": "带电量减半，电容增大"
+      }
+    ],
+    "answer": "A",
+    "explanation": "C∝1/d，恒压时 Q=CU、E=U/d，板距减半使三者都加倍。",
+    "verify": "\"电容、带电量和板间场强都变为 2 倍\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h063_q103",
+    "topicId": "cnp_h063",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "孤立的理想平行板电容器已充电并与电源断开，正对面积、介质不变，板距增为 2 倍。忽略漏电与边缘效应，则",
+    "choices": [
+      {
+        "key": "A",
+        "text": "Q 加倍、U 不变、场强减半"
+      },
+      {
+        "key": "B",
+        "text": "Q 不变、U 加倍、板间场强不变"
+      },
+      {
+        "key": "C",
+        "text": "Q 不变、U 减半、场强减为 1/4"
+      },
+      {
+        "key": "D",
+        "text": "电容与电压均不变"
+      }
+    ],
+    "answer": "B",
+    "explanation": "断开后 Q 不变，C 减半导致 U=Q/C 加倍；同时板距加倍，E=U/d 不变。",
+    "verify": "\"Q 不变、U 加倍、板间场强不变\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h064_q101",
+    "topicId": "cnp_h064",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "电容器从不带电状态充电至 12 V。由电流-时间曲线下方面积测得流入电荷量为 0.60 mC。电容是多少微法？（只填数值）",
+    "answer": "50",
+    "explanation": "曲线面积给出电荷 Q，C=Q/U=0.00060/12 F=50 μF。",
+    "verify": "0.60e-3/12*1e6",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h064_q102",
+    "topicId": "cnp_h064",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "相同电容器从零电压接到同一恒压电源，经电阻 R 或 2R 充电。忽略漏电，充至稳定后",
+    "choices": [
+      {
+        "key": "A",
+        "text": "2R 情形最终电荷减半"
+      },
+      {
+        "key": "B",
+        "text": "最终带电量相同，2R 情形充电初始电流较小、过程较慢"
+      },
+      {
+        "key": "C",
+        "text": "两者初始电流相同，充电时间也相同"
+      },
+      {
+        "key": "D",
+        "text": "R 越大，最终电压越高"
+      }
+    ],
+    "answer": "B",
+    "explanation": "稳定时两者电压均等于电源电压，Q=CU 相同；初始电流由 U/R 决定，电阻较大时充电较慢。",
+    "verify": "\"最终带电量相同，2R 情形充电初始电流较小、过程较慢\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h064_q103",
+    "topicId": "cnp_h064",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "一个已充电电容器经电阻放电，取先前充电电流为正方向。在理想 RC 过程中，放电电流",
+    "choices": [
+      {
+        "key": "A",
+        "text": "方向与充电相同，大小逐渐增大"
+      },
+      {
+        "key": "B",
+        "text": "始终为零，因为极板之间绝缘"
+      },
+      {
+        "key": "C",
+        "text": "方向与充电相反，大小逐渐减小至零"
+      },
+      {
+        "key": "D",
+        "text": "方向不断周期反转，且不需要电感"
+      }
+    ],
+    "answer": "C",
+    "explanation": "放电时原来电源维持的极板电荷经外电路回流，电流方向相反；极板电压逐渐降低，所以电流幅值减小。",
+    "verify": "\"方向与充电相反，大小逐渐减小至零\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h065_q101",
+    "topicId": "cnp_h065",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "电荷量 +2 μC 的粒子穿过加速电场，运动中电势降低 300 V，重力忽略。动能增加多少微焦？（只填数值）",
+    "answer": "600",
+    "explanation": "电势降低对应 U初末=+300 V，ΔEk=qU=600 μJ，与电场是否匀强无关。",
+    "verify": "2*300",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h065_q102",
+    "topicId": "cnp_h065",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两正粒子都从静止通过相同加速电压，q/m 比值之比为 4:1，忽略重力和相对论效应。末速率之比为",
+    "choices": [
+      {
+        "key": "A",
+        "text": "4:1"
+      },
+      {
+        "key": "B",
+        "text": "1:2"
+      },
+      {
+        "key": "C",
+        "text": "2:1"
+      },
+      {
+        "key": "D",
+        "text": "1:4"
+      }
+    ],
+    "answer": "C",
+    "explanation": "qU=mv²/2，v=√(2Uq/m)，速率与荷质比平方根成正比。",
+    "verify": "\"2:1\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h065_q103",
+    "topicId": "cnp_h065",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "同一粒子从相同初速度出发，通过初末电势差相同的两个静电加速区，一区匀强、一区非匀强，只有静电力做功。离开时的动能",
+    "choices": [
+      {
+        "key": "A",
+        "text": "匀强场中必较大"
+      },
+      {
+        "key": "B",
+        "text": "非匀强场中必较大"
+      },
+      {
+        "key": "C",
+        "text": "只由极板间距决定，不能比较"
+      },
+      {
+        "key": "D",
+        "text": "相同，因为静电力的总功只由 q 和电势差决定"
+      }
+    ],
+    "answer": "D",
+    "explanation": "动能定理 ΔEk=qU 对一般静电场成立，场的分布影响运动过程，却不改变同一电势差下的总功。",
+    "verify": "\"相同，因为静电力的总功只由 q 和电势差决定\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h066_q101",
+    "topicId": "cnp_h066",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "正粒子的荷质比为 2000 C/kg，以 2000 m/s 垂直电场方向射入场强为 3000 N/C 的匀强电场，电场区沿初速度方向长 0.20 m。忽略重力且不碰板，离开电场的横向偏移是多少厘米？（只填数值）",
+    "answer": "3",
+    "explanation": "通过时间为 0.00010 s，横向加速度为 6×10⁶ m/s²，y=at²/2=0.03 m=3 cm。",
+    "verify": "0.5*2000*3000*(0.20/2000)**2*100",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h066_q102",
+    "topicId": "cnp_h066",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同一种粒子沿垂直电场方向进入同一匀强偏转电场。只把入射速率增为 2 倍，其他条件不变且都不碰板。离开时偏移量和偏转角正切分别变为",
+    "choices": [
+      {
+        "key": "A",
+        "text": "原来的 1/2 和 1/2"
+      },
+      {
+        "key": "B",
+        "text": "原来的 1/4 和 1/2"
+      },
+      {
+        "key": "C",
+        "text": "原来的 2 倍和 4 倍"
+      },
+      {
+        "key": "D",
+        "text": "原来的 1/4 和 1/4"
+      }
+    ],
+    "answer": "D",
+    "explanation": "t=L/v₀ 减半，y=at²/2 减为 1/4；tanθ=at/v₀ 还需再除以加倍的 v₀，因此也减为 1/4。",
+    "verify": "\"原来的 1/4 和 1/4\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h066_q103",
+    "topicId": "cnp_h066",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "两种正粒子分别从静止经同一加速电压 U₀，再垂直射入相同的匀强偏转电场。忽略重力、相对论效应与边缘效应，且均不碰板。离开偏转区时的偏移量",
+    "choices": [
+      {
+        "key": "A",
+        "text": "相同，与各自 q/m 无关"
+      },
+      {
+        "key": "B",
+        "text": "与各自 q/m 成正比"
+      },
+      {
+        "key": "C",
+        "text": "与质量成正比且与电荷量无关"
+      },
+      {
+        "key": "D",
+        "text": "与加速电压 U₀ 成正比"
+      }
+    ],
+    "answer": "A",
+    "explanation": "加速后 v₀²=2qU₀/m，偏移 y=qEL²/(2mv₀²)=EL²/(4U₀)，荷质比消去。",
+    "verify": "\"相同，与各自 q/m 无关\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h067_q101",
+    "topicId": "cnp_h067",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "某截面在 2 s 内有 +12 μC 电荷向东通过，同时有 −8 μC 电荷向西通过。向东为正，平均电流为多少微安？（只填数值）",
+    "answer": "10",
+    "explanation": "负电荷向西运动相当于正电荷向东，两个电流贡献相加，I=20 μC/2 s=10 μA。",
+    "verify": "(12+8)/2",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h067_q102",
+    "topicId": "cnp_h067",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "相同材料的两段金属导线串联，稳定电流相同，自由电子数密度相同，甲截面积为乙的 2 倍。电子定向移动速率应满足",
+    "choices": [
+      {
+        "key": "A",
+        "text": "甲为乙的一半"
+      },
+      {
+        "key": "B",
+        "text": "甲为乙的 2 倍"
+      },
+      {
+        "key": "C",
+        "text": "甲乙必相等"
+      },
+      {
+        "key": "D",
+        "text": "甲为乙的 4 倍"
+      }
+    ],
+    "answer": "A",
+    "explanation": "微观电流 I=neSv，n、e、I 相同，定向速率 v 与截面积 S 成反比。",
+    "verify": "\"甲为乙的一半\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h067_q103",
+    "topicId": "cnp_h067",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "接通长导线电路后，远处用电器很快响应，而电子漂移速率很小。合理解释是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "电子必须在瞬间穿过整段导线"
+      },
+      {
+        "key": "B",
+        "text": "电路中建立电场的变化传播很快，不要求同一电子从电源跑到用电器"
+      },
+      {
+        "key": "C",
+        "text": "电子在金属中一接通就以真空光速漂移"
+      },
+      {
+        "key": "D",
+        "text": "用电器获得能量不需要电场或电源"
+      }
+    ],
+    "answer": "B",
+    "explanation": "电信号的传播与电子缓慢的定向漂移是不同过程，不能把用电器响应时间当作单个电子的通行时间。",
+    "verify": "\"电路中建立电场的变化传播很快，不要求同一电子从电源跑到用电器\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h068_q101",
+    "topicId": "cnp_h068",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "某非线性元件在电压 6 V 时电流为 0.30 A，在该工作点按 R=U/I 求得的电阻为多少欧？（只填数值）",
+    "answer": "20",
+    "explanation": "工作点电阻为 6/0.30=20 Ω，非线性意味着其他工作点的比值不一定相同。",
+    "verify": "6/0.30",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h068_q102",
+    "topicId": "cnp_h068",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "在线性电阻的 I-U 图像中，甲直线斜率为乙的 2 倍，两图线均过原点。甲、乙电阻之比为",
+    "choices": [
+      {
+        "key": "A",
+        "text": "2:1"
+      },
+      {
+        "key": "B",
+        "text": "1:2"
+      },
+      {
+        "key": "C",
+        "text": "1:1"
+      },
+      {
+        "key": "D",
+        "text": "4:1"
+      }
+    ],
+    "answer": "B",
+    "explanation": "纵轴 I、横轴 U 时斜率为 I/U=1/R，斜率越大电阻越小，不能混同 U-I 图的斜率。",
+    "verify": "\"1:2\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h068_q103",
+    "topicId": "cnp_h068",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "小灯泡的 I-U 曲线随电压升高逐渐变平。把电压从某值加倍时，电流没有加倍，合理的解释是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "电流不符合 I=U/R，所以 R=U/I 也不能定义"
+      },
+      {
+        "key": "B",
+        "text": "电压升高必使灯丝电阻减小"
+      },
+      {
+        "key": "C",
+        "text": "灯丝温度升高，电阻增大，不能把灯泡当作恒定电阻"
+      },
+      {
+        "key": "D",
+        "text": "电源把多余电压转化成了电荷"
+      }
+    ],
+    "answer": "C",
+    "explanation": "灯丝温度影响电阻。每个稳定工作点仍可用 R=U/I 描述，但 R 不是保持不变的常数。",
+    "verify": "\"灯丝温度升高，电阻增大，不能把灯泡当作恒定电阻\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h069_q101",
+    "topicId": "cnp_h069",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "一根均匀金属丝保持温度、体积和材料性质不变，被均匀拉长至原来的 3 倍。电阻变为原来的多少倍？（只填数值）",
+    "answer": "9",
+    "explanation": "体积不变时横截面积缩为 1/3，R=ρl/S 因而增为 3/(1/3)=9 倍。",
+    "verify": "3**2",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h069_q102",
+    "topicId": "cnp_h069",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一根均匀金属丝对折后，两股并联使用，忽略折弯影响、接触电阻和温度变化。端到端电阻为原来的",
+    "choices": [
+      {
+        "key": "A",
+        "text": "1/2"
+      },
+      {
+        "key": "B",
+        "text": "2 倍"
+      },
+      {
+        "key": "C",
+        "text": "1/4"
+      },
+      {
+        "key": "D",
+        "text": "4 倍"
+      }
+    ],
+    "answer": "C",
+    "explanation": "每股长度减半、电阻为原来的 1/2，再把两相同电阻并联，总电阻为原来的 1/4。",
+    "verify": "\"1/4\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h069_q103",
+    "topicId": "cnp_h069",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "同一金属材料在相同温度下制作粗、细两根导线。下列比较正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "粗导线的电阻率必较小"
+      },
+      {
+        "key": "B",
+        "text": "长导线的电阻率必较大"
+      },
+      {
+        "key": "C",
+        "text": "只要材料相同，电阻就必相同"
+      },
+      {
+        "key": "D",
+        "text": "两者电阻率相同，电阻还取决于各自长度与截面积"
+      }
+    ],
+    "answer": "D",
+    "explanation": "电阻率主要由材料与温度决定；导体的电阻还包含几何因素 R=ρl/S。",
+    "verify": "\"两者电阻率相同，电阻还取决于各自长度与截面积\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h070_q101",
+    "topicId": "cnp_h070",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "20 分度游标卡尺精度为 0.05 mm，闭合两爪时示数为 +0.10 mm。测圆柱时主尺整毫米读数 12 mm、游标第 7 格对齐。校正后的长度是多少毫米？（只填数值）",
+    "answer": "12.25",
+    "explanation": "原始示数为 12.35 mm，仪器正零误差 0.10 mm 应减去，真实长度为 12.25 mm。",
+    "verify": "12+7*0.05-0.10",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h070_q102",
+    "topicId": "cnp_h070",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "螺旋测微器零误差为 −0.006 mm。测量时固定刻度露出 3.5 mm，可动刻度对准 23.4 格，每格 0.01 mm。校正后的测量值是多少毫米？（只填数值）",
+    "answer": "3.74",
+    "explanation": "原始读数 3.734 mm；测量值=读数−零误差，所以应加 0.006 mm，得到 3.740 mm。",
+    "verify": "3.5+23.4*0.01-(-0.006)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h070_q103",
+    "topicId": "cnp_h070",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "要测直径约 0.50 mm 的细金属丝，并记录到 0.001 mm 估读位，现有毫米刻度尺、十分度游标卡尺和螺旋测微器。应优先使用",
+    "choices": [
+      {
+        "key": "A",
+        "text": "螺旋测微器，并在不同位置和方向重复测量"
+      },
+      {
+        "key": "B",
+        "text": "毫米刻度尺，直接估读三位小数"
+      },
+      {
+        "key": "C",
+        "text": "十分度游标卡尺，再凭空补两位零"
+      },
+      {
+        "key": "D",
+        "text": "任意工具都能通过多写小数获得相同精度"
+      }
+    ],
+    "answer": "A",
+    "explanation": "测量精细直径应选择相应分辨能力的工具；螺旋测微器可估读到 0.001 mm，重复测量有助于发现不均匀等影响。",
+    "verify": "\"螺旋测微器，并在不同位置和方向重复测量\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h071_q101",
+    "topicId": "cnp_h071",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "伏安法测较小电阻时采用电流表外接：电压表跨在待测电阻两端，电流表示数包含电压表电流。忽略电流表内阻，则 U/I 得到的电阻",
+    "choices": [
+      {
+        "key": "A",
+        "text": "偏大，因为电流表分流"
+      },
+      {
+        "key": "B",
+        "text": "准确，因为电压表电流不可能存在"
+      },
+      {
+        "key": "C",
+        "text": "偏大，因为电压表示数含电流表电压"
+      },
+      {
+        "key": "D",
+        "text": "偏小，因为电流表示数大于流过待测电阻的电流"
+      }
+    ],
+    "answer": "D",
+    "explanation": "外接法电流表测到总电流，I表=IR+IV，分母偏大导致 R测=U/I表 小于真实电阻。",
+    "verify": "\"偏小，因为电流表示数大于流过待测电阻的电流\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h071_q102",
+    "topicId": "cnp_h071",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "用 ρ=πd²R/(4l) 测电阻率，R、l 均准确，直径 d 被高估 2%。所得电阻率比真实值高估百分之几？（只填百分数数值）",
+    "answer": "4.04",
+    "explanation": "直径在公式中平方，ρ测/ρ真=1.02²=1.0404，因此高估 4.04%。",
+    "verify": "((1.02)**2-1)*100",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h071_q103",
+    "topicId": "cnp_h071",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "测金属丝电阻率时，接入电路的有效长度为 l，两个电夹之间还有一段弯曲但不自接触的金属丝。测量 l 时应",
+    "choices": [
+      {
+        "key": "A",
+        "text": "只测两夹的空间直线距离"
+      },
+      {
+        "key": "B",
+        "text": "沿实际导电路径测两夹之间金属丝的长度"
+      },
+      {
+        "key": "C",
+        "text": "把两夹外的全部引线也计入金属丝长度"
+      },
+      {
+        "key": "D",
+        "text": "忽略长度，因为电阻率只由电压决定"
+      }
+    ],
+    "answer": "B",
+    "explanation": "公式 R=ρl/S 中 l 是被测这段金属丝的真实导电长度；把弯曲路径当作直线会使长度偏小并导致结果偏大。",
+    "verify": "\"沿实际导电路径测两夹之间金属丝的长度\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h072_q101",
+    "topicId": "cnp_h072",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "6 Ω 与 3 Ω 电阻并联后，再与 4 Ω 电阻串联，接在理想 6 V 电源两端。总电流为多少安？（只填数值）",
+    "answer": "1",
+    "explanation": "并联部分等效为 2 Ω，与 4 Ω 串联共 6 Ω，故总电流为 1 A。",
+    "verify": "6/(6*3/(6+3)+4)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h072_q102",
+    "topicId": "cnp_h072",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两只电阻并联在理想恒压电源上，之后再并联一只电阻。原来两支路电阻和电源电压不变，则",
+    "choices": [
+      {
+        "key": "A",
+        "text": "原两支路电流都减小，因为分支变多"
+      },
+      {
+        "key": "B",
+        "text": "原两支路电流不变，总电流增大"
+      },
+      {
+        "key": "C",
+        "text": "总电阻增大，总电流减小"
+      },
+      {
+        "key": "D",
+        "text": "三条支路电流必相等"
+      }
+    ],
+    "answer": "B",
+    "explanation": "并联各支路电压均由理想电源保持不变，原支路 I=U/R 不变；新支路使总电流增加、等效电阻减小。",
+    "verify": "\"原两支路电流不变，总电流增大\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h072_q103",
+    "topicId": "cnp_h072",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "两个电阻 4 Ω 与 12 Ω 并联，总电流为 2 A。流过 4 Ω 电阻的电流为多少安？（只填数值）",
+    "answer": "1.5",
+    "explanation": "并联分流与电阻成反比，4 Ω 支路分得总电流的 12/(4+12)=3/4，为 1.5 A。",
+    "verify": "2*12/(4+12)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h073_q101",
+    "topicId": "cnp_h073",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "某已改装电压表的量程为 3 V、总内阻为 3000 Ω，表头满偏状态保持不变。若把量程扩展为 15 V，应在此电压表外再串联多少欧电阻？（只填数值）",
+    "answer": "12000",
+    "explanation": "由原量程和总内阻得满偏电流 1 mA；新增电阻需分担 12 V，因此 R增=12/0.001=12000 Ω。",
+    "verify": "(15-3)/(3/3000)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h073_q102",
+    "topicId": "cnp_h073",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "表头内阻 45 Ω，与 5 Ω 电阻并联时，流入改装电流表的总电流 20 mA 恰好使表头满偏。要把总量程改为 32 mA，所需新分流电阻为多少欧？（只填数值）",
+    "answer": "3",
+    "explanation": "原分流关系给出 Ig=20 mA×5/(45+5)=2 mA，表头满偏电压为 0.09 V；新分流电流为 30 mA，故 Rs=3 Ω。",
+    "verify": "((0.020*5/(45+5))*45)/(0.032-0.020*5/(45+5))",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h073_q103",
+    "topicId": "cnp_h073",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "改装电压表时，实际串联电阻比设计值偏大，但表盘仍按设计量程标记。接到同一待测电压下，该表读数将",
+    "choices": [
+      {
+        "key": "A",
+        "text": "偏大，因为总电阻变大"
+      },
+      {
+        "key": "B",
+        "text": "准确，电阻偏差对电压测量无影响"
+      },
+      {
+        "key": "C",
+        "text": "总会满偏，与待测电压无关"
+      },
+      {
+        "key": "D",
+        "text": "偏小，因为表头电流小于设计时的电流"
+      }
+    ],
+    "answer": "D",
+    "explanation": "实际总电阻偏大，给定电压下通过表头的电流偏小，按原标度换算出的电压也偏小。",
+    "verify": "\"偏小，因为表头电流小于设计时的电流\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h074_q101",
+    "topicId": "cnp_h074",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "欧姆表更换电池后，新电池电动势较原来低，但仍能调零。表头满偏电流不变，原欧姆刻度仍保留；重新调零后再测同一未知电阻，示值会",
+    "choices": [
+      {
+        "key": "A",
+        "text": "准确，因为只要调零就能消除电池电动势任意变化的影响"
+      },
+      {
+        "key": "B",
+        "text": "偏小，因为电动势较低总使电阻读数变小"
+      },
+      {
+        "key": "C",
+        "text": "偏大，因为调零后的总内阻变小，接入该电阻后相对偏转较小"
+      },
+      {
+        "key": "D",
+        "text": "无穷大，因为低电动势电池一定不能测量"
+      }
+    ],
+    "answer": "C",
+    "explanation": "调零时内阻 R内=E/Ig，新 E 较低使 R内 较小。测量时 I/Ig=R内/(R内+Rx) 变小，沿用原刻度便把 Rx 读得偏大。",
+    "verify": "\"偏大，因为调零后的总内阻变小，接入该电阻后相对偏转较小\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h074_q102",
+    "topicId": "cnp_h074",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "理想欧姆表已调零，表头满偏电流为 Ig。接入某电阻 R 后电流为 Ig/3，再串联一只相同 R 后电流为 Ig/5。R 是欧姆表总内阻的多少倍？（只填数值）",
+    "answer": "2",
+    "explanation": "调零时 Ig=E/R内，接入 R 后 Ig/I=1+R/R内=3，得 R/R内=2；串两只时比例变为 1+4=5，与第二次观察一致。",
+    "verify": "3-1",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h074_q103",
+    "topicId": "cnp_h074",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "准备使用多用电表欧姆挡测电路中某个电阻，合理操作是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "先断开外部电源，并在需要时断开被测电阻一端排除其他支路影响"
+      },
+      {
+        "key": "B",
+        "text": "保持电路通电，以工作电压帮助测量"
+      },
+      {
+        "key": "C",
+        "text": "直接把欧姆挡并接到插座火线与零线"
+      },
+      {
+        "key": "D",
+        "text": "先用大电流烧热电阻再测"
+      }
+    ],
+    "answer": "A",
+    "explanation": "欧姆挡自带内部电源，不能在外部带电电路上测量；其他并联路径也会影响读数，应在安全断电条件下测量。",
+    "verify": "\"先断开外部电源，并在需要时断开被测电阻一端排除其他支路影响\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h075_q101",
+    "topicId": "cnp_h075",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "额定功率 1.5 kW 的电热器按额定状态工作 24 min，消耗电能多少瓦时？（只填数值）",
+    "answer": "600",
+    "explanation": "24 min=0.40 h，电能为 1500 W×0.40 h=600 Wh，即 0.60 kW·h。",
+    "verify": "1500*24/60",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h075_q102",
+    "topicId": "cnp_h075",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "某设备两端电压恒为 12 V，前 10 s 电流为 2 A，后 20 s 进入节能状态，电流降为 1 A。30 s 内共消耗电能多少焦？（只填数值）",
+    "answer": "480",
+    "explanation": "分时段计算输入电能再相加：W=12×2×10+12×1×20=480 J，不能把初始电流当作全程电流。",
+    "verify": "12*(2*10+1*20)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h075_q103",
+    "topicId": "cnp_h075",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "两台设备输入功率均恒为 100 W，工作时间相同，其中一台是电阻加热器，另一台是电动机。必然相同的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "电流产生的焦耳热"
+      },
+      {
+        "key": "B",
+        "text": "消耗的总电能"
+      },
+      {
+        "key": "C",
+        "text": "输出的机械能"
+      },
+      {
+        "key": "D",
+        "text": "全部转化为内能的比例"
+      }
+    ],
+    "answer": "B",
+    "explanation": "输入电能 W=Pt 相同；不同设备中电能的去向不同，不能据此认为焦耳热或机械能相等。",
+    "verify": "\"消耗的总电能\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h076_q101",
+    "topicId": "cnp_h076",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "电动机接在 20 V 电源上稳定工作，绕组电阻 2 Ω，机械输出功率实测为 32 W，且电流小于 5 A。仅有绕组发热损耗，电流为多少安？（只填数值）",
+    "answer": "2",
+    "explanation": "能量守恒给出 20I−2I²=32，解得 I=2 A 或 8 A；由 I<5 A 排除 8 A，选 2 A。",
+    "verify": "(20-sqrt(20**2-4*2*32))/(2*2)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h076_q102",
+    "topicId": "cnp_h076",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两只阻值不同的电阻串联，通过稳定电流，通电时间相同。产生的焦耳热之比等于",
+    "choices": [
+      {
+        "key": "A",
+        "text": "它们的电阻反比"
+      },
+      {
+        "key": "B",
+        "text": "它们的电阻之比"
+      },
+      {
+        "key": "C",
+        "text": "它们的电阻平方之比"
+      },
+      {
+        "key": "D",
+        "text": "1，因为串联电流相同"
+      }
+    ],
+    "answer": "B",
+    "explanation": "串联电流、通电时间相同，由 Q=I²Rt 得热量与电阻成正比；电流相同不代表热量相同。",
+    "verify": "\"它们的电阻之比\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h076_q103",
+    "topicId": "cnp_h076",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "正常转动的电动机电压为 U、电流为 I、绕组电阻为 R。下列关于能量的计算正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "输入电能和绕组热量都必须为 U²t/R"
+      },
+      {
+        "key": "B",
+        "text": "只要绕组有电阻，全部输入电能都必变成焦耳热"
+      },
+      {
+        "key": "C",
+        "text": "输入电能为 UIt，绕组焦耳热为 I²Rt，一般二者不相等"
+      },
+      {
+        "key": "D",
+        "text": "电动机输出机械能为 I²Rt"
+      }
+    ],
+    "answer": "C",
+    "explanation": "电动机属于非纯电阻用电器，输入电能除绕组热损耗外还可转为机械能，不能套用纯电阻的 U=IR 来代换。",
+    "verify": "\"输入电能为 UIt，绕组焦耳热为 I²Rt，一般二者不相等\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h077_q101",
+    "topicId": "cnp_h077",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "某家庭线路额定电压为 220 V，允许持续总电流上限 10 A。现有设备总输入功率 1400 W，若再同时启用 900 W 电器，按额定值估算应",
+    "choices": [
+      {
+        "key": "A",
+        "text": "可以同时启用，因为每个电器都不足 2200 W"
+      },
+      {
+        "key": "B",
+        "text": "避免同时启用，因为总功率 2300 W 超过 2200 W 上限"
+      },
+      {
+        "key": "C",
+        "text": "只要换粗保险丝就一定安全"
+      },
+      {
+        "key": "D",
+        "text": "把新增电器接地后就不计入总功率"
+      }
+    ],
+    "answer": "B",
+    "explanation": "同一线路各支路功率相加，总电流约为 2300/220≈10.45 A，已超过给定上限；保护装置不能随意加大。",
+    "verify": "\"避免同时启用，因为总功率 2300 W 超过 2200 W 上限\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h077_q102",
+    "topicId": "cnp_h077",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "金属外壳家电的保护接地线主要作用是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "代替零线持续承担全部正常工作电流"
+      },
+      {
+        "key": "B",
+        "text": "让用电器正常功率增加"
+      },
+      {
+        "key": "C",
+        "text": "在绝缘故障导致外壳带电时，为故障电流提供保护路径并配合保护装置动作"
+      },
+      {
+        "key": "D",
+        "text": "保证潮湿环境中可以用湿手插拔插头"
+      }
+    ],
+    "answer": "C",
+    "explanation": "保护接地针对故障触电风险，与零线功能不同；即使有保护接地，也必须遵守干燥操作等安全规范。",
+    "verify": "\"在绝缘故障导致外壳带电时，为故障电流提供保护路径并配合保护装置动作\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h077_q103",
+    "topicId": "cnp_h077",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "照明灯的单极开关在规范家庭电路中应串在火线上。若误接在零线上，即使关灯后不亮，也可能",
+    "choices": [
+      {
+        "key": "A",
+        "text": "灯具中所有部件都必对地零电势"
+      },
+      {
+        "key": "B",
+        "text": "电网频率自动降低"
+      },
+      {
+        "key": "C",
+        "text": "灯泡必立即短路爆炸"
+      },
+      {
+        "key": "D",
+        "text": "灯具部分导体仍与火线相连而对地带电"
+      }
+    ],
+    "answer": "D",
+    "explanation": "切断零线不能隔离火线电势，灯具不亮不代表内部对地无电压；检修仍须按规范彻底断电。",
+    "verify": "\"灯具部分导体仍与火线相连而对地带电\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h078_q101",
+    "topicId": "cnp_h078",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "某电源把 0.30 C 正电荷由低电势端移到高电势端时，非静电力做功 0.90 J。电动势是多少伏？（只填数值）",
+    "answer": "3",
+    "explanation": "电动势 E=W非/q=0.90/0.30=3 V，描述单位电荷获得的非静电力能量。",
+    "verify": "0.90/0.30",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h078_q102",
+    "topicId": "cnp_h078",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同一干电池向不同负载供电，忽略温度与电池状态改变。下列说法正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "电流越大，电动势必按比例增大"
+      },
+      {
+        "key": "B",
+        "text": "有内阻时路端电压永远等于电动势"
+      },
+      {
+        "key": "C",
+        "text": "电源电动势的单位是牛顿"
+      },
+      {
+        "key": "D",
+        "text": "电动势近似不变，路端电压可随电流而改变"
+      }
+    ],
+    "answer": "D",
+    "explanation": "电动势主要由电源本身的能量转化性质决定，路端电压 U=E−Ir 含内阻上的电压损失。",
+    "verify": "\"电动势近似不变，路端电压可随电流而改变\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h078_q103",
+    "topicId": "cnp_h078",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "电源电动势 6 V、内阻 1 Ω，向外供电电流为 2 A。路端电压为多少伏？（只填数值）",
+    "answer": "4",
+    "explanation": "放电时 E=U+Ir，U=6−2=4 V；电动势与实际输出端电压不能混同。",
+    "verify": "6-2*1",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h079_q101",
+    "topicId": "cnp_h079",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "电源电动势 6 V、内阻 2 Ω，原外接 4 Ω 电阻。再并联另一只 4 Ω 电阻后，路端电压比原来降低多少伏？（只填数值）",
+    "answer": "1",
+    "explanation": "原路端电压为 4 V；新增并联支路后外电阻为 2 Ω，路端电压为 3 V，下降 1 V。",
+    "verify": "6*4/(4+2)-6*(4*4/(4+4))/(2+4*4/(4+4))",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h079_q102",
+    "topicId": "cnp_h079",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "有内阻的电源由正常放电变为外电路断开，忽略漏电。它的电流和路端电压分别趋于",
+    "choices": [
+      {
+        "key": "A",
+        "text": "0 和电动势 E"
+      },
+      {
+        "key": "B",
+        "text": "E/r 和 0"
+      },
+      {
+        "key": "C",
+        "text": "0 和 0"
+      },
+      {
+        "key": "D",
+        "text": "原电流和原路端电压"
+      }
+    ],
+    "answer": "A",
+    "explanation": "断路时 I=0，内阻电压 Ir=0，因此路端电压 U=E，电源内部仍具有能量转化本领。",
+    "verify": "\"0 和电动势 E\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h079_q103",
+    "topicId": "cnp_h079",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "某电源 E、r 不变，外接可变纯电阻 R 逐渐增大且始终有限。放电电流和路端电压的变化为",
+    "choices": [
+      {
+        "key": "A",
+        "text": "电流增大，路端电压减小"
+      },
+      {
+        "key": "B",
+        "text": "电流减小，路端电压增大"
+      },
+      {
+        "key": "C",
+        "text": "电流与路端电压都减小"
+      },
+      {
+        "key": "D",
+        "text": "电流与路端电压都不变"
+      }
+    ],
+    "answer": "B",
+    "explanation": "I=E/(R+r) 随 R 增大而减小，内阻损失 Ir 变小，所以 U=E−Ir 增大。",
+    "verify": "\"电流减小，路端电压增大\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h080_q101",
+    "topicId": "cnp_h080",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "电源电动势 12 V、内阻 2 Ω，外电路由固定 4 Ω 电阻与可调电阻 R 串联。只问可调电阻 R 上的最大功率，最大值为多少瓦？（只填数值）",
+    "answer": "6",
+    "explanation": "把电源内阻与固定外阻合为 6 Ω，相当于可调电阻所见的等效内阻。R=6 Ω 时其功率最大，为 12²/(4×6)=6 W。",
+    "verify": "12**2/(4*(2+4))",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h080_q102",
+    "topicId": "cnp_h080",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "有内阻的直流电源给一只纯电阻供电，当 R=r 时输出功率最大。此时外电路获得的功率占电源总转化功率的比例为",
+    "choices": [
+      {
+        "key": "A",
+        "text": "100%"
+      },
+      {
+        "key": "B",
+        "text": "50%"
+      },
+      {
+        "key": "C",
+        "text": "75%"
+      },
+      {
+        "key": "D",
+        "text": "25%"
+      }
+    ],
+    "answer": "B",
+    "explanation": "外、内阻相等且电流相同，两处功率 I²R、I²r 相等，所以外电路得到总功率的一半；最大输出功率不等于最高效率。",
+    "verify": "\"50%\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h080_q103",
+    "topicId": "cnp_h080",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "有内阻的电源原来给一只定值电阻 R₁ 供电，随后在外电路再并联 R₂。E、r、R₁ 均不变。原支路 R₁ 中的电流",
+    "choices": [
+      {
+        "key": "A",
+        "text": "保持不变，因为电源电动势不变"
+      },
+      {
+        "key": "B",
+        "text": "增大，因为总电流增大"
+      },
+      {
+        "key": "C",
+        "text": "减小，因为总电流增大导致路端电压下降"
+      },
+      {
+        "key": "D",
+        "text": "立即变为零，因为 R₂ 把所有电流分走"
+      }
+    ],
+    "answer": "C",
+    "explanation": "并联后外电阻减小，总电流增大，内阻压降增加，路端电压降低，故 I₁=U/R₁ 减小。",
+    "verify": "\"减小，因为总电流增大导致路端电压下降\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h081_q101",
+    "topicId": "cnp_h081",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "测电源 U-I 关系，理想电表下两组数据为 I=0.20 A、U=1.40 V 和 I=0.50 A、U=1.10 V。电源电动势为多少伏？（只填数值）",
+    "answer": "1.6",
+    "explanation": "由 U=E−Ir 得 r=(1.40−1.10)/(0.50−0.20)=1 Ω，再得 E=1.40+0.20×1=1.60 V。",
+    "verify": "1.40+0.20*((1.40-1.10)/(0.50-0.20))",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h081_q102",
+    "topicId": "cnp_h081",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "用 U-I 图像求电源内阻时，纵轴 U 的画图起点不是零。下列做法正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "直接取纸面上斜率角的正切，不看坐标比例"
+      },
+      {
+        "key": "B",
+        "text": "把图上最低 U 刻度当作零，读出电动势"
+      },
+      {
+        "key": "C",
+        "text": "按刻度求两点的 ΔU/ΔI 绝对值，不能直接量图线与纸面横轴的几何夹角"
+      },
+      {
+        "key": "D",
+        "text": "只读一个点就能同时确定 E 和 r"
+      }
+    ],
+    "answer": "C",
+    "explanation": "物理斜率是带单位的坐标变化比，需结合刻度；r=|ΔU/ΔI|，电动势应外推到 I=0 的真实电压值。",
+    "verify": "\"按刻度求两点的 ΔU/ΔI 绝对值，不能直接量图线与纸面横轴的几何夹角\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h081_q103",
+    "topicId": "cnp_h081",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "电源内阻 r>0，电压表内阻 RV 有限且直接跨在电源两端，理想电流表只测负载电流，不含电压表分流。用 U=E测−I表r测 拟合，电压表分流造成",
+    "choices": [
+      {
+        "key": "A",
+        "text": "电动势和内阻都偏大"
+      },
+      {
+        "key": "B",
+        "text": "电动势偏大、内阻偏小"
+      },
+      {
+        "key": "C",
+        "text": "电动势准确，内阻偏大"
+      },
+      {
+        "key": "D",
+        "text": "测得的电动势和内阻都偏小"
+      }
+    ],
+    "answer": "D",
+    "explanation": "电源实际总电流为 I表+U/RV，代入 U=E−r(I表+U/RV)，得 E测=E/(1+r/RV)、r测=r/(1+r/RV)，二者均偏小。",
+    "verify": "\"测得的电动势和内阻都偏小\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h082_q101",
+    "topicId": "cnp_h082",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "某微型水电装置每秒有 20 kg 水下降 10 m，重力势能转化为输出电能的效率为 80%，g=10 m/s²。输出电功率为多少千瓦？（只填数值）",
+    "answer": "1.6",
+    "explanation": "水每秒释放重力势能 2000 J，按 80% 输出为 1600 W，即 1.6 kW。",
+    "verify": "20*10*10*0.80/1000",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h082_q102",
+    "topicId": "cnp_h082",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "“能量守恒，所以不必节约能源”这一推论不成立，主要因为",
+    "choices": [
+      {
+        "key": "A",
+        "text": "使用能源会破坏能量守恒"
+      },
+      {
+        "key": "B",
+        "text": "能量使用后从自然界彻底消失"
+      },
+      {
+        "key": "C",
+        "text": "能量守恒只适用于不工作的机器"
+      },
+      {
+        "key": "D",
+        "text": "能量转化有方向性，分散的低温内能难以完全重新变成可利用的功"
+      }
+    ],
+    "answer": "D",
+    "explanation": "能量总量守恒不代表可利用程度不变；实际过程的耗散使高品质能源的可用性降低，因此仍需节约。",
+    "verify": "\"能量转化有方向性，分散的低温内能难以完全重新变成可利用的功\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h082_q103",
+    "topicId": "cnp_h082",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "下列关于发电与可持续发展的判断，较合理的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "风电、光伏运行时少用化石燃料，但仍需考虑制造、储能和生态等环节的影响"
+      },
+      {
+        "key": "B",
+        "text": "光伏发电在全部生命周期中绝无任何环境影响"
+      },
+      {
+        "key": "C",
+        "text": "核燃料因为能量巨大，所以必属于可再生能源"
+      },
+      {
+        "key": "D",
+        "text": "只要可再生能源波动，就完全不能接入电网"
+      }
+    ],
+    "answer": "A",
+    "explanation": "评估能源方案要考虑全生命周期与系统配套；可再生不等于没有影响，核燃料也不能仅按能量大小判定为可再生。",
+    "verify": "\"风电、光伏运行时少用化石燃料，但仍需考虑制造、储能和生态等环节的影响\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h083_q101",
+    "topicId": "cnp_h083",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "某同学把两个磁场的磁感线分别画出后，让不同来源的磁感线在同一点交叉，并称它们是“合磁场磁感线”。这一表述的问题是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两个磁体的磁场在空间不能重叠"
+      },
+      {
+        "key": "B",
+        "text": "合磁场方向必须沿纸面上下方向"
+      },
+      {
+        "key": "C",
+        "text": "磁感线相交就会使两个磁体立即消磁"
+      },
+      {
+        "key": "D",
+        "text": "各场可分别画出，但合磁场在非零场强点只有一个方向，合磁场线不能相交"
+      }
+    ],
+    "answer": "D",
+    "explanation": "磁场可叠加。合磁场方向由矢量和唯一确定，不能把两套分别描述的场线直接当成相交的合场线。",
+    "verify": "\"各场可分别画出，但合磁场在非零场强点只有一个方向，合磁场线不能相交\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h083_q102",
+    "topicId": "cnp_h083",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两块磁体的磁场在某点刚好抵消。在该点放置理想小磁针并忽略地磁场，小磁针",
+    "choices": [
+      {
+        "key": "A",
+        "text": "没有由该处合磁场确定的唯一指向"
+      },
+      {
+        "key": "B",
+        "text": "必指向磁场更强的那块磁体"
+      },
+      {
+        "key": "C",
+        "text": "必沿两磁体连线"
+      },
+      {
+        "key": "D",
+        "text": "必竖直向上"
+      }
+    ],
+    "answer": "A",
+    "explanation": "合磁感应强度为零时，不能指定该点的合磁场方向；不能只看单块磁体的位置。",
+    "verify": "\"没有由该处合磁场确定的唯一指向\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h083_q103",
+    "topicId": "cnp_h083",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "在地磁场存在的实验台上，放入一块磁体后小磁针 N 极指向正东，移走磁体后指向正北。由此能得出的判断是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "磁体单独的磁场必向东，与地磁场无关"
+      },
+      {
+        "key": "B",
+        "text": "放入磁体时的合磁场指向东，但不能断定磁体单独在该点的磁场也向东"
+      },
+      {
+        "key": "C",
+        "text": "小磁针指向东说明地磁场消失"
+      },
+      {
+        "key": "D",
+        "text": "磁体放入前后该点合磁场始终向北"
+      }
+    ],
+    "answer": "B",
+    "explanation": "小磁针指示当地合磁场方向，实验磁体场与地磁场按矢量叠加。合场向东并不意味着其中一个分场也必向东。",
+    "verify": "\"放入磁体时的合磁场指向东，但不能断定磁体单独在该点的磁场也向东\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h084_q101",
+    "topicId": "cnp_h084",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一根长直导线电流垂直纸面向外。纸面内位于导线右侧的一点，磁场方向为",
+    "choices": [
+      {
+        "key": "A",
+        "text": "纸面内向上"
+      },
+      {
+        "key": "B",
+        "text": "纸面内向下"
+      },
+      {
+        "key": "C",
+        "text": "垂直纸面向内"
+      },
+      {
+        "key": "D",
+        "text": "水平向右"
+      }
+    ],
+    "answer": "A",
+    "explanation": "右手拇指指向纸面外，弯曲四指给出逆时针磁场，在右侧切向即向上。",
+    "verify": "\"纸面内向上\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h084_q102",
+    "topicId": "cnp_h084",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "从螺线管左端看去，线圈电流沿逆时针方向。该左端相当于",
+    "choices": [
+      {
+        "key": "A",
+        "text": "S 极，内部磁场大致指向左端"
+      },
+      {
+        "key": "B",
+        "text": "N 极，内部磁场大致指向左端"
+      },
+      {
+        "key": "C",
+        "text": "N 极，内部磁场大致背离左端"
+      },
+      {
+        "key": "D",
+        "text": "无法由电流方向判断磁极"
+      }
+    ],
+    "answer": "B",
+    "explanation": "右手四指按端面所见电流弯曲，拇指向观察者即向左，指出内部磁场及 N 极方向。",
+    "verify": "\"N 极，内部磁场大致指向左端\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h084_q103",
+    "topicId": "cnp_h084",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "两根平行长直导线位于同一平面，电流大小相等、方向均向上。在两线的几何中点，忽略其他磁场，合磁场",
+    "choices": [
+      {
+        "key": "A",
+        "text": "为单根导线磁场的 2 倍"
+      },
+      {
+        "key": "B",
+        "text": "沿两导线连线"
+      },
+      {
+        "key": "C",
+        "text": "为零，因为两线在该点产生等大反向的磁场"
+      },
+      {
+        "key": "D",
+        "text": "一定向上，与电流同向"
+      }
+    ],
+    "answer": "C",
+    "explanation": "由安培定则，夹在同向电流之间的磁场方向相反；中点距离相等且电流相等，大小相等而抵消。",
+    "verify": "\"为零，因为两线在该点产生等大反向的磁场\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h085_q101",
+    "topicId": "cnp_h085",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "一段长 0.20 m 的水平直导线在磁场中由竖直测力装置支持，通 3 A 电流时示数为 0.30 N，反向同样电流时为 0.18 N。磁场力均竖直，导线与匀强磁场垂直。B 大小是多少特斯拉？（只填数值）",
+    "answer": "0.1",
+    "explanation": "正反电流使磁力方向反转，两次示数差为 2F，故 F=0.06 N，再由 B=F/(IL) 得 0.10 T。",
+    "verify": "(0.30-0.18)/(2*3*0.20)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h085_q102",
+    "topicId": "cnp_h085",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "某点两个磁场方向相同，合场为 10 mT。将其中较小的磁场反向、大小不变，合场大小变为 2 mT，方向仍与原较大场相同。较小磁场大小为多少毫特斯拉？（只填数值）",
+    "answer": "4",
+    "explanation": "由 B大+B小=10、B大−B小=2，解得 B小=4 mT；同时利用两种叠加状态才能确定各分场。",
+    "verify": "(10-2)/2",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h085_q103",
+    "topicId": "cnp_h085",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "在同一点用三段彼此垂直、长度和电流均相同的短直导线探测匀强磁场：第一段磁场力为零，另外两段均受相同的非零磁场力。可判断",
+    "choices": [
+      {
+        "key": "A",
+        "text": "磁场一定为零，因为第一段受力为零"
+      },
+      {
+        "key": "B",
+        "text": "磁场方向沿第二段导线"
+      },
+      {
+        "key": "C",
+        "text": "磁场有三个互相垂直而互不相加的方向"
+      },
+      {
+        "key": "D",
+        "text": "磁场非零，方向沿第一段导线所在直线，正反仍需进一步判断"
+      }
+    ],
+    "answer": "D",
+    "explanation": "后两段非零受力证明 B≠0；第一段 F=BILsinθ=0，故与 B 平行或反平行。仅凭力大小尚不能区分 B 的正反方向。",
+    "verify": "\"磁场非零，方向沿第一段导线所在直线，正反仍需进一步判断\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h086_q101",
+    "topicId": "cnp_h086",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "平面线框在匀强磁场中面积为 0.050 m²，场强为 0.40 T。线框法线与场夹角从 60° 转到 90°，面积不变。磁通量减少多少毫韦伯？（只填数值）",
+    "answer": "10",
+    "explanation": "初磁通量为 10 mWb，法线垂直于场时末磁通量为零，减少 10 mWb。应区分法线角度与平面角度。",
+    "verify": "0.40*0.050*(0.5-0)*1000",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h086_q102",
+    "topicId": "cnp_h086",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两个线圈面积和方向相同，处在同一匀强磁场中，一个 1 匝、一个 100 匝。若“磁通量”指穿过每一匝的 Φ，则两者",
+    "choices": [
+      {
+        "key": "A",
+        "text": "100 匝线圈每匝 Φ 必大 100 倍"
+      },
+      {
+        "key": "B",
+        "text": "1 匝线圈的 Φ 必为零"
+      },
+      {
+        "key": "C",
+        "text": "Φ 由导线电阻直接决定"
+      },
+      {
+        "key": "D",
+        "text": "Φ 相同，100 匝线圈的磁通链 NΦ 更大"
+      }
+    ],
+    "answer": "D",
+    "explanation": "单匝磁通量由 B、面积和方向决定，与匝数无关；匝数影响的是磁通链，不能混淆。",
+    "verify": "\"Φ 相同，100 匝线圈的磁通链 NΦ 更大\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h086_q103",
+    "topicId": "cnp_h086",
+    "difficulty": "challenge",
+    "type": "numeric",
+    "prompt": "单匝线框起初的有向磁通量为 +0.020 Wb，在匀强场中翻转 180°，面积不变。磁通量变化量的绝对值是多少毫韦伯？（只填数值）",
+    "answer": "40",
+    "explanation": "翻转后磁通量为 −0.020 Wb，变化量为 −0.040 Wb，绝对值为 40 mWb。",
+    "verify": "abs(-0.020-0.020)*1000",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h087_q101",
+    "topicId": "cnp_h087",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "一个刚性闭合矩形线框完全处在足够大的匀强磁场中，线框平面始终垂直磁场并做匀速平移。忽略其他影响，线框中",
+    "choices": [
+      {
+        "key": "A",
+        "text": "必有感应电流，因为导线一直在运动"
+      },
+      {
+        "key": "B",
+        "text": "电流大小只与平移路程有关"
+      },
+      {
+        "key": "C",
+        "text": "必有感应电流，因为磁感线穿过线框"
+      },
+      {
+        "key": "D",
+        "text": "没有感应电流，因为磁通量不变"
+      }
+    ],
+    "answer": "D",
+    "explanation": "产生感应电流需闭合回路的磁通量变化；整体平移但面积、方向和磁场均不变时，磁通量不变。",
+    "verify": "\"没有感应电流，因为磁通量不变\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h087_q102",
+    "topicId": "cnp_h087",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "线圈两端断开，穿过它的磁通量随时间改变。此时对感应现象的判断是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "可能有感应电动势，但因回路不闭合而无持续感应电流"
+      },
+      {
+        "key": "B",
+        "text": "既无电流就一定无感应电动势"
+      },
+      {
+        "key": "C",
+        "text": "磁通量不能在断路线圈中改变"
+      },
+      {
+        "key": "D",
+        "text": "不闭合反而使电流无限大"
+      }
+    ],
+    "answer": "A",
+    "explanation": "磁通量变化是感应电动势的条件，形成持续感应电流还需要闭合导电回路。",
+    "verify": "\"可能有感应电动势，但因回路不闭合而无持续感应电流\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h087_q103",
+    "topicId": "cnp_h087",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "闭合线圈放在静止磁体旁，要判断它是否产生感应电流，最关键的信息是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "磁感应强度是否大于某固定阈值"
+      },
+      {
+        "key": "B",
+        "text": "穿过闭合回路的磁通量是否随时间变化"
+      },
+      {
+        "key": "C",
+        "text": "线圈是否一定绕了超过 100 匝"
+      },
+      {
+        "key": "D",
+        "text": "线圈是否只要存在电阻"
+      }
+    ],
+    "answer": "B",
+    "explanation": "磁场存在或很强都不足以保证电磁感应，必须考察穿过回路的磁通量是否改变。",
+    "verify": "\"穿过闭合回路的磁通量是否随时间变化\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h088_q101",
+    "topicId": "cnp_h088",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "两无线电频道在真空中传播，其中一频道波长为 4 m，另一频道频率比它高 25 MHz。c=3×10⁸ m/s，后一频道波长是多少米？（只填数值）",
+    "answer": "3",
+    "explanation": "先由 4 m 得原频率 75 MHz，增加 25 MHz 后为 100 MHz，再求新波长为 3 m。",
+    "verify": "3e8/(3e8/4+25e6)",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h088_q102",
+    "topicId": "cnp_h088",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "同在真空中传播的红外线和紫外线，比较它们的波速与频率，正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "紫外线波速更高，频率相同"
+      },
+      {
+        "key": "B",
+        "text": "波速相同，紫外线频率更高"
+      },
+      {
+        "key": "C",
+        "text": "红外线频率更高，波速相同"
+      },
+      {
+        "key": "D",
+        "text": "频率越高，在真空中传播越慢"
+      }
+    ],
+    "answer": "B",
+    "explanation": "各类电磁波在真空中均以 c 传播，紫外线波长更短，由 f=c/λ 得频率更高。",
+    "verify": "\"波速相同，紫外线频率更高\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h088_q103",
+    "topicId": "cnp_h088",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "实验装置置于抽成近似真空的容器中，发射无线电信号与声波。关于传播的判断正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "两者都必须靠空气传播"
+      },
+      {
+        "key": "B",
+        "text": "声波能传播而无线电信号不能"
+      },
+      {
+        "key": "C",
+        "text": "无线电信号仍能通过真空传播，声波不能在真空中传播"
+      },
+      {
+        "key": "D",
+        "text": "两者在真空中的速度都等于 c"
+      }
+    ],
+    "answer": "C",
+    "explanation": "无线电属于电磁波，不依赖物质介质；声波是机械波，传播需要介质。",
+    "verify": "\"无线电信号仍能通过真空传播，声波不能在真空中传播\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h089_q101",
+    "topicId": "cnp_h089",
+    "difficulty": "standard",
+    "type": "numeric",
+    "prompt": "某脉冲光源在 0.50 s 内保持光功率 9.9 mW，单色光在真空中波长 400 nm。取 c=3×10⁸ m/s、h=6.6×10⁻³⁴ J·s。该脉冲光子数以 10¹⁵ 个为单位是多少？（只填数值）",
+    "answer": "10",
+    "explanation": "总光能为 0.00495 J，单光子能量 hc/λ=4.95×10⁻¹⁹ J，光子总数为 10¹⁶ 个，即 10×10¹⁵ 个。",
+    "verify": "(9.9e-3*0.50)/(6.6e-34*3e8/(400e-9))/1e15",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h089_q102",
+    "topicId": "cnp_h089",
+    "difficulty": "standard",
+    "type": "choice",
+    "prompt": "两束单色光频率分别为 f 和 2f，比较单个光子的能量与相同总能量下的光子数，正确的是",
+    "choices": [
+      {
+        "key": "A",
+        "text": "2f 光子能量减半，光子数加倍"
+      },
+      {
+        "key": "B",
+        "text": "频率不同但单个光子能量相同"
+      },
+      {
+        "key": "C",
+        "text": "2f 光子的能量是 f 光子的 2 倍，相同总能量时光子数减半"
+      },
+      {
+        "key": "D",
+        "text": "光子能量只由光束亮度决定"
+      }
+    ],
+    "answer": "C",
+    "explanation": "单光子能量 ε=hf 与频率成正比；光束总能量给定时 N=E总/(hf)，频率加倍则光子数减半。",
+    "verify": "\"2f 光子的能量是 f 光子的 2 倍，相同总能量时光子数减半\"",
+    "level": "pro",
+    "origin": "original"
+  },
+  {
+    "id": "cnp_h089_q103",
+    "topicId": "cnp_h089",
+    "difficulty": "challenge",
+    "type": "choice",
+    "prompt": "按简化的普朗克振子模型 E=nhν（n 为非负整数，不计零点能），甲频率为 f，乙频率为 2f。两振子可以具有的最低相同非零能量为",
+    "choices": [
+      {
+        "key": "A",
+        "text": "hf"
+      },
+      {
+        "key": "B",
+        "text": "1.5hf"
+      },
+      {
+        "key": "C",
+        "text": "3hf"
+      },
+      {
+        "key": "D",
+        "text": "2hf"
+      }
+    ],
+    "answer": "D",
+    "explanation": "甲允许能量为 hf、2hf、3hf…，乙允许能量为 2hf、4hf、6hf…；最低非零公共值是 2hf，须同时满足两套整数条件。",
+    "verify": "\"2hf\"",
+    "level": "pro",
+    "origin": "original"
+  }
+]

@@ -229,6 +229,29 @@ test('已失去普通通关状态时不能取得新的专家奖励，先前已�
   assert.equal(api.achievements('child-a').pro,1);
 });
 
+test('小学和高中专家记录可持久化、按档案隔离，失败不改普通通过或重复发星', () => {
+  const {api,storage} = load();
+  for (const [id,subject] of [['cns_a','science'],['cnp_h001','physics']]) {
+    const session = status => ({status:{[id]:{s:status,src:'direct'}},answers:[{id,qid:id+'_q101',result:status==='mastered'?'correct':'wrong'}]});
+    assert.equal(record(api,'new-pro-'+id,session('mastered'),t1,{subject,level:'pro'}),true);
+    assert.equal(api.achievements('child-a',subject).pro,0,'没有普通通过不授予专家积分');
+    record(api,'normal-'+id,session('mastered'),t2,{subject});
+    record(api,'valid-pro-'+id,session('mastered'),t3,{subject,level:'pro'});
+    record(api,'repeat-pro-'+id,session('mastered'),t4,{subject,level:'pro'});
+    assert.equal(api.achievements('child-a',subject).total,2);
+    assert.equal(api.achievements('child-a',subject).pro,1);
+    assert.equal(api.statuses('child-b',subject,'pro')[id],undefined);
+    record(api,'failed-pro-'+id,session('weak'),'2026-11-05T00:00:00.000Z',{subject,level:'pro'});
+    assert.equal(api.statuses('child-a',subject,'pro')[id].status,'weak');
+    assert.equal(api.statuses('child-a',subject)[id].status,'mastered');
+    assert.equal(api.achievements('child-a',subject).total,2);
+  }
+  const restored=load(Object.fromEntries(storage)).api;
+  assert.equal(restored.achievements('child-a').total,4);
+  assert.equal(restored.statuses('child-a','science','pro').cns_a.status,'weak');
+  assert.equal(restored.statuses('child-a','physics','pro').cnp_h001.status,'weak');
+});
+
 test('成就按孩子、访客和学科隔离，刷新保留；删除档案清理该档案积分', () => {
   const {api,storage}=load();
   record(api,'a',run('cns_a',['correct','correct','correct']));

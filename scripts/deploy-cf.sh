@@ -37,8 +37,10 @@ cp "$ROOT/data/topics.json" \
    "$ROOT/data/questions.json" \
    "$ROOT/data/questions-pro.json" \
    "$ROOT/data/pro-sources.json" \
+   "$ROOT/data/pro-manifest.json" \
    "$ROOT/data/id-aliases.json" \
    "$DIST/data/"
+cp -a "$ROOT/data/pro" "$DIST/data/"
 
 echo "Deploying $(du -sh "$DIST" | awk '{print $1}') from $DIST ..."
 # Upload often succeeds even if wrangler then trips on a local cache path; check exit and pages.dev.

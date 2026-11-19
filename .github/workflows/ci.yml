@@ -128,6 +128,9 @@ jobs:
       - name: scripts/validate_pro_questions.py
         run: python3 scripts/validate_pro_questions.py
 
+      - name: tests/test_pro_chunks.py
+        run: python3 tests/test_pro_chunks.py
+
       - name: tests/test_pro_bank.js
         run: node tests/test_pro_bank.js
 

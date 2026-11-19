@@ -122,4 +122,14 @@ test('访客专家通过和失败都能从独立进度识别完成，不依赖�
   }
   assert.equal(load({storage:{[PHYSICS]:saved}}).api.savedSessions()[0].completed,false);
 });
+test('小学科学专家存档可在个人中心识别完成并与其他学科隔离',()=>{
+  const id='cns_p001',saved=session({level:'pro',mode:'target',targets:[id],progressChildId:null,
+    answers:[{id,qid:id+'_q101',result:'correct'}]});
+  const progress={v:1,byChild:{guest:{runs:[{key:'pro|science|round-a|'+id,subject:'science',level:'pro',at:date,
+    states:{[id]:{status:'mastered',at:date}}}]}}};
+  const {api,unchanged}=load({storage:{[SCIENCE]:saved,'cnmProgress.v1':progress}});
+  const rows=api.savedSessions();assert.equal(rows.length,1);
+  assert.equal(rows[0].subject,'science');assert.equal(rows[0].level,'pro');assert.equal(rows[0].completed,true);
+  assert.deepEqual(ids(api.weakPoints({childId:null})),[]);unchanged();
+});
 console.log('test_local_learning: '+passed+' passed');

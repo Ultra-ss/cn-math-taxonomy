@@ -150,9 +150,11 @@ assert.equal(new URL(yes.getAttribute('href'),ctx.location.origin).searchParams.
 ids['node-dialog-no'].fire('click');
 ctx.progressOf = () => ({status:'mastered'});
 ctx.byId.set('cnp_h001',{name:'高中点',grade:10});
-assert.equal(ctx.canChallengeExpert('cnp_h001'),false,'高中不进入初中 Pro 题库');
+assert.equal(ctx.canChallengeExpert('cnp_h001'),true,'高中普通通过可进入独立专家题库');
 ctx.subject = 'science';
-assert.equal(ctx.canChallengeExpert('cnp_029'),false,'科学不进入初中 Pro 题库');
+assert.equal(ctx.canChallengeExpert('cnp_029'),false,'科学界面不借物理知识点进入专家模式');
+ctx.byId.set('cns_p001',{name:'植物',grade:1});
+assert.equal(ctx.canChallengeExpert('cns_p001'),true,'小学科学普通通过可进入独立专家题库');
 ctx.subject = 'physics';
 
 // 移动默认收起菜单和选项，桌面自动显示，不依赖CSS暴露已隐藏的内容。
