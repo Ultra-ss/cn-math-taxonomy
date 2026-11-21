@@ -1,0 +1,55 @@
+{
+  "generated": "2026-11-21",
+  "sourceCommit": "4e63316a5c0a3ece6447dc377e29c1806d031922",
+  "layout": "compact force-directed; original nodes, link directions and strengths retained",
+  "exports": [
+    {
+      "subject": "physics",
+      "topics": 269,
+      "links": 637,
+      "books": 9,
+      "files": [
+        {
+          "file": "physics-all-textbooks.png",
+          "bytes": 8988026,
+          "sha256": "6d68f1f8b234a8f067b4b4b98a5fc1e57c26e18866623db3711239be7d5a5c2c"
+        },
+        {
+          "file": "physics-all-textbooks.svg",
+          "bytes": 567236,
+          "sha256": "411b16ebec0fbbb56bf41d3e09ff90d9382ad172444301857af5318a1fda2ffc"
+        },
+        {
+          "file": "physics-all-textbooks.pdf",
+          "bytes": 1716676,
+          "sha256": "22f3a7a62b88dc8e333595de19a401a0faafc8b36e899445e7b1bff826cf3524"
+        }
+      ],
+      "preview": "physics-all-textbooks-preview.png"
+    },
+    {
+      "subject": "science",
+      "topics": 269,
+      "links": 337,
+      "books": 12,
+      "files": [
+        {
+          "file": "primary-science-all-textbooks.png",
+          "bytes": 4608519,
+          "sha256": "97ce49b9b44a059186cb1af3948e5e0f126328ea267c4eb8afb26bada659f457"
+        },
+        {
+          "file": "primary-science-all-textbooks.svg",
+          "bytes": 425790,
+          "sha256": "1414c5cb9e742a6ad8bf64942670fabda94ba799ee38b8b9a7194b87b11d3783"
+        },
+        {
+          "file": "primary-science-all-textbooks.pdf",
+          "bytes": 1158878,
+          "sha256": "f4ac7565bfe8a2562c6b3e49f27899b0826b3e65e6bdc42f532f52f71f98a847"
+        }
+      ],
+      "preview": "primary-science-all-textbooks-preview.png"
+    }
+  ]
+}
